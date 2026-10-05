@@ -182,6 +182,21 @@ def tape(w=32, h=11, ramp_name="tan"):
             c.px(x, y, r[2] if y < 2 else r[1])
     return c
 
+def rank_badge(n):
+    import text_px
+    cols = ["grey", "green", "blue", "purple", "orange", "red", "gold"]
+    r = RAMP[cols[n - 1]]
+    c = C(15, 15)
+    c.ell(0, 0, 14, 14, r[0]); c.ell(1, 1, 13, 13, r[1]); c.ell(2, 2, 8, 6, r[2])
+    g = text_px.glyphs(str(n), scale=1)
+    px = g.im.load(); sh = C(g.w, g.h)
+    for y in range(g.h):
+        for x in range(g.w):
+            if px[x, y][3]: sh.px(x, y, INK)
+    ox, oy = (15 - g.w) // 2, (15 - g.h) // 2
+    c.blit(sh, ox + 1, oy + 1); c.blit(g, ox, oy)
+    return c.outline(INK)
+
 def register(add):
     k = 4
     def A(key, c, group="uigen", scale=k): add(key, c.scaled(scale).im, group)
@@ -203,5 +218,6 @@ def register(add):
         A(f"ui_ribbon_{nm}", ribbon(rp))
     for nm, rp in [("blue", "blue"), ("green", "green"), ("red", "red")]:
         A(f"ui_stamp_{nm}", stamp(rp))
+    for n in range(1, 8): A(f"ui_rank_{n}", rank_badge(n))
     A("ui_star_gold", star("gold")); A("ui_star_gray", star("grey")); A("ui_star_red", star("red"))
     A("ui_tape", tape()); A("ui_tape_b", tape(ramp_name="cream")); A("ui_tape_small", tape(19, 9))

@@ -15,18 +15,17 @@ func _ready() -> void:
 	super._ready()
 	var vp := vsize()
 	var C: Dictionary = Data.chapters[ch - 1]
-	UI.paper_bg(self, Color("26221f"))
-	var pic := Atlas.rect("biome_" + C["biome"], vp.x, vp.y * 0.75)
-	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED if false else TextureRect.STRETCH_SCALE
-	pic.size = Vector2(vp.x * 1.3, vp.y * 0.9)
-	pic.position = Vector2(-vp.x * 0.1, 0)
+	UI.paper_bg(self, "blue")
+	var pic := Atlas.rect("biome_" + C["biome"], vp.x, vp.x * 150.0 / 270.0)
+	pic.position = Vector2(0, vp.y * 0.5 + 120)
 	add_child(pic)
+	var frame := ColorRect.new()
+	frame.color = UI.INK
+	frame.position = Vector2(0, pic.position.y - 8); frame.size = Vector2(vp.x, 8)
+	add_child(frame)
 	var tw := create_tween()
-	tw.tween_property(pic, "position:x", -vp.x * 0.25, 9.0)
-	var shade := ColorRect.new()
-	shade.color = Color(0, 0, 0, 0.35)
-	UI.set_full_rect(shade)
-	add_child(shade)
+	pic.modulate.a = 0.0
+	tw.tween_property(pic, "modulate:a", 1.0, 0.6)
 	var banner := Atlas.nine("ui_ribbon_red", 22)
 	banner.size = Vector2(vp.x - 60, 240)
 	banner.position = Vector2(30, vp.y * 0.28)

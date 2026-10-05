@@ -85,29 +85,19 @@ func _apply_scale() -> void:
 
 func _build_badge() -> void:
 	badge = Control.new()
-	badge.size = Vector2(52, 52)
-	badge.position = Vector2(view.sim.cell.x * 0.5 - 70, view.sim.cell.y * 0.5 - 70)
+	badge.size = Vector2(68, 68)
+	badge.position = Vector2(view.sim.cell.x * 0.5 - 76, view.sim.cell.y * 0.5 - 76)
 	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var star := Atlas.rect("ui_star_gold", 62, 62)
-	star.position = Vector2(-5, -5)
+	var star := Atlas.rect("ui_rank_1", 68, 68)
 	badge.add_child(star)
-	badge_label = UI.label(str(u.rank), 30, UI.INK, true)
-	badge_label.size = Vector2(52, 52)
-	badge_label.position = Vector2(0, 3)
-	badge.add_child(badge_label)
 	add_child(badge)
 
 func _update_rank(force: bool = false) -> void:
 	if u.rank == _last_rank and not force:
 		return
 	_last_rank = u.rank
-	badge_label.text = str(u.rank)
-	var col := Color("fff3b0")
-	if u.rank >= 7: col = Color("ff9ad0")
-	elif u.rank >= 5: col = Color("ffb870")
-	elif u.rank >= 3: col = Color("fff08a")
-	else: col = Color("e8e2d0")
-	(badge.get_child(0) as TextureRect).modulate = col
+	var tx := Atlas.tex("ui_rank_%d" % clampi(u.rank, 1, 7))
+	(badge.get_child(0) as TextureRect).texture = tx
 	glow.modulate.a = 0.0 if u.rank < 4 else 0.2 + 0.1 * (u.rank - 4)
 	_apply_scale()
 
@@ -135,7 +125,7 @@ func pop_in(rank: int) -> void:
 	tw.tween_property(body, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 	# rank stamps
 	badge.scale = Vector2(2.4, 2.4)
-	badge.pivot_offset = Vector2(26, 26)
+	badge.pivot_offset = Vector2(34, 34)
 	var t2 := create_tween()
 	t2.tween_interval(0.12)
 	t2.tween_property(badge, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)

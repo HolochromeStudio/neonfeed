@@ -110,7 +110,7 @@ func _spawn_critter() -> void:
 	var fly: bool = k in ["pigeon", "seagull"]
 	var dir := 1.0 if _rng.randf() < 0.5 else -1.0
 	var s := Atlas.sprite("npc_animal_" + k, true)
-	s.scale = Vector2(-dir, 1.0) * (0.9 if fly else 1.0)
+	s.scale = Vector2(dir, 1.0) * (1.0 if fly else 1.0)
 	var root := Node2D.new()
 	root.add_child(s)
 	var y0 := _road_y - 30 if not fly else _road_y - 190 - _rng.randf() * 60
@@ -128,19 +128,22 @@ func _spawn_car(x: float = -200.0) -> void:
 		key = "en_" + Data.enemies.keys()[_rng.randi() % Data.enemies.size()]
 	else:
 		key = "veh_" + String(car_ids[_rng.randi() % car_ids.size()])
-	var shadow := Atlas.sprite("fx_shadow_blob")
-	shadow.scale = Vector2(1.6, 0.8); shadow.position = Vector2(0, -6); shadow.modulate = Color(1, 1, 1, 0.7)
-	root.add_child(shadow)
-	var s := Atlas.sprite(key, true)
-	s.scale = Vector2(1.5, 1.5) if lane == 1 else Vector2(1.25, 1.25)
-	s.scale.x *= -dir   # sprites face left
+	var s := Atlas.sprite(key + ("_left" if (key.begins_with("en_") and dir < 0.0) else ""))
+	if key.begins_with("veh_"):
+		s.rotation = dir * PI * 0.5       # player vehicles are drawn facing up
+	var sh := Sprite2D.new()
+	sh.texture = s.texture
+	sh.modulate = Color(0, 0, 0, 0.3)
+	sh.rotation = s.rotation
+	sh.position = Vector2(6, 9)
+	root.add_child(sh)
 	root.add_child(s)
-	var ly := _road_y + _road_h * (0.72 if lane == 1 else 0.28) + 30.0
+	var ly := _road_y + _road_h * (0.72 if lane == 1 else 0.28)
 	root.position = Vector2(x if x > -190.0 else (-200.0 if dir > 0 else w + 200.0), ly)
 	if x <= -190.0:
 		root.position.x = -200.0 if dir > 0 else w + 200.0
 	_layer_cars.add_child(root)
-	_cars.append({"n": root, "s": s, "v": _rng.randf_range(120, 300) * dir * (1.0 if lane == 1 else 0.8), "ph": _rng.randf() * 6.28, "base": s.scale})
+	_cars.append({"n": root, "s": s, "v": _rng.randf_range(120, 300) * dir * (1.0 if lane == 1 else 0.8), "ph": _rng.randf() * 6.28, "base": s.scale, "sh": sh})
 	_layer_cars.move_child(root, -1)
 
 func _process(dt: float) -> void:
@@ -160,8 +163,8 @@ func _process(dt: float) -> void:
 		var n: Node2D = c["n"]
 		n.position.x += (c["v"] - speed * 0.5) * dt
 		var bob := sin(_t * 18.0 * absf(c["v"]) / 200.0 + c["ph"])
-		c["s"].position.y = bob * 1.6
-		c["s"].rotation = bob * 0.012
+		c["s"].position.y = 0.0 if bob < 0.0 else 4.0
+		c["sh"].position.y = 9.0
 		if n.position.x < -300 or n.position.x > w + 300:
 			n.queue_free()
 			_cars.remove_at(i)

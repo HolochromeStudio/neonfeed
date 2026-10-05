@@ -53,10 +53,10 @@ func _ready() -> void:
 	nt.size = Vector2(430, 86)
 	nt.position = Vector2(50, -56)
 	_box.add_child(nt)
-	_name = UI.label("", 40, UI.INK, true)
+	_name = UI.label("", 32, UI.WHITE, true)
 	_name.size = nt.size
 	nt.add_child(_name)
-	_text = UI.rich("", 42, UI.INK)
+	_text = UI.rich("", 32, UI.WHITE)
 	_text.position = Vector2(50, 50)
 	_text.size = Vector2(_box.size.x - 100, bh - 90)
 	_text.fit_content = false

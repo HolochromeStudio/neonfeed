@@ -1,7 +1,7 @@
 # TRAFFIC JAM — Merge · Defend · Survive
 
 A complete portrait mobile game (Godot 4.3, GDScript): **randomized merge + tower defense + roguelite + deck builder**,
-built end-to-end from the supplied cut-paper TRAFFIC JAM master sheet.
+drawn end-to-end as retro pixel art (top-down intersection battlefield).
 
 > Small cars. Big chaos. Deploy random vehicles from your deck, merge matching ranks (the result is *any* deck vehicle),
 > pick run-defining upgrades, build synergies, beat elites and bosses, and keep the Jam out of the city.
@@ -28,9 +28,9 @@ Export presets for Android (arm64) and iOS are in `export_presets.cfg` (portrait
 | Enemies / bosses | 10 traffic types + elites, 6 bosses with unique mechanics (stomp-stun, bombs, silence shells, burrow, abduct, 3-phase mecha) |
 | Modes | Story campaign (9 chapters / biomes × 6 levels, boss each chapter), Survival (endless, boss every 10 waves), **PvP** (offline simulated rival, same-seed waves, "send" pressure), **Co-op** (offline simulated partner on a shared 6-row board), interactive Tutorial |
 | Meta | Collection, 3 decks, unit levels (cards + coins), Shop (packs/boosters, in-game currency only), daily reward, daily/weekly quests, 44 achievements, local leaderboards, profile & statistics, Codex |
-| Customization | Modular paper-doll (skin/hair/hat/glasses/extras/top/bottom/shoes), 48 cosmetics, unlocked by level / shop / achievements |
+| Customization | Modular pixel doll (skin/hair/hat/glasses/extras/top/bottom/shoes), 48 cosmetics, unlocked by level / shop / achievements |
 | Story | Intro (4 animated panels), 9 chapter cutscenes + dialogue (cast of 10 with mood-driven animation), boss intros, outros |
-| Polish | Paper UI (button press/overshoot, popup unfold, stamps, card flips), animated vehicles (spawn drive-in, brake, idle rumble, wheel spin, recoil, merge pop…), VFX, procedural audio + haptic hooks |
+| Polish | Pixel UI (button press/overshoot, popup unfold, stamps, card flips), animated vehicles (spawn drive-in, brake, idle rumble, recoil, merge pop…), VFX, procedural audio + haptic hooks |
 | Dev | Dev menu (backtick / `--dev`), FPS counter, god mode, unlock-all, content validator, headless tests, balance harness |
 
 ## Controls
@@ -40,25 +40,26 @@ Export presets for Android (arm64) and iOS are in `export_presets.cfg` (portrait
 * **Tap** a vehicle for stats/sell; tap the deck cards to inspect.
 * **NEXT»** calls the next wave early for bonus SP; **x1/x2/x3** speed; **BUILD** lists synergies/upgrades/relics.
 
-## Art pipeline (`tools/`)
+## Art pipeline (`tools/pix/`)
 
-The supplied sheet (`assets/source/reference/traffic_jam_master_sheet.webp`) is the *only* art source. Everything is reproducible:
+All art is drawn **in code** (no scans, no AI images) at native low resolution and nearest-upscaled x4, so one art pixel = 4 screen
+pixels on the 1080x1920 canvas:
 
 ```
-pip install pillow numpy scipy opencv-python-headless
-python3 tools/extract_assets.py   # sheet -> clean transparent PNGs in assets/source/<category>/ (semantic names)
-python3 tools/make_units.py       # 60 vehicle arts = sheet sprites (recoloured/stretched variants, see tools/roster_art.py)
-python3 tools/make_ui.py          # procedural cut-paper UI kit, status icons, scraps, houses/pines, wheel overlay
-python3 tools/make_doll.py        # modular paper-doll parts (tintable) + faces
-python3 tools/wheels.py           # per-vehicle wheel positions (template matching) -> assets/runtime/wheels.json
-python3 tools/build_atlas.py      # runtime atlases (assets/runtime/atlas_*.png + atlas.json) + seamless ground textures
+pip install pillow numpy
+python3 tools/build_atlas.py   # draws everything and packs assets/runtime/atlas_*.png + atlas.json + tex/*.png
 ```
 
-Notes on fidelity (honest limits): the master sheet is 1536×1024, so individual sprites are ~40–60 px. They are segmented
-(flood/threshold + hole fill + feather), kept as native source PNGs, and only upscaled 2× with a light unsharp pass at atlas
-build time. Scenes that cannot hold up to scaling (biome pictures, cutscene panels) get a bilateral "repaint" instead of blur.
-Items that were too small/damaged to reuse (UI panels/buttons, speech bubbles, map backdrop, houses, doll parts, wheels,
-status icons, paper scraps, grain/halftone) were **reconstructed** in the sheet's palette and style rather than cropped.
+| Module | Draws |
+|---|---|
+| `vehicles.py`, `vkit.py` | 60 top-down player vehicles, 10 enemy vehicles, 6 bosses (rotated for lane direction) |
+| `arena.py` | the baked top-down battlefields (9 biomes x 2 layouts) with road, crosswalks, lots, sidewalks and decor |
+| `ui_px.py`, `icons_px.py`, `text_px.py` | panels, buttons, bars, cards, ribbons, icons, status badges, digits and sticker labels |
+| `chars_px.py` | tintable modular doll parts, cosmetics, NPCs, animals, avatar presets |
+| `scenes_px.py`, `props_px.py` | logo, mode cards, map nodes, biome panoramas, story panels, props, ground tiles, menu backgrounds |
+| `fx_px.py` | glow, rings, smoke, explosions, debris |
+
+`arena.py` replicates the road geometry of `BattleSim._build_path`; `tests/unit_test.tscn` checks they stay in sync.
 
 ## Architecture (`scripts/`)
 
@@ -94,4 +95,4 @@ tools/shot.sh out.png 120 --goto=battle --args=bot:1,speed:4         # screensho
 * Online PvP/Co-op needs a relay server (the client side/protocol is implemented and tested; offline simulation is the shipped experience).
 * No store SDKs/IAP — the shop only uses earned in-game currency.
 * Procedural audio is synthesised at boot (~2 s); replace with authored stems via `Audio.sfx/music` hooks when available.
-* Fonts: Lilita One, Patrick Hand, Bangers (SIL OFL, see `assets/fonts/LICENSE.txt`).
+* Fonts: Silkscreen, Pixelify Sans, VT323 (SIL OFL, see `assets/fonts/LICENSE.txt`).

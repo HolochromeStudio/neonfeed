@@ -233,7 +233,7 @@ func _build_hud() -> void:
 			deck_row.add_child(holder)
 	# deploy button
 	var bw := 420.0
-	deploy_btn = UI.btn("DEPLOY", "red", Vector2(bw, 150), func(): _on_deploy(), 58, "icon_dice")
+	deploy_btn = UI.btn("DEPLOY", "red", Vector2(bw, 150), func(): _on_deploy(), 48, "icon_dice")
 	deploy_btn.position = Vector2(vp.x - bw - 20, bottom_y + 70)
 	hud.add_child(deploy_btn)
 	cost_label = UI.label("10 SP", 34, UI.YELLOW, true, HORIZONTAL_ALIGNMENT_CENTER, 7)
