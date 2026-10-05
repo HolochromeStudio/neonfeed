@@ -53,3 +53,22 @@ Characters are 32x48, feet on the bottom row (y=47), centre origin (0.5, 1). `he
 | `dust_puff_0..2` | 16x16 | PLACEHOLDER | Dust puff animation (ground kick-up, death puff) |
 | `ui_exclaim` | 16x32 | PLACEHOLDER | Draw-cue "!" icon from the UI art set |
 | `ui_crosshair` | 32x32 | PLACEHOLDER | Aiming reticle from the UI art set |
+
+## Arenas (A11): procedural PLACEHOLDER parts of Dust Creek / Saloon
+
+Blocker B1: the desert terrain sheet is not available, so these are drawn with `Phaser.Graphics` in `src/scenes/ArenaBuilder.ts` from `src/data/arenas/*` (every layer with `placeholder: true`). Palette follows the town sheet. Atlas sprites (buildings, props, interior tiles) are real.
+
+| Placeholder | Where | Real asset that should replace it |
+|---|---|---|
+| Sky colour bands (day) + sun disc | `dust_creek` layer `sky` | Desert sky strip / cloud sprites |
+| Night sky bands + moon disc | `dust_creek_night` layer `sky` | Night sky strip with stars |
+| Far and mid mountain/mesa ridges (stepped rects) | layers `far-ridge`, `mid-ridge` (both Dust Creek variants) | Desert mesa/mountain silhouettes (parallax strips) |
+| Flat ground fill, horizon line, duel-lane band, dust speckle | layer `ground` | Desert ground tiles / dust patches (stamped) |
+| Lantern glow discs (additive) | `dust_creek_night.lights`, `saloon_interior.lights` | Baked glow sprites or a light shader |
+| Ceiling rect | `saloon_interior` layer `ceiling` | Ceiling beams strip |
+| Blue multiply tint for night | `ArenaDef.tint` | Hand-painted night variants of buildings |
+
+Other notes
+- Tile frames in the town atlas (`tile_*`, `wall_saloon_*`) have a 1px light halo on every edge; `ArenaBuilder` crops 1px per side when stamping as a workaround (needs A04 tile normalisation, D9).
+- Desert-specific props (tumbleweed, dry bones, mesa rocks) are not in the town sheet; the arenas deliberately avoid them.
+- Preview: `PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers node scripts/arenaPreview.mjs` writes `scripts/out/arena_*.png` (+ `_overlay.png` with zone/target rects).
