@@ -133,7 +133,7 @@ export const EFFECT_COST: Readonly<Record<string, number>> = {
 export const KNOWN_EFFECT_KEYS: readonly string[] = Object.keys(HANDLERS);
 
 export function getEffectCost(effectKey: string): number {
-  if (!(effectKey in HANDLERS)) throw new Error(`Unknown event effectKey: ${effectKey}`);
+  if (!Object.prototype.hasOwnProperty.call(HANDLERS, effectKey)) throw new Error(`Unknown event effectKey: ${effectKey}`);
   return EFFECT_COST[effectKey] ?? 0;
 }
 
@@ -144,8 +144,8 @@ const blankOutcome = (effectKey: string): EventOutcome => ({
 
 /** Resolve one effect. Throws on an unknown key. Consumes rng; use previewEffect to look without consuming. */
 export function resolveEffect(effectKey: string, c: ResolveCtx): EventOutcome {
+  if (!Object.prototype.hasOwnProperty.call(HANDLERS, effectKey)) throw new Error(`Unknown event effectKey: ${effectKey}`);
   const h = HANDLERS[effectKey];
-  if (!h || !Object.prototype.hasOwnProperty.call(HANDLERS, effectKey)) throw new Error(`Unknown event effectKey: ${effectKey}`);
   const o = blankOutcome(effectKey);
   const cost = EFFECT_COST[effectKey] ?? 0;
   if (cost > c.state.coins) { o.blocked = 'cannot_afford'; return o; }
