@@ -10,7 +10,7 @@ export async function createBot(opts = {}) {
     shot: (n) => shot(page, n),
     ev: (fn, arg) => page.evaluate(fn, arg),
     /** advance dialogue/menus by mashing A until the world is free again */
-    async mash(maxMs = 20000, until) {
+    async mash(maxMs = 150000, until) {
       const t0 = Date.now();
       for (;;) {
         const s = await bot.state().catch(() => null);
@@ -31,6 +31,8 @@ export async function createBot(opts = {}) {
         const hp = bt.e.mon.hp / Math.max(1, (window.__maxHp ? window.__maxHp(bt.e.mon) : 30));
         return { menu: b.menu, wild, over: bt.over, ehp: bt.e.mon.hp, stab: bt.e.stab, cont: b.lastCmd };
       });
+      const needSw = await page.evaluate(() => { const b = window.__battle; return !!(b && b.scene.isActive() && b.b && b.b.needSwitch && !b.b.over); });
+      if (needSw) { await page.evaluate(() => { const i = window.__input; ['down', 'a'].forEach((k, n) => setTimeout(() => { i.press(k); i.release(k); }, n * 120)); }); await P(350); return; }
       if (!act || !act.menu || act.over) return;
       if (act.menu === 'command') {
         const wantContain = bot.wantContain && act.wild;
@@ -39,10 +41,11 @@ export async function createBot(opts = {}) {
       } else if (act.menu === 'move') { await page.evaluate(() => { const i = window.__input; i.press('a'); i.release('a'); }); await P(250); }
     },
     wantContain: false,
-    async goto(tx, ty, maxMs = 30000) {
-      const t0 = Date.now();
+    async goto(tx, ty, maxMs = 600000) {
+      const t0 = Date.now(); const startMap = (await bot.state()).map;
       for (;;) {
         const s = await bot.state();
+        if (s.map !== startMap) { await P(350); return await bot.state(); }
         if (s.x === tx && s.y === ty) { await P(350); return await bot.state(); }
         if (s.busy || s.battle) { await bot.mash(); continue; }
         const d = await page.evaluate(([x, y]) => window.bb.nextDir(x, y), [tx, ty]);

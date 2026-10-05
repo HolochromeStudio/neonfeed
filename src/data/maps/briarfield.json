@@ -571,9 +571,9 @@
  "triggers": [
   {
    "id": "mira_b",
-   "x": 14,
-   "y": 8,
-   "w": 5,
+   "x": 24,
+   "y": 7,
+   "w": 1,
    "h": 1,
    "script": "mira_briarfield",
    "when": {
@@ -605,10 +605,10 @@
  "npcs": [
   {
    "id": "mira",
-   "x": 16,
-   "y": 7,
+   "x": 24,
+   "y": 9,
    "look": "mira",
-   "dir": "down",
+   "dir": "up",
    "name": "MIRA",
    "show": {
     "flag": "mira_b_vis"

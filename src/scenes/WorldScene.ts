@@ -48,7 +48,7 @@ export class WorldScene extends Phaser.Scene {
   wanderers: { spr: Phaser.GameObjects.Image; x: number; y: number; next: number; entry: any }[] = [];
   nextSpawn = 0; clockAcc = 0; debugOn = false; debugText?: Phaser.GameObjects.BitmapText;
   fadeLock = false; mapName?: Phaser.GameObjects.Container; sparkles: Phaser.GameObjects.Image[] = [];
-  glitchFx = 0; mira?: any;
+  glitchFx = 0; mira?: any; staticBars: Phaser.GameObjects.Rectangle[] = [];
   tmpLayers: any[] = [];
 
   constructor() { super('World'); }
@@ -81,7 +81,7 @@ export class WorldScene extends Phaser.Scene {
     for (const a of this.actors.values()) { a.spr.destroy(); a.shadow.destroy(); }
     this.actors.clear();
     for (const s of this.sprites) s.destroy(); this.sprites = [];
-    this.objSprites.clear(); this.anim = []; this.wanderers.forEach((w) => w.spr.destroy()); this.wanderers = [];
+    this.objSprites.forEach((o) => o.destroy()); this.objSprites.clear(); this.anim = []; this.wanderers.forEach((w) => w.spr.destroy()); this.wanderers = [];
     this.sparkles.forEach((s) => s.destroy()); this.sparkles = [];
   }
   loadMap(id: string, x: number, y: number, dir: Dir, o: { first?: boolean } = {}) {
@@ -224,7 +224,6 @@ export class WorldScene extends Phaser.Scene {
 
   // ====================== MAIN LOOP ======================
   update(_t: number, dtRaw: number) {
-    Input.update();
     const speedMul = G.s.settings.gameSpeed;
     const dt = Math.min(50, dtRaw) * speedMul;
     // clock + playtime
@@ -233,6 +232,8 @@ export class WorldScene extends Phaser.Scene {
     if (this.dirty && !this.moveInProgress()) { this.rebuildTiles(); this.sparkleRefresh(); this.actors.forEach((a) => { if (!a.isPlayer) this.applyNpcVisibility(a); }); this.refreshObjects(); this.setupCameraKeep(); }
     // weather
     if (this.weather === 'rain') for (const r of this.rain) { r.y += dt * 0.25; r.x -= dt * 0.06; if (r.y > 164) { r.y = -6; r.x = Math.random() * 260; } }
+    // static storm: pixel-authentic tearing bars
+    if (this.weather === 'static') { if (!this.staticBars.length) for (let i = 0; i < 5; i++) this.staticBars.push(this.add.rectangle(0, 0, 240, 2, 0xb43cd8, 0.5).setOrigin(0, 0).setScrollFactor(0).setDepth(902)); for (const b of this.staticBars) { b.setVisible(Math.random() < 0.35); b.y = Math.floor(Math.random() * 160); b.setFillStyle(Math.random() < 0.5 ? 0x38e0e8 : 0xb43cd8, 0.45); b.height = 1 + Math.floor(Math.random() * 3); } } else if (this.staticBars.length) { this.staticBars.forEach((b) => b.destroy()); this.staticBars = []; }
     // glitch fx
     if (this.glitchFx > 0) { this.glitchFx -= dtRaw; if (Math.random() < 0.3) this.cameras.main.setScroll(this.cameras.main.scrollX + Phaser.Math.Between(-2, 2), this.cameras.main.scrollY); }
     this.updateActors(dt);
@@ -833,6 +834,7 @@ export class WorldScene extends Phaser.Scene {
       give(id: string, n = 1) { addItem(id, n); },
       mon(species: string, level = 5) { addMon(makeMon(species, level)); },
       level(i: number, lv: number) { const m = G.s.party[i]; if (m) { m.level = lv; m.exp = lv ** 3; m.hp = maxHp(m); } },
+      levelAll(lv: number) { for (const m of G.s.party) { m.level = lv; m.exp = lv ** 3; m.hp = maxHp(m); } },
       heal() { healParty(); }, keys(n: number) { for (let i = 1; i <= 8; i++) { if (i <= n) G.s.bag[`root_key_0${i}`] = 1; else delete G.s.bag[`root_key_0${i}`]; } },
       battle(species: string, level = 5) { void self.startWild({ s: species, min: level, max: level }); },
       time(h: number) { G.s.clock = Math.floor(G.s.clock / 1440) * 1440 + h * 60; self.updateTint(); },

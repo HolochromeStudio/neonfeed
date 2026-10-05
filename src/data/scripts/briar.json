@@ -5,8 +5,12 @@
   },
   {
    "show": "mira",
-   "x": 16,
-   "y": 7,
+   "x": 24,
+   "y": 9,
+   "dir": "up"
+  },
+  {
+   "face": "player",
    "dir": "down"
   },
   {
@@ -15,7 +19,7 @@
   },
   {
    "move": "mira",
-   "path": "d1",
+   "path": "u1",
    "slow": true
   },
   {

@@ -29,6 +29,7 @@ export class BattleScene extends Phaser.Scene {
   constructor() { super('Battle'); }
 
   async create(data: Data) {
+    this.lastCmd = 0; this.lastMove = 0; this.leveled = false; this.tutorialStep = 0; this.badges = {};
     this.bd = data; this.ui = new Ui(this); (window as any).__battle = this;
     this.cameras.main.setBackgroundColor('#000000'); this.cameras.main.roundPixels = true;
     Audio.glitch = false; Audio.play(data.bgm);
@@ -226,7 +227,7 @@ export class BattleScene extends Phaser.Scene {
         const mods = itemCount('contain_module');
         let mod: string | undefined;
         if (mods > 0) {
-          const c = await this.ui.choose(['STANDARD', `MODULE x${mods}`], { x: 120, y: 80, w: 112, title: `${Math.round(this.b.containProbability(1) * 100)}% / ${Math.round(this.b.containProbability(1.5) * 100)}%`.length ? 'CONTAIN' : '' });
+          const c = await this.ui.choose(['STANDARD', `MODULE x${mods}`], { x: 4, y: 40, w: 112, title: `${Math.round(this.b.containProbability(1) * 100)}% / ${Math.round(this.b.containProbability(1.5) * 100)}%`.length ? 'CONTAIN' : '' });
           if (c < 0) continue; if (c === 1) mod = 'contain_module';
         }
         if (mod) takeItem('contain_module');

@@ -5,7 +5,7 @@ import { Audio } from '../audio/audio';
 import { G, itemCount, takeItem, addItem } from '../core/state';
 import { ITEMS, SHOPS, SPECIES } from '../data';
 import { maxHp, displayName, checkEvolution } from '../core/mon';
-import { partyMenu } from './party';
+import { partyMenu, wrapText } from './party';
 import { playEvolution } from './evolution';
 
 const CATS = ['HEALING', 'STATUS', 'CAPTURE', 'DEBUG', 'EVOLUTION', 'MATERIALS', 'KEY ITEMS'];
@@ -54,7 +54,7 @@ export async function bagMenu(scene: Phaser.Scene, ui: Ui, o: { battle?: boolean
     ui.rect(L, 0, 0, 240, 160, '#2a3a78');
     ui.win(L, 2, 2, 236, 18);
     const c = CATS[cat];
-    ui.text(L, 10, 8, `< ${c} >`, BLUE); ui.text(L, 140, 8, `${G.s.credits} CR`, '#c89818');
+    ui.text(L, 10, 8, `< ${c} >`, BLUE); ui.text(L, 96, 8, `${G.s.credits} CR`, '#c89818');
     const items = Object.entries(G.s.bag).filter(([id, n]) => n > 0 && ITEMS[id]?.cat === c).map(([id]) => id);
     if (idx >= items.length) idx = Math.max(0, items.length - 1);
     ui.win(L, 2, 22, 236, 86);
@@ -67,8 +67,8 @@ export async function bagMenu(scene: Phaser.Scene, ui: Ui, o: { battle?: boolean
     });
     ui.win(L, 2, 110, 236, 48);
     const sel = items[idx];
-    if (sel) { const d = ITEMS[sel].desc; ui.text(L, 10, 118, d.slice(0, 36), INK); ui.text(L, 10, 128, d.slice(36, 72), INK); ui.text(L, 10, 138, d.slice(72, 108), INK); }
-    if (G.s.settings.hints) ui.text(L, 4, 150, o.battle ? 'A:USE  L/R:TAB  B:BACK' : 'A:USE  L/R:TAB  B:BACK', '#8a90b0');
+    if (sel) wrapText(ITEMS[sel].desc, 37).slice(0, 4).forEach((ln, i) => ui.text(L, 10, 118 + i * 9, ln, INK));
+    if (G.s.settings.hints) ui.textR(L, 232, 8, 'A:USE B:BACK', DIM);
     const b = await Input.wait(['up', 'down', 'left', 'right', 'a', 'b']);
     L.destroy();
     if (b === 'b') { Audio.sfx('back'); return null; }
@@ -119,7 +119,7 @@ async function buy(scene: Phaser.Scene, ui: Ui, shop: { name: string; stock: str
     ui.win(L, 2, 2, 236, 18); ui.text(L, 10, 8, shop.name, BLUE); ui.text(L, 150, 8, `${G.s.credits} CR`, '#c89818');
     ui.win(L, 2, 22, 236, 86);
     shop.stock.forEach((id, i) => { const y = 30 + (i % 7) * 11; if (i < 7) { ui.text(L, 18, y, ITEMS[id].name.slice(0, 18), INK); ui.text(L, 176, y, `${ITEMS[id].price} CR`, INK); ui.text(L, 130, y, `x${itemCount(id)}`, DIM); } if (i === idx) L.add(scene.add.image(8, 30 + (idx % 7) * 11, 'cursor').setOrigin(0, 0).setTint(0x1a1830)); });
-    ui.win(L, 2, 110, 236, 48); const d = ITEMS[shop.stock[idx]].desc; ui.text(L, 10, 118, d.slice(0, 36), INK); ui.text(L, 10, 128, d.slice(36, 72), INK);
+    ui.win(L, 2, 110, 236, 48); wrapText(ITEMS[shop.stock[idx]].desc, 37).slice(0, 4).forEach((ln, i) => ui.text(L, 10, 118 + i * 9, ln, INK));
     const b = await Input.wait(['up', 'down', 'a', 'b']); L.destroy();
     if (b === 'b') { Audio.sfx('back'); return; }
     if (b === 'up') idx = (idx + shop.stock.length - 1) % shop.stock.length; else if (b === 'down') idx = (idx + 1) % shop.stock.length;

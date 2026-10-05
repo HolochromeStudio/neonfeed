@@ -578,9 +578,9 @@
  "triggers": [
   {
    "id": "mira_r1",
-   "x": 12,
+   "x": 1,
    "y": 35,
-   "w": 2,
+   "w": 24,
    "h": 1,
    "script": "mira_route1",
    "when": {

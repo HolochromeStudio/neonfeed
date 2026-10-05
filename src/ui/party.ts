@@ -34,10 +34,10 @@ export async function partyMenu(scene: Phaser.Scene, ui: Ui, o: { prompt?: strin
     const L = ui.layer();
     ui.rect(L, 0, 0, 240, 160, '#2a3a78');
     ui.win(L, 2, 2, 236, 16); ui.text(L, 10, 7, o.prompt ?? 'BYTE PARTY', BLUE);
-    party.forEach((m, i) => row(ui, L, scene, m, 2, 20 + i * 23, 236, (o.item === 'signal_crystal' && SPECIES[m.species].evo.some((e) => e.item === o.item)) ? 'CAN EVOLVE' : undefined));
+    party.forEach((m, i) => row(ui, L, scene, m, 2, 20 + i * 23 - (party.length > 5 ? 1 : 0), 236, (o.item === 'signal_crystal' && SPECIES[m.species].evo.some((e) => e.item === o.item)) ? 'CAN EVOLVE' : undefined));
     const cur = L.add(scene.add.image(0, 0, 'cursor').setOrigin(0, 0).setTint(0xd84040));
     cur.setPosition(-1, 28 + idx * 23);
-    if (G.s.settings.hints) ui.text(L, 8, 152, o.pick ? 'A: SELECT  B: BACK' : 'A: ACTIONS  B: BACK', '#c8d0ff');
+    if (G.s.settings.hints) ui.textR(L, 232, 7, o.pick ? 'A:SELECT B:BACK' : 'A:ACTIONS B:BACK', DIM);
     let chosen = -2;
     for (;;) {
       cur.setPosition(-1, 28 + idx * 23);
@@ -101,20 +101,20 @@ export async function summary(scene: Phaser.Scene, ui: Ui, m: Bytekin) {
     ui.rect(L, 10, 148, 76, 3, '#1a1830'); ui.rect(L, 11, 148, Math.round(74 * expBar(m)), 3, '#38a8e8');
     ui.win(L, 94, 2, 144, 156);
     ui.text(L, 102, 8, page === 0 ? 'STATS' : page === 1 ? 'MOVES' : 'INFO', BLUE);
-    ui.text(L, 214, 8, `${page + 1}/3`, DIM);
+    ui.text(L, 160, 8, `< ${page + 1}/3 >`, DIM);
     if (page === 0) {
       const stats: ['hp' | 'atk' | 'def' | 'sys' | 'spd', string][] = [['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['sys', 'SYS'], ['spd', 'SPD']];
       stats.forEach(([k, n], i) => {
         ui.text(L, 102, 24 + i * 14, n, INK);
         const v = k === 'hp' ? maxHp(m) : calcStat(m, k);
         ui.text(L, 130, 24 + i * 14, k === 'hp' ? `${m.hp}/${v}` : String(v), INK);
-        const bw = Math.min(70, Math.round((v / (k === 'hp' ? 160 : 110)) * 70));
-        ui.rect(L, 166, 25 + i * 14, 70, 5, '#d8dcec'); ui.rect(L, 166, 25 + i * 14, bw, 5, '#38a8e8');
+        const bw = Math.min(64, Math.round((v / (k === 'hp' ? 160 : 110)) * 64));
+        ui.rect(L, 166, 25 + i * 14, 64, 5, '#d8dcec'); ui.rect(L, 166, 25 + i * 14, bw, 5, '#38a8e8');
       });
       const ab = ABILITIES[m.ability];
       ui.text(L, 102, 98, 'ABILITY', BLUE); ui.text(L, 102, 108, ab?.name ?? m.ability, INK);
-      ui.text(L, 102, 120, (ab?.desc ?? '').slice(0, 22), DIM); ui.text(L, 102, 130, (ab?.desc ?? '').slice(22, 44), DIM);
-      if (m.status) ui.text(L, 102, 144, `STATUS: ${m.status}`, RED);
+      wrapText(ab?.desc ?? '', 22).slice(0, 3).forEach((ln, i) => ui.text(L, 102, 120 + i * 9, ln, DIM));
+      if (m.status) ui.text(L, 102, 148, `STATUS: ${m.status}`, RED);
     } else if (page === 1) {
       m.moves.forEach((mv, i) => {
         const d = MOVES[mv.id]; const y = 22 + i * 32;
@@ -129,7 +129,7 @@ export async function summary(scene: Phaser.Scene, ui: Ui, m: Bytekin) {
       ui.text(L, 102, 132, `STABILITY: ${sp.stab.toUpperCase()}`, MAGc);
       ui.text(L, 102, 144, `RARITY: ${sp.rarity.toUpperCase()}`, DIM);
     }
-    if (G.s.settings.hints) ui.text(L, 100, 150, '< > PAGE  B: BACK', '#8a90b0');
+    if (G.s.settings.hints) ui.textR(L, 232, 8, 'B:BACK', DIM);
     const b = await Input.wait(['left', 'right', 'a', 'b']);
     L.destroy();
     if (b === 'b') { Audio.sfx('back'); return; }

@@ -46,6 +46,7 @@ setTimeout(applyScale, 50);
 
 Input.init();
 Audio.init();
+game.events.on(Phaser.Core.Events.POST_STEP, () => Input.update());
 G.s.settings = loadGlobalSettings();
 (window as any).__game = game;
 (window as any).G = G;

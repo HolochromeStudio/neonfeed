@@ -16,7 +16,7 @@ function habitats(species: string): string[] {
   return out;
 }
 export async function dexMenu(scene: Phaser.Scene, ui: Ui) {
-  let idx = 0;
+  let idx = 0; let dexPage = 0;
   const ids = SPECIES_ORDER;
   for (;;) {
     const L = ui.layer();
@@ -27,26 +27,35 @@ export async function dexMenu(scene: Phaser.Scene, ui: Ui) {
     const VIS = 11; const top = Math.max(0, Math.min(idx - 5, ids.length - VIS));
     ids.slice(top, top + VIS).forEach((id, i) => {
       const y = 28 + i * 11; const st = G.s.dex[id] || 0; const sp = SPECIES[id];
-      ui.text(L, 16, y, `${String(sp.dex).padStart(3, '0')} ${st ? sp.name.slice(0, 11) : '-----------'}`, st ? INK : DIM);
+      ui.text(L, 16, y, `${String(sp.dex).padStart(3, '0')} ${st ? sp.name.slice(0, 10) : '---------'}`, st ? INK : DIM);
       if (st === 2) ui.text(L, 94, y, '@', GREEN);
       if (top + i === idx) L.add(scene.add.image(7, y, 'cursor').setOrigin(0, 0).setTint(0x1a1830));
     });
     ui.win(L, 108, 20, 130, 138);
     const id = ids[idx]; const sp = SPECIES[id]; const st = G.s.dex[id] || 0;
-    L.add(scene.add.image(150, 24, creatureTex(scene, id, st ? 'front' : 'sil')).setOrigin(0, 0).setScale(0.75));
+    L.add(scene.add.image(150, 22, creatureTex(scene, id, st ? 'front' : 'sil')).setOrigin(0, 0).setScale(0.75));
     ui.text(L, 114, 24, `#${String(sp.dex).padStart(3, '0')}`, DIM);
     if (st) {
-      ui.text(L, 114, 74, sp.name, INK);
-      let bx = 114; for (const t of sp.types) bx += typeBadge(ui, L, bx, 84, t, TYPE_COLORS) + 3;
-      if (st === 2) {
-        wrapText(sp.desc, 20).slice(0, 5).forEach((ln, i) => ui.text(L, 114, 96 + i * 9, ln, INK));
-      } else ui.text(L, 114, 98, 'CONTAIN IT TO LOG', DIM), ui.text(L, 114, 108, 'FULL RESEARCH DATA.', DIM);
-      ui.text(L, 114, 142, `STAB:${sp.stab.toUpperCase()}`, MAG);
-      const h = habitats(id); ui.text(L, 114, 150, ('HAB:' + (h.join(',') || '???')).slice(0, 21), DIM);
-    } else { ui.text(L, 114, 74, '??????????', DIM); ui.text(L, 114, 98, 'UNKNOWN BYTEKIN.', DIM); ui.text(L, 114, 108, 'FIND IT IN THE WILD.', DIM); }
-    const b = await Input.wait(['up', 'down', 'left', 'right', 'b']);
+      ui.text(L, 114, 72, sp.name, INK);
+      let bx = 114; for (const t of sp.types) bx += typeBadge(ui, L, bx, 82, t, TYPE_COLORS) + 3;
+      if (dexPage === 0) {
+        if (st === 2) wrapText(sp.desc, 21).slice(0, 6).forEach((ln, i) => ui.text(L, 114, 95 + i * 9, ln, INK));
+        else { ui.text(L, 114, 98, 'CONTAIN IT TO LOG', DIM); ui.text(L, 114, 108, 'FULL RESEARCH DATA.', DIM); }
+        ui.text(L, 114, 148, 'A: DATA', DIM);
+      } else {
+        const h = habitats(id);
+        ui.text(L, 114, 95, `STABILITY: ${sp.stab.toUpperCase()}`, MAG);
+        ui.text(L, 114, 105, `RARITY: ${sp.rarity.toUpperCase()}`, INK);
+        ui.text(L, 114, 115, `ABILITY: ${st === 2 ? (ABILITIES[sp.abilities[0]]?.name ?? '').slice(0, 12) : '???'}`, INK);
+        ui.text(L, 114, 125, `HABITAT: ${h[0] ?? '???'}`.slice(0, 21), INK);
+        if (h.length > 1) ui.text(L, 114, 134, `+ ${h.slice(1).join(', ')}`.slice(0, 21), DIM);
+        ui.text(L, 114, 148, 'A: ENTRY', DIM);
+      }
+    } else { ui.text(L, 114, 72, '??????????', DIM); ui.text(L, 114, 95, 'UNKNOWN BYTEKIN.', DIM); ui.text(L, 114, 105, 'FIND IT IN THE WILD.', DIM); }
+    const b = await Input.wait(['up', 'down', 'left', 'right', 'a', 'b']);
     L.destroy();
     if (b === 'b') { Audio.sfx('back'); return; }
+    if (b === 'a') dexPage ^= 1;
     if (b === 'up') idx = Math.max(0, idx - 1); else if (b === 'down') idx = Math.min(ids.length - 1, idx + 1);
     else if (b === 'left') idx = Math.max(0, idx - 10); else if (b === 'right') idx = Math.min(ids.length - 1, idx + 10);
     Audio.sfx('move');
@@ -165,18 +174,17 @@ export async function debuggerMenu(scene: Phaser.Scene, ui: Ui) {
   ui.win(L, 2, 2, 236, 156);
   const d = dexCounts();
   L.add(scene.add.image(8, 10, 'debugger').setOrigin(0, 0).setScale(1.1));
-  ui.text(L, 60, 10, `${G.s.name}`, BLUE); ui.text(L, 60, 20, `DEBUGGER LV ${1 + rootKeys()}`, INK);
-  ui.text(L, 60, 32, `TIME ${playtimeText()}  DAY ${dayNumber()} ${clockText()}`, DIM);
-  ui.text(L, 60, 42, `${timeOfDay().toUpperCase()}`, DIM);
-  ui.text(L, 60, 54, `CREDITS ${G.s.credits}`, GOLD);
-  ui.text(L, 60, 66, `BYTEDEX ${d.seen}/${d.total}  OWN ${d.got}`, INK);
-  ui.text(L, 60, 78, `WINS ${G.s.stats.wins}/${G.s.stats.battles}  CONTAINED ${G.s.stats.contained}`.slice(0, 29), INK);
-  ui.text(L, 60, 90, `STEPS ${G.s.stats.steps}  MODE ${G.s.settings.difficulty}`, DIM);
-  ui.text(L, 10, 78 + 6, 'ROOT KEYS', BLUE);
-  for (let i = 1; i <= 8; i++) { const have = G.s.bag[`root_key_0${i}`] > 0; ui.rect(L, 10 + (i - 1) * 24, 100, 20, 14, '#1a1830'); ui.rect(L, 11 + (i - 1) * 24, 101, 18, 12, have ? '#38e0e8' : '#d8dcec'); ui.text(L, 16 + (i - 1) * 24, 104, have ? String(i) : '?', have ? INK : DIM); }
-  ui.text(L, 10, 120, 'FIELD ABILITIES', BLUE);
+  ui.text(L, 60, 8, `${G.s.name}`, BLUE); ui.text(L, 60, 18, `DEBUGGER LV ${1 + rootKeys()}`, INK);
+  ui.text(L, 60, 29, `TIME ${playtimeText()}`, DIM); ui.text(L, 60, 39, `DAY ${dayNumber()} ${clockText()} ${timeOfDay().toUpperCase()}`, DIM);
+  ui.text(L, 60, 50, `CREDITS ${G.s.credits}`, GOLD);
+  ui.text(L, 60, 60, `BYTEDEX ${d.seen}/${d.total}  OWN ${d.got}`, INK);
+  ui.text(L, 60, 70, `WINS ${G.s.stats.wins}/${G.s.stats.battles}  CONTAINED ${G.s.stats.contained}`.slice(0, 29), INK);
+  ui.text(L, 60, 80, `STEPS ${G.s.stats.steps}  ${G.s.settings.difficulty}`, DIM);
+  ui.text(L, 10, 92, 'ROOT KEYS', BLUE);
+  for (let i = 1; i <= 8; i++) { const have = G.s.bag[`root_key_0${i}`] > 0; ui.rect(L, 10 + (i - 1) * 28, 102, 24, 14, '#1a1830'); ui.rect(L, 11 + (i - 1) * 28, 103, 22, 12, have ? '#38e0e8' : '#d8dcec'); ui.text(L, 19 + (i - 1) * 28, 106, have ? String(i) : '?', have ? INK : DIM); }
+  ui.text(L, 10, 122, 'FIELD ABILITIES', BLUE);
   const ab: [string, boolean][] = [['SCAN', flag('has_scan')], ['PULSE', flag('has_pulse')], ['FREQ', false], ['OVRD', false], ['TRCE', false], ['DCPT', false], ['PHSE', false], ['ANCR', false]];
-  ab.forEach(([n, on], i) => ui.text(L, 10 + (i % 4) * 56, 130 + Math.floor(i / 4) * 10, on ? n : '----', on ? GREEN : DIM));
-  if (G.s.settings.hints) ui.text(L, 160, 148, 'B: BACK', DIM);
+  ab.forEach(([n, on], i) => ui.text(L, 10 + (i % 4) * 56, 132 + Math.floor(i / 4) * 10, on ? n : '----', on ? GREEN : DIM));
+  if (G.s.settings.hints) ui.textR(L, 232, 148, 'B:BACK', DIM);
   await Input.wait(['b', 'a']); Audio.sfx('back'); L.destroy(); void RED; void WHITE; void ABILITIES;
 }

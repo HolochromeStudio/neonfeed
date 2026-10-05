@@ -45,8 +45,21 @@ class InputSys {
     const i = this.waiters.findIndex((w) => w.f(b));
     if (i >= 0) { const [w] = this.waiters.splice(i, 1); this.pressedFrame[b] = false; w.r(b); }
   }
-  /** call every frame: key-repeat for directions while waiting in menus */
+  private padPrev: Partial<Record<Btn, boolean>> = {};
+  private pollPad() {
+    const pads = (navigator.getGamepads?.() ?? []) as (Gamepad | null)[];
+    const cur: Partial<Record<Btn, boolean>> = {};
+    for (const p of pads) {
+      if (!p) continue;
+      const ax = p.axes[0] ?? 0, ay = p.axes[1] ?? 0, bt = (i: number) => !!p.buttons[i]?.pressed;
+      cur.left ||= bt(14) || ax < -0.5; cur.right ||= bt(15) || ax > 0.5; cur.up ||= bt(12) || ay < -0.5; cur.down ||= bt(13) || ay > 0.5;
+      cur.a ||= bt(0); cur.b ||= bt(1); cur.start ||= bt(9) || bt(8); cur.run ||= bt(2) || bt(5);
+    }
+    for (const b of ALL) { const now = !!cur[b], was = !!this.padPrev[b]; if (now && !was) this.press(b); else if (!now && was) this.release(b); this.padPrev[b] = now; }
+  }
+  /** call every frame: key-repeat for directions while waiting in menus; polls gamepads */
   update() {
+    this.pollPad();
     const now = performance.now();
     for (const b of ['up', 'down', 'left', 'right'] as Btn[]) {
       const h = this.held[b];

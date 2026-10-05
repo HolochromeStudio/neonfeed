@@ -93,6 +93,22 @@ describe('maps', () => {
   });
 });
 
+describe('trainers', () => {
+  it('every trainer has an unobstructed line of sight that crosses walkable ground', () => {
+    const DIRS: Record<string, [number, number]> = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+    const bad: string[] = [];
+    for (const [id, def] of Object.entries<any>(MAPS)) withFlags(allFlags(), () => {
+      const cm = compileMap(def);
+      for (const t of def.trainers ?? []) {
+        const [dx, dy] = DIRS[t.dir]; const sight = t.sight ?? 4; let seen = 0;
+        for (let i = 1; i <= sight; i++) { const x = t.x + dx * i, y = t.y + dy * i; if (isSolidAt(cm, x, y)) break; seen++; }
+        if (seen < Math.min(2, sight)) bad.push(`${id}:${t.id} sees only ${seen} tiles from (${t.x},${t.y}) facing ${t.dir}`);
+      }
+    });
+    expect(bad).toEqual([]);
+  });
+});
+
 describe('game data', () => {
   it('encounter tables, trainers, shops, quests are valid', () => {
     for (const [id, z] of Object.entries(ENCOUNTERS)) for (const e of z.table) { expect(SPECIES[e.s], `${id}:${e.s}`).toBeTruthy(); expect(e.min).toBeLessThanOrEqual(e.max); }
@@ -106,5 +122,24 @@ describe('game data', () => {
     // flags the engine itself sets: starter_selected, has_*, relay_puzzle_solved ...
     const engine = new Set(['game_start', 'starter_selected', 'relay_puzzle_solved', 'node1_valves_done', 'relay_done']);
     for (const [id, q] of Object.entries<any>(QUESTS)) for (const o of q.objectives) if (o.type === 'flag') expect(setFlags.has(o.flag) || engine.has(o.flag), `${id}: flag ${o.flag} never set`).toBe(true);
+  });
+});
+
+describe('text', () => {
+  it('all player-facing strings use only glyphs the pixel font has (ASCII 32-126)', () => {
+    const bad: string[] = [];
+    const walk = (x: any, path: string) => {
+      if (typeof x === 'string') { if (/[^\x20-\x7e]/.test(x)) bad.push(`${path}: ${x.slice(0, 40)}`); }
+      else if (Array.isArray(x)) x.forEach((v, i) => walk(v, `${path}[${i}]`));
+      else if (x && typeof x === 'object') for (const [k, v] of Object.entries(x)) walk(v, `${path}.${k}`);
+    };
+    walk(MAPS, 'maps'); walk(SCRIPTS, 'scripts'); walk(QUESTS, 'quests'); walk(SPECIES, 'species'); walk(ITEMS, 'items'); walk(MOVES, 'moves'); walk(TRAINERS, 'trainers'); walk(ABILITIES, 'abilities');
+    expect(bad).toEqual([]);
+  });
+  it('dialogue lines are short enough to read (each say <= 220 chars)', () => {
+    const long: string[] = [];
+    const visit = (cmds: any[], where: string) => { for (const c of cmds) { if (typeof c.say === 'string' && c.say.length > 220) long.push(`${where}: ${c.say.slice(0, 40)}`); for (const k of ['then', 'else', 'yes', 'no']) if (Array.isArray(c[k])) visit(c[k], where); if (c.on) for (const v of Object.values<any>(c.on)) visit(v, where); } };
+    for (const [id, s] of Object.entries(SCRIPTS)) visit(s, id);
+    expect(long).toEqual([]);
   });
 });
