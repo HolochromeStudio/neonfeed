@@ -46,7 +46,7 @@ func _ready() -> void:
 	_tap.position = Vector2(0, vp.y * 0.86)
 	_tap.size = Vector2(vp.x, 100)
 	add_child(_tap)
-	var ver := UI.label("v1.0  -  A cut-paper traffic story", 26, Color(1, 1, 1, 0.65), false)
+	var ver := UI.label("v1.0  -  A pixel traffic story", 26, Color(1, 1, 1, 0.65), false)
 	ver.position = Vector2(0, vp.y - 60 - Game.safe_bottom)
 	ver.size = Vector2(vp.x, 40)
 	add_child(ver)
