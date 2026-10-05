@@ -23,14 +23,14 @@ func setup(text: String, color: String, sz: Vector2, font_size: int, icon_key: S
 	_bg = Atlas.nine("ui_btn_%s_up" % color, 40)
 	_bg.size = sz + Vector2(0, 0)
 	add_child(_bg)
-	label = UI.label(text, font_size, UI.INK if color in ["yellow", "orange", "mint", "gray"] else UI.WHITE, true)
+	label = UI.label(text, font_size, UI.INK if color in ["yellow", "mint"] else UI.WHITE, true)
 	label.size = sz - Vector2(10, 14)
 	label.position = Vector2(5, 2)
 	label.clip_text = false
 	label.autowrap_mode = TextServer.AUTOWRAP_OFF
-	if color in ["teal", "red", "blue", "lavender", "green", "dark"]:
-		label.add_theme_constant_override("outline_size", 6)
-		label.add_theme_color_override("font_outline_color", Color(0.1, 0.08, 0.08, 0.9))
+	if color not in ["yellow", "mint"]:
+		label.add_theme_constant_override("outline_size", 4)
+		label.add_theme_color_override("font_outline_color", UI.INK)
 	add_child(label)
 	_base_text_pos = label.position
 	if icon_key != "":

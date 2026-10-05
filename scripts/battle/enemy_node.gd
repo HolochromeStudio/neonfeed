@@ -27,56 +27,45 @@ var _sx: float = 1.0
 var _stun_icon: Sprite2D
 var _dead: bool = false
 var _smoke_t: float = 0.0
-var wheels: Array = []
-var _wheel_rot: float = 0.0
+var _art: String = ""
+var _radius: float = 60.0
+var _suffix: String = ""
 
 func setup(en: BattleSim.SimEnemy, v: BattleView) -> void:
 	e = en
 	view = v
 	_ph = randf() * TAU
 	position = en.pos
-	shadow = Atlas.sprite("fx_shadow_blob")
-	shadow.scale = Vector2(1.7, 0.8) * float(en.def.get("scale", 1.0))
-	shadow.position = Vector2(0, 6)
-	shadow.modulate = Color(1, 1, 1, 0.7)
+	shadow = Sprite2D.new()
+	shadow.modulate = Color(0, 0, 0, 0.32)
+	shadow.position = Vector2(8, 10)
 	add_child(shadow)
 	glow = Atlas.sprite("fx_glow")
 	glow.modulate = Color(1, 0.85, 0.3, 0.0)
 	glow.scale = Vector2(2.2, 2.2)
-	glow.position = Vector2(0, -34)
+	glow.position = Vector2(0, 0)
 	add_child(glow)
 	body = Node2D.new()
 	add_child(body)
-	sprite = Atlas.sprite(String(en.def["art"]), true)
+	_art = String(en.def["art"])
+	sprite = Atlas.sprite(_art)
 	body.add_child(sprite)
-	var w: float = sprite.texture.region.size.x
-	_fit = clampf(104.0 / w, 0.6, 1.1) * float(en.def.get("scale", 1.0))
-	if en.boss:
-		_fit = clampf(190.0 / w, 0.8, 1.6) * 1.0
-	_fit *= en.size_mult
+	_fit = 1.0
 	if en.elite:
-		_fit *= 1.12
 		glow.modulate = Color(1, 0.85, 0.3, 0.55)
-	sprite.scale = Vector2(_fit, _fit)
-	for wd in Atlas.wheels(String(en.def["art"])):
-		var ws := Atlas.sprite("fx_wheel")
-		ws.position = Vector2(wd[0], wd[1])
-		var kk: float = float(wd[2]) * 1.86 / 64.0
-		ws.scale = Vector2(kk, kk)
-		sprite.add_child(ws)
-		wheels.append(ws)
-	hp_bg = Atlas.nine("ui_bar_bg", 20)
-	hp_bg.size = Vector2(70, 14) * (1.6 if en.boss else 1.0)
-	hp_bg.position = Vector2(-hp_bg.size.x * 0.5, -sprite.texture.region.size.y * _fit - 22)
+	_radius = maxf(sprite.texture.region.size.x, sprite.texture.region.size.y) * 0.5
+	hp_bg = Atlas.nine("ui_bar_bg", 8)
+	hp_bg.size = Vector2(72, 16) * (1.6 if en.boss else 1.0)
+	hp_bg.position = Vector2(-hp_bg.size.x * 0.5, -_radius - 26)
 	add_child(hp_bg)
-	hp_fill = Atlas.nine("ui_bar_fill_red" if not en.elite else "ui_bar_fill_yellow", 20)
+	hp_fill = Atlas.nine("ui_bar_fill_red" if not en.elite else "ui_bar_fill_yellow", 8)
 	hp_fill.size = hp_bg.size
 	hp_fill.position = hp_bg.position
 	add_child(hp_fill)
 	hp_bg.visible = en.elite or en.boss
 	hp_fill.visible = hp_bg.visible
 	status_row = Node2D.new()
-	status_row.position = Vector2(0, -sprite.texture.region.size.y * _fit - 46)
+	status_row.position = Vector2(0, -_radius - 52)
 	add_child(status_row)
 	if en.shield > 0.0:
 		shield_ring = Atlas.sprite("fx_ring")
@@ -85,8 +74,8 @@ func setup(en: BattleSim.SimEnemy, v: BattleView) -> void:
 		shield_ring.position = Vector2(0, -30)
 		add_child(shield_ring)
 	# spawn pop
-	body.scale = Vector2(0.3, 0.3)
-	create_tween().tween_property(body, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	body.modulate.a = 0.0
+	create_tween().tween_property(body, "modulate:a", 1.0, 0.18)
 	if en.boss:
 		Audio.sfx("growl")
 		z_index = 5
@@ -109,23 +98,29 @@ func sync(sim: BattleSim, dt: float) -> void:
 	position = e.pos
 	var dir := e.dir
 	var fear := e.st.has("fear")
-	var want_flip := -1.0 if (dir.x > 0.05) != fear else 1.0
-	if absf(dir.x) > 0.05:
-		_flip = lerpf(_flip, want_flip, clampf(dt * 10.0, 0, 1))
+	if fear:
+		dir = -dir
+	var suf := _suffix
+	if absf(dir.x) >= absf(dir.y) * 0.9:
+		suf = "" if dir.x >= 0.0 else "_left"
+	elif dir.y > 0.0:
+		suf = "_down"
+	else:
+		suf = "_up"
+	if suf != _suffix or sprite.texture == null or sprite.texture.region.size == Vector2.ZERO:
+		_suffix = suf
+		var key := _art + suf
+		if not Atlas.has(key):
+			key = _art
+		sprite.texture = Atlas.tex(key)
+		shadow.texture = sprite.texture
 	var speedf := clampf(e.speed / 90.0, 0.5, 2.5)
 	var moving := not e.st.has("stun")
-	if moving and not wheels.is_empty():
-		var dirsign := -1.0 if fear else 1.0
-		_wheel_rot += (e.speed * dt / 7.0) * dirsign * (1.0 if _flip < 0.0 else -1.0) * -1.0
-		for ws in wheels:
-			ws.rotation = _wheel_rot
-	var bob := sin(_t * 9.0 * speedf + _ph) * (1.6 if moving else 0.2)
-	body.position.y = bob * 0.5 - (6.0 if e.flying else 0.0) + (sin(_t * 3.0) * 8.0 if e.flying else 0.0)
-	var tilt := dir.y * 0.18 * (-_flip) if absf(dir.x) > 0.05 else dir.y * 0.15
-	body.rotation = lerpf(body.rotation, tilt + sin(_t * 9.0 * speedf + _ph) * 0.01, clampf(dt * 8.0, 0, 1))
+	# pixel-stepped drive bounce (two frames) instead of smooth bob
+	var step := 1.0 if (int(_t * 6.0 * speedf + _ph) % 2 == 0) else 0.0
+	body.position.y = (step * 4.0 if moving else 0.0) - (8.0 if e.flying else 0.0) + (snappedf(sin(_t * 3.0) * 8.0, 4.0) if e.flying else 0.0)
 	_hit_squash = maxf(0.0, _hit_squash - dt)
-	var sq := 1.0 - _hit_squash * 0.8
-	sprite.scale = Vector2(_fit * _flip / sq, _fit * sq)
+	sprite.scale = Vector2.ONE
 	if e.untargetable_t > 0.0:
 		sprite.modulate.a = 0.35
 	else:
@@ -144,7 +139,7 @@ func sync(sim: BattleSim, dt: float) -> void:
 	# hp bar
 	if hp_bg.visible:
 		var f := clampf(e.hp / e.max_hp, 0.0, 1.0)
-		hp_fill.size.x = maxf(14.0, hp_bg.size.x * f)
+		hp_fill.size.x = maxf(8.0, hp_bg.size.x * f)
 	if shield_ring:
 		shield_ring.visible = e.shield > 0.0
 		shield_ring.scale = Vector2(1.0 + 0.05 * sin(_t * 6.0), 0.8)
@@ -154,7 +149,7 @@ func sync(sim: BattleSim, dt: float) -> void:
 		_dust = 0.28
 		var d := Atlas.sprite("fx_dust")
 		d.position = position + Vector2(-dir.x * 30, 4)
-		d.scale = Vector2(0.4, 0.4)
+		d.scale = Vector2(0.5, 0.5)
 		d.modulate = Color(1, 1, 1, 0.5)
 		view.fx_layer.add_child(d)
 		var tw := d.create_tween()
@@ -169,7 +164,7 @@ func sync(sim: BattleSim, dt: float) -> void:
 		if _smoke_t <= 0.0:
 			_smoke_t = 0.45 if hpf >= 0.25 else 0.25
 			var sm := Atlas.sprite("fx_smoke_tiny")
-			sm.position = position + Vector2(-e.dir.x * 10, -sprite.texture.region.size.y * _fit * 0.5)
+			sm.position = position + Vector2(-e.dir.x * 10, -_radius * 0.5)
 			sm.scale = Vector2(0.28, 0.28)
 			sm.modulate = Color(0.8, 0.8, 0.8, 0.8)
 			view.fx_layer.add_child(sm)
@@ -180,7 +175,7 @@ func sync(sim: BattleSim, dt: float) -> void:
 			stw.tween_property(sm, "modulate:a", 0.0, 0.7)
 			stw.chain().tween_callback(sm.queue_free)
 	if hpf < 0.25:
-		body.position.x = sin(_t * 40.0) * 1.5
+		body.position.x = 4.0 if int(_t * 20.0) % 2 == 0 else -4.0
 	var keys := e.st.keys()
 	if keys != _keys:
 		_keys = keys.duplicate()
@@ -190,7 +185,7 @@ func sync(sim: BattleSim, dt: float) -> void:
 			_stun_icon = Atlas.sprite("ui_status_stun")
 			_stun_icon.scale = Vector2(0.6, 0.6)
 			add_child(_stun_icon)
-		_stun_icon.position = Vector2(sin(_t * 8.0) * 20, -sprite.texture.region.size.y * _fit * 0.9)
+		_stun_icon.position = Vector2(sin(_t * 8.0) * 20, -_radius - 10.0)
 		_stun_icon.visible = true
 	elif _stun_icon:
 		_stun_icon.visible = false
@@ -217,14 +212,14 @@ func die(boss: bool) -> void:
 	hp_bg.visible = false
 	hp_fill.visible = false
 	status_row.visible = false
+	shadow.visible = false
 	var tw := create_tween()
 	tw.set_parallel(true)
 	if boss:
-		tw.tween_property(body, "scale", Vector2(1.4, 0.2), 0.5)
-		tw.tween_property(self, "modulate:a", 0.0, 0.5).set_delay(0.2)
+		tw.tween_property(body, "modulate", Color(3, 3, 3, 1), 0.15)
+		tw.tween_property(self, "modulate:a", 0.0, 0.45).set_delay(0.25)
 	else:
-		tw.tween_property(body, "position:y", -50.0, 0.28).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		tw.tween_property(body, "rotation", randf_range(-1.6, 1.6), 0.3)
-		tw.tween_property(body, "scale", Vector2(0.2, 0.2), 0.3).set_delay(0.05)
-		tw.tween_property(self, "modulate:a", 0.0, 0.2).set_delay(0.12)
+		sprite.modulate = Color(3, 3, 3, 1)
+		tw.tween_property(body, "position:y", -24.0, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tw.tween_property(self, "modulate:a", 0.0, 0.18).set_delay(0.08)
 	tw.chain().tween_callback(queue_free)

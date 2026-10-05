@@ -28,8 +28,10 @@ var _mouth_t: float = 0.0
 var _bubble: Sprite2D
 var _event_t: float = 0.0
 
+const PX := 4.0   # one art pixel on screen
+
 static func tint(c: Color) -> Color:
-	return Color(minf(c.r * 1.3, 1.0), minf(c.g * 1.3, 1.0), minf(c.b * 1.3, 1.0), 1.0)
+	return c
 
 func _init(l: Dictionary = {}) -> void:
 	look = l if not l.is_empty() else Save.look()
@@ -41,7 +43,7 @@ func _ready() -> void:
 func _spr(key: String, pos: Vector2, parent: Node2D, col: Color = Color.WHITE) -> Sprite2D:
 	var s := Sprite2D.new()
 	s.texture = Atlas.tex(key)
-	s.position = pos
+	s.position = pos * PX
 	s.modulate = col
 	parent.add_child(s)
 	return s
@@ -49,64 +51,59 @@ func _spr(key: String, pos: Vector2, parent: Node2D, col: Color = Color.WHITE) -
 func _cos(id: String) -> Dictionary:
 	return Data.cosmetics_by_id.get(id, {})
 
+## Geometry is in art pixels relative to the feet (y up is negative); sprites are 4x upscaled pixel art tinted per cosmetic.
 func build() -> void:
 	for c in get_children():
 		c.queue_free()
 	_root = Node2D.new(); add_child(_root)
-	var shadow := _spr("fx_shadow_blob", Vector2(0, 2), _root, Color(1, 1, 1, 0.8)); shadow.scale = Vector2(1.6, 1.0)
+	var shadow := _spr("fx_shadow_blob", Vector2(0, 0), _root, Color(0, 0, 0, 0.3)); shadow.scale = Vector2(0.9, 0.9)
 	var skin: Color = _cos(look.get("skin", "skin_1")).get("color", Color("e0a97a"))
 	var top_c: Color = _cos(look.get("top", "top_0")).get("color", Color("5b79b0"))
 	var bot_c: Color = _cos(look.get("bottom", "bot_0")).get("color", Color("3f5f8f"))
 	var shoe_c: Color = _cos(look.get("shoes", "shoe_0")).get("color", Color("3a2e2a"))
 	_body = Node2D.new(); _root.add_child(_body)
-	# back accessory
 	var acc: String = look.get("accessory", "acc_none")
 	var accd := _cos(acc)
 	if acc == "acc_backpack":
-		_spr("doll_backpack", Vector2(-34, -100), _body, tint(Color("a65d3d")))
-	# legs
-	_leg_l = Node2D.new(); _leg_l.position = Vector2(-17, -54); _body.add_child(_leg_l)
-	_leg_r = Node2D.new(); _leg_r.position = Vector2(17, -54); _body.add_child(_leg_r)
+		_spr("doll_backpack", Vector2(0, -21), _body)
+	_leg_l = Node2D.new(); _leg_l.position = Vector2(-3, -13) * PX; _body.add_child(_leg_l)
+	_leg_r = Node2D.new(); _leg_r.position = Vector2(3, -13) * PX; _body.add_child(_leg_r)
 	for lg in [_leg_l, _leg_r]:
-		_spr("doll_leg", Vector2(0, 24), lg, tint(bot_c))
-		_spr("doll_shoe", Vector2(0, 52), lg, tint(shoe_c))
-	# rear arm
-	_arm_r = Node2D.new(); _arm_r.position = Vector2(40, -118); _body.add_child(_arm_r)
-	_spr("doll_arm", Vector2(0, 24), _arm_r, tint(top_c))
-	_spr("doll_hand", Vector2(0, 54), _arm_r, tint(skin))
-	_spr("doll_torso", Vector2(0, -92), _body, tint(top_c))
-	_arm_l = Node2D.new(); _arm_l.position = Vector2(-40, -118); _body.add_child(_arm_l)
-	_spr("doll_arm", Vector2(0, 24), _arm_l, tint(top_c))
-	_spr("doll_hand", Vector2(0, 54), _arm_l, tint(skin))
-	# head group
-	_head = Node2D.new(); _head.position = Vector2(0, -138); _body.add_child(_head)
-	_spr("doll_ear", Vector2(-46, -40), _head, tint(skin))
-	_spr("doll_ear", Vector2(46, -40), _head, tint(skin))
-	_spr("doll_head", Vector2(0, -40), _head, tint(skin))
-	_spr("doll_cheek", Vector2(-27, -28), _head, Color(1, 1, 1, 0.7))
-	_spr("doll_cheek", Vector2(27, -28), _head, Color(1, 1, 1, 0.7))
-	_eyes = _spr("doll_eyes_open", Vector2(0, -42), _head)
-	_mouth = _spr("doll_mouth_neutral", Vector2(0, -16), _head)
+		_spr("doll_leg", Vector2(0, 6.5), lg, bot_c)
+		_spr("doll_shoe", Vector2(0.5, 10.5), lg, shoe_c)
+	_arm_r = Node2D.new(); _arm_r.position = Vector2(8.5, -25.5) * PX; _body.add_child(_arm_r)
+	_spr("doll_arm", Vector2(0, 6.5), _arm_r, top_c)
+	_spr("doll_hand", Vector2(0, 13), _arm_r, skin)
+	_spr("doll_torso", Vector2(0, -20), _body, top_c)
+	_arm_l = Node2D.new(); _arm_l.position = Vector2(-8.5, -25.5) * PX; _body.add_child(_arm_l)
+	_spr("doll_arm", Vector2(0, 6.5), _arm_l, top_c)
+	_spr("doll_hand", Vector2(0, 13), _arm_l, skin)
+	_head = Node2D.new(); _head.position = Vector2(0, -23) * PX; _body.add_child(_head)   # hinge at the chin
+	_spr("doll_ear", Vector2(-12.5, -10.5), _head, skin)
+	_spr("doll_ear", Vector2(12.5, -10.5), _head, skin)
+	_spr("doll_head", Vector2(0, -11), _head, skin)
+	_spr("doll_cheek", Vector2(-6, -5.5), _head)
+	_spr("doll_cheek", Vector2(6, -5.5), _head)
+	_eyes = _spr("doll_eyes_open", Vector2(0, -10), _head)
+	_mouth = _spr("doll_mouth_neutral", Vector2(0, -4), _head)
 	_extra = Node2D.new(); _head.add_child(_extra)
 	var g: String = look.get("glasses", "glasses_none")
 	if _cos(g).get("key", "") != "":
-		var gs := _spr(_cos(g)["key"], Vector2(0, -40), _head); gs.scale = Vector2(0.78, 0.78)
+		_spr(_cos(g)["key"], Vector2(0, -11), _head)
 	var h: String = look.get("hair", "hair_none")
 	if _cos(h).get("key", "") != "":
-		var hs := _spr(_cos(h)["key"], Vector2(0, -80), _head); hs.scale = Vector2(1.1, 1.1)
-		hs.position.y = -82 + (hs.texture.region.size.y * 0.5 * 1.1 - 38.0) * 0.5
+		_spr(_cos(h)["key"], Vector2(0, -11), _head)
 	var hat: String = look.get("hat", "hat_none")
 	if _cos(hat).get("key", "") != "":
-		var ht := _spr(_cos(hat)["key"], Vector2(0, -80), _head); ht.scale = Vector2(1.0, 1.0)
-		ht.position.y = -76 - ht.texture.region.size.y * 0.5 + 38.0
+		_spr(_cos(hat)["key"], Vector2(0, -11), _head)
 	if accd.get("key", "") != "" and acc != "acc_backpack" and acc != "acc_none":
 		var key: String = accd["key"]
-		var s := _spr(key, Vector2(0, -52), _head)
 		if key.begins_with("icon_"):
-			s.scale = Vector2(0.6, 0.6); s.position = Vector2(0, -110)
+			var s := _spr(key, Vector2(14, -30), _head)
+			s.scale = Vector2(0.6, 0.6)
 		else:
-			s.scale = Vector2(1.15, 1.15)
-	_bubble = Sprite2D.new(); _bubble.visible = false; _bubble.position = Vector2(70, -250); add_child(_bubble)
+			_spr(key, Vector2(0, -11), _head)
+	_bubble = Sprite2D.new(); _bubble.visible = false; _bubble.position = Vector2(18, -52) * PX; add_child(_bubble)
 
 func set_state(s: String) -> void:
 	state = s
@@ -123,15 +120,15 @@ func set_mood(m: String) -> void:
 	_bubble.visible = true
 	match m:
 		"worried":
-			_bubble.texture = Atlas.tex("fx_drop"); _bubble.scale = Vector2(1.2, 1.2); _bubble.position = Vector2(60, -215)
+			_bubble.texture = Atlas.tex("fx_drop"); _bubble.scale = Vector2(1.0, 1.0); _bubble.position = Vector2(16, -44) * PX
 		"surprised":
-			_bubble.texture = Atlas.tex("icon_alert"); _bubble.scale = Vector2(0.8, 0.8); _bubble.position = Vector2(60, -260)
+			_bubble.texture = Atlas.tex("icon_alert"); _bubble.scale = Vector2(0.8, 0.8); _bubble.position = Vector2(17, -52) * PX
 		"think":
 			_bubble.texture = Atlas.tex("icon_remote"); _bubble.scale = Vector2(0.01, 0.01); _bubble.visible = false
 		"happy":
-			_bubble.texture = Atlas.tex("fx_sparkle"); _bubble.scale = Vector2(0.45, 0.45); _bubble.position = Vector2(-62, -240)
+			_bubble.texture = Atlas.tex("fx_sparkle"); _bubble.scale = Vector2(0.8, 0.8); _bubble.position = Vector2(-16, -50) * PX
 		"angry":
-			_bubble.texture = Atlas.tex("fx_flame"); _bubble.scale = Vector2(0.55, 0.55); _bubble.position = Vector2(62, -250)
+			_bubble.texture = Atlas.tex("fx_flame"); _bubble.scale = Vector2(0.9, 0.9); _bubble.position = Vector2(16, -50) * PX
 		_:
 			_bubble.visible = false
 
@@ -165,7 +162,7 @@ func _process(dt: float) -> void:
 	var squash := 1.0
 	match state:
 		"idle", "talk":
-			bob = sin(t * 2.4) * 2.5
+			bob = snappedf(sin(t * 2.4) * 2.5, 4.0)
 			squash = 1.0 + sin(t * 2.4) * 0.012
 			arm_l = sin(t * 2.4 + 1.0) * 0.06; arm_r = -sin(t * 2.4 + 1.0) * 0.06
 			head_rot = sin(t * 1.3) * 0.03

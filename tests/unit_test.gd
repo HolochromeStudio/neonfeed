@@ -12,6 +12,18 @@ func _sim(deck: Array, seed_: int = 1) -> BattleSim:
 
 func _ready() -> void:
 	await get_tree().process_frame
+	# --- baked arenas (tools/pix/arena.py) must match the simulation's road
+	var lf := FileAccess.open("res://assets/runtime/tex/arena_layout.json", FileAccess.READ)
+	var lay: Dictionary = JSON.parse_string(lf.get_as_text())
+	for kind in ["a", "b"]:
+		var sm := BattleSim.new()
+		var cfg := {"mode": "story", "seed": 1, "deck": ["taxi"], "levels": {}, "city_hp": 20, "start_sp": 0, "chapter": 1, "level": 1, "waves": 3, "enemy_pool": ["slow_car"]}
+		if kind == "b":
+			cfg["coop"] = true; cfg["cols"] = 5; cfg["rows"] = 6; cfg["cell"] = Vector2(136, 120); cfg["grid_origin"] = Vector2(200, 500)
+		sm.setup(cfg)
+		var L: Dictionary = lay[kind]
+		ok(absf(sm.path_pts[0].y - float(L["first"][1])) < 0.5 and absf(sm.path_pts[sm.path_pts.size() - 1].y - float(L["last"][1])) < 0.5, "arena %s matches the sim road (lane y)" % kind)
+		ok(absf(sm.grid_origin.x - float(L["org"][0])) < 0.5 and absf(sm.grid_origin.y - float(L["org"][1])) < 0.5, "arena %s matches the sim grid origin" % kind)
 	# --- deploy
 	var s := _sim(["taxi", "police", "fire_engine", "tow_truck", "city_bus"])
 	var c0 := s.deploy_cost()

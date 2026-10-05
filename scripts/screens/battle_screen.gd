@@ -69,8 +69,8 @@ func _ready() -> void:
 	sim = BattleSim.new()
 	var c := cfg.duplicate()
 	if mode == "coop":
-		c["grid_origin"] = Vector2(vp.x * 0.5 - 540.0 + 190.0, 500)
-		c["cell"] = Vector2(136, 118)
+		c["grid_origin"] = Vector2(200, 500)
+		c["cell"] = Vector2(136, 120)
 	sim.setup(c)
 	sim.ended.connect(_on_sim_ended)
 	view = BattleView.new()

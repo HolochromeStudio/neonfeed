@@ -1,1054 +1,1441 @@
 {
 "entries": {
 "biome_beach_road": {
-"page": 0,
+"page": 2,
 "rect": [
-1042,
-927,
-396,
-332
+2,
+2,
+1080,
+600
 ]
 },
 "biome_city_center": {
 "page": 0,
 "rect": [
-398,
-1601,
-396,
-308
+2,
+2,
+1080,
+600
 ]
 },
 "biome_countryside": {
-"page": 0,
+"page": 2,
 "rect": [
-1442,
-927,
-444,
-332
+2,
+606,
+1080,
+600
 ]
 },
 "biome_desert": {
-"page": 0,
+"page": 1,
 "rect": [
-1565,
-1267,
-444,
-328
+2,
+606,
+1080,
+600
 ]
 },
 "biome_highway": {
 "page": 0,
 "rect": [
-798,
-1601,
-392,
-308
+2,
+1210,
+1080,
+600
 ]
 },
 "biome_industrial": {
-"page": 0,
+"page": 1,
 "rect": [
-1165,
-1267,
-396,
-328
+2,
+2,
+1080,
+600
 ]
 },
 "biome_night_city": {
-"page": 0,
+"page": 2,
 "rect": [
-646,
-927,
-392,
-332
+2,
+1210,
+1080,
+600
 ]
 },
 "biome_snow_town": {
-"page": 0,
+"page": 1,
 "rect": [
 2,
-1601,
-392,
-328
+1210,
+1080,
+600
 ]
 },
 "biome_suburbs": {
 "page": 0,
 "rect": [
-1194,
-1601,
-444,
-308
+2,
+606,
+1080,
+600
 ]
 },
 "boss_drill_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-174,
-2,
-196,
-170
+1462,
+1162,
+192,
+120
+]
+},
+"boss_drill_truck_down": {
+"page": 9,
+"rect": [
+266,
+434,
+120,
+192
+]
+},
+"boss_drill_truck_left": {
+"page": 9,
+"rect": [
+1658,
+1162,
+192,
+120
+]
+},
+"boss_drill_truck_up": {
+"page": 9,
+"rect": [
+390,
+434,
+120,
+192
 ]
 },
 "boss_helicopter": {
-"page": 7,
+"page": 9,
 "rect": [
-1016,
+1822,
 2,
-178,
-150
+224,
+200
+]
+},
+"boss_helicopter_down": {
+"page": 9,
+"rect": [
+2,
+2,
+200,
+224
+]
+},
+"boss_helicopter_left": {
+"page": 9,
+"rect": [
+2,
+230,
+224,
+200
+]
+},
+"boss_helicopter_up": {
+"page": 9,
+"rect": [
+206,
+2,
+200,
+224
 ]
 },
 "boss_mecha": {
-"page": 7,
+"page": 9,
+"rect": [
+854,
+818,
+184,
+168
+]
+},
+"boss_mecha_down": {
+"page": 9,
 "rect": [
 2,
-2,
+630,
 168,
-188
+184
+]
+},
+"boss_mecha_left": {
+"page": 9,
+"rect": [
+1042,
+818,
+184,
+168
+]
+},
+"boss_mecha_up": {
+"page": 9,
+"rect": [
+174,
+630,
+168,
+184
 ]
 },
 "boss_monster_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-374,
+1706,
+998,
+184,
+144
+]
+},
+"boss_monster_truck_down": {
+"page": 9,
+"rect": [
+1694,
+434,
+144,
+184
+]
+},
+"boss_monster_truck_left": {
+"page": 9,
+"rect": [
 2,
-176,
-162
+1162,
+184,
+144
+]
+},
+"boss_monster_truck_up": {
+"page": 9,
+"rect": [
+1842,
+434,
+144,
+184
 ]
 },
 "boss_tank": {
-"page": 7,
+"page": 9,
 "rect": [
-554,
-2,
-152,
-156
+982,
+1162,
+168,
+136
+]
+},
+"boss_tank_down": {
+"page": 9,
+"rect": [
+574,
+818,
+136,
+168
+]
+},
+"boss_tank_left": {
+"page": 9,
+"rect": [
+1154,
+1162,
+168,
+136
+]
+},
+"boss_tank_up": {
+"page": 9,
+"rect": [
+714,
+818,
+136,
+168
 ]
 },
 "boss_ufo": {
-"page": 7,
+"page": 9,
 "rect": [
-710,
-2,
-164,
-152
+190,
+1162,
+144,
+144
 ]
 },
-"btnbaked_customize": {
-"page": 5,
+"boss_ufo_down": {
+"page": 9,
 "rect": [
-893,
-2,
-342,
-96
+338,
+1162,
+144,
+144
 ]
 },
-"btnbaked_inventory": {
-"page": 5,
+"boss_ufo_left": {
+"page": 9,
 "rect": [
-1239,
-2,
-321,
-96
+486,
+1162,
+144,
+144
 ]
 },
-"btnbaked_leaderboard": {
-"page": 5,
+"boss_ufo_up": {
+"page": 9,
 "rect": [
-1564,
-2,
-342,
-96
-]
-},
-"btnbaked_play": {
-"page": 5,
-"rect": [
-807,
-108,
-342,
-93
-]
-},
-"btnbaked_quests": {
-"page": 5,
-"rect": [
-2,
-108,
-321,
-96
-]
-},
-"btnbaked_settings": {
-"page": 5,
-"rect": [
-568,
-2,
-321,
-96
-]
-},
-"btnbaked_shop": {
-"page": 5,
-"rect": [
-1153,
-108,
-321,
-93
-]
-},
-"btnbaked_units": {
-"page": 5,
-"rect": [
-327,
-108,
-342,
-96
+634,
+1162,
+144,
+144
 ]
 },
 "cos_accessories_headphones": {
-"page": 2,
+"page": 4,
 "rect": [
-986,
-186,
-106,
-74
+562,
+506,
+136,
+136
 ]
 },
 "cos_bottoms_blue_hoodie2": {
-"page": 2,
+"page": 4,
 "rect": [
-352,
-290,
-62,
-64
+382,
+646,
+72,
+72
 ]
 },
 "cos_bottoms_cargo": {
-"page": 2,
+"page": 4,
 "rect": [
-536,
-290,
-60,
-62
+1902,
+506,
+72,
+72
 ]
 },
 "cos_bottoms_dark_jacket": {
-"page": 2,
+"page": 4,
 "rect": [
-226,
-290,
-58,
-64
+154,
+646,
+72,
+72
+]
+},
+"cos_bottoms_dark_jacket2": {
+"page": 4,
+"rect": [
+534,
+646,
+72,
+72
 ]
 },
 "cos_bottoms_denim_shorts": {
-"page": 2,
+"page": 4,
 "rect": [
-1888,
-186,
-60,
-66
+78,
+646,
+72,
+72
 ]
 },
 "cos_bottoms_jeans": {
-"page": 2,
+"page": 4,
 "rect": [
-288,
-290,
-60,
-64
+1826,
+506,
+72,
+72
 ]
 },
 "cos_bottoms_overalls": {
-"page": 2,
+"page": 4,
 "rect": [
-170,
-290,
-52,
-64
+2,
+646,
+72,
+72
 ]
 },
 "cos_bottoms_red_bag": {
-"page": 2,
+"page": 4,
 "rect": [
-482,
-290,
-50,
-62
+610,
+646,
+72,
+72
 ]
 },
 "cos_bottoms_red_pack": {
-"page": 2,
+"page": 4,
 "rect": [
-710,
-290,
-56,
-60
+230,
+646,
+72,
+72
+]
+},
+"cos_bottoms_red_pack2": {
+"page": 4,
+"rect": [
+686,
+646,
+72,
+72
 ]
 },
 "cos_bottoms_red_sneakers": {
-"page": 2,
+"page": 4,
 "rect": [
-770,
-290,
-54,
-60
+306,
+646,
+72,
+72
 ]
 },
 "cos_bottoms_yellow_jacket": {
-"page": 2,
+"page": 4,
 "rect": [
-1824,
-186,
-60,
-66
+1674,
+506,
+72,
+72
 ]
 },
 "cos_glasses_dark_shades": {
-"page": 2,
+"page": 4,
 "rect": [
-962,
-290,
-98,
-54
+422,
+506,
+136,
+136
 ]
 },
 "cos_glasses_round_shades": {
-"page": 2,
+"page": 4,
 "rect": [
-1064,
-290,
-104,
-52
+282,
+506,
+136,
+136
 ]
 },
 "cos_hair_curly_blond": {
-"page": 2,
+"page": 4,
 "rect": [
-884,
-186,
-98,
-74
+1174,
+254,
+136,
+136
 ]
 },
 "cos_hair_messy_brown": {
-"page": 2,
+"page": 4,
 "rect": [
-566,
-186,
-98,
-82
+754,
+254,
+136,
+136
 ]
 },
 "cos_hair_slick_black": {
-"page": 2,
+"page": 4,
 "rect": [
-668,
-186,
-102,
-78
+1034,
+254,
+136,
+136
 ]
 },
 "cos_hair_spiky_black": {
-"page": 2,
+"page": 4,
 "rect": [
-454,
-186,
-108,
-84
+894,
+254,
+136,
+136
 ]
 },
 "cos_hats_cap_blue_red": {
-"page": 2,
+"page": 4,
 "rect": [
-1170,
-186,
-100,
-70
+1314,
+254,
+136,
+136
 ]
 },
 "cos_hats_cap_green": {
-"page": 2,
+"page": 4,
 "rect": [
-774,
-186,
-106,
-78
+1594,
+254,
+136,
+136
 ]
 },
 "cos_hats_cap_red_blue": {
-"page": 2,
+"page": 4,
 "rect": [
-600,
-290,
-106,
-62
+1454,
+254,
+136,
+136
 ]
 },
 "cos_hats_cap_white": {
-"page": 2,
+"page": 4,
+"rect": [
+1734,
+254,
+136,
+136
+]
+},
+"cos_hats_crown": {
+"page": 4,
+"rect": [
+142,
+506,
+136,
+136
+]
+},
+"cos_hats_golden": {
+"page": 4,
 "rect": [
 2,
-290,
-102,
-66
+506,
+136,
+136
 ]
 },
 "cos_hats_hat_black": {
-"page": 2,
+"page": 4,
 "rect": [
-828,
-290,
-98,
-60
+1874,
+254,
+136,
+136
 ]
 },
 "cos_tops_blue_hoodie": {
-"page": 2,
+"page": 4,
 "rect": [
-1462,
-186,
-54,
-68
-]
-},
-"cos_tops_green_hoodie": {
-"page": 2,
-"rect": [
-1764,
-186,
-56,
-68
+1750,
+506,
+72,
+72
 ]
 },
 "cos_tops_green_jacket": {
-"page": 2,
+"page": 4,
 "rect": [
-1338,
-186,
-56,
-70
+1522,
+506,
+72,
+72
 ]
 },
 "cos_tops_grey_jacket": {
-"page": 2,
+"page": 4,
 "rect": [
-1638,
-186,
-58,
-68
+1598,
+506,
+72,
+72
 ]
 },
 "cos_tops_jeans_overalls": {
-"page": 2,
+"page": 4,
 "rect": [
-1520,
-186,
-56,
-68
+458,
+646,
+72,
+72
 ]
 },
 "cos_tops_navy_scarf": {
-"page": 2,
+"page": 4,
 "rect": [
-1580,
-186,
-54,
-68
+1218,
+506,
+72,
+72
 ]
 },
 "cos_tops_patchwork_tee": {
-"page": 2,
+"page": 4,
 "rect": [
-108,
-290,
-58,
-66
+1142,
+506,
+72,
+72
 ]
 },
 "cos_tops_red_jacket": {
-"page": 2,
+"page": 4,
 "rect": [
-1398,
-186,
-60,
-70
+1446,
+506,
+72,
+72
 ]
 },
 "cos_tops_tan_jacket": {
-"page": 2,
+"page": 4,
 "rect": [
-1700,
-186,
-60,
-68
+1294,
+506,
+72,
+72
 ]
 },
 "cos_tops_teal_hoodie": {
-"page": 2,
+"page": 4,
 "rect": [
-1274,
-186,
-60,
-70
+1370,
+506,
+72,
+72
 ]
 },
 "cut_panel_1": {
-"page": 1,
+"page": 3,
 "rect": [
-506,
+1330,
 2,
-515,
-305
+500,
+304
 ]
 },
 "cut_panel_2": {
-"page": 1,
+"page": 3,
 "rect": [
 2,
-2,
+350,
 500,
-305
+304
 ]
 },
 "cut_panel_3": {
-"page": 0,
+"page": 3,
 "rect": [
-586,
-1267,
-575,
-330
+506,
+350,
+500,
+304
 ]
 },
 "cut_panel_4": {
-"page": 0,
+"page": 3,
 "rect": [
-2,
-1267,
-580,
-330
+1010,
+350,
+500,
+304
 ]
 },
 "digit_0": {
-"page": 5,
+"page": 7,
 "rect": [
-673,
-108,
-74,
-94
+338,
+2,
+76,
+76
 ]
 },
 "digit_1": {
-"page": 5,
+"page": 7,
 "rect": [
-751,
-108,
-52,
-94
+418,
+2,
+64,
+76
 ]
 },
 "digit_2": {
-"page": 5,
+"page": 7,
 "rect": [
-248,
+486,
 2,
-72,
-96
+76,
+76
 ]
 },
 "digit_3": {
-"page": 5,
+"page": 7,
 "rect": [
-1734,
-108,
-74,
-92
+566,
+2,
+76,
+76
 ]
 },
 "digit_4": {
-"page": 5,
+"page": 7,
 "rect": [
-482,
+646,
 2,
-82,
-96
+76,
+76
 ]
 },
 "digit_5": {
-"page": 5,
+"page": 7,
 "rect": [
-170,
+726,
 2,
-74,
-98
+76,
+76
 ]
 },
 "digit_6": {
-"page": 5,
+"page": 7,
 "rect": [
-404,
+806,
 2,
-74,
-96
+76,
+76
 ]
 },
 "digit_7": {
-"page": 5,
+"page": 7,
 "rect": [
-1658,
-108,
-72,
-92
+886,
+2,
+76,
+76
 ]
 },
 "digit_8": {
-"page": 5,
+"page": 7,
 "rect": [
-324,
+966,
 2,
 76,
-96
+76
 ]
 },
 "digit_9": {
-"page": 5,
+"page": 7,
 "rect": [
+1046,
 2,
-2,
-74,
-102
+76,
+76
 ]
 },
 "doll_arm": {
-"page": 2,
+"page": 4,
 "rect": [
-930,
-290,
-28,
-58
+1086,
+646,
+24,
+52
 ]
 },
 "doll_backpack": {
-"page": 2,
+"page": 4,
 "rect": [
-418,
-290,
-60,
-64
+962,
+646,
+52,
+60
 ]
 },
 "doll_cheek": {
-"page": 2,
+"page": 4,
 "rect": [
-358,
-360,
-22,
-16
+38,
+722,
+16,
+12
 ]
 },
 "doll_ear": {
-"page": 2,
+"page": 4,
 "rect": [
-1952,
-290,
-32,
-30
+1146,
+646,
+20,
+24
 ]
 },
 "doll_eyes_angry": {
-"page": 2,
+"page": 4,
 "rect": [
-1478,
-290,
-84,
-40
+1510,
+646,
+64,
+24
 ]
 },
 "doll_eyes_blink": {
-"page": 2,
+"page": 4,
 "rect": [
-1654,
-290,
-84,
-40
+1306,
+646,
+64,
+24
 ]
 },
 "doll_eyes_happy": {
-"page": 2,
+"page": 4,
 "rect": [
-1302,
-290,
-84,
-40
+1374,
+646,
+64,
+24
 ]
 },
 "doll_eyes_look": {
-"page": 2,
+"page": 4,
 "rect": [
-1830,
-290,
-84,
-40
+1714,
+646,
+64,
+24
 ]
 },
 "doll_eyes_open": {
-"page": 2,
+"page": 4,
 "rect": [
-1214,
-290,
-84,
-40
+1238,
+646,
+64,
+24
 ]
 },
 "doll_eyes_surprised": {
-"page": 2,
+"page": 4,
 "rect": [
-1390,
-290,
-84,
-40
+1442,
+646,
+64,
+24
 ]
 },
 "doll_eyes_think": {
-"page": 2,
+"page": 4,
 "rect": [
-1566,
-290,
-84,
-40
+1646,
+646,
+64,
+24
 ]
 },
 "doll_eyes_worried": {
-"page": 2,
+"page": 4,
 "rect": [
-1742,
-290,
-84,
-40
+1578,
+646,
+64,
+24
 ]
 },
 "doll_hand": {
-"page": 2,
+"page": 4,
 "rect": [
-1918,
-290,
-30,
-30
+1170,
+646,
+24,
+24
 ]
 },
 "doll_head": {
-"page": 2,
+"page": 4,
 "rect": [
-358,
-186,
-92,
-86
+702,
+506,
+96,
+88
 ]
 },
 "doll_leg": {
-"page": 2,
+"page": 4,
 "rect": [
-1172,
-290,
-38,
+1114,
+646,
+28,
 52
 ]
 },
 "doll_mouth_frown": {
-"page": 2,
+"page": 4,
 "rect": [
-90,
-360,
-40,
-26
+1854,
+646,
+32,
+16
 ]
 },
 "doll_mouth_grin": {
-"page": 2,
+"page": 4,
 "rect": [
-226,
-360,
-40,
-26
+1926,
+646,
+32,
+16
 ]
 },
 "doll_mouth_neutral": {
-"page": 2,
+"page": 4,
 "rect": [
-2,
-360,
-40,
-26
+1818,
+646,
+32,
+16
 ]
 },
 "doll_mouth_o": {
-"page": 2,
+"page": 4,
 "rect": [
-270,
-360,
-40,
-26
+1890,
+646,
+32,
+16
 ]
 },
 "doll_mouth_smile": {
-"page": 2,
+"page": 4,
 "rect": [
-182,
-360,
-40,
-26
+1782,
+646,
+32,
+16
 ]
 },
 "doll_mouth_talk_a": {
-"page": 2,
+"page": 4,
 "rect": [
-1988,
-290,
-40,
-26
+1962,
+646,
+32,
+16
 ]
 },
 "doll_mouth_talk_b": {
-"page": 2,
+"page": 4,
 "rect": [
-46,
-360,
-40,
-26
+1998,
+646,
+32,
+16
 ]
 },
 "doll_mouth_wobble": {
-"page": 2,
+"page": 4,
 "rect": [
-314,
-360,
-40,
-26
+2,
+722,
+32,
+16
 ]
 },
 "doll_shoe": {
-"page": 2,
+"page": 4,
 "rect": [
-134,
-360,
-44,
-26
+1198,
+646,
+36,
+24
 ]
 },
 "doll_torso": {
-"page": 2,
+"page": 4,
 "rect": [
-1096,
-186,
-70,
-72
+1018,
+646,
+64,
+56
 ]
 },
 "en_armored_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-282,
-194,
-138,
-134
+310,
+1310,
+160,
+112
+]
+},
+"en_armored_truck_down": {
+"page": 9,
+"rect": [
+1670,
+818,
+112,
+160
+]
+},
+"en_armored_truck_left": {
+"page": 9,
+"rect": [
+474,
+1310,
+160,
+112
+]
+},
+"en_armored_truck_up": {
+"page": 9,
+"rect": [
+1786,
+818,
+112,
+160
 ]
 },
 "en_bus": {
-"page": 7,
+"page": 9,
+"rect": [
+1854,
+1162,
+168,
+112
+]
+},
+"en_bus_down": {
+"page": 9,
+"rect": [
+342,
+818,
+112,
+168
+]
+},
+"en_bus_left": {
+"page": 9,
 "rect": [
 2,
-194,
-134,
-138
+1310,
+168,
+112
+]
+},
+"en_bus_up": {
+"page": 9,
+"rect": [
+458,
+818,
+112,
+168
 ]
 },
 "en_gang_cars": {
-"page": 7,
+"page": 9,
 "rect": [
-1152,
-194,
-138,
-126
+566,
+998,
+144,
+152
+]
+},
+"en_gang_cars_down": {
+"page": 9,
+"rect": [
+1394,
+998,
+152,
+144
+]
+},
+"en_gang_cars_left": {
+"page": 9,
+"rect": [
+714,
+998,
+144,
+152
+]
+},
+"en_gang_cars_up": {
+"page": 9,
+"rect": [
+1550,
+998,
+152,
+144
 ]
 },
 "en_motorcycle": {
-"page": 7,
+"page": 9,
 "rect": [
-788,
-194,
-104,
-130
+446,
+1426,
+112,
+64
+]
+},
+"en_motorcycle_down": {
+"page": 9,
+"rect": [
+174,
+1310,
+64,
+112
+]
+},
+"en_motorcycle_left": {
+"page": 9,
+"rect": [
+562,
+1426,
+112,
+64
+]
+},
+"en_motorcycle_up": {
+"page": 9,
+"rect": [
+242,
+1310,
+64,
+112
 ]
 },
 "en_police_chase": {
-"page": 7,
+"page": 9,
 "rect": [
-1328,
+1886,
+1310,
+144,
+96
+]
+},
+"en_police_chase_down": {
+"page": 9,
+"rect": [
+1194,
+998,
+96,
+144
+]
+},
+"en_police_chase_left": {
+"page": 9,
+"rect": [
 2,
-126,
+1426,
+144,
+96
+]
+},
+"en_police_chase_up": {
+"page": 9,
+"rect": [
+1294,
+998,
+96,
 144
 ]
 },
 "en_road_cleaner": {
-"page": 7,
+"page": 9,
 "rect": [
-1602,
+1278,
+1310,
+160,
+104
+]
+},
+"en_road_cleaner_down": {
+"page": 9,
+"rect": [
+1902,
+818,
+104,
+160
+]
+},
+"en_road_cleaner_left": {
+"page": 9,
+"rect": [
+1442,
+1310,
+160,
+104
+]
+},
+"en_road_cleaner_up": {
+"page": 9,
+"rect": [
 2,
-140,
-140
+998,
+104,
+160
 ]
 },
 "en_slow_car": {
-"page": 7,
+"page": 9,
 "rect": [
-1084,
-450,
-126,
-100
+1606,
+1310,
+136,
+96
+]
+},
+"en_slow_car_down": {
+"page": 9,
+"rect": [
+782,
+1162,
+96,
+136
+]
+},
+"en_slow_car_left": {
+"page": 9,
+"rect": [
+1746,
+1310,
+136,
+96
+]
+},
+"en_slow_car_up": {
+"page": 9,
+"rect": [
+882,
+1162,
+96,
+136
 ]
 },
 "en_speedster": {
-"page": 7,
+"page": 9,
 "rect": [
-526,
-336,
-136,
-110
-]
-},
-"en_suv": {
-"page": 7,
-"rect": [
-1562,
-194,
-122,
-114
-]
-},
-"en_truck": {
-"page": 7,
-"rect": [
-1024,
-194,
-124,
-128
-]
-},
-"fx_arrow_blue": {
-"page": 4,
-"rect": [
-1504,
-2,
-72,
-68
-]
-},
-"fx_arrow_red_a": {
-"page": 4,
-"rect": [
-1346,
-2,
-74,
+150,
+1426,
+144,
 88
 ]
 },
-"fx_arrow_red_b": {
-"page": 4,
+"en_speedster_down": {
+"page": 9,
 "rect": [
-1778,
+1010,
+998,
+88,
+144
+]
+},
+"en_speedster_left": {
+"page": 9,
+"rect": [
+298,
+1426,
+144,
+88
+]
+},
+"en_speedster_up": {
+"page": 9,
+"rect": [
+1102,
+998,
+88,
+144
+]
+},
+"en_suv": {
+"page": 9,
+"rect": [
+638,
+1310,
+152,
+104
+]
+},
+"en_suv_down": {
+"page": 9,
+"rect": [
+350,
+998,
+104,
+152
+]
+},
+"en_suv_left": {
+"page": 9,
+"rect": [
+794,
+1310,
+152,
+104
+]
+},
+"en_suv_up": {
+"page": 9,
+"rect": [
+458,
+998,
+104,
+152
+]
+},
+"en_truck": {
+"page": 9,
+"rect": [
+950,
+1310,
+160,
+104
+]
+},
+"en_truck_down": {
+"page": 9,
+"rect": [
+1454,
+818,
+104,
+160
+]
+},
+"en_truck_left": {
+"page": 9,
+"rect": [
+1114,
+1310,
+160,
+104
+]
+},
+"en_truck_up": {
+"page": 9,
+"rect": [
+1562,
+818,
+104,
+160
+]
+},
+"fx_arrow_blue": {
+"page": 6,
+"rect": [
+1594,
 2,
-58,
-60
+44,
+44
+]
+},
+"fx_arrow_red_a": {
+"page": 6,
+"rect": [
+1642,
+2,
+44,
+44
+]
+},
+"fx_arrow_red_b": {
+"page": 6,
+"rect": [
+1690,
+2,
+44,
+44
 ]
 },
 "fx_arrow_small": {
-"page": 4,
+"page": 6,
 "rect": [
-1654,
+1738,
 2,
-52,
-68
+44,
+44
 ]
 },
 "fx_boom_burst": {
-"page": 4,
+"page": 6,
 "rect": [
-238,
+454,
 2,
-188,
-148
+128,
+104
 ]
 },
 "fx_bullet": {
 "page": 6,
 "rect": [
-1208,
-1916,
+398,
+198,
 32,
 16
 ]
 },
 "fx_cone_big": {
-"page": 4,
+"page": 6,
 "rect": [
-1196,
-2,
-90,
-98
+442,
+198,
+4,
+4
 ]
 },
 "fx_debris_a": {
-"page": 4,
+"page": 6,
 "rect": [
-1290,
-2,
-52,
-90
+150,
+198,
+32,
+32
 ]
 },
 "fx_drop": {
 "page": 6,
 "rect": [
-778,
-1916,
-32,
+2,
+198,
+36,
 32
 ]
 },
 "fx_dust": {
 "page": 6,
 "rect": [
-1846,
-1676,
-64,
-64
+1222,
+2,
+56,
+56
 ]
 },
 "fx_explosion_orange": {
-"page": 4,
+"page": 6,
 "rect": [
-126,
+198,
 2,
-108,
-150
+128,
+128
 ]
 },
 "fx_flame": {
 "page": 6,
 "rect": [
-1010,
-1860,
-40,
-48
+1342,
+2,
+48,
+52
 ]
 },
 "fx_glow": {
 "page": 6,
 "rect": [
-250,
-1676,
+586,
+2,
 96,
 96
 ]
@@ -1056,89 +1443,89 @@
 "fx_ring": {
 "page": 6,
 "rect": [
-458,
-1038,
+2,
+2,
 192,
 192
 ]
 },
 "fx_rock_a": {
-"page": 4,
+"page": 6,
 "rect": [
-1580,
+1494,
 2,
-70,
-68
+48,
+48
 ]
 },
 "fx_rock_b": {
-"page": 4,
+"page": 6,
 "rect": [
-1710,
+1546,
 2,
-64,
-60
+44,
+44
 ]
 },
 "fx_rock_c": {
-"page": 4,
+"page": 6,
 "rect": [
-1908,
+1830,
 2,
-54,
-44
+36,
+36
 ]
 },
 "fx_scrap_00": {
 "page": 6,
 "rect": [
-1123,
-1916,
-28,
-28
+1870,
+2,
+36,
+36
 ]
 },
 "fx_scrap_01": {
 "page": 6,
 "rect": [
-850,
-1916,
-31,
-31
+186,
+198,
+28,
+28
 ]
 },
 "fx_scrap_02": {
 "page": 6,
 "rect": [
-955,
-1916,
-30,
-30
+314,
+198,
+24,
+24
 ]
 },
 "fx_scrap_03": {
 "page": 6,
 "rect": [
-1155,
-1916,
-23,
-23
+218,
+198,
+28,
+28
 ]
 },
 "fx_scrap_04": {
 "page": 6,
 "rect": [
-920,
-1916,
-31,
-31
+250,
+198,
+28,
+28
 ]
 },
 "fx_scrap_05": {
 "page": 6,
 "rect": [
-814,
-1916,
+42,
+198,
 32,
 32
 ]
@@ -1146,17 +1533,17 @@
 "fx_scrap_06": {
 "page": 6,
 "rect": [
-1091,
-1916,
-28,
-28
+342,
+198,
+24,
+24
 ]
 },
 "fx_scrap_07": {
 "page": 6,
 "rect": [
-706,
-1916,
+78,
+198,
 32,
 32
 ]
@@ -1164,53 +1551,53 @@
 "fx_scrap_08": {
 "page": 6,
 "rect": [
-1023,
-1916,
-30,
-30
+282,
+198,
+28,
+28
 ]
 },
 "fx_scrap_09": {
 "page": 6,
 "rect": [
-989,
-1916,
-30,
-30
+1910,
+2,
+36,
+36
 ]
 },
 "fx_scrap_10": {
 "page": 6,
 "rect": [
-885,
-1916,
-31,
-31
+370,
+198,
+24,
+24
 ]
 },
 "fx_scrap_11": {
 "page": 6,
 "rect": [
-1057,
-1916,
-30,
-30
+1950,
+2,
+36,
+36
 ]
 },
 "fx_scrap_12": {
 "page": 6,
 "rect": [
-1182,
-1916,
-22,
-22
+1990,
+2,
+36,
+36
 ]
 },
 "fx_scrap_13": {
 "page": 6,
 "rect": [
-742,
-1916,
+114,
+198,
 32,
 32
 ]
@@ -1218,2482 +1605,2241 @@
 "fx_shadow_blob": {
 "page": 6,
 "rect": [
-1054,
-1860,
+1394,
+2,
 96,
 48
 ]
 },
 "fx_shard_blue": {
-"page": 4,
+"page": 6,
 "rect": [
-1840,
-2,
-64,
-60
+450,
+198,
+4,
+4
 ]
 },
 "fx_smoke_big": {
-"page": 4,
+"page": 6,
 "rect": [
-430,
+686,
 2,
-152,
-138
+96,
+96
 ]
 },
 "fx_smoke_cloud_b": {
-"page": 4,
+"page": 6,
 "rect": [
-750,
+994,
 2,
-130,
-132
+80,
+80
 ]
 },
 "fx_smoke_far": {
-"page": 4,
+"page": 6,
 "rect": [
-1036,
+1154,
 2,
-56,
-106
+64,
+64
 ]
 },
 "fx_smoke_med": {
-"page": 4,
+"page": 6,
 "rect": [
-1096,
+1078,
 2,
-96,
-100
+72,
+72
 ]
 },
 "fx_smoke_small": {
-"page": 4,
+"page": 6,
 "rect": [
-884,
+1282,
 2,
-148,
-110
+56,
+56
 ]
 },
 "fx_smoke_tiny": {
-"page": 4,
+"page": 6,
 "rect": [
-1424,
+1786,
 2,
-76,
-76
+40,
+40
 ]
 },
 "fx_spark_burst": {
-"page": 4,
+"page": 6,
 "rect": [
-586,
+878,
 2,
-160,
-138
+112,
+88
 ]
 },
 "fx_sparkle": {
 "page": 6,
 "rect": [
-350,
-1676,
-96,
-96
+786,
+2,
+88,
+88
+]
+},
+"fx_sparkle_big": {
+"page": 6,
+"rect": [
+330,
+2,
+120,
+120
 ]
 },
 "fx_streaks": {
-"page": 4,
+"page": 6,
 "rect": [
-2,
-2,
-120,
-152
+434,
+198,
+4,
+4
 ]
 },
 "fx_wheel": {
 "page": 6,
 "rect": [
-1914,
-1676,
-64,
-64
+458,
+198,
+4,
+4
 ]
 },
 "icon_alert": {
-"page": 5,
+"page": 7,
 "rect": [
-602,
-208,
-76,
-76
-]
-},
-"icon_ay_plate": {
-"page": 5,
-"rect": [
-92,
-296,
-110,
-60
-]
-},
-"icon_big": {
-"page": 5,
-"rect": [
-80,
-2,
-86,
-100
-]
-},
-"icon_bolt": {
-"page": 5,
-"rect": [
-1478,
-108,
-80,
-92
-]
-},
-"icon_calendar": {
-"page": 5,
-"rect": [
-528,
-208,
-70,
-78
-]
-},
-"icon_coin": {
-"page": 5,
-"rect": [
-440,
-208,
-84,
-80
-]
-},
-"icon_cone": {
-"page": 5,
-"rect": [
-90,
-208,
-74,
-84
-]
-},
-"icon_crown": {
-"page": 5,
-"rect": [
-682,
-208,
-78,
-76
-]
-},
-"icon_dice": {
-"page": 6,
-"rect": [
-334,
-1290,
-128,
-128
-]
-},
-"icon_gear": {
-"page": 5,
-"rect": [
-168,
-208,
-86,
-84
-]
-},
-"icon_gem": {
-"page": 5,
-"rect": [
-1908,
-108,
-96,
-86
-]
-},
-"icon_heart": {
-"page": 5,
-"rect": [
-1086,
-208,
-76,
-70
-]
-},
-"icon_jerrycan": {
-"page": 5,
-"rect": [
-322,
-296,
-62,
-50
-]
-},
-"icon_lock": {
-"page": 5,
-"rect": [
-2,
-208,
-84,
-84
-]
-},
-"icon_mail": {
-"page": 5,
-"rect": [
-764,
-208,
-66,
-74
-]
-},
-"icon_pump": {
-"page": 5,
-"rect": [
-340,
-208,
-96,
-80
-]
-},
-"icon_rank_shield": {
-"page": 5,
-"rect": [
-258,
-208,
-78,
-80
-]
-},
-"icon_remote": {
-"page": 5,
-"rect": [
-1940,
-208,
+1418,
+102,
 56,
-62
-]
-},
-"icon_se_plate": {
-"page": 5,
-"rect": [
-1540,
-208,
-140,
-64
-]
-},
-"icon_star": {
-"page": 5,
-"rect": [
-1338,
-208,
-76,
-66
-]
-},
-"icon_ticket": {
-"page": 5,
-"rect": [
-834,
-208,
-104,
-72
-]
-},
-"icon_tire": {
-"page": 5,
-"rect": [
-1562,
-108,
-92,
-92
-]
-},
-"icon_trophy": {
-"page": 5,
-"rect": [
-1812,
-108,
-92,
-86
-]
-},
-"icon_xp": {
-"page": 5,
-"rect": [
-388,
-296,
-80,
 48
 ]
 },
-"lbl_block": {
-"page": 5,
+"icon_ay_plate": {
+"page": 7,
 "rect": [
-942,
-208,
-140,
-72
+150,
+162,
+56,
+36
+]
+},
+"icon_big": {
+"page": 7,
+"rect": [
+1478,
+102,
+56,
+48
+]
+},
+"icon_bolt": {
+"page": 7,
+"rect": [
+1318,
+102,
+44,
+48
+]
+},
+"icon_calendar": {
+"page": 7,
+"rect": [
+1038,
+102,
+52,
+52
+]
+},
+"icon_coin": {
+"page": 7,
+"rect": [
+1126,
+2,
+56,
+56
+]
+},
+"icon_cone": {
+"page": 7,
+"rect": [
+1730,
+102,
+48,
+40
+]
+},
+"icon_crown": {
+"page": 7,
+"rect": [
+1894,
+102,
+44,
+36
+]
+},
+"icon_dice": {
+"page": 7,
+"rect": [
+1834,
+102,
+56,
+40
+]
+},
+"icon_gear": {
+"page": 7,
+"rect": [
+1366,
+102,
+48,
+48
+]
+},
+"icon_gem": {
+"page": 7,
+"rect": [
+1538,
+102,
+56,
+44
+]
+},
+"icon_heart": {
+"page": 7,
+"rect": [
+1202,
+102,
+52,
+48
+]
+},
+"icon_jerrycan": {
+"page": 7,
+"rect": [
+1782,
+102,
+48,
+40
+]
+},
+"icon_lock": {
+"page": 7,
+"rect": [
+1686,
+102,
+40,
+40
+]
+},
+"icon_mail": {
+"page": 7,
+"rect": [
+1942,
+102,
+56,
+36
+]
+},
+"icon_pump": {
+"page": 7,
+"rect": [
+1094,
+102,
+48,
+52
+]
+},
+"icon_rank_shield": {
+"page": 7,
+"rect": [
+1634,
+102,
+48,
+44
+]
+},
+"icon_remote": {
+"page": 7,
+"rect": [
+1598,
+102,
+32,
+44
+]
+},
+"icon_se_plate": {
+"page": 7,
+"rect": [
+210,
+162,
+56,
+36
+]
+},
+"icon_star": {
+"page": 7,
+"rect": [
+1258,
+102,
+56,
+48
+]
+},
+"icon_ticket": {
+"page": 7,
+"rect": [
+2,
+162,
+64,
+36
+]
+},
+"icon_tire": {
+"page": 7,
+"rect": [
+1146,
+102,
+52,
+52
+]
+},
+"icon_trophy": {
+"page": 7,
+"rect": [
+986,
+102,
+48,
+52
+]
+},
+"icon_xp": {
+"page": 7,
+"rect": [
+70,
+162,
+76,
+36
+]
+},
+"lbl_block": {
+"page": 7,
+"rect": [
+1186,
+2,
+272,
+56
 ]
 },
 "lbl_boss": {
-"page": 5,
+"page": 7,
 "rect": [
-206,
-296,
-112,
-60
+1462,
+2,
+224,
+56
 ]
 },
 "lbl_combo": {
-"page": 5,
+"page": 7,
 "rect": [
-1166,
-208,
-168,
-68
+1690,
+2,
+288,
+56
 ]
 },
 "lbl_critical": {
-"page": 5,
+"page": 7,
 "rect": [
-1684,
-208,
-126,
-64
+2,
+102,
+224,
+56
 ]
 },
 "lbl_merge": {
-"page": 5,
+"page": 7,
 "rect": [
-1814,
-208,
-122,
-64
+230,
+102,
+304,
+56
 ]
 },
 "lbl_miss": {
-"page": 5,
+"page": 7,
 "rect": [
-2,
-296,
-86,
-62
+538,
+102,
+208,
+56
 ]
 },
 "lbl_wave": {
-"page": 5,
+"page": 7,
 "rect": [
-1418,
-208,
-118,
-66
+750,
+102,
+232,
+56
 ]
 },
 "logo_cone": {
-"page": 1,
+"page": 3,
 "rect": [
-1025,
-2,
-180,
-258
+566,
+658,
+104,
+144
 ]
 },
 "logo_strapline": {
-"page": 1,
-"rect": [
-2,
-311,
-606,
-90
-]
-},
-"logo_tagline": {
-"page": 1,
-"rect": [
-1209,
-2,
-456,
-222
-]
-},
-"logo_title_block": {
-"page": 0,
-"rect": [
-591,
-2,
-738,
-504
-]
-},
-"map_art": {
-"page": 0,
-"rect": [
-2,
-2,
-585,
-921
-]
-},
-"map_node_boss": {
-"page": 1,
-"rect": [
-1669,
-2,
-82,
-114
-]
-},
-"map_node_lock": {
-"page": 1,
-"rect": [
-612,
-311,
-64,
-72
-]
-},
-"map_node_star": {
-"page": 1,
-"rect": [
-680,
-311,
-66,
-70
-]
-},
-"map_node_start": {
-"page": 1,
-"rect": [
-750,
-311,
-64,
-68
-]
-},
-"mode_coop": {
-"page": 0,
-"rect": [
-1333,
-2,
-315,
-336
-]
-},
-"mode_pvp": {
-"page": 0,
-"rect": [
-1652,
-2,
-318,
-336
-]
-},
-"mode_story": {
-"page": 0,
-"rect": [
-2,
-927,
-318,
-336
-]
-},
-"mode_survival": {
-"page": 0,
-"rect": [
-324,
-927,
-318,
-336
-]
-},
-"npc_animal_cat": {
-"page": 2,
-"rect": [
-1874,
-2,
-96,
-110
-]
-},
-"npc_animal_dog": {
-"page": 2,
-"rect": [
-1760,
-2,
-110,
-112
-]
-},
-"npc_animal_pigeon": {
-"page": 2,
-"rect": [
-118,
-186,
-112,
-100
-]
-},
-"npc_animal_raccoon": {
-"page": 2,
-"rect": [
-234,
-186,
-120,
-94
-]
-},
-"npc_animal_seagull": {
-"page": 2,
-"rect": [
-2,
-186,
-112,
-100
-]
-},
-"npc_construction": {
-"page": 2,
-"rect": [
-1486,
-2,
-142,
-158
-]
-},
-"npc_delivery_guy": {
-"page": 2,
-"rect": [
-822,
-2,
-126,
-164
-]
-},
-"npc_mayor": {
-"page": 2,
-"rect": [
-952,
-2,
-144,
-162
-]
-},
-"npc_mechanic": {
-"page": 2,
-"rect": [
-1230,
-2,
-128,
-160
-]
-},
-"npc_mysterious_stranger": {
-"page": 2,
-"rect": [
-1362,
-2,
-120,
-160
-]
-},
-"npc_news_reporter": {
-"page": 2,
-"rect": [
-1100,
-2,
-126,
-162
-]
-},
-"npc_rival_driver": {
-"page": 2,
-"rect": [
-1632,
-2,
-124,
-154
-]
-},
-"npc_traffic_cop": {
-"page": 2,
-"rect": [
-560,
-2,
-146,
-168
-]
-},
-"pc_brown_hair": {
-"page": 2,
-"rect": [
-710,
-2,
-108,
-166
-]
-},
-"pc_cap_blue": {
-"page": 2,
-"rect": [
-228,
-2,
-102,
-168
-]
-},
-"pc_cap_headphones": {
-"page": 2,
-"rect": [
-112,
-2,
-112,
-174
-]
-},
-"pc_cap_red_blue": {
-"page": 2,
-"rect": [
-442,
-2,
-114,
-168
-]
-},
-"pc_long_hair": {
-"page": 2,
-"rect": [
-334,
-2,
-104,
-168
-]
-},
-"pc_red_curls": {
-"page": 2,
-"rect": [
-2,
-2,
-106,
-180
-]
-},
-"prop_barricade_a": {
 "page": 3,
 "rect": [
-312,
-378,
-128,
-94
-]
-},
-"prop_barricade_b": {
-"page": 3,
-"rect": [
-850,
-378,
-100,
-82
-]
-},
-"prop_bench": {
-"page": 3,
-"rect": [
-444,
-378,
-116,
-92
-]
-},
-"prop_bin_blue": {
-"page": 3,
-"rect": [
-564,
-378,
-66,
-90
-]
-},
-"prop_bush": {
-"page": 3,
-"rect": [
-744,
-378,
-102,
-86
-]
-},
-"prop_bush_rocks": {
-"page": 3,
-"rect": [
-1850,
-246,
-110,
-104
-]
-},
-"prop_house_a": {
-"page": 6,
-"rect": [
-602,
-1290,
-132,
-122
-]
-},
-"prop_house_b": {
-"page": 6,
-"rect": [
-466,
-1290,
-132,
-122
-]
-},
-"prop_house_c": {
-"page": 6,
-"rect": [
-738,
-1290,
-152,
-122
-]
-},
-"prop_house_d": {
-"page": 6,
-"rect": [
-1028,
-1038,
-112,
-162
-]
-},
-"prop_hydrant": {
-"page": 3,
-"rect": [
-98,
-378,
-72,
-100
-]
-},
-"prop_junction_box": {
-"page": 3,
-"rect": [
-634,
-378,
-106,
-88
-]
-},
-"prop_one_way_sign": {
-"page": 3,
-"rect": [
-174,
-378,
-134,
-100
-]
-},
-"prop_pine": {
-"page": 6,
-"rect": [
-914,
-1038,
-110,
-165
-]
-},
-"prop_rock": {
-"page": 3,
-"rect": [
-954,
-378,
-82,
+674,
+658,
+628,
 64
 ]
 },
-"prop_speed_camera": {
+"logo_tagline": {
 "page": 3,
 "rect": [
-522,
 2,
-82,
-136
+658,
+560,
+152
+]
+},
+"logo_title_block": {
+"page": 2,
+"rect": [
+1086,
+1210,
+736,
+504
+]
+},
+"map_node_boss": {
+"page": 7,
+"rect": [
+2,
+2,
+80,
+96
+]
+},
+"map_node_lock": {
+"page": 7,
+"rect": [
+86,
+2,
+80,
+96
+]
+},
+"map_node_star": {
+"page": 7,
+"rect": [
+170,
+2,
+80,
+96
+]
+},
+"map_node_start": {
+"page": 7,
+"rect": [
+254,
+2,
+80,
+96
+]
+},
+"mode_coop": {
+"page": 3,
+"rect": [
+666,
+2,
+328,
+344
+]
+},
+"mode_pvp": {
+"page": 3,
+"rect": [
+998,
+2,
+328,
+344
+]
+},
+"mode_story": {
+"page": 3,
+"rect": [
+2,
+2,
+328,
+344
+]
+},
+"mode_survival": {
+"page": 3,
+"rect": [
+334,
+2,
+328,
+344
+]
+},
+"npc_animal_cat": {
+"page": 4,
+"rect": [
+918,
+506,
+104,
+80
+]
+},
+"npc_animal_dog": {
+"page": 4,
+"rect": [
+802,
+506,
+112,
+80
+]
+},
+"npc_animal_pigeon": {
+"page": 4,
+"rect": [
+762,
+646,
+96,
+64
+]
+},
+"npc_animal_raccoon": {
+"page": 4,
+"rect": [
+1026,
+506,
+112,
+80
+]
+},
+"npc_animal_seagull": {
+"page": 4,
+"rect": [
+862,
+646,
+96,
+64
+]
+},
+"npc_construction": {
+"page": 4,
+"rect": [
+754,
+2,
+184,
+248
+]
+},
+"npc_delivery_guy": {
+"page": 4,
+"rect": [
+942,
+2,
+184,
+248
+]
+},
+"npc_mayor": {
+"page": 4,
+"rect": [
+190,
+2,
+184,
+248
+]
+},
+"npc_mechanic": {
+"page": 4,
+"rect": [
+378,
+2,
+184,
+248
+]
+},
+"npc_mysterious_stranger": {
+"page": 4,
+"rect": [
+1318,
+2,
+184,
+248
+]
+},
+"npc_news_reporter": {
+"page": 4,
+"rect": [
+566,
+2,
+184,
+248
+]
+},
+"npc_rival_driver": {
+"page": 4,
+"rect": [
+1130,
+2,
+184,
+248
+]
+},
+"npc_traffic_cop": {
+"page": 4,
+"rect": [
+2,
+2,
+184,
+248
+]
+},
+"pc_brown_hair": {
+"page": 4,
+"rect": [
+2,
+254,
+184,
+248
+]
+},
+"pc_cap_blue": {
+"page": 4,
+"rect": [
+190,
+254,
+184,
+248
+]
+},
+"pc_cap_headphones": {
+"page": 4,
+"rect": [
+1694,
+2,
+184,
+248
+]
+},
+"pc_cap_red_blue": {
+"page": 4,
+"rect": [
+1506,
+2,
+184,
+248
+]
+},
+"pc_long_hair": {
+"page": 4,
+"rect": [
+378,
+254,
+184,
+248
+]
+},
+"pc_red_curls": {
+"page": 4,
+"rect": [
+566,
+254,
+184,
+248
+]
+},
+"prop_barricade_a": {
+"page": 5,
+"rect": [
+1346,
+2,
+96,
+40
+]
+},
+"prop_barricade_b": {
+"page": 5,
+"rect": [
+1446,
+2,
+72,
+40
+]
+},
+"prop_bench": {
+"page": 5,
+"rect": [
+1118,
+2,
+80,
+44
+]
+},
+"prop_bin_blue": {
+"page": 5,
+"rect": [
+966,
+2,
+48,
+48
+]
+},
+"prop_bush": {
+"page": 5,
+"rect": [
+650,
+2,
+72,
+72
+]
+},
+"prop_bush_rocks": {
+"page": 5,
+"rect": [
+786,
+2,
+72,
+56
+]
+},
+"prop_house_a": {
+"page": 5,
+"rect": [
+310,
+2,
+104,
+88
+]
+},
+"prop_house_b": {
+"page": 5,
+"rect": [
+418,
+2,
+104,
+88
+]
+},
+"prop_house_c": {
+"page": 5,
+"rect": [
+526,
+2,
+120,
+88
+]
+},
+"prop_house_d": {
+"page": 5,
+"rect": [
+2,
+2,
+88,
+120
+]
+},
+"prop_hydrant": {
+"page": 5,
+"rect": [
+1070,
+2,
+44,
+44
+]
+},
+"prop_junction_box": {
+"page": 5,
+"rect": [
+1522,
+2,
+48,
+40
+]
+},
+"prop_one_way_sign": {
+"page": 5,
+"rect": [
+1298,
+2,
+44,
+44
+]
+},
+"prop_pine": {
+"page": 5,
+"rect": [
+202,
+2,
+104,
+104
+]
+},
+"prop_rock": {
+"page": 5,
+"rect": [
+726,
+2,
+56,
+56
+]
+},
+"prop_speed_camera": {
+"page": 5,
+"rect": [
+1574,
+2,
+48,
+40
 ]
 },
 "prop_stop_sign": {
-"page": 3,
+"page": 5,
 "rect": [
-346,
+1202,
 2,
-78,
-154
+44,
+44
 ]
 },
 "prop_stop_sign_small": {
-"page": 3,
+"page": 5,
 "rect": [
+1250,
 2,
-378,
-92,
-100
+44,
+44
 ]
 },
 "prop_street_lamp": {
-"page": 3,
+"page": 5,
 "rect": [
-76,
+862,
 2,
-126,
-158
+48,
+48
 ]
 },
 "prop_traffic_light": {
-"page": 3,
+"page": 5,
 "rect": [
+1018,
 2,
-2,
-70,
-240
+48,
+48
 ]
 },
 "prop_trash_can": {
-"page": 3,
+"page": 5,
 "rect": [
-428,
+914,
 2,
-90,
-138
+48,
+48
 ]
 },
 "prop_tree": {
-"page": 3,
+"page": 5,
 "rect": [
-206,
+94,
 2,
-136,
-158
-]
-},
-"tile_asphalt_cracked": {
-"page": 3,
-"rect": [
-1796,
-2,
-128,
-128
-]
-},
-"tile_asphalt_plain": {
-"page": 3,
-"rect": [
-662,
-246,
-128,
-128
-]
-},
-"tile_concrete_cracked": {
-"page": 3,
-"rect": [
-1454,
-246,
-128,
-128
-]
-},
-"tile_crosswalk_books": {
-"page": 3,
-"rect": [
-1136,
-2,
-128,
-128
-]
-},
-"tile_grass_dry": {
-"page": 3,
-"rect": [
-1004,
-2,
-128,
-128
-]
-},
-"tile_grass_flowers": {
-"page": 3,
-"rect": [
-794,
-246,
-128,
-128
-]
-},
-"tile_grass_patch": {
-"page": 3,
-"rect": [
-740,
-2,
-128,
-128
-]
-},
-"tile_grass_with_slab": {
-"page": 3,
-"rect": [
-608,
-2,
-128,
-128
-]
-},
-"tile_hazard_stripes": {
-"page": 3,
-"rect": [
-2,
-246,
-128,
-128
-]
-},
-"tile_manhole": {
-"page": 3,
-"rect": [
-1322,
-246,
-128,
-128
-]
-},
-"tile_parking_p": {
-"page": 3,
-"rect": [
-1586,
-246,
-128,
-128
-]
-},
-"tile_road_arrow_down": {
-"page": 3,
-"rect": [
-1190,
-246,
-128,
-128
-]
-},
-"tile_road_arrow_right": {
-"page": 3,
-"rect": [
-1664,
-2,
-128,
-128
-]
-},
-"tile_road_arrow_up": {
-"page": 3,
-"rect": [
-1268,
-2,
-128,
-128
-]
-},
-"tile_road_corner_yellow": {
-"page": 3,
-"rect": [
-926,
-246,
-128,
-128
-]
-},
-"tile_road_dashed_white_h": {
-"page": 3,
-"rect": [
-398,
-246,
-128,
-128
-]
-},
-"tile_road_dashed_yellow_h": {
-"page": 3,
-"rect": [
-266,
-246,
-128,
-128
-]
-},
-"tile_road_double_yellow_v": {
-"page": 3,
-"rect": [
-530,
-246,
-128,
-128
-]
-},
-"tile_road_edge_grass": {
-"page": 3,
-"rect": [
-1532,
-2,
-128,
-128
-]
-},
-"tile_road_lane_v": {
-"page": 3,
-"rect": [
-1718,
-246,
-128,
-128
-]
-},
-"tile_road_lane_v_dashed": {
-"page": 3,
-"rect": [
-872,
-2,
-128,
-128
-]
-},
-"tile_road_t_junction": {
-"page": 3,
-"rect": [
-134,
-246,
-128,
-128
-]
-},
-"tile_road_turn_arrow": {
-"page": 3,
-"rect": [
-1058,
-246,
-128,
-128
-]
-},
-"tile_roundabout": {
-"page": 3,
-"rect": [
-1400,
-2,
-128,
-128
+104,
+104
 ]
 },
 "ui_bar_bg": {
-"page": 6,
+"page": 8,
 "rect": [
-1658,
-1800,
+422,
+1318,
 248,
 52
 ]
 },
 "ui_bar_fill_blue": {
-"page": 6,
+"page": 8,
 "rect": [
-1406,
-1800,
+674,
+1318,
 248,
 52
 ]
 },
 "ui_bar_fill_green": {
-"page": 6,
+"page": 8,
 "rect": [
-1154,
-1800,
+926,
+1318,
 248,
 52
 ]
 },
 "ui_bar_fill_lavender": {
-"page": 6,
+"page": 8,
 "rect": [
-506,
-1860,
+1178,
+1318,
 248,
 52
 ]
 },
 "ui_bar_fill_orange": {
-"page": 6,
+"page": 8,
 "rect": [
-254,
-1860,
+1430,
+1318,
 248,
 52
 ]
 },
 "ui_bar_fill_red": {
-"page": 6,
+"page": 8,
 "rect": [
-2,
-1860,
+1682,
+1318,
 248,
 52
 ]
 },
 "ui_bar_fill_teal": {
-"page": 6,
+"page": 8,
 "rect": [
-902,
-1800,
+2,
+1378,
 248,
 52
 ]
 },
 "ui_bar_fill_yellow": {
-"page": 6,
+"page": 8,
 "rect": [
-758,
-1860,
+254,
+1378,
 248,
 52
 ]
 },
 "ui_btn_blue_down": {
-"page": 6,
+"page": 8,
 "rect": [
-1490,
-1552,
+2,
+946,
 244,
 120
 ]
 },
 "ui_btn_blue_up": {
-"page": 6,
+"page": 8,
 "rect": [
-1738,
-1552,
+1646,
+782,
 244,
 120
 ]
 },
 "ui_btn_dark_down": {
-"page": 6,
+"page": 8,
 "rect": [
-250,
-1428,
+2,
+1194,
 244,
 120
 ]
 },
 "ui_btn_dark_up": {
-"page": 6,
+"page": 8,
 "rect": [
-2,
-1428,
+1738,
+1070,
 244,
 120
 ]
 },
 "ui_btn_disabled_up": {
-"page": 6,
+"page": 8,
 "rect": [
 250,
-1552,
+1194,
 244,
 120
 ]
 },
 "ui_btn_gray_down": {
-"page": 6,
+"page": 8,
 "rect": [
-498,
-1552,
+994,
+1070,
 244,
 120
 ]
 },
 "ui_btn_gray_up": {
-"page": 6,
+"page": 8,
 "rect": [
-1242,
-1428,
+746,
+1070,
 244,
 120
 ]
 },
 "ui_btn_green_down": {
-"page": 6,
+"page": 8,
 "rect": [
-994,
-1428,
+1490,
+1070,
 244,
 120
 ]
 },
 "ui_btn_green_up": {
-"page": 6,
+"page": 8,
 "rect": [
-894,
-1290,
+1242,
+1070,
 244,
 120
 ]
 },
 "ui_btn_lavender_down": {
-"page": 6,
+"page": 8,
 "rect": [
-994,
-1552,
+2,
+1070,
 244,
 120
 ]
 },
 "ui_btn_lavender_up": {
-"page": 6,
+"page": 8,
 "rect": [
-2,
-1552,
+1738,
+946,
 244,
 120
 ]
 },
 "ui_btn_mint_down": {
-"page": 6,
+"page": 8,
 "rect": [
-1490,
-1428,
+498,
+1070,
 244,
 120
 ]
 },
 "ui_btn_mint_up": {
-"page": 6,
+"page": 8,
 "rect": [
-498,
-1428,
+250,
+1070,
 244,
 120
 ]
 },
 "ui_btn_orange_down": {
-"page": 6,
+"page": 8,
 "rect": [
-746,
-1552,
+994,
+946,
 244,
 120
 ]
 },
 "ui_btn_orange_up": {
-"page": 6,
+"page": 8,
 "rect": [
-1738,
-1428,
+746,
+946,
 244,
 120
 ]
 },
 "ui_btn_red_down": {
-"page": 6,
+"page": 8,
 "rect": [
-1638,
-1290,
+498,
+946,
 244,
 120
 ]
 },
 "ui_btn_red_up": {
-"page": 6,
+"page": 8,
 "rect": [
-746,
-1428,
+250,
+946,
 244,
 120
 ]
 },
 "ui_btn_teal_down": {
-"page": 6,
+"page": 8,
 "rect": [
-2,
-1676,
+1398,
+782,
 244,
 120
 ]
 },
 "ui_btn_teal_up": {
-"page": 6,
+"page": 8,
 "rect": [
-1142,
-1290,
+1150,
+782,
 244,
 120
 ]
 },
 "ui_btn_yellow_down": {
-"page": 6,
+"page": 8,
 "rect": [
-1242,
-1552,
+1490,
+946,
 244,
 120
 ]
 },
 "ui_btn_yellow_up": {
-"page": 6,
+"page": 8,
 "rect": [
-1390,
-1290,
+1242,
+946,
 244,
 120
 ]
 },
 "ui_bubble": {
-"page": 6,
+"page": 8,
 "rect": [
-654,
-1038,
+1698,
+522,
 256,
-170
+168
 ]
 },
 "ui_card_common": {
-"page": 6,
+"page": 8,
 "rect": [
-1238,
-778,
+262,
+522,
 192,
 248
 ]
 },
 "ui_card_epic": {
-"page": 6,
+"page": 8,
 "rect": [
-1630,
-778,
+850,
+522,
 192,
 248
 ]
 },
 "ui_card_legendary": {
-"page": 6,
+"page": 8,
 "rect": [
-1434,
-778,
+1046,
+522,
 192,
 248
 ]
 },
 "ui_card_mythic": {
-"page": 6,
+"page": 8,
 "rect": [
-2,
-1038,
+1242,
+522,
 192,
 248
 ]
 },
 "ui_card_rare": {
-"page": 6,
+"page": 8,
 "rect": [
-1826,
-778,
+654,
+522,
 192,
 248
 ]
 },
 "ui_card_uncommon": {
-"page": 6,
+"page": 8,
 "rect": [
-1042,
-778,
+458,
+522,
 192,
 248
 ]
 },
 "ui_chip_common": {
-"page": 6,
+"page": 8,
 "rect": [
-2,
-1916,
+990,
+1378,
 160,
 44
 ]
 },
 "ui_chip_epic": {
-"page": 6,
+"page": 8,
 "rect": [
-1612,
-1860,
+1482,
+1378,
 160,
 44
 ]
 },
 "ui_chip_legendary": {
-"page": 6,
+"page": 8,
 "rect": [
-330,
-1916,
+1646,
+1378,
 160,
 44
 ]
 },
 "ui_chip_mythic": {
-"page": 6,
+"page": 8,
 "rect": [
-1284,
-1860,
+1810,
+1378,
 160,
 44
 ]
 },
 "ui_chip_rare": {
-"page": 6,
+"page": 8,
 "rect": [
-166,
-1916,
+1318,
+1378,
 160,
 44
 ]
 },
 "ui_chip_uncommon": {
-"page": 6,
+"page": 8,
 "rect": [
-1448,
-1860,
+1154,
+1378,
 160,
 44
 ]
 },
 "ui_dialog_box": {
-"page": 6,
+"page": 8,
 "rect": [
-198,
-1038,
+1438,
+522,
 256,
 200
 ]
 },
-"ui_grain_tile": {
-"page": 6,
-"rect": [
-2,
-2,
-512,
-512
-]
-},
-"ui_halftone_tile": {
-"page": 6,
-"rect": [
-1982,
-1676,
-64,
-64
-]
-},
 "ui_namebox": {
-"page": 6,
+"page": 8,
 "rect": [
-1666,
-1676,
+1714,
+1194,
 176,
-70
+68
 ]
 },
 "ui_panel_blue": {
-"page": 6,
+"page": 8,
 "rect": [
-782,
-778,
+1562,
+2,
 256,
 256
 ]
 },
 "ui_panel_cardboard": {
-"page": 6,
+"page": 8,
 "rect": [
-1038,
+522,
 2,
 256,
 256
 ]
 },
 "ui_panel_cream": {
-"page": 6,
+"page": 8,
 "rect": [
-522,
-518,
+262,
+2,
 256,
 256
 ]
 },
 "ui_panel_dark": {
-"page": 6,
+"page": 8,
 "rect": [
-1558,
+782,
 2,
 256,
 256
 ]
 },
 "ui_panel_gray": {
-"page": 6,
+"page": 8,
 "rect": [
-1042,
-518,
+1302,
+262,
 256,
 256
 ]
 },
 "ui_panel_green": {
-"page": 6,
+"page": 8,
 "rect": [
-1298,
-2,
+1562,
+262,
 256,
 256
 ]
 },
 "ui_panel_kraft": {
-"page": 6,
+"page": 8,
 "rect": [
-778,
+1042,
 2,
 256,
 256
 ]
 },
 "ui_panel_lavender": {
-"page": 6,
+"page": 8,
 "rect": [
-1302,
-518,
+782,
+262,
 256,
 256
 ]
 },
 "ui_panel_mint": {
-"page": 6,
+"page": 8,
 "rect": [
-522,
-778,
+1042,
+262,
 256,
 256
 ]
 },
 "ui_panel_orange": {
-"page": 6,
+"page": 8,
 "rect": [
-1562,
-518,
+262,
+262,
 256,
 256
 ]
 },
 "ui_panel_paper": {
-"page": 6,
+"page": 8,
 "rect": [
 2,
-778,
+2,
 256,
 256
 ]
 },
 "ui_panel_pink": {
-"page": 6,
+"page": 8,
 "rect": [
-262,
-518,
+2,
+522,
 256,
 256
 ]
 },
 "ui_panel_red": {
-"page": 6,
+"page": 8,
 "rect": [
-782,
-518,
+2,
+262,
 256,
 256
 ]
 },
 "ui_panel_teal": {
-"page": 6,
+"page": 8,
 "rect": [
+1302,
 2,
-518,
 256,
 256
 ]
 },
 "ui_panel_yellow": {
-"page": 6,
+"page": 8,
 "rect": [
+522,
 262,
-778,
 256,
 256
 ]
 },
 "ui_pill": {
-"page": 6,
+"page": 8,
 "rect": [
-1090,
-1676,
+498,
+1194,
 252,
 80
 ]
 },
 "ui_ribbon_red": {
-"page": 6,
+"page": 8,
 "rect": [
-450,
-1676,
+754,
+1194,
 316,
 80
 ]
 },
 "ui_ribbon_teal": {
-"page": 6,
+"page": 8,
 "rect": [
-1346,
-1676,
+1074,
+1194,
 316,
 80
 ]
 },
 "ui_ribbon_yellow": {
-"page": 6,
+"page": 8,
 "rect": [
-770,
-1676,
+1394,
+1194,
 316,
 80
 ]
 },
 "ui_slot": {
-"page": 6,
+"page": 8,
 "rect": [
-1636,
-1038,
-162,
-134
+494,
+782,
+160,
+132
 ]
 },
 "ui_slot_bad": {
-"page": 6,
+"page": 8,
 "rect": [
-168,
-1290,
-162,
-134
+986,
+782,
+160,
+132
 ]
 },
 "ui_slot_merge": {
-"page": 6,
+"page": 8,
 "rect": [
-2,
-1290,
-162,
-134
+822,
+782,
+160,
+132
 ]
 },
 "ui_slot_ok": {
-"page": 6,
+"page": 8,
 "rect": [
-1802,
-1038,
-162,
-134
+658,
+782,
+160,
+132
 ]
 },
 "ui_stamp_blue": {
-"page": 6,
+"page": 8,
 "rect": [
-1144,
-1038,
+2,
+782,
 160,
 160
 ]
 },
 "ui_stamp_green": {
-"page": 6,
+"page": 8,
 "rect": [
-1308,
-1038,
+166,
+782,
 160,
 160
 ]
 },
 "ui_stamp_red": {
-"page": 6,
+"page": 8,
 "rect": [
-1472,
-1038,
+330,
+782,
 160,
 160
 ]
 },
 "ui_star_gold": {
-"page": 6,
+"page": 8,
 "rect": [
-538,
-1916,
-40,
-40
+730,
+1378,
+48,
+48
 ]
 },
 "ui_star_gray": {
-"page": 6,
+"page": 8,
 "rect": [
-582,
-1916,
-40,
-40
+782,
+1378,
+48,
+48
 ]
 },
 "ui_star_red": {
-"page": 6,
+"page": 8,
 "rect": [
-494,
-1916,
-40,
-40
+834,
+1378,
+48,
+48
 ]
 },
 "ui_status_armor_break": {
-"page": 6,
+"page": 8,
 "rect": [
-602,
-1800,
+122,
+1318,
 56,
 56
 ]
 },
 "ui_status_burn": {
-"page": 6,
+"page": 8,
 "rect": [
 2,
-1800,
+1318,
 56,
 56
 ]
 },
 "ui_status_fear": {
-"page": 6,
+"page": 8,
 "rect": [
-482,
-1800,
+362,
+1318,
 56,
 56
 ]
 },
 "ui_status_haste": {
-"page": 6,
+"page": 8,
 "rect": [
-662,
-1800,
+302,
+1318,
 56,
 56
 ]
 },
 "ui_status_jammed": {
-"page": 6,
+"page": 8,
 "rect": [
-722,
-1800,
-56,
-56
+938,
+1378,
+48,
+48
 ]
 },
 "ui_status_marked": {
-"page": 6,
+"page": 8,
 "rect": [
-302,
-1800,
+62,
+1318,
 56,
 56
 ]
 },
 "ui_status_oil": {
-"page": 6,
+"page": 8,
 "rect": [
-242,
-1800,
-56,
-56
+618,
+1378,
+52,
+52
 ]
 },
 "ui_status_pushback": {
-"page": 6,
+"page": 8,
 "rect": [
-362,
-1800,
+182,
+1318,
 56,
 56
 ]
 },
 "ui_status_regen": {
-"page": 6,
+"page": 8,
 "rect": [
-542,
-1800,
-56,
-56
+674,
+1378,
+52,
+52
 ]
 },
 "ui_status_shield": {
-"page": 6,
+"page": 8,
 "rect": [
-782,
-1800,
-56,
-56
+562,
+1378,
+52,
+52
 ]
 },
 "ui_status_shock": {
-"page": 6,
+"page": 8,
 "rect": [
-182,
-1800,
-56,
-56
+886,
+1378,
+48,
+48
 ]
 },
 "ui_status_silence": {
-"page": 6,
+"page": 8,
 "rect": [
-842,
-1800,
+242,
+1318,
 56,
 56
 ]
 },
 "ui_status_slow": {
-"page": 6,
+"page": 8,
 "rect": [
-422,
-1800,
+1958,
+1194,
 56,
 56
 ]
 },
 "ui_status_stun": {
-"page": 6,
+"page": 8,
 "rect": [
-122,
-1800,
-56,
-56
+1894,
+1194,
+60,
+60
 ]
 },
 "ui_status_wet": {
-"page": 6,
+"page": 8,
 "rect": [
-62,
-1800,
-56,
-56
+506,
+1378,
+52,
+52
 ]
 },
 "ui_tape": {
-"page": 6,
+"page": 8,
 "rect": [
-1154,
-1860,
-126,
+2,
+1434,
+128,
 44
 ]
 },
 "ui_tape_b": {
-"page": 6,
+"page": 8,
 "rect": [
-1776,
-1860,
-126,
+134,
+1434,
+128,
 44
 ]
 },
 "ui_tape_small": {
-"page": 6,
+"page": 8,
 "rect": [
-626,
-1916,
+266,
+1434,
 76,
 36
 ]
 },
-"ui_vignette": {
-"page": 6,
-"rect": [
-518,
-2,
-256,
-256
-]
-},
 "veh_airport_rescue": {
-"page": 7,
+"page": 9,
 "rect": [
-418,
-450,
-130,
-102
+922,
+2,
+120,
+200
 ]
 },
 "veh_ambulance": {
-"page": 7,
+"page": 9,
 "rect": [
-1584,
-336,
-114,
-106
+754,
+434,
+120,
+184
 ]
 },
 "veh_armored_van": {
-"page": 7,
+"page": 9,
 "rect": [
-140,
-194,
-138,
-134
+1422,
+630,
+120,
+176
 ]
 },
 "veh_chrono_police": {
-"page": 7,
+"page": 9,
 "rect": [
-270,
-336,
-130,
-110
+1682,
+2,
+136,
+200
 ]
 },
 "veh_city_bus": {
-"page": 7,
+"page": 9,
 "rect": [
-1746,
-2,
-134,
-138
+230,
+230,
+120,
+192
 ]
 },
 "veh_compact": {
-"page": 7,
+"page": 9,
 "rect": [
-2,
-658,
-114,
-88
+110,
+998,
+104,
+152
 ]
 },
 "veh_construction_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-1204,
-336,
-132,
-108
+1222,
+230,
+120,
+192
 ]
 },
 "veh_courier_bike": {
-"page": 7,
+"page": 9,
 "rect": [
-572,
-194,
-104,
-130
+1394,
+1162,
+64,
+120
 ]
 },
 "veh_crane_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-792,
-336,
-124,
-108
+674,
+2,
+120,
+200
 ]
 },
 "veh_delivery_van": {
-"page": 7,
+"page": 9,
 "rect": [
-1466,
-450,
-134,
-96
+462,
+630,
+120,
+176
 ]
 },
 "veh_electric_taxi": {
-"page": 7,
+"page": 9,
 "rect": [
-1338,
-450,
-124,
-98
+950,
+630,
+112,
+176
 ]
 },
 "veh_elite_fire_engine": {
-"page": 7,
+"page": 9,
 "rect": [
-364,
-658,
-124,
-82
+1418,
+2,
+120,
+200
 ]
 },
 "veh_experimental_ev": {
-"page": 7,
+"page": 9,
 "rect": [
-238,
-658,
-122,
-84
+1546,
+630,
+112,
+176
 ]
 },
 "veh_family_wagon": {
-"page": 7,
+"page": 9,
 "rect": [
-1410,
-558,
-124,
-90
+638,
+434,
+112,
+184
 ]
 },
 "veh_fire_engine": {
-"page": 7,
+"page": 9,
 "rect": [
-552,
-450,
-130,
-102
+1098,
+230,
+120,
+192
 ]
 },
 "veh_food_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-2,
-558,
-132,
-96
+602,
+230,
+120,
+192
 ]
 },
 "veh_garbage_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-896,
-194,
-124,
-128
+478,
+230,
+120,
+192
 ]
 },
 "veh_ghost_car": {
-"page": 7,
+"page": 9,
 "rect": [
-120,
-658,
-114,
-88
+2,
+818,
+112,
+176
 ]
 },
 "veh_golden_taxi": {
-"page": 7,
+"page": 9,
 "rect": [
-872,
-558,
-128,
-92
+1778,
+630,
+112,
+176
 ]
 },
 "veh_hatchback": {
-"page": 7,
+"page": 9,
 "rect": [
-736,
-558,
-132,
-92
+1230,
+818,
+112,
+160
 ]
 },
 "veh_heavy_rescue": {
-"page": 7,
+"page": 9,
 "rect": [
-1062,
-336,
-138,
-108
+1170,
+2,
+120,
+200
 ]
 },
 "veh_heavy_wrecker": {
-"page": 7,
+"page": 9,
 "rect": [
-1432,
-194,
-126,
-118
+798,
+2,
+120,
+200
 ]
 },
 "veh_highway_patrol": {
-"page": 7,
+"page": 9,
 "rect": [
-1198,
-2,
-126,
-144
+1306,
+630,
+112,
+176
 ]
 },
 "veh_hyper_bus": {
-"page": 7,
+"page": 9,
 "rect": [
-2,
-450,
-150,
-104
+1842,
+230,
+120,
+192
 ]
 },
 "veh_interceptor": {
-"page": 7,
+"page": 9,
 "rect": [
-1728,
-450,
-122,
-96
+1894,
+630,
+104,
+176
 ]
 },
 "veh_limousine": {
-"page": 7,
+"page": 9,
 "rect": [
-402,
 558,
-198,
-92
+2,
+112,
+200
 ]
 },
 "veh_mail_van": {
-"page": 7,
+"page": 9,
 "rect": [
-818,
-450,
-128,
-100
+702,
+630,
+120,
+176
 ]
 },
 "veh_mecha_vehicle": {
-"page": 7,
+"page": 9,
 "rect": [
-878,
-2,
-134,
-150
+1398,
+434,
+168,
+184
 ]
 },
 "veh_military_convoy": {
-"page": 7,
+"page": 9,
 "rect": [
-920,
-336,
-138,
-108
+1294,
+2,
+120,
+200
 ]
 },
 "veh_mini_tank": {
-"page": 7,
+"page": 9,
 "rect": [
-1790,
-558,
-140,
-90
+218,
+998,
+128,
+152
 ]
 },
 "veh_minivan": {
-"page": 7,
+"page": 9,
 "rect": [
-1538,
-558,
-124,
-90
+586,
+630,
+112,
+176
 ]
 },
 "veh_mobile_command": {
-"page": 7,
+"page": 9,
 "rect": [
-1688,
-194,
-126,
-110
+1718,
+230,
+120,
+192
 ]
 },
 "veh_monster_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-424,
-194,
+1250,
+434,
 144,
-132
+184
 ]
 },
 "veh_news_van": {
-"page": 7,
+"page": 9,
 "rect": [
-686,
-450,
-128,
-100
+878,
+434,
+120,
+184
 ]
 },
 "veh_phantom_ambulance": {
-"page": 7,
+"page": 9,
 "rect": [
-1702,
-336,
-114,
-106
+1570,
+434,
+120,
+184
 ]
 },
 "veh_pickup": {
-"page": 7,
+"page": 9,
 "rect": [
-1604,
-450,
+514,
+434,
 120,
-96
+184
 ]
 },
 "veh_police": {
-"page": 7,
+"page": 9,
 "rect": [
-136,
-336,
-130,
-110
+1190,
+630,
+112,
+176
 ]
 },
 "veh_portal_bus": {
-"page": 7,
+"page": 9,
 "rect": [
-1136,
-558,
-126,
-92
+142,
+434,
+120,
+192
 ]
 },
 "veh_possessed_ice_cream_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-156,
-450,
-128,
-104
+410,
+2,
+144,
+216
 ]
 },
 "veh_presidential_limo": {
-"page": 7,
+"page": 9,
 "rect": [
-1854,
-450,
-170,
-96
+1046,
+2,
+120,
+200
 ]
 },
 "veh_prototype_supercar": {
-"page": 7,
+"page": 9,
 "rect": [
-270,
-558,
-128,
-94
+234,
+818,
+104,
+168
 ]
 },
 "veh_quantum_taxi": {
-"page": 7,
+"page": 9,
 "rect": [
-1004,
-558,
-128,
-92
+1542,
+2,
+136,
+200
 ]
 },
 "veh_race_car": {
-"page": 7,
+"page": 9,
 "rect": [
-138,
-558,
-128,
-94
+1346,
+818,
+104,
+160
 ]
 },
 "veh_recovery_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-1818,
-194,
-118,
-110
+1346,
+230,
+120,
+192
 ]
 },
 "veh_rescue_van": {
-"page": 7,
+"page": 9,
 "rect": [
-1466,
-336,
-114,
-106
+1002,
+434,
+120,
+184
 ]
 },
 "veh_riot_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-1340,
-336,
-122,
-106
+1470,
+230,
+120,
+192
 ]
 },
 "veh_road_worker": {
-"page": 7,
+"page": 9,
 "rect": [
-950,
-450,
-130,
-100
+974,
+230,
+120,
+192
 ]
 },
 "veh_school_bus": {
-"page": 7,
+"page": 9,
 "rect": [
-288,
-450,
-126,
-104
+726,
+230,
+120,
+192
 ]
 },
 "veh_scooter": {
-"page": 7,
+"page": 9,
 "rect": [
-680,
-194,
-104,
-130
+1326,
+1162,
+64,
+120
 ]
 },
 "veh_shuttle": {
-"page": 7,
+"page": 9,
 "rect": [
-1884,
-2,
-134,
-138
+1066,
+630,
+120,
+176
 ]
 },
 "veh_snowplow": {
-"page": 7,
+"page": 9,
 "rect": [
-1266,
-558,
-140,
-90
+1594,
+230,
+120,
+192
 ]
 },
 "veh_street_sweeper": {
-"page": 7,
+"page": 9,
 "rect": [
-1458,
-2,
-140,
-140
+850,
+230,
+120,
+192
 ]
 },
 "veh_swat_van": {
-"page": 7,
+"page": 9,
 "rect": [
-666,
-336,
-122,
-108
+1126,
+434,
+120,
+184
 ]
 },
 "veh_taxi": {
-"page": 7,
+"page": 9,
 "rect": [
-604,
-558,
-128,
-92
+346,
+630,
+112,
+176
 ]
 },
 "veh_time_traveller": {
-"page": 7,
+"page": 9,
 "rect": [
-1666,
-558,
-120,
-90
+2,
+434,
+136,
+192
 ]
 },
 "veh_tow_truck": {
-"page": 7,
+"page": 9,
 "rect": [
-404,
-336,
-118,
-110
+354,
+230,
+120,
+192
 ]
 },
 "veh_traffic_enforcement": {
-"page": 7,
+"page": 9,
 "rect": [
-2,
-336,
-130,
-110
+118,
+818,
+112,
+168
 ]
 },
 "veh_ufo": {
-"page": 7,
+"page": 9,
 "rect": [
-1294,
-194,
-134,
-124
+862,
+998,
+144,
+144
 ]
 },
 "veh_utility_van": {
-"page": 7,
+"page": 9,
 "rect": [
-1820,
-336,
-122,
-106
+826,
+630,
+120,
+176
 ]
 },
 "veh_vintage_hot_rod": {
-"page": 7,
+"page": 9,
 "rect": [
-1214,
-450,
-120,
-98
+1662,
+630,
+112,
+176
 ]
 }
 },
 "pages": [
 "atlas_big_0.png",
 "atlas_big_1.png",
+"atlas_big_2.png",
+"atlas_big_3.png",
 "atlas_chars_0.png",
 "atlas_env_0.png",
 "atlas_fx_0.png",

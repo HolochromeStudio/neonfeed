@@ -34,9 +34,6 @@ var _dust_t: float = 0.0
 var _hop: float = 0.0
 var beacon: Sprite2D
 var muzzle: Sprite2D
-var wheels: Array = []
-var _wheel_rot: float = 0.0
-var _roll: float = 0.0
 
 func setup(unit: BattleSim.SimUnit, v: BattleView, anim: bool) -> void:
 	u = unit
@@ -44,63 +41,47 @@ func setup(unit: BattleSim.SimUnit, v: BattleView, anim: bool) -> void:
 	_ph = randf() * TAU
 	_base_pos = unit.pos
 	position = unit.pos
-	shadow = Atlas.sprite("fx_shadow_blob")
-	shadow.scale = Vector2(1.9, 0.9)
-	shadow.position = Vector2(0, 38)
-	shadow.modulate = Color(1, 1, 1, 0.75)
+	shadow = Sprite2D.new()
+	shadow.modulate = Color(0, 0, 0, 0.32)
+	shadow.position = Vector2(8, 10)
 	add_child(shadow)
 	glow = Atlas.sprite("fx_glow")
 	glow.scale = Vector2(2.2, 2.2)
 	glow.modulate = Color(1, 0.9, 0.5, 0.0)
 	add_child(glow)
 	body = Node2D.new()
-	body.position = Vector2(0, 36)   # pivot at wheels
 	add_child(body)
-	sprite = Atlas.sprite(Data.unit_art(u.uid), true)
+	sprite = Atlas.sprite(Data.unit_art(u.uid))
 	body.add_child(sprite)
-	var tw: float = sprite.texture.region.size.x
-	var th: float = sprite.texture.region.size.y
-	_fit = minf(v.sim.cell.x * 0.86 / tw, v.sim.cell.y * 0.62 / th)
-	_fit = clampf(_fit, 0.8, 1.55)
+	shadow.texture = sprite.texture
+	_fit = 1.0
 	_apply_scale()
-	_add_wheels()
 	if "emergency" in u.def["tags"] or "police" in u.def["tags"]:
 		beacon = Atlas.sprite("fx_glow")
-		beacon.position = Vector2(0, -sprite.texture.region.size.y * 0.92)
+		beacon.position = Vector2(0, -sprite.texture.region.size.y * 0.18)
 		beacon.scale = Vector2(0.55, 0.55)
 		beacon.modulate = Color(1, 0.2, 0.2, 0.0)
-		sprite.add_child(beacon)
-		beacon.scale = Vector2(0.55 / maxf(_fit, 0.01), 0.55 / maxf(_fit, 0.01)) * 1.0
+		body.add_child(beacon)
 	muzzle = Atlas.sprite("fx_glow")
 	muzzle.modulate = Color(1, 0.9, 0.5, 0.0)
-	muzzle.position = Vector2(0, -52)
+	muzzle.position = Vector2(0, -sprite.texture.region.size.y * 0.5)
 	muzzle.scale = Vector2(0.7, 0.7)
 	body.add_child(muzzle)
 	_hl = Atlas.sprite("fx_ring")
 	_hl.visible = false
 	_hl.scale = Vector2(1.1, 0.8)
-	_hl.position = Vector2(0, 20)
+	_hl.position = Vector2(0, 0)
 	add_child(_hl)
 	status_row = Node2D.new()
-	status_row.position = Vector2(0, -80)
+	status_row.position = Vector2(0, -sprite.texture.region.size.y * 0.5 - 14)
 	add_child(status_row)
 	_build_badge()
 	_update_rank(true)
 	if anim:
 		_drive_in()
 
-func _add_wheels() -> void:
-	for w in Atlas.wheels(Data.unit_art(u.uid)):
-		var ws := Atlas.sprite("fx_wheel")
-		ws.position = Vector2(w[0], w[1])
-		var k: float = float(w[2]) * 1.86 / 64.0
-		ws.scale = Vector2(k, k)
-		sprite.add_child(ws)
-		wheels.append(ws)
-
 func _apply_scale() -> void:
-	var rs := 1.0 + 0.035 * (u.rank - 1)
-	sprite.scale = Vector2(_fit * rs * _flip, _fit * rs)
+	sprite.scale = Vector2.ONE
 
 func _build_badge() -> void:
 	badge = Control.new()
@@ -147,9 +128,9 @@ func _drive_in() -> void:
 	tw.tween_callback(func(): _driving = false)
 
 func pop_in(rank: int) -> void:
-	body.scale = Vector2(0.3, 0.3)
+	body.scale = Vector2(0.5, 0.5)
 	var tw := create_tween()
-	tw.tween_property(body, "scale", Vector2(1.28, 1.28), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(body, "scale", Vector2(1.25, 1.25), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tw.tween_property(body, "scale", Vector2(0.9, 1.1), 0.08)
 	tw.tween_property(body, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 	# rank stamps
@@ -170,10 +151,7 @@ func recoil(target: Vector2) -> void:
 	var d := (target - position).normalized()
 	var an := Data.unit_anim(u.uid)
 	_recoil_v = -d * float(an["recoil"])
-	_squash = float(an["squash"])
-	_target_flip = -1.0 if target.x > position.x else 1.0
-	_tilt = clampf(d.x * float(an["tilt"]), -0.14, 0.14)
-	muzzle.position = Vector2(d.x * 38.0, -52 + d.y * 20.0)
+	muzzle.position = Vector2(d.x * 38.0, d.y * 38.0 - sprite.texture.region.size.y * 0.1)
 	muzzle.modulate.a = 0.9
 
 func flash(c: Color) -> void:
@@ -208,13 +186,11 @@ func begin_drag() -> void:
 	_dragging = true
 	z_index = 30
 	create_tween().tween_property(body, "scale", Vector2(1.18, 1.18), 0.1)
-	shadow.position = Vector2(14, 56)
 
 func end_drag() -> void:
 	_dragging = false
 	z_index = 0
 	create_tween().tween_property(body, "scale", Vector2.ONE, 0.12)
-	shadow.position = Vector2(0, 38)
 
 func sync(sim: BattleSim, dt: float) -> void:
 	_t += dt
@@ -225,28 +201,18 @@ func sync(sim: BattleSim, dt: float) -> void:
 		return
 	if not _dragging:
 		pass
-	# idle rumble: faster when attacking / buffs
-	var rumble := sin(_t * (14.0 if u.cd < 0.2 else 8.0) + _ph)
-	var bob := sin(_t * 2.2 + _ph) * 1.5 + rumble * 0.8
+	# pixel-stepped idle: 1-frame engine rumble (4px = one art pixel), faster when attacking
+	var rate := 14.0 if u.cd < 0.2 else 6.0
+	var step := 1.0 if (int(_t * rate + _ph) % 2 == 0) else 0.0
 	_recoil = _recoil.lerp(Vector2.ZERO, clampf(dt * 14.0, 0, 1))
 	_recoil += _recoil_v * dt
 	_recoil_v = _recoil_v.lerp(Vector2.ZERO, clampf(dt * 18.0, 0, 1))
 	_squash = lerpf(_squash, 1.0, clampf(dt * 12.0, 0, 1))
 	_tilt = lerpf(_tilt, 0.0, clampf(dt * 8.0, 0, 1))
-	_flip = lerpf(_flip, _target_flip, clampf(dt * 14.0, 0, 1))
-	var rs := 1.0 + 0.035 * (u.rank - 1)
-	sprite.scale = Vector2(_fit * rs * _flip, _fit * rs * _squash)
-	# wheels turn while idling (slowly), spin up when driving in / attacking
-	var spin := 1.2 if not _driving else 14.0
-	if u.cd < 0.15 and not u.st.has("stun"):
-		spin += 3.0
-	if u.st.has("stun"):
-		spin = 0.0
-	_wheel_rot += spin * dt * 6.0
-	for ws in wheels:
-		ws.rotation = _wheel_rot
-	body.position = Vector2(_recoil.x * 0.3, 36 + bob * 0.6 + _recoil.y * 0.3)
-	body.rotation = _tilt + sin(_t * 1.3 + _ph) * 0.006
+	sprite.scale = Vector2.ONE
+	body.position = Vector2(snappedf(_recoil.x * 0.3, 2.0), snappedf(step * (4.0 if rate > 10.0 else 2.0) + _recoil.y * 0.3, 2.0))
+	body.rotation = 0.0
+	shadow.position = Vector2(8, 10) + Vector2(-body.position.x, 0)
 	if muzzle.modulate.a > 0.0:
 		muzzle.modulate.a = maxf(0.0, muzzle.modulate.a - dt * 9.0)
 	if beacon:

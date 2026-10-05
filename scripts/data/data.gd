@@ -64,7 +64,7 @@ func units_of_rarity(r: String) -> Array:
 func unit_visual(id: String) -> Dictionary:
 	var u: Dictionary = units[id]
 	var big: bool = "heavy" in u["tags"] or "bus" in u["tags"]
-	return {"art": "veh_" + id, "wheels": Atlas.wheels("veh_" + id).size(), "scale_bias": 1.08 if big else 1.0, "glow_rank": 4,
+	return {"art": "veh_" + id, "wheels": 0, "scale_bias": 1.08 if big else 1.0, "glow_rank": 4,
 		"rarity_color": rarity_color(u["rarity"])}
 
 const ANIM_BY_PROJ := {

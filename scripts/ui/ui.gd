@@ -2,30 +2,42 @@ class_name UI
 extends RefCounted
 ## Cut-paper UI toolkit. Everything is built in code from atlas textures (see tools/make_ui.py).
 
-const INK := Color("2a1c1a")
-const INK_SOFT := Color("5a4338")
-const PAPER := Color("e2d0b0")
-const CREAM := Color("eee0c2")
-const RED := Color("c9524a")
-const TEAL := Color("548c84")
-const BLUE := Color("719cbc")
-const YELLOW := Color("e9ab4b")
-const ORANGE := Color("db8863")
-const GREEN := Color("6ea062")
-const LAVENDER := Color("8c8fb8")
-const CARDBOARD := Color("56514c")
-const WHITE := Color("fbf6ea")
+const INK := Color("181425")
+const INK_SOFT := Color("3a4466")
+const PAPER := Color("e8d8b0")
+const CREAM := Color("f6ecd0")
+const RED := Color("e43b44")
+const TEAL := Color("2aa7a0")
+const BLUE := Color("1f86d8")
+const YELLOW := Color("fee761")
+const ORANGE := Color("f77622")
+const GREEN := Color("63c74d")
+const LAVENDER := Color("a77be0")
+const CARDBOARD := Color("262b44")
+const WHITE := Color("ffffff")
 
 static var font_title: Font
 static var font_body: Font
 static var font_hand: Font
 
+static func _pixel_font(path: String) -> Font:
+	var f: FontFile = load(path)
+	f.antialiasing = TextServer.FONT_ANTIALIASING_NONE
+	f.hinting = TextServer.HINTING_NONE
+	f.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
+	f.force_autohinter = false
+	return f
+
 static func init_fonts() -> void:
 	if font_title != null:
 		return
-	font_title = load("res://assets/fonts/LilitaOne-Regular.ttf")
-	font_body = load("res://assets/fonts/PatrickHand-Regular.ttf")
-	font_hand = load("res://assets/fonts/Bangers-Regular.ttf")
+	font_title = _pixel_font("res://assets/fonts/Silkscreen-Bold.ttf")
+	font_body = _pixel_font("res://assets/fonts/PixelifySans.ttf")
+	font_hand = font_title
+
+## Pixel fonts stay crisp only at multiples of 8.
+static func snap_font(size: int) -> int:
+	return maxi(16, int(floor(size / 8.0 + 0.25)) * 8)
 
 static func label(text: String, size: int = 32, color: Color = INK, title: bool = false, align: int = HORIZONTAL_ALIGNMENT_CENTER, outline: int = 0, outline_color: Color = INK) -> Label:
 	init_fonts()
@@ -34,10 +46,10 @@ static func label(text: String, size: int = 32, color: Color = INK, title: bool 
 	l.horizontal_alignment = align
 	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	l.add_theme_font_override("font", font_title if title else font_body)
-	l.add_theme_font_size_override("font_size", size)
+	l.add_theme_font_size_override("font_size", snap_font(size))
 	l.add_theme_color_override("font_color", color)
 	if outline > 0:
-		l.add_theme_constant_override("outline_size", outline)
+		l.add_theme_constant_override("outline_size", maxi(4, int(round(outline / 4.0)) * 4))
 		l.add_theme_color_override("font_outline_color", outline_color)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return l
@@ -50,8 +62,8 @@ static func rich(bbcode: String, size: int = 30, color: Color = INK) -> RichText
 	r.scroll_active = false
 	r.add_theme_font_override("normal_font", font_body)
 	r.add_theme_font_override("bold_font", font_title)
-	r.add_theme_font_size_override("normal_font_size", size)
-	r.add_theme_font_size_override("bold_font_size", size)
+	r.add_theme_font_size_override("normal_font_size", snap_font(size))
+	r.add_theme_font_size_override("bold_font_size", snap_font(size))
 	r.add_theme_color_override("default_color", color)
 	r.text = bbcode
 	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -204,13 +216,6 @@ static func paper_bg(parent: Control, base: Variant = "teal", halftone: bool = t
 		set_full_rect(t)
 		t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		bg.add_child(t)
-	var g := TextureRect.new()
-	g.texture = Atlas.tile("ui_grain_tile")
-	g.stretch_mode = TextureRect.STRETCH_TILE
-	g.modulate = Color(1, 1, 1, 0.10)
-	set_full_rect(g)
-	g.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	bg.add_child(g)
 	return bg
 
 # ------------------------------------------------------------------ unit card
@@ -233,7 +238,7 @@ static func unit_card(id: String, size: Vector2 = Vector2(200, 270), show_level:
 	var sprite := Atlas.rect(Data.unit_art(id), size.x * 0.9, size.y * 0.46)
 	sprite.position = Vector2(size.x * 0.05, size.y * 0.1)
 	root.add_child(sprite)
-	var nm := label(d["name"], int(size.x * (0.17 if String(d["name"]).length() <= 9 else 0.125)), INK, true)
+	var nm := label(d["name"], int(size.x * (0.15 if String(d["name"]).length() <= 9 else 0.125)), INK, false)
 	nm.position = Vector2(4, size.y * 0.6)
 	nm.size = Vector2(size.x - 8, size.y * 0.16)
 	nm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

@@ -86,7 +86,7 @@ var rng := RandomNumberGenerator.new()
 var wave_rng := RandomNumberGenerator.new()
 var cols: int = 4
 var rows: int = 4
-var cell := Vector2(190, 190)
+var cell := Vector2(192, 192)
 var grid_origin := Vector2(115, 480)
 var path_pts: PackedVector2Array = PackedVector2Array()
 var fly_end := Vector2(1150, 1300)
@@ -172,8 +172,8 @@ func setup(config: Dictionary) -> void:
 	rng.seed = int(cfg.get("seed", 12345))
 	wave_rng.seed = int(cfg.get("wave_seed", cfg.get("seed", 12345)))
 	cols = int(cfg.get("cols", 4)); rows = int(cfg.get("rows", 4))
-	cell = cfg.get("cell", Vector2(190, 190))
-	grid_origin = cfg.get("grid_origin", Vector2((FIELD_W - 90.0 - cols * cell.x) * 0.5, 480))
+	cell = cfg.get("cell", Vector2(192, 192))
+	grid_origin = cfg.get("grid_origin", Vector2(snappedf((FIELD_W - 88.0 - cols * cell.x) * 0.5, 4.0), 480))
 	coop = bool(cfg.get("coop", false))
 	deck = cfg.get("deck", ["taxi", "police", "fire_engine", "tow_truck", "city_bus"]).duplicate()
 	partner_deck = cfg.get("partner_deck", []).duplicate()
@@ -209,10 +209,10 @@ func setup(config: Dictionary) -> void:
 func _build_path() -> void:
 	## C-shaped orbit: top lane left->right, down the right-hand street, bottom lane right->left. The grid sits between the lanes.
 	path_pts.clear()
-	var yt := grid_origin.y - 115.0
-	var yb := grid_origin.y + rows * cell.y + 115.0
+	var yt := grid_origin.y - 116.0
+	var yb := grid_origin.y + rows * cell.y + 116.0
 	var xr := FIELD_W - 72.0
-	var r := 90.0
+	var r := 88.0
 	path_pts.append(Vector2(-70, yt))
 	path_pts.append(Vector2(xr - r, yt))
 	for i in range(1, 9):

@@ -81,7 +81,7 @@ func _ready() -> void:
 	vb.add_child(UI.label("TRAFFIC JAM 1.0  -  Godot 4  -  built from the supplied paper-collage art sheet.", 24, Color(1, 1, 1, 0.6)))
 
 func _credits() -> void:
-	var l := UI.label("TRAFFIC JAM\nDesign, code and art pipeline: Claude Code\nSource art: the supplied TRAFFIC JAM master sheet\nFonts: Lilita One, Patrick Hand, Bangers (SIL OFL)\nEngine: Godot 4", 32, UI.INK)
+	var l := UI.label("TRAFFIC JAM\nDesign, code and art pipeline: Claude Code\nAll art drawn in code as pixel art (tools/pix)\nFonts: Silkscreen, Pixelify Sans, VT323 (SIL OFL)\nEngine: Godot 4", 32, UI.INK)
 	l.custom_minimum_size = Vector2(760, 320)
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	Game.popup("CREDITS", l, [{"text": "OK", "color": "teal"}], Vector2(860, 640))

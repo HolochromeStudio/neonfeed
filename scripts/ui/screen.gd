@@ -42,9 +42,9 @@ func add_topbar(show_back: bool = false, title: String = "") -> Control:
 		bar.add_child(b)
 		x += 110
 	if title != "":
-		var t := UI.label(title, 50 if title.length() <= 8 else 36, UI.WHITE, true, HORIZONTAL_ALIGNMENT_LEFT, 8)
+		var t := UI.label(title, 40 if title.length() <= 6 else (32 if title.length() <= 11 else 24), UI.WHITE, true, HORIZONTAL_ALIGNMENT_LEFT, 8)
 		t.position = Vector2(x, 0)
-		t.size = Vector2(500, 90)
+		t.size = Vector2(290, 90)
 		bar.add_child(t)
 	var vw := vsize().x
 	var coin := UI.resource_pill("coins", 210)
