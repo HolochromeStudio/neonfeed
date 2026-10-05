@@ -35,8 +35,12 @@ After Gate B: Run(A08), Economy(A09), Boss(A07), UI screens(A10) -> Balance(A18)
 | Item | Status |
 |---|---|
 | Lead docs | done (this batch) |
-| Scaffold | in progress |
-| Batch 1 | dispatching |
+| Scaffold | done |
+| Batch 1 (assets, UX, narrative, save, audio) | done, verified |
+| Gate A (town sheet) | PASSED (A04 + A05) |
+| Placeholders (hero/enemy/FX) | done |
+| Animation defs + state graph | done |
+| Core duel (A02) | in progress |
 | Everything else | pending |
 
 ## Blockers
