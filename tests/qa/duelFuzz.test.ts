@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { Rng } from '../../src/core/rng';
 import { DUEL_CONFIG } from '../../src/data/duelConfig';
 import { DuelSystem, replayDuel } from '../../src/systems/DuelSystem';
-import type { DuelInput, DuelOutcome } from '../../src/systems/DuelSystem';
+import type { DuelOutcome } from '../../src/systems/DuelSystem';
 import { LEGAL, VALID_PHASES, cfgWith, quietAudio, randomLog, randomOpponent, record } from './helpers';
 import type { Recorder } from './helpers';
 
