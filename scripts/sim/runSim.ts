@@ -18,8 +18,8 @@ import type { SkillModel } from './skills';
 /** 'none' never takes or buys a perk (measures the bare duel game); 'random' takes one of the three offers. */
 export type PerkPolicyId = 'none' | 'random' | 'smart' | `tag:${PerkTag}`;
 
-/** Which perks actually change play in the current code (support === 'today' => modifiers are wired). */
-const works = (p: PerkDef): boolean => p.support === 'today';
+/** Which perks actually change play in the current code (D16: support === 'ready' => modifiers are consumed). */
+const works = (p: PerkDef): boolean => p.support === 'ready';
 const RARITY_RANK: Record<string, number> = { common: 1, rare: 2, legend: 3, cursed: -5 };
 
 export function pickPerk(policy: PerkPolicyId, offers: readonly string[], owned: readonly string[], rng: Rng): string | null {
@@ -230,7 +230,7 @@ export function playRun(o: RunSimOptions): RunRecord {
       if (r.reactionMs !== null) rec.bestReactionMs = rec.bestReactionMs === null ? r.reactionMs : Math.min(rec.bestReactionMs, r.reactionMs);
       const out = run.completeDuel({
         outcome: r.win ? 'WIN' : 'LOSE', heroHp: r.heroHpEnd, tier: r.tier, reactionMs: r.reactionMs, headshots: r.headshots,
-        consumedPerks: r.revives > 0 ? ['revive_flask'] : undefined,
+        consumedPerks: r.revives > 0 ? ['revive_flask'] : undefined, hitsIgnored: r.hitsIgnored,
       });
       if (out.status === 'won') {
         rec.defeated.push(enc.boss && enc.bossId ? enc.bossId : enc.enemyId);

@@ -38,9 +38,9 @@ describe('perk table', () => {
     const ids = new Set(PERKS.map((p) => p.id));
     for (const p of PERKS) for (const e of p.excludes ?? []) { expect(ids.has(e)).toBe(true); expect(e).not.toBe(p.id); }
   });
-  it('support classification is set and today-perks name no missing system', () => {
-    for (const p of PERKS) expect(['today', 'a02', 'a06']).toContain(p.support);
-    for (const p of PERKS.filter((x) => x.support !== 'today')) expect(p.needs, p.id).toBeTruthy();
+  it('owner and support classification is set; pending perks say what is missing', () => {
+    for (const p of PERKS) { expect(['today', 'a02', 'a06']).toContain(p.owner); expect(['ready', 'pending']).toContain(p.support); }
+    for (const p of PERKS.filter((x) => x.support === 'pending')) expect(p.needs, p.id).toBeTruthy();
   });
 });
 

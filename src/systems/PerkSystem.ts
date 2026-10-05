@@ -62,6 +62,8 @@ export interface RollOptions {
   exclude?: readonly string[];
   /** Probability that a non-wildcard slot is forced on-tag. GAME_DESIGN: 30%. */
   onTagChance?: number;
+  /** D16: also offer `support: 'pending'` perks (hook not landed yet). Default false; tests and sims set it. */
+  includePending?: boolean;
 }
 
 export function rarityWeights(luck: number, opts: RollOptions = {}): Record<Rarity, number> {
@@ -101,6 +103,7 @@ export function rollPerkChoices(rng: Rng, owned: readonly string[], rarityLuck: 
   const eligible = (p: PerkDef): boolean => {
     if (ownedIds.has(p.id) || banned.has(p.id) || picked.includes(p.id)) return false;
     if (weights[p.rarity] <= 0) return false;
+    if (p.support === 'pending' && !opts.includePending) return false;
     if (conflictsWith(p.id, owned) || conflictsWith(p.id, picked)) return false;
     return true;
   };
@@ -219,6 +222,10 @@ export function duelConfigFor(mods: DuelModifiers, base: DuelConfig = DUEL_CONFI
   cfg.draw.flinchPenaltyMs = Math.round(base.draw.flinchPenaltyMs * mods.flinchPenaltyMult);
   cfg.aim.budgetMs = Math.round(base.aim.budgetMs * mods.aimBudgetMult);
   cfg.damage.enemyDamage = base.damage.enemyDamage * mods.enemyDamageMult;
+  // D14/D15: elite and boss hits scale with the same perk multiplier (Iron Skin, Mad Dog's Collar)
+  if (typeof base.damage.eliteDamage === 'number') cfg.damage.eliteDamage = base.damage.eliteDamage * mods.enemyDamageMult;
+  if (typeof base.damage.bossDamage === 'number') cfg.damage.bossDamage = base.damage.bossDamage * mods.enemyDamageMult;
+  cfg.damage.critMultiplier = base.damage.critMultiplier * mods.critDamageMult;
   if (mods.oneHitKill) cfg.damage.baseDamage = 99;
   cfg.fairness.maxDisarms = base.fairness.maxDisarms + mods.maxDisarmsDelta;
   cfg.damage.heroHp = heroHpFor(mods, base.damage.heroHp);

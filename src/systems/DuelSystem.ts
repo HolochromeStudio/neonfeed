@@ -37,6 +37,18 @@ import type { Zone } from './TargetSystem';
  * flinchNoTimeCost, goodAsPerfectPerDuel, afterHitAutoPerfect (a hero who starts wounded), ignoreFirstHits,
  * reviveCharges, lastStandBudgetMult, aimBudgetStillBonus. Boss `aimBudgetScale` (a property of the opponent) shrinks the
  * aim budget (>= 0.7). Every stagger only ADDS time to the pending enemy shot (RULE F1 untouched).
+ *
+ * Dodge (D18, docs/GAME_DESIGN.md): `{type:'dodge'}` is a sideways sidestep that makes ONE pending enemy shot miss.
+ * Allowed in CUE (instead of drawing) and SHOT (recoil); in AIM only with Tumble (`dodgeWhileAiming`, costs
+ * `tumbleBudgetCost` of the aim budget) or Phantom Step (free, from an enemy miss until the next enemy shot resolves);
+ * never in WAIT, DRAW or after the duel. The window is the last `W` REAL ms before the pending shot, with
+ * `W = clamp(opponent.dodgeWindowMs ?? cfg.dodge.windowMs, ...) * dodgeWindowMult` clamped to cfg.dodge min..max (>= 150 ms,
+ * ~9 frames plus touch latency). Results: perfect (first `perfectFrac` of the window) / ok succeed; early (window not open
+ * yet) / late (within `lateGraceMs` after an undodged shot) fail and delay the next draw by `failPenaltyMs` like a flinch
+ * (further dodges are ignored meanwhile). A successful dodge in CUE (hero never drew) ends in a counter draw at the
+ * dodged shot (no reaction tier, so Perfect-streak perks cannot be farmed). The dodge never touches the enemy plan:
+ * the first shot stays >= 450 ms after the cue (RULE F1). Perks: Counter Roll (next player shot crits), Dust Kick (the next enemy
+ * shot is blocked), Matador (window mult), Slip Away (DuelResult.dodges), Tumble, Phantom Step.
  */
 
 /** `advanceTo(Infinity)` is clamped to this many ms past the current clock. */
@@ -88,7 +100,13 @@ export type DuelInput =
   | { type: 'draw'; t: number }
   | { type: 'aim'; t: number; x: number; y: number }
   | { type: 'fire'; t: number; x?: number; y?: number }
-  | { type: 'retry'; t: number };
+  | { type: 'retry'; t: number }
+  | { type: 'dodge'; t: number; dir?: 'left' | 'right' };
+
+/** What kind of encounter this is: elites and bosses hit harder (D14, `cfg.damage.eliteDamage` / `bossDamage`). */
+export type EncounterKind = 'normal' | 'elite' | 'boss';
+
+export type DodgeResult = 'perfect' | 'ok' | 'early' | 'late';
 
 export interface DuelParams {
   seed: number;
@@ -106,6 +124,8 @@ export interface DuelParams {
   heroMaxHp?: number;
   /** Perk modifiers (composePerks().duel). Missing fields are neutral. */
   modifiers?: Partial<DuelModifiers>;
+  /** Encounter kind (DuelEncounter.elite / .boss): picks the damage of an enemy hit. Default 'normal'. */
+  kind?: EncounterKind;
 }
 
 export interface DuelResult {
@@ -133,6 +153,10 @@ export interface DuelResult {
   revivesUsed: number;
   /** Times the enemy was staggered (perk, prop or boss environment). */
   staggers: number;
+  /** Successful dodges: enemy shots that missed because of a dodge (Slip Away pays per dodge). */
+  dodges: number;
+  /** Early or late dodge attempts. */
+  dodgeFails: number;
 }
 
 export interface DuelHitInfo {
@@ -151,6 +175,44 @@ export interface DuelHitInfo {
   revived?: boolean;
 }
 
+export interface DuelDodgeInfo {
+  t: number;
+  result: DodgeResult;
+  /** True for perfect and ok. */
+  success: boolean;
+  dir: 'left' | 'right';
+  /** Real ms from the input to the pending enemy shot (null if no shot was pending). */
+  etaMs: number | null;
+  /** Effective window in real ms. */
+  windowMs: number;
+  shotIndex: number;
+  /** Dodged from AIM (Tumble or Phantom Step). */
+  fromAim: boolean;
+  /** Success with Dust Kick: a cloud will block the next enemy shot. */
+  cloud: boolean;
+  /** Success with Counter Roll: the next player shot crits. */
+  counterCrit: boolean;
+  /** Success in CUE: the hero follows with a counter draw at the dodged shot. */
+  counterDraw: boolean;
+}
+
+/** Dodge availability for the HUD / scene (RULE F2: the muzzle raise shows when `open` first becomes true). */
+export interface DodgeStatus {
+  /** A dodge input would be accepted now (phase, no commit, no stumble). */
+  available: boolean;
+  /** Available and the pending shot is inside the window: a dodge now succeeds. */
+  open: boolean;
+  /** Real ms to the pending enemy shot, null when none is running. */
+  etaMs: number | null;
+  windowMs: number;
+  /** A successful dodge is waiting for its shot. */
+  committed: boolean;
+  /** Real ms of stumble left after a failed dodge. */
+  stumbleMs: number;
+  /** Phantom Step state: the last enemy shot missed. */
+  phantom: boolean;
+}
+
 export interface DuelEvents {
   onPhase: { phase: DuelPhase; prev: DuelPhase; t: number };
   onWait: { t: number; attempt: number };
@@ -161,17 +223,20 @@ export interface DuelEvents {
   onAimStart: { t: number; budgetMs: number; followUp: boolean };
   onShot: { t: number; shooter: 'player' | 'enemy'; x: number; y: number; crit: boolean };
   onHit: { t: number } & DuelHitInfo;
-  onMiss: { t: number; shooter: 'player' | 'enemy' };
+  /** `evaded` (enemy shots only): the miss was caused by the hero's dodge or a Dust Kick cloud. */
+  onMiss: { t: number; shooter: 'player' | 'enemy'; evaded?: 'dodge' | 'dust' };
   onResolve: { t: number; result: DuelResult };
   onRetry: { t: number; attempt: number };
   /** The enemy's pending shot was pushed back `ms` ms of enemy clock. */
   onStagger: { t: number; ms: number; source: StaggerSource };
+  /** Every accepted dodge attempt (a rejected one counts in `ignoredInputs`). */
+  onDodge: DuelDodgeInfo;
 }
 
 export type StaggerSource = 'perfect_draw' | 'headshot' | 'prop' | 'external';
 
 export const DUEL_EVENT_NAMES: readonly (keyof DuelEvents)[] = [
-  'onPhase', 'onWait', 'onFlinch', 'onCue', 'onDraw', 'onPerfectDraw', 'onAimStart', 'onShot', 'onHit', 'onMiss', 'onResolve', 'onRetry', 'onStagger',
+  'onPhase', 'onWait', 'onFlinch', 'onCue', 'onDraw', 'onPerfectDraw', 'onAimStart', 'onShot', 'onHit', 'onMiss', 'onResolve', 'onRetry', 'onStagger', 'onDodge',
 ];
 
 type Listener<T> = (payload: T) => void;
@@ -230,6 +295,7 @@ export interface DuelSnapshot {
   enemyShotIndex: number;
   /** Real ms until the enemy's next shot at the current clock speed, or null when it is not running. */
   enemyShotEtaMs: number | null;
+  dodge: DodgeStatus;
 }
 
 export class DuelSystem {
@@ -246,6 +312,7 @@ export class DuelSystem {
   private readonly heroCap: number;
   private readonly enemyMax: number;
   private readonly mods: DuelModifiers;
+  private readonly kind: EncounterKind;
 
   private rng!: Rng;
   private hero!: Health;
@@ -283,6 +350,16 @@ export class DuelSystem {
   private staggers = 0;
   private stillExtra = 0;
   private lastAimMoveAt = 0;
+  // dodge (all reset per attempt)
+  private dodgeCommit: { shotIndex: number; perfect: boolean } | null = null;
+  private dodgeLockUntil = -Infinity;
+  private dodges = 0;
+  private dodgeFails = 0;
+  private counterCrit = false;
+  private dustBlock = false;
+  private phantom = false;
+  private lastEnemyShotAt: number | null = null;
+  private aimBudgetTotal = 0;
   /** True once `onPhase` has announced WAIT for the current attempt. */
   private waitAnnounced = false;
 
@@ -307,6 +384,7 @@ export class DuelSystem {
     this.enemyMax = Number.isFinite(eh) && eh > 0 ? eh : 1;
     this.heroCap = Number.isFinite(params.heroMaxHp) ? Math.max(this.heroMax, params.heroMaxHp as number) : this.heroMax;
     this.mods = { ...neutralDuelModifiers(), ...(params.modifiers ?? {}) };
+    this.kind = params.kind === 'elite' || params.kind === 'boss' ? params.kind : 'normal';
     const e = this.cfg.arena.enemy;
     const rect = params.enemyRect ?? { x: e.x - e.w / 2, y: e.y - e.h, w: e.w, h: e.h };
     this.zones = buildZones(rect, this.cfg.arena.props, this.cfg);
@@ -323,6 +401,14 @@ export class DuelSystem {
   }
   get lastResult(): DuelResult | null {
     return this.result;
+  }
+  /** Damage of one enemy hit on the hero: kind base (D14) times the perk multiplier for elites and bosses. */
+  get enemyHitDamage(): number {
+    const d = this.cfg.damage;
+    if (this.kind === 'normal') return d.enemyDamage; // from duelConfigFor: the perk multiplier is already in
+    const base = this.kind === 'boss' ? d.bossDamage : d.eliteDamage;
+    const m = Number.isFinite(this.mods.enemyDamageMult) ? this.mods.enemyDamageMult : 1;
+    return (Number.isFinite(base) ? base : d.enemyDamage) * m;
   }
   get isOver(): boolean {
     return this.phase === 'RESOLVE' || this.phase === 'RETRY';
@@ -354,6 +440,7 @@ export class DuelSystem {
       ignoredInputs: this.ignored,
       enemyShotIndex: this.enemyShotIndex,
       enemyShotEtaMs: this.enemyRealTime() === null ? null : Math.max(0, (this.enemyRealTime() as number) - this.now),
+      dodge: this.dodgeStatus(),
     };
   }
 
@@ -411,6 +498,9 @@ export class DuelSystem {
       case 'retry':
         if (this.phase === 'RETRY') this.retry();
         break;
+      case 'dodge':
+        this.onDodgeInput(e.dir === 'left' ? 'left' : 'right');
+        break;
     }
   }
 
@@ -458,6 +548,15 @@ export class DuelSystem {
     this.staggers = 0;
     this.stillExtra = 0;
     this.lastAimMoveAt = t;
+    this.dodgeCommit = null;
+    this.dodgeLockUntil = -Infinity;
+    this.dodges = 0;
+    this.dodgeFails = 0;
+    this.counterCrit = false;
+    this.dustBlock = false;
+    this.phantom = false;
+    this.lastEnemyShotAt = null;
+    this.aimBudgetTotal = 0;
     // Second Wind: a hero who starts wounded (was hit earlier in the run) draws Perfect
     this.autoPerfect = this.mods.afterHitAutoPerfect && this.heroMax < this.heroCap;
     this.rng = new Rng(this.seed);
@@ -582,9 +681,15 @@ export class DuelSystem {
       this.ignored++; // double tap / swipe outside the draw window
       return;
     }
+    if (this.dodgeCommit) {
+      this.ignored++; // mid-sidestep: the hero cannot draw until the dodged shot has passed
+      return;
+    }
     const raw = this.now - this.cueAt;
     const penalty = this.mods.flinchNoTimeCost ? 0 : this.cfg.draw.flinchPenaltyMs;
-    const reaction = effectiveReaction(raw, this.flinched, penalty);
+    // a failed dodge leaves the hero stumbling: the draw starts late by what is left of it (flinch-like)
+    const stumble = this.stumbleMs();
+    const reaction = effectiveReaction(raw, this.flinched, penalty) + stumble;
     let grade = gradeDraw(reaction, this.cfg.draw, this.cfg.aim.perfectBudgetBonus);
     if (!grade.perfect) {
       // tier promotion: Second Wind (wounded start) first, then Spit and Polish (one Good draw per duel)
@@ -602,7 +707,7 @@ export class DuelSystem {
     this.critReady = grade.crit && !(this.mods.flinchDisablesCrit && this.flinched);
     this.aimBudgetMult = grade.aimBudgetMultiplier;
     this.setPhase('DRAW');
-    const drawTime = this.cfg.draw.drawAnimMs + (this.flinched ? penalty : 0);
+    const drawTime = this.cfg.draw.drawAnimMs + (this.flinched ? penalty : 0) + stumble;
     this.deadline = { at: this.now + drawTime, kind: 'drawEnd' };
     this.events.emit('onDraw', { t: this.now, rawMs: raw, reactionMs: reaction, tier: grade.tier, perfect: grade.perfect, flinched: this.flinched });
     if (grade.perfect) {
@@ -618,6 +723,7 @@ export class DuelSystem {
     if (this.hero.hp > 0 && this.hero.hp <= 1) budget *= this.mods.lastStandBudgetMult;
     this.stillExtra = 0;
     this.lastAimMoveAt = this.now;
+    this.aimBudgetTotal = budget;
     this.setPhase('AIM');
     this.deadline = { at: this.now + budget, kind: 'autoFire' };
     this.events.emit('onAimStart', { t: this.now, budgetMs: budget, followUp });
@@ -649,7 +755,7 @@ export class DuelSystem {
   private onFireInput(x?: number, y?: number): void {
     if (x !== undefined && y !== undefined && Number.isFinite(x) && Number.isFinite(y)) this.reticle = { x, y };
     if (this.phase === 'AIM') this.fire(x, y);
-    else if (this.phase === 'DRAW') this.queuedFire = { x, y }; // released while the gun comes out
+    else if (this.phase === 'DRAW' || (this.phase === 'CUE' && this.dodgeCommit)) this.queuedFire = { x, y }; // released while the gun comes out / mid-dodge
     else this.ignored++;
   }
 
@@ -658,7 +764,9 @@ export class DuelSystem {
     const own = x !== undefined && y !== undefined && Number.isFinite(x) && Number.isFinite(y);
     const p = own ? { x: x as number, y: y as number } : this.reticle;
     this.deadline = null;
-    const crit = this.mods.alwaysCrit || (this.critReady && this.shotsFired === 0);
+    const counter = this.counterCrit;
+    this.counterCrit = false; // Counter Roll: the next shot after a dodge, consumed by it
+    const crit = this.mods.alwaysCrit || counter || (this.critReady && this.shotsFired === 0);
     this.shotsFired++;
     if (!p) {
       // QA-08: no aim point: shoot straight ahead of the hero (always a miss) instead of leaking NaN
@@ -712,6 +820,7 @@ export class DuelSystem {
       // gun-arm hit disarms: the pending enemy shot is cancelled, the next one is planned.
       // At most `fairness.maxDisarms` per attempt (QA-09 re-arm rule).
       this.disarms++;
+      this.dodgeCommit = null; // the dodged shot no longer exists (tumble then limb hit): the dodge is void, no cost
       this.enemyShotIndex++;
       this.planShot(this.enemyShotIndex);
       this.enemyNext = this.enemyT + this.shotDelays[this.enemyShotIndex];
@@ -724,9 +833,15 @@ export class DuelSystem {
     const i = this.enemyShotIndex;
     const err = this.aimErrors[i];
     const phaseAtShot = this.phase;
+    const commit = this.dodgeCommit && this.dodgeCommit.shotIndex === i ? this.dodgeCommit : null;
+    this.dodgeCommit = null;
+    const evaded: 'dodge' | 'dust' | null = commit ? 'dodge' : this.dustBlock ? 'dust' : null;
+    if (evaded === 'dust') this.dustBlock = false; // a cloud blocks one shot
+    this.lastEnemyShotAt = this.now;
     this.events.emit('onShot', { t: this.now, shooter: 'enemy', x: this.cfg.arena.hero.x, y: this.cfg.arena.hero.y, crit: false });
     this.sfx({ type: 'gunshot', shooter: 'enemy' });
-    if (err <= this.cfg.fairness.enemyHitTolerancePx) {
+    if (evaded === null && err <= this.cfg.fairness.enemyHitTolerancePx) {
+      this.phantom = false;
       const at = { x: this.cfg.arena.hero.x, y: this.cfg.arena.hero.y };
       if (this.ignoredHits < this.mods.ignoreFirstHits && this.hero.hp > 0) {
         // Tin Star: the first hits of each duel are ignored
@@ -734,7 +849,7 @@ export class DuelSystem {
         this.events.emit('onHit', { t: this.now, target: 'hero', zone: null, damage: 0, crit: false, killed: false, assisted: false, ignored: true, ...at });
         this.sfx({ type: 'miss' });
       } else {
-        const res = applyDamage(this.hero, this.cfg.damage.enemyDamage);
+        const res = applyDamage(this.hero, this.enemyHitDamage);
         let revived = false;
         if (res.killed && this.revivesLeft > 0) {
           // Revive Flask: the lethal hit is survived at 1 life
@@ -752,17 +867,110 @@ export class DuelSystem {
         }
       }
     } else {
-      this.events.emit('onMiss', { t: this.now, shooter: 'enemy' });
+      this.phantom = true; // Phantom Step: the shot missed, the rest of its window is the hero's
+      this.events.emit('onMiss', evaded ? { t: this.now, shooter: 'enemy', evaded } : { t: this.now, shooter: 'enemy' });
       this.sfx({ type: 'miss' });
       if (isDead(this.hero)) {
         // QA-03: a hero that started with 0 hp is lost at the first enemy shot even if it misses
         this.resolve('LOSE', this.causeFor(phaseAtShot, i));
         return;
       }
+      if (commit) {
+        this.dodges++;
+        if (this.mods.dodgeGuaranteesCrit) this.counterCrit = true;
+        if (this.mods.dodgeCloudBlocksShot) this.dustBlock = true;
+        if (this.phase === 'CUE') this.counterDraw(commit.perfect);
+      }
     }
     this.enemyShotIndex = i + 1;
     this.planShot(i + 1);
     this.enemyNext = this.enemyT + this.shotDelays[i + 1];
+  }
+
+  /** The hero never drew and dodged the shot: a free draw now (no reaction tier), then AIM as usual. */
+  private counterDraw(perfect: boolean): void {
+    this.critReady = false;
+    this.aimBudgetMult = perfect ? 1 + this.cfg.dodge.perfectBudgetBonus : 1;
+    this.setPhase('DRAW');
+    this.deadline = { at: this.now + this.cfg.draw.drawAnimMs, kind: 'drawEnd' };
+  }
+
+  // ---- dodge ---------------------------------------------------------------
+
+  /** Effective window in real ms (see class docs). Opponent value (boss/enemy `dodgeWindowMs`) or the default, times the perk multiplier, clamped. */
+  private dodgeWindow(): number {
+    const D = this.cfg.dodge;
+    const raw = (this.opponent as { dodgeWindowMs?: unknown }).dodgeWindowMs;
+    const base = typeof raw === 'number' && Number.isFinite(raw) && raw > 0 ? raw : D.windowMs;
+    const m = Number.isFinite(this.mods.dodgeWindowMult) && this.mods.dodgeWindowMult > 0 ? this.mods.dodgeWindowMult : 1;
+    return Math.min(D.maxWindowMs, Math.max(D.minWindowMs, base * m));
+  }
+
+  private stumbleMs(): number {
+    return Math.max(0, this.dodgeLockUntil - this.now);
+  }
+
+  private dodgePhaseOk(): boolean {
+    switch (this.phase) {
+      case 'CUE':
+      case 'SHOT':
+        return true;
+      case 'AIM':
+        return this.mods.dodgeWhileAiming || this.phantom;
+      default:
+        return false;
+    }
+  }
+
+  private dodgeStatus(): DodgeStatus {
+    const eR = this.enemyRealTime();
+    const eta = eR === null ? null : Math.max(0, eR - this.now);
+    const windowMs = this.dodgeWindow();
+    const available = this.dodgePhaseOk() && this.enemyRunning() && !this.dodgeCommit && this.stumbleMs() <= 0;
+    return { available, open: available && eta !== null && eta <= windowMs, etaMs: eta, windowMs, committed: this.dodgeCommit !== null, stumbleMs: this.stumbleMs(), phantom: this.phantom };
+  }
+
+  private onDodgeInput(dir: 'left' | 'right'): void {
+    if (!this.dodgePhaseOk() || !this.enemyRunning() || this.dodgeCommit || this.stumbleMs() > 0) {
+      this.ignored++;
+      return;
+    }
+    const eR = this.enemyRealTime();
+    const eta = eR === null ? null : Math.max(0, eR - this.now);
+    const windowMs = this.dodgeWindow();
+    const fromAim = this.phase === 'AIM';
+    const D = this.cfg.dodge;
+    let result: DodgeResult;
+    if (eta !== null && eta <= windowMs) {
+      result = eta >= windowMs * (1 - D.perfectFrac) ? 'perfect' : 'ok';
+    } else if (this.lastEnemyShotAt !== null && this.now - this.lastEnemyShotAt <= D.lateGraceMs) {
+      result = 'late';
+    } else {
+      result = 'early';
+    }
+    const success = result === 'perfect' || result === 'ok';
+    if (fromAim && !this.phantom) this.tumbleCost(); // Tumble: the attempt costs aim budget, hit or miss
+    if (success) {
+      this.dodgeCommit = { shotIndex: this.enemyShotIndex, perfect: result === 'perfect' };
+      this.sfx({ type: 'dodge' });
+    } else {
+      this.dodgeFails++;
+      this.dodgeLockUntil = this.now + D.failPenaltyMs;
+      this.sfx({ type: 'miss' });
+    }
+    this.events.emit('onDodge', {
+      t: this.now, result, success, dir, etaMs: eta, windowMs, shotIndex: this.enemyShotIndex, fromAim,
+      cloud: success && this.mods.dodgeCloudBlocksShot, counterCrit: success && this.mods.dodgeGuaranteesCrit, counterDraw: success && this.phase === 'CUE',
+    });
+  }
+
+  /** Tumble: takes `tumbleBudgetCost` of this aim period's budget off the remaining time; never extends it, never below tumbleMinLeftMs. */
+  private tumbleCost(): void {
+    const frac = Number.isFinite(this.mods.tumbleBudgetCost) ? Math.min(1, Math.max(0, this.mods.tumbleBudgetCost)) : 0;
+    const dl = this.deadline;
+    if (frac <= 0 || !dl || dl.kind !== 'autoFire') return;
+    const floor = this.now + this.cfg.dodge.tumbleMinLeftMs;
+    this.deadline = { at: Math.min(dl.at, Math.max(floor, dl.at - frac * this.aimBudgetTotal)), kind: 'autoFire' };
   }
 
   private causeFor(phase: DuelPhase, shotIndex: number): LoseCause {
@@ -795,6 +1003,8 @@ export class DuelSystem {
       hitsIgnored: this.ignoredHits,
       revivesUsed: this.revivesUsed,
       staggers: this.staggers,
+      dodges: this.dodges,
+      dodgeFails: this.dodgeFails,
     };
     this.setPhase('RESOLVE');
     this.events.emit('onResolve', { t: this.now, result: this.result });

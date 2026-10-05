@@ -188,7 +188,15 @@ export interface RunDuelResult {
   dodges?: number;
   /** Once-per-run perks the duel used (Revive Flask). */
   consumedPerks?: readonly string[];
+  /**
+   * Enemy hits the duel ignored (`DuelResult.hitsIgnored`, Tin Star). When absent RunSystem assumes the region's Tin Star
+   * shield was spent by this duel (safe default: it can never protect more than one duel per region).
+   */
+  hitsIgnored?: number;
 }
+
+/** Screen kind of the node the run is standing on (what GameFlow shows). */
+export type NodeScreenKind = 'duel' | 'shop' | 'rest' | 'treasure' | 'event';
 
 export interface DuelEncounter {
   kind: 'duel';
@@ -378,7 +386,19 @@ export class RunSystem {
 
   maxHp(): number { return heroHpFor(this.compose().duel); }
   private compose(ctx: Parameters<typeof composePerks>[1] = {}): ComposedPerks {
-    return composePerks(this.perks, { consumed: this.st.consumed, buffs: this.st.buffs, ...ctx });
+    return composePerks(this.perks, { consumed: this.st.consumed, buffs: this.st.buffs, regionShield: this.regionShieldReady(), ...ctx });
+  }
+
+  /** Tin Star (D15): the badge turns one hit per region; `tin_star@<region>` in `consumed` marks it spent. */
+  private regionShieldReady(): boolean {
+    const nd = this.currentNode();
+    return !nd || !this.st.consumed.includes(`tin_star@${nd.region}`);
+  }
+
+  /** What the current node shows ('duel' covers elite and boss), or null on the map / reward screens. */
+  nodeKind(): NodeScreenKind | null {
+    const s = this.st.nodeState;
+    return s ? s.kind : null;
   }
   rules(): RunRules { return this.compose().run; }
 
@@ -537,6 +557,10 @@ export class RunSystem {
     const nd = this.currentNode() as MapNode;
     need(!s.lost, 'duel already lost; retry or abandon');
     for (const c of res.consumedPerks ?? []) if (!this.st.consumed.includes(c)) this.st.consumed.push(c);
+    const shieldKey = `tin_star@${nd.region}`;
+    if (hasPerk(this.perks, 'tin_star') && !this.st.consumed.includes(shieldKey) && (res.hitsIgnored === undefined || res.hitsIgnored > 0)) {
+      this.st.consumed.push(shieldKey);
+    }
 
     if (res.outcome === 'LOSE') {
       this.st.perfectStreak = 0;
@@ -569,7 +593,8 @@ export class RunSystem {
     const eventDuel = s.eventDuel;
     const wasRetried = s.retryUsed && rules.retryNoReward;
     if (!wasRetried) {
-      const mult = nd.type === 'duel' ? m.coinMultDuel : m.coinMultElite;
+      // elites and bosses have their own multipliers: Bounty Hunter's creed does not inflate boss pay (A18 #15)
+      const mult = nd.type === 'duel' ? m.coinMultDuel : nd.type === 'boss' ? m.coinMultBoss : m.coinMultElite;
       let base = (RUN_TUNING.baseCoins + RUN_TUNING.difficultyCoins * s.difficulty) * region.coinMult;
       if (nd.type === 'elite') base *= RUN_TUNING.eliteCoinMult;
       if (nd.type === 'boss') base *= RUN_TUNING.bossCoinMult;
@@ -627,8 +652,9 @@ export class RunSystem {
     need(p && p.perkChoices.length > 0, 'nothing to reroll');
     const cost = this.rewardRerollCost();
     need(this.coins + p.coins >= cost, 'cannot afford reroll');
-    // paid from the run purse (reward coins are not yet banked)
-    this.coins -= cost; p.rerolls++;
+    // paid from the run purse first, then out of the not-yet-banked reward; neither can go negative
+    const fromPurse = Math.min(this.coins, cost);
+    this.coins -= fromPurse; p.coins -= cost - fromPurse; p.rerolls++;
     const opts: RollOptions = p.nodeType === 'elite' ? { minRarity: 'rare' } : p.boss ? { minRarity: 'rare', bossBoost: true } : {};
     p.perkChoices = rollPerkChoices(this.rng, this.perks, this.luck(), 3, { ...opts, exclude: p.perkChoices });
     return p.perkChoices.slice();

@@ -71,7 +71,7 @@ const loseCoinsUpTo = (c: ResolveCtx, o: EventOutcome, n: number) => { o.coinsDe
 /** Random common perk the player can take (not owned, no conflict), or null. */
 function commonPerkId(c: ResolveCtx): string | null {
   const owned = new Set(c.state.perks.map((p) => (p.endsWith('+') ? p.slice(0, -1) : p)));
-  const pool = PERKS.filter((p) => p.rarity === 'common' && !owned.has(p.id) &&
+  const pool = PERKS.filter((p) => p.rarity === 'common' && p.support === 'ready' && !owned.has(p.id) &&
     !c.state.perks.some((o) => {
       const q = PERK_BY_ID[o.endsWith('+') ? o.slice(0, -1) : o];
       return !!q && ((p.excludes?.includes(q.id) ?? false) || (q.excludes?.includes(p.id) ?? false));

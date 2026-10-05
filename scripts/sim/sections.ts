@@ -427,7 +427,7 @@ export function perkContribution(nDuel: number, nRun: number): Section & { rows:
     const dead = Math.abs(r.dWin) < 0.06 && Math.abs(r.z) < 2 && Math.abs(r.duelDamage - r.baseDamage) < 0.01 && Math.abs(r.duelPerfect - base.perfect) < 0.01;
     if (r.dWin > 0.15) return 'DOMINANT';
     if (r.dWin < -0.1 && r.z < -2) return 'HARMFUL';
-    if (dead) return r.support === 'today' ? 'no measurable effect (run/shop perk?)' : `DEAD (support ${r.support})`;
+    if (dead) return r.support === 'ready' ? 'no measurable effect (run/shop perk?)' : 'DEAD (support pending, not offered)';
     return '';
   };
   const md = `\nBaseline (no perk), ${STRESS.label}: run win ${pct(bw / nRun, 1)}, clear Dust Creek ${pct(bc1 / nRun, 1)}, N=${nRun}. ` +

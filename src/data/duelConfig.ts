@@ -37,6 +37,10 @@ export interface DuelConfig {
     heroHp: number;
     enemyHp: number;
     enemyDamage: number;
+    /** D14: damage of an elite's hit on the hero (before perk `enemyDamageMult`). Set to `enemyDamage` to revert. */
+    eliteDamage: number;
+    /** D14: damage of a boss's hit on the hero (before perk `enemyDamageMult`). Package B = boss only: eliteDamage 1, bossDamage 2. */
+    bossDamage: number;
   };
   zones: Record<ZoneId, { multiplier: number }>;
   /** Zone rects as fractions of the enemy rect {x,y,w,h in 0..1}. */
@@ -56,6 +60,26 @@ export interface DuelConfig {
     maxDisarms: number;
   };
   resolve: { holdMs: number };
+  /** Dodge action (D18, docs/GAME_DESIGN.md "Dodge"). All times are REAL ms so touch latency is never scaled by slow-mo. */
+  dodge: {
+    /** Default window before an enemy shot in which a dodge succeeds (an opponent's `dodgeWindowMs` replaces it). */
+    windowMs: number;
+    /** Fairness clamp on the effective window (opponent value times perk multiplier): never narrower than ~9 frames plus touch latency. */
+    minWindowMs: number;
+    maxWindowMs: number;
+    /** A dodge in the first `perfectFrac` of the window (a fast reaction to the muzzle raise) is PERFECT, later OK. */
+    perfectFrac: number;
+    /** Cost of an early or late dodge (the hero stumbles): the next draw is delayed by whatever is left of it, like a flinch. */
+    failPenaltyMs: number;
+    /** A dodge this soon after an enemy shot that was not dodged is reported LATE rather than EARLY. */
+    lateGraceMs: number;
+    /** A PERFECT dodge's counter draw gets this much extra aim budget (same bonus as a Perfect Draw, but no crit, no tier). */
+    perfectBudgetBonus: number;
+    /** Tumble (dodge while aiming) never leaves less than this much aim budget (F7: touch precision stays fair). */
+    tumbleMinLeftMs: number;
+    /** Horizontal flick recognition: faster and longer than the draw flick so a reticle drag is not a dodge. */
+    input: SwipeConfig;
+  };
   /** Draw swipe + holster hold. */
   input: SwipeConfig;
   arena: {
@@ -97,7 +121,8 @@ export const DUEL_CONFIG: DuelConfig = {
     assistRadiusPx: 14,
     reticleOffsetY: 48,
   },
-  damage: { baseDamage: 1, critMultiplier: 1.5, heroHp: 3, enemyHp: 2, enemyDamage: 1 },
+  /** D14 (package C): 2 lives, elites and bosses hit for 2. Revert: heroHp 3, eliteDamage 1, bossDamage 1. */
+  damage: { baseDamage: 1, critMultiplier: 1.5, heroHp: 2, enemyHp: 2, enemyDamage: 1, eliteDamage: 2, bossDamage: 2 },
   zones: {
     head: { multiplier: 2 },
     body: { multiplier: 1 },
@@ -112,6 +137,25 @@ export const DUEL_CONFIG: DuelConfig = {
   fairness: { minLethalMs: 450, minShotGapMs: 250, enemyHitTolerancePx: 24, maxDisarms: 2 },
   /** 300 ms: retry is reachable almost at once (FEEL_REVIEW item 2) and still guards a mashing thumb. */
   resolve: { holdMs: 300 },
+  dodge: {
+    windowMs: 250,
+    minWindowMs: 150,
+    maxWindowMs: 600,
+    perfectFrac: 0.35,
+    failPenaltyMs: 300,
+    lateGraceMs: 200,
+    perfectBudgetBonus: 0.3,
+    tumbleMinLeftMs: 100,
+    input: {
+      minDistancePx: 40,
+      minSpeedPxPerMs: 0.3,
+      speedWindowMs: 100,
+      maxDurationMs: 500,
+      angleToleranceDeg: 35,
+      tapMaxTravelPx: 10,
+      tapMaxMs: 300,
+    },
+  },
   input: {
     minDistancePx: 28,
     minSpeedPxPerMs: 0.12,

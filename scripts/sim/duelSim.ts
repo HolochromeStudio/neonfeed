@@ -60,6 +60,8 @@ export interface DuelSimResult {
   bossPhase: number | null;
   /** Lethal hits prevented by Revive Flask (consumedPerks). */
   revives: number;
+  /** Enemy hits ignored by Tin Star (DuelResult.hitsIgnored). */
+  hitsIgnored: number;
   stalled: boolean;
   cause: string | null;
   durationMs: number;
@@ -231,12 +233,12 @@ export function simulateDuel(enemyId: string, skill: SkillModel, prng: Rng, o: D
     // stall: nobody resolved within the cap
     const s = duel.snapshot();
     return {
-      win: false, bossPhase: bossSys ? bossSys.phase : null, revives: 0, stalled: true, cause: 'stall', durationMs: s.now, heroHpStart: heroHp, heroHpEnd: s.heroHp, damage: heroHp - s.heroHp,
+      win: false, bossPhase: bossSys ? bossSys.phase : null, revives: 0, hitsIgnored: 0, stalled: true, cause: 'stall', durationMs: s.now, heroHpStart: heroHp, heroHpEnd: s.heroHp, damage: heroHp - s.heroHp,
       tier: s.tier, reactionMs: s.reactionMs, flinched: s.flinched, headshots, shots, hits: 0, enemyShotMs: duel.plan.firstShotMs, waitMs: cue,
     };
   }
   return {
-    win: res.outcome === 'WIN', bossPhase: bossSys ? bossSys.phase : null, revives: (res as { revivesUsed?: number }).revivesUsed ?? 0, stalled: false, cause: res.cause, durationMs: res.durationMs, heroHpStart: heroHp, heroHpEnd: res.heroHp,
+    win: res.outcome === 'WIN', bossPhase: bossSys ? bossSys.phase : null, revives: (res as { revivesUsed?: number }).revivesUsed ?? 0, hitsIgnored: (res as { hitsIgnored?: number }).hitsIgnored ?? 0, stalled: false, cause: res.cause, durationMs: res.durationMs, heroHpStart: heroHp, heroHpEnd: res.heroHp,
     damage: heroHp - res.heroHp, tier: res.tier, reactionMs: res.reactionMs, flinched: res.flinched, headshots, shots: res.shotsFired,
     hits: res.hits, enemyShotMs: res.enemyShotMs, waitMs: cue,
   };

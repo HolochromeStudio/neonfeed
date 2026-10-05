@@ -62,11 +62,11 @@ export interface BotPolicy {
 }
 
 export function duelResult(data: DuelSceneData, outcome: 'WIN' | 'LOSE', over: Partial<DuelResult> = {}): DuelResult {
-  const hp = data.heroHp ?? 3;
+  const hp = data.heroHp ?? 2;
   return {
     outcome, cause: outcome === 'LOSE' ? 'shot_while_aiming' : null, flinched: false, rawReactionMs: 180, reactionMs: 180,
     tier: 'perfect', enemyShotMs: 600, shotsFired: 1, hits: 1, heroHp: outcome === 'WIN' ? hp : 0, enemyHp: outcome === 'WIN' ? 0 : 1,
-    durationMs: 1500, attempt: 1, headshots: 1, hitsIgnored: 0, revivesUsed: 0, staggers: 0, ...over,
+    durationMs: 1500, attempt: 1, headshots: 1, hitsIgnored: 0, revivesUsed: 0, staggers: 0, dodges: 0, dodgeFails: 0, ...over,
   };
 }
 

@@ -245,9 +245,9 @@ describe('enemy shots, fairness and loss causes', () => {
     const { d } = make({ opp: new Fixed(1000, 50, 100) });
     expect(d.plan.firstShotMs).toBeGreaterThanOrEqual(DUEL_CONFIG.fairness.minLethalMs);
     d.advanceTo(CUE + 449);
-    expect(d.snapshot().heroHp).toBe(3);
+    expect(d.snapshot().heroHp).toBe(DUEL_CONFIG.damage.heroHp);
     d.advanceTo(CUE + 451);
-    expect(d.snapshot().heroHp).toBe(2);
+    expect(d.snapshot().heroHp).toBe(DUEL_CONFIG.damage.heroHp - DUEL_CONFIG.damage.enemyDamage);
   });
 
   it('never drawing loses with cause too_slow, and the text names it (RULE F4)', () => {
@@ -290,8 +290,8 @@ describe('enemy shots, fairness and loss causes', () => {
     expect(slow.d.snapshot().timeScale).toBe(DUEL_CONFIG.aim.slowMoScale);
     slow.d.advanceTo(CUE + 960);
     fast.d.advanceTo(CUE + 960);
-    expect(slow.d.snapshot().heroHp).toBe(3);
-    expect(fast.d.snapshot().heroHp).toBe(2);
+    expect(slow.d.snapshot().heroHp).toBe(DUEL_CONFIG.damage.heroHp);
+    expect(fast.d.snapshot().heroHp).toBe(DUEL_CONFIG.damage.heroHp - DUEL_CONFIG.damage.enemyDamage);
   });
 });
 

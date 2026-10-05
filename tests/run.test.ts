@@ -160,7 +160,7 @@ describe('map generation', () => {
 describe('run flow', () => {
   it('starts with full hp, validates as a RunSave and the map is opaque data', () => {
     const run = startRun(5);
-    expect(run.getHp()).toBe(3);
+    expect(run.getHp()).toBe(BASE_HP);
     const save = run.serialize();
     expect(validateRun(save)).not.toBeNull();
     expect(Object.keys(save).sort()).toEqual(['coins', 'hp', 'map', 'nodeIndex', 'perks', 'rngState', 'seed']);
@@ -255,7 +255,7 @@ describe('run flow', () => {
     expect(run.completeDuel({ outcome: 'LOSE', heroHp: 0 }).canRetry).toBe(true);
     const again = run.retryDuel();
     expect(again.seed).toBe(seed);
-    expect(again.heroHp).toBe(3);
+    expect(again.heroHp).toBe(BASE_HP);
     expect(run.getCoins()).toBe(100 - cost);
     expect(run.completeDuel({ outcome: 'LOSE', heroHp: 0 }).canRetry).toBe(false);
     expect(() => run.retryDuel()).toThrow();
@@ -275,15 +275,15 @@ describe('run flow', () => {
   it('carries hp between duels and pays coin income with bonuses', () => {
     const run = startRun(34);
     run.enterNode(run.getChoices()[0].id);
-    run.completeDuel(win(2, { tier: 'slow' }));
+    run.completeDuel(win(BASE_HP - 1, { tier: 'slow' }));
     const plain = run.getReward()!.coins;
     run.applyReward({ skip: true });
-    expect(run.getHp()).toBe(2);
+    expect(run.getHp()).toBe(BASE_HP - 1);
     expect(run.getCoins()).toBe(plain + 5);
 
     const run2 = startRun(34);
     run2.enterNode(run2.getChoices()[0].id);
-    run2.completeDuel(win(3, { tier: 'perfect', headshots: 1 }));
+    run2.completeDuel(win(BASE_HP, { tier: 'perfect', headshots: 1 }));
     expect(run2.getReward()!.coins).toBe(plain + 5 + 3 + 4);
     expect(run2.getReward()!.perkChoices).toHaveLength(3);
     expect(() => run2.applyReward({ perkId: 'not_offered' })).toThrow();
@@ -375,15 +375,15 @@ describe('run flow', () => {
     a.doRest({ type: 'heal' });
     expect(a.getHp()).toBe(Math.min(a.maxHp(), 2));
     expect(() => a.doRest({ type: 'heal' })).toThrow(); // single use
-    const b = mk(['hair_trigger'], 3);
+    const b = mk(['hair_trigger'], BASE_HP);
     b.doRest({ type: 'upgrade', perkId: 'hair_trigger' });
     expect(b.getPerks()).toContain('hair_trigger+');
-    const c = mk(['hair_trigger', 'horseshoe'], 1);
+    const c = mk(['hair_trigger', 'horseshoe', 'bullet_belt'], 1); // bullet_belt: room for two heals at D14's 2 base lives
     c.doRest({ type: 'heal' }); c.doRest({ type: 'heal' });
-    expect(c.getHp()).toBe(3);
+    expect(c.getHp()).toBe(c.maxHp());
     const d = mk(['healers_touch'], 1);
     d.doRest({ type: 'heal' });
-    expect(d.getHp()).toBe(3);
+    expect(d.getHp()).toBe(d.maxHp());
     const e = mk(['healers_touch', 'hair_trigger'], 2);
     expect(() => e.doRest({ type: 'upgrade', perkId: 'hair_trigger' })).toThrow();
     const f = mk(['hair_trigger'], 3);
@@ -484,8 +484,8 @@ describe('run flow', () => {
 
   it('Bullet Belt / Glass Cannon change max hp and clamp current hp', () => {
     const a = startRun(70, { startPerks: ['bullet_belt'] });
-    expect(a.maxHp()).toBe(4);
-    expect(a.getHp()).toBe(4);
+    expect(a.maxHp()).toBe(BASE_HP + 1);
+    expect(a.getHp()).toBe(BASE_HP + 1);
     const b = startRun(70, { startPerks: ['glass_cannon'] });
     expect(b.maxHp()).toBe(1);
     expect(b.getHp()).toBe(1);

@@ -11,6 +11,8 @@ export interface PointerSample {
 }
 
 export type SwipeDir = 'up' | 'down' | 'left' | 'right';
+/** A swipe axis: one direction, or either horizontal direction (dodge). */
+export type SwipeAxis = SwipeDir | 'horizontal';
 
 export interface Swipe {
   dir: SwipeDir;
@@ -97,8 +99,20 @@ export function analyzeSwipe(
   return { swipe: null, failure: 'too_slow' };
 }
 
-export function recognizeSwipe(samples: readonly PointerSample[], dir: SwipeDir = 'up', cfg: SwipeConfig = DUEL_CONFIG.input): Swipe | null {
+export function recognizeSwipe(samples: readonly PointerSample[], dir: SwipeAxis = 'up', cfg: SwipeConfig = DUEL_CONFIG.input): Swipe | null {
+  if (dir === 'horizontal') return recognizeHorizontal(samples, cfg);
   return analyzeSwipe(samples, dir, cfg).swipe;
+}
+
+/**
+ * Dodge flick: the earlier-qualifying of a left and a right swipe (an up/down gesture never qualifies, the angle
+ * tolerance is per axis). Same speed/distance/duration/QA-07 rules as the draw flick.
+ */
+export function recognizeHorizontal(samples: readonly PointerSample[], cfg: SwipeConfig = DUEL_CONFIG.dodge.input): Swipe | null {
+  const l = analyzeSwipe(samples, 'left', cfg).swipe;
+  const r = analyzeSwipe(samples, 'right', cfg).swipe;
+  if (l && r) return l.t <= r.t ? l : r;
+  return l ?? r;
 }
 
 export function isTap(samples: readonly PointerSample[], cfg: SwipeConfig = DUEL_CONFIG.input): boolean {
@@ -140,7 +154,7 @@ export class SwipeTracker {
   private fired = false;
   private pointerId: number | null = null;
 
-  constructor(private readonly dir: SwipeDir = 'up', private readonly cfg: SwipeConfig = DUEL_CONFIG.input) {}
+  constructor(private readonly dir: SwipeAxis = 'up', private readonly cfg: SwipeConfig = DUEL_CONFIG.input) {}
 
   get isActive(): boolean {
     return this.active;
