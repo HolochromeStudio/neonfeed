@@ -1,0 +1,3641 @@
+{
+"entries": {
+"biome_beach_road": {
+"page": 0,
+"rect": [
+1042,
+927,
+396,
+332
+]
+},
+"biome_city_center": {
+"page": 0,
+"rect": [
+398,
+1601,
+396,
+308
+]
+},
+"biome_countryside": {
+"page": 0,
+"rect": [
+1442,
+927,
+444,
+332
+]
+},
+"biome_desert": {
+"page": 0,
+"rect": [
+1565,
+1267,
+444,
+328
+]
+},
+"biome_highway": {
+"page": 0,
+"rect": [
+798,
+1601,
+392,
+308
+]
+},
+"biome_industrial": {
+"page": 0,
+"rect": [
+1165,
+1267,
+396,
+328
+]
+},
+"biome_night_city": {
+"page": 0,
+"rect": [
+646,
+927,
+392,
+332
+]
+},
+"biome_snow_town": {
+"page": 0,
+"rect": [
+2,
+1601,
+392,
+328
+]
+},
+"biome_suburbs": {
+"page": 0,
+"rect": [
+1194,
+1601,
+444,
+308
+]
+},
+"boss_drill_truck": {
+"page": 7,
+"rect": [
+174,
+2,
+196,
+170
+]
+},
+"boss_helicopter": {
+"page": 7,
+"rect": [
+1016,
+2,
+178,
+150
+]
+},
+"boss_mecha": {
+"page": 7,
+"rect": [
+2,
+2,
+168,
+188
+]
+},
+"boss_monster_truck": {
+"page": 7,
+"rect": [
+374,
+2,
+176,
+162
+]
+},
+"boss_tank": {
+"page": 7,
+"rect": [
+554,
+2,
+152,
+156
+]
+},
+"boss_ufo": {
+"page": 7,
+"rect": [
+710,
+2,
+164,
+152
+]
+},
+"btnbaked_customize": {
+"page": 5,
+"rect": [
+893,
+2,
+342,
+96
+]
+},
+"btnbaked_inventory": {
+"page": 5,
+"rect": [
+1239,
+2,
+321,
+96
+]
+},
+"btnbaked_leaderboard": {
+"page": 5,
+"rect": [
+1564,
+2,
+342,
+96
+]
+},
+"btnbaked_play": {
+"page": 5,
+"rect": [
+807,
+108,
+342,
+93
+]
+},
+"btnbaked_quests": {
+"page": 5,
+"rect": [
+2,
+108,
+321,
+96
+]
+},
+"btnbaked_settings": {
+"page": 5,
+"rect": [
+568,
+2,
+321,
+96
+]
+},
+"btnbaked_shop": {
+"page": 5,
+"rect": [
+1153,
+108,
+321,
+93
+]
+},
+"btnbaked_units": {
+"page": 5,
+"rect": [
+327,
+108,
+342,
+96
+]
+},
+"cos_accessories_headphones": {
+"page": 2,
+"rect": [
+986,
+186,
+106,
+74
+]
+},
+"cos_bottoms_blue_hoodie2": {
+"page": 2,
+"rect": [
+352,
+290,
+62,
+64
+]
+},
+"cos_bottoms_cargo": {
+"page": 2,
+"rect": [
+536,
+290,
+60,
+62
+]
+},
+"cos_bottoms_dark_jacket": {
+"page": 2,
+"rect": [
+226,
+290,
+58,
+64
+]
+},
+"cos_bottoms_denim_shorts": {
+"page": 2,
+"rect": [
+1888,
+186,
+60,
+66
+]
+},
+"cos_bottoms_jeans": {
+"page": 2,
+"rect": [
+288,
+290,
+60,
+64
+]
+},
+"cos_bottoms_overalls": {
+"page": 2,
+"rect": [
+170,
+290,
+52,
+64
+]
+},
+"cos_bottoms_red_bag": {
+"page": 2,
+"rect": [
+482,
+290,
+50,
+62
+]
+},
+"cos_bottoms_red_pack": {
+"page": 2,
+"rect": [
+710,
+290,
+56,
+60
+]
+},
+"cos_bottoms_red_sneakers": {
+"page": 2,
+"rect": [
+770,
+290,
+54,
+60
+]
+},
+"cos_bottoms_yellow_jacket": {
+"page": 2,
+"rect": [
+1824,
+186,
+60,
+66
+]
+},
+"cos_glasses_dark_shades": {
+"page": 2,
+"rect": [
+962,
+290,
+98,
+54
+]
+},
+"cos_glasses_round_shades": {
+"page": 2,
+"rect": [
+1064,
+290,
+104,
+52
+]
+},
+"cos_hair_curly_blond": {
+"page": 2,
+"rect": [
+884,
+186,
+98,
+74
+]
+},
+"cos_hair_messy_brown": {
+"page": 2,
+"rect": [
+566,
+186,
+98,
+82
+]
+},
+"cos_hair_slick_black": {
+"page": 2,
+"rect": [
+668,
+186,
+102,
+78
+]
+},
+"cos_hair_spiky_black": {
+"page": 2,
+"rect": [
+454,
+186,
+108,
+84
+]
+},
+"cos_hats_cap_blue_red": {
+"page": 2,
+"rect": [
+1170,
+186,
+100,
+70
+]
+},
+"cos_hats_cap_green": {
+"page": 2,
+"rect": [
+774,
+186,
+106,
+78
+]
+},
+"cos_hats_cap_red_blue": {
+"page": 2,
+"rect": [
+600,
+290,
+106,
+62
+]
+},
+"cos_hats_cap_white": {
+"page": 2,
+"rect": [
+2,
+290,
+102,
+66
+]
+},
+"cos_hats_hat_black": {
+"page": 2,
+"rect": [
+828,
+290,
+98,
+60
+]
+},
+"cos_tops_blue_hoodie": {
+"page": 2,
+"rect": [
+1462,
+186,
+54,
+68
+]
+},
+"cos_tops_green_hoodie": {
+"page": 2,
+"rect": [
+1764,
+186,
+56,
+68
+]
+},
+"cos_tops_green_jacket": {
+"page": 2,
+"rect": [
+1338,
+186,
+56,
+70
+]
+},
+"cos_tops_grey_jacket": {
+"page": 2,
+"rect": [
+1638,
+186,
+58,
+68
+]
+},
+"cos_tops_jeans_overalls": {
+"page": 2,
+"rect": [
+1520,
+186,
+56,
+68
+]
+},
+"cos_tops_navy_scarf": {
+"page": 2,
+"rect": [
+1580,
+186,
+54,
+68
+]
+},
+"cos_tops_patchwork_tee": {
+"page": 2,
+"rect": [
+108,
+290,
+58,
+66
+]
+},
+"cos_tops_red_jacket": {
+"page": 2,
+"rect": [
+1398,
+186,
+60,
+70
+]
+},
+"cos_tops_tan_jacket": {
+"page": 2,
+"rect": [
+1700,
+186,
+60,
+68
+]
+},
+"cos_tops_teal_hoodie": {
+"page": 2,
+"rect": [
+1274,
+186,
+60,
+70
+]
+},
+"cut_panel_1": {
+"page": 1,
+"rect": [
+506,
+2,
+515,
+305
+]
+},
+"cut_panel_2": {
+"page": 1,
+"rect": [
+2,
+2,
+500,
+305
+]
+},
+"cut_panel_3": {
+"page": 0,
+"rect": [
+586,
+1267,
+575,
+330
+]
+},
+"cut_panel_4": {
+"page": 0,
+"rect": [
+2,
+1267,
+580,
+330
+]
+},
+"digit_0": {
+"page": 5,
+"rect": [
+673,
+108,
+74,
+94
+]
+},
+"digit_1": {
+"page": 5,
+"rect": [
+751,
+108,
+52,
+94
+]
+},
+"digit_2": {
+"page": 5,
+"rect": [
+248,
+2,
+72,
+96
+]
+},
+"digit_3": {
+"page": 5,
+"rect": [
+1734,
+108,
+74,
+92
+]
+},
+"digit_4": {
+"page": 5,
+"rect": [
+482,
+2,
+82,
+96
+]
+},
+"digit_5": {
+"page": 5,
+"rect": [
+170,
+2,
+74,
+98
+]
+},
+"digit_6": {
+"page": 5,
+"rect": [
+404,
+2,
+74,
+96
+]
+},
+"digit_7": {
+"page": 5,
+"rect": [
+1658,
+108,
+72,
+92
+]
+},
+"digit_8": {
+"page": 5,
+"rect": [
+324,
+2,
+76,
+96
+]
+},
+"digit_9": {
+"page": 5,
+"rect": [
+2,
+2,
+74,
+102
+]
+},
+"doll_arm": {
+"page": 2,
+"rect": [
+930,
+290,
+28,
+58
+]
+},
+"doll_backpack": {
+"page": 2,
+"rect": [
+418,
+290,
+60,
+64
+]
+},
+"doll_cheek": {
+"page": 2,
+"rect": [
+358,
+360,
+22,
+16
+]
+},
+"doll_ear": {
+"page": 2,
+"rect": [
+1952,
+290,
+32,
+30
+]
+},
+"doll_eyes_angry": {
+"page": 2,
+"rect": [
+1478,
+290,
+84,
+40
+]
+},
+"doll_eyes_blink": {
+"page": 2,
+"rect": [
+1654,
+290,
+84,
+40
+]
+},
+"doll_eyes_happy": {
+"page": 2,
+"rect": [
+1302,
+290,
+84,
+40
+]
+},
+"doll_eyes_look": {
+"page": 2,
+"rect": [
+1830,
+290,
+84,
+40
+]
+},
+"doll_eyes_open": {
+"page": 2,
+"rect": [
+1214,
+290,
+84,
+40
+]
+},
+"doll_eyes_surprised": {
+"page": 2,
+"rect": [
+1390,
+290,
+84,
+40
+]
+},
+"doll_eyes_think": {
+"page": 2,
+"rect": [
+1566,
+290,
+84,
+40
+]
+},
+"doll_eyes_worried": {
+"page": 2,
+"rect": [
+1742,
+290,
+84,
+40
+]
+},
+"doll_hand": {
+"page": 2,
+"rect": [
+1918,
+290,
+30,
+30
+]
+},
+"doll_head": {
+"page": 2,
+"rect": [
+358,
+186,
+92,
+86
+]
+},
+"doll_leg": {
+"page": 2,
+"rect": [
+1172,
+290,
+38,
+52
+]
+},
+"doll_mouth_frown": {
+"page": 2,
+"rect": [
+90,
+360,
+40,
+26
+]
+},
+"doll_mouth_grin": {
+"page": 2,
+"rect": [
+226,
+360,
+40,
+26
+]
+},
+"doll_mouth_neutral": {
+"page": 2,
+"rect": [
+2,
+360,
+40,
+26
+]
+},
+"doll_mouth_o": {
+"page": 2,
+"rect": [
+270,
+360,
+40,
+26
+]
+},
+"doll_mouth_smile": {
+"page": 2,
+"rect": [
+182,
+360,
+40,
+26
+]
+},
+"doll_mouth_talk_a": {
+"page": 2,
+"rect": [
+1988,
+290,
+40,
+26
+]
+},
+"doll_mouth_talk_b": {
+"page": 2,
+"rect": [
+46,
+360,
+40,
+26
+]
+},
+"doll_mouth_wobble": {
+"page": 2,
+"rect": [
+314,
+360,
+40,
+26
+]
+},
+"doll_shoe": {
+"page": 2,
+"rect": [
+134,
+360,
+44,
+26
+]
+},
+"doll_torso": {
+"page": 2,
+"rect": [
+1096,
+186,
+70,
+72
+]
+},
+"en_armored_truck": {
+"page": 7,
+"rect": [
+282,
+194,
+138,
+134
+]
+},
+"en_bus": {
+"page": 7,
+"rect": [
+2,
+194,
+134,
+138
+]
+},
+"en_gang_cars": {
+"page": 7,
+"rect": [
+1152,
+194,
+138,
+126
+]
+},
+"en_motorcycle": {
+"page": 7,
+"rect": [
+788,
+194,
+104,
+130
+]
+},
+"en_police_chase": {
+"page": 7,
+"rect": [
+1328,
+2,
+126,
+144
+]
+},
+"en_road_cleaner": {
+"page": 7,
+"rect": [
+1602,
+2,
+140,
+140
+]
+},
+"en_slow_car": {
+"page": 7,
+"rect": [
+1084,
+450,
+126,
+100
+]
+},
+"en_speedster": {
+"page": 7,
+"rect": [
+526,
+336,
+136,
+110
+]
+},
+"en_suv": {
+"page": 7,
+"rect": [
+1562,
+194,
+122,
+114
+]
+},
+"en_truck": {
+"page": 7,
+"rect": [
+1024,
+194,
+124,
+128
+]
+},
+"fx_arrow_blue": {
+"page": 4,
+"rect": [
+1504,
+2,
+72,
+68
+]
+},
+"fx_arrow_red_a": {
+"page": 4,
+"rect": [
+1346,
+2,
+74,
+88
+]
+},
+"fx_arrow_red_b": {
+"page": 4,
+"rect": [
+1778,
+2,
+58,
+60
+]
+},
+"fx_arrow_small": {
+"page": 4,
+"rect": [
+1654,
+2,
+52,
+68
+]
+},
+"fx_boom_burst": {
+"page": 4,
+"rect": [
+238,
+2,
+188,
+148
+]
+},
+"fx_bullet": {
+"page": 6,
+"rect": [
+325,
+1876,
+32,
+16
+]
+},
+"fx_cone_big": {
+"page": 4,
+"rect": [
+1196,
+2,
+90,
+98
+]
+},
+"fx_debris_a": {
+"page": 4,
+"rect": [
+1290,
+2,
+52,
+90
+]
+},
+"fx_drop": {
+"page": 6,
+"rect": [
+1926,
+1820,
+32,
+32
+]
+},
+"fx_dust": {
+"page": 6,
+"rect": [
+1078,
+1676,
+64,
+64
+]
+},
+"fx_explosion_orange": {
+"page": 4,
+"rect": [
+126,
+2,
+108,
+150
+]
+},
+"fx_flame": {
+"page": 6,
+"rect": [
+254,
+1820,
+40,
+48
+]
+},
+"fx_glow": {
+"page": 6,
+"rect": [
+1490,
+1552,
+96,
+96
+]
+},
+"fx_ring": {
+"page": 6,
+"rect": [
+458,
+1038,
+192,
+192
+]
+},
+"fx_rock_a": {
+"page": 4,
+"rect": [
+1580,
+2,
+70,
+68
+]
+},
+"fx_rock_b": {
+"page": 4,
+"rect": [
+1710,
+2,
+64,
+60
+]
+},
+"fx_rock_c": {
+"page": 4,
+"rect": [
+1908,
+2,
+54,
+44
+]
+},
+"fx_scrap_00": {
+"page": 6,
+"rect": [
+240,
+1876,
+28,
+28
+]
+},
+"fx_scrap_01": {
+"page": 6,
+"rect": [
+1998,
+1820,
+31,
+31
+]
+},
+"fx_scrap_02": {
+"page": 6,
+"rect": [
+72,
+1876,
+30,
+30
+]
+},
+"fx_scrap_03": {
+"page": 6,
+"rect": [
+272,
+1876,
+23,
+23
+]
+},
+"fx_scrap_04": {
+"page": 6,
+"rect": [
+37,
+1876,
+31,
+31
+]
+},
+"fx_scrap_05": {
+"page": 6,
+"rect": [
+1962,
+1820,
+32,
+32
+]
+},
+"fx_scrap_06": {
+"page": 6,
+"rect": [
+208,
+1876,
+28,
+28
+]
+},
+"fx_scrap_07": {
+"page": 6,
+"rect": [
+1854,
+1820,
+32,
+32
+]
+},
+"fx_scrap_08": {
+"page": 6,
+"rect": [
+140,
+1876,
+30,
+30
+]
+},
+"fx_scrap_09": {
+"page": 6,
+"rect": [
+106,
+1876,
+30,
+30
+]
+},
+"fx_scrap_10": {
+"page": 6,
+"rect": [
+2,
+1876,
+31,
+31
+]
+},
+"fx_scrap_11": {
+"page": 6,
+"rect": [
+174,
+1876,
+30,
+30
+]
+},
+"fx_scrap_12": {
+"page": 6,
+"rect": [
+299,
+1876,
+22,
+22
+]
+},
+"fx_scrap_13": {
+"page": 6,
+"rect": [
+1890,
+1820,
+32,
+32
+]
+},
+"fx_shadow_blob": {
+"page": 6,
+"rect": [
+298,
+1820,
+96,
+48
+]
+},
+"fx_shard_blue": {
+"page": 4,
+"rect": [
+1840,
+2,
+64,
+60
+]
+},
+"fx_smoke_big": {
+"page": 4,
+"rect": [
+430,
+2,
+152,
+138
+]
+},
+"fx_smoke_cloud_b": {
+"page": 4,
+"rect": [
+750,
+2,
+130,
+132
+]
+},
+"fx_smoke_far": {
+"page": 4,
+"rect": [
+1036,
+2,
+56,
+106
+]
+},
+"fx_smoke_med": {
+"page": 4,
+"rect": [
+1096,
+2,
+96,
+100
+]
+},
+"fx_smoke_small": {
+"page": 4,
+"rect": [
+884,
+2,
+148,
+110
+]
+},
+"fx_smoke_tiny": {
+"page": 4,
+"rect": [
+1424,
+2,
+76,
+76
+]
+},
+"fx_spark_burst": {
+"page": 4,
+"rect": [
+586,
+2,
+160,
+138
+]
+},
+"fx_sparkle": {
+"page": 6,
+"rect": [
+1590,
+1552,
+96,
+96
+]
+},
+"fx_streaks": {
+"page": 4,
+"rect": [
+2,
+2,
+120,
+152
+]
+},
+"icon_alert": {
+"page": 5,
+"rect": [
+602,
+208,
+76,
+76
+]
+},
+"icon_ay_plate": {
+"page": 5,
+"rect": [
+92,
+296,
+110,
+60
+]
+},
+"icon_big": {
+"page": 5,
+"rect": [
+80,
+2,
+86,
+100
+]
+},
+"icon_bolt": {
+"page": 5,
+"rect": [
+1478,
+108,
+80,
+92
+]
+},
+"icon_calendar": {
+"page": 5,
+"rect": [
+528,
+208,
+70,
+78
+]
+},
+"icon_coin": {
+"page": 5,
+"rect": [
+440,
+208,
+84,
+80
+]
+},
+"icon_cone": {
+"page": 5,
+"rect": [
+90,
+208,
+74,
+84
+]
+},
+"icon_crown": {
+"page": 5,
+"rect": [
+682,
+208,
+78,
+76
+]
+},
+"icon_gear": {
+"page": 5,
+"rect": [
+168,
+208,
+86,
+84
+]
+},
+"icon_gem": {
+"page": 5,
+"rect": [
+1908,
+108,
+96,
+86
+]
+},
+"icon_heart": {
+"page": 5,
+"rect": [
+1086,
+208,
+76,
+70
+]
+},
+"icon_jerrycan": {
+"page": 5,
+"rect": [
+322,
+296,
+62,
+50
+]
+},
+"icon_lock": {
+"page": 5,
+"rect": [
+2,
+208,
+84,
+84
+]
+},
+"icon_mail": {
+"page": 5,
+"rect": [
+764,
+208,
+66,
+74
+]
+},
+"icon_pump": {
+"page": 5,
+"rect": [
+340,
+208,
+96,
+80
+]
+},
+"icon_rank_shield": {
+"page": 5,
+"rect": [
+258,
+208,
+78,
+80
+]
+},
+"icon_remote": {
+"page": 5,
+"rect": [
+1940,
+208,
+56,
+62
+]
+},
+"icon_se_plate": {
+"page": 5,
+"rect": [
+1540,
+208,
+140,
+64
+]
+},
+"icon_star": {
+"page": 5,
+"rect": [
+1338,
+208,
+76,
+66
+]
+},
+"icon_ticket": {
+"page": 5,
+"rect": [
+834,
+208,
+104,
+72
+]
+},
+"icon_tire": {
+"page": 5,
+"rect": [
+1562,
+108,
+92,
+92
+]
+},
+"icon_trophy": {
+"page": 5,
+"rect": [
+1812,
+108,
+92,
+86
+]
+},
+"icon_xp": {
+"page": 5,
+"rect": [
+388,
+296,
+80,
+48
+]
+},
+"lbl_block": {
+"page": 5,
+"rect": [
+942,
+208,
+140,
+72
+]
+},
+"lbl_boss": {
+"page": 5,
+"rect": [
+206,
+296,
+112,
+60
+]
+},
+"lbl_combo": {
+"page": 5,
+"rect": [
+1166,
+208,
+168,
+68
+]
+},
+"lbl_critical": {
+"page": 5,
+"rect": [
+1684,
+208,
+126,
+64
+]
+},
+"lbl_merge": {
+"page": 5,
+"rect": [
+1814,
+208,
+122,
+64
+]
+},
+"lbl_miss": {
+"page": 5,
+"rect": [
+2,
+296,
+86,
+62
+]
+},
+"lbl_wave": {
+"page": 5,
+"rect": [
+1418,
+208,
+118,
+66
+]
+},
+"logo_cone": {
+"page": 1,
+"rect": [
+1025,
+2,
+180,
+258
+]
+},
+"logo_strapline": {
+"page": 1,
+"rect": [
+2,
+311,
+606,
+90
+]
+},
+"logo_tagline": {
+"page": 1,
+"rect": [
+1209,
+2,
+456,
+222
+]
+},
+"logo_title_block": {
+"page": 0,
+"rect": [
+591,
+2,
+738,
+504
+]
+},
+"map_art": {
+"page": 0,
+"rect": [
+2,
+2,
+585,
+921
+]
+},
+"map_node_boss": {
+"page": 1,
+"rect": [
+1669,
+2,
+82,
+114
+]
+},
+"map_node_lock": {
+"page": 1,
+"rect": [
+612,
+311,
+64,
+72
+]
+},
+"map_node_star": {
+"page": 1,
+"rect": [
+680,
+311,
+66,
+70
+]
+},
+"map_node_start": {
+"page": 1,
+"rect": [
+750,
+311,
+64,
+68
+]
+},
+"mode_coop": {
+"page": 0,
+"rect": [
+1333,
+2,
+315,
+336
+]
+},
+"mode_pvp": {
+"page": 0,
+"rect": [
+1652,
+2,
+318,
+336
+]
+},
+"mode_story": {
+"page": 0,
+"rect": [
+2,
+927,
+318,
+336
+]
+},
+"mode_survival": {
+"page": 0,
+"rect": [
+324,
+927,
+318,
+336
+]
+},
+"npc_animal_cat": {
+"page": 2,
+"rect": [
+1874,
+2,
+96,
+110
+]
+},
+"npc_animal_dog": {
+"page": 2,
+"rect": [
+1760,
+2,
+110,
+112
+]
+},
+"npc_animal_pigeon": {
+"page": 2,
+"rect": [
+118,
+186,
+112,
+100
+]
+},
+"npc_animal_raccoon": {
+"page": 2,
+"rect": [
+234,
+186,
+120,
+94
+]
+},
+"npc_animal_seagull": {
+"page": 2,
+"rect": [
+2,
+186,
+112,
+100
+]
+},
+"npc_construction": {
+"page": 2,
+"rect": [
+1486,
+2,
+142,
+158
+]
+},
+"npc_delivery_guy": {
+"page": 2,
+"rect": [
+822,
+2,
+126,
+164
+]
+},
+"npc_mayor": {
+"page": 2,
+"rect": [
+952,
+2,
+144,
+162
+]
+},
+"npc_mechanic": {
+"page": 2,
+"rect": [
+1230,
+2,
+128,
+160
+]
+},
+"npc_mysterious_stranger": {
+"page": 2,
+"rect": [
+1362,
+2,
+120,
+160
+]
+},
+"npc_news_reporter": {
+"page": 2,
+"rect": [
+1100,
+2,
+126,
+162
+]
+},
+"npc_rival_driver": {
+"page": 2,
+"rect": [
+1632,
+2,
+124,
+154
+]
+},
+"npc_traffic_cop": {
+"page": 2,
+"rect": [
+560,
+2,
+146,
+168
+]
+},
+"pc_brown_hair": {
+"page": 2,
+"rect": [
+710,
+2,
+108,
+166
+]
+},
+"pc_cap_blue": {
+"page": 2,
+"rect": [
+228,
+2,
+102,
+168
+]
+},
+"pc_cap_headphones": {
+"page": 2,
+"rect": [
+112,
+2,
+112,
+174
+]
+},
+"pc_cap_red_blue": {
+"page": 2,
+"rect": [
+442,
+2,
+114,
+168
+]
+},
+"pc_long_hair": {
+"page": 2,
+"rect": [
+334,
+2,
+104,
+168
+]
+},
+"pc_red_curls": {
+"page": 2,
+"rect": [
+2,
+2,
+106,
+180
+]
+},
+"prop_barricade_a": {
+"page": 3,
+"rect": [
+312,
+378,
+128,
+94
+]
+},
+"prop_barricade_b": {
+"page": 3,
+"rect": [
+850,
+378,
+100,
+82
+]
+},
+"prop_bench": {
+"page": 3,
+"rect": [
+444,
+378,
+116,
+92
+]
+},
+"prop_bin_blue": {
+"page": 3,
+"rect": [
+564,
+378,
+66,
+90
+]
+},
+"prop_bush": {
+"page": 3,
+"rect": [
+744,
+378,
+102,
+86
+]
+},
+"prop_bush_rocks": {
+"page": 3,
+"rect": [
+1850,
+246,
+110,
+104
+]
+},
+"prop_hydrant": {
+"page": 3,
+"rect": [
+98,
+378,
+72,
+100
+]
+},
+"prop_junction_box": {
+"page": 3,
+"rect": [
+634,
+378,
+106,
+88
+]
+},
+"prop_one_way_sign": {
+"page": 3,
+"rect": [
+174,
+378,
+134,
+100
+]
+},
+"prop_rock": {
+"page": 3,
+"rect": [
+954,
+378,
+82,
+64
+]
+},
+"prop_speed_camera": {
+"page": 3,
+"rect": [
+522,
+2,
+82,
+136
+]
+},
+"prop_stop_sign": {
+"page": 3,
+"rect": [
+346,
+2,
+78,
+154
+]
+},
+"prop_stop_sign_small": {
+"page": 3,
+"rect": [
+2,
+378,
+92,
+100
+]
+},
+"prop_street_lamp": {
+"page": 3,
+"rect": [
+76,
+2,
+126,
+158
+]
+},
+"prop_traffic_light": {
+"page": 3,
+"rect": [
+2,
+2,
+70,
+240
+]
+},
+"prop_trash_can": {
+"page": 3,
+"rect": [
+428,
+2,
+90,
+138
+]
+},
+"prop_tree": {
+"page": 3,
+"rect": [
+206,
+2,
+136,
+158
+]
+},
+"tile_asphalt_cracked": {
+"page": 3,
+"rect": [
+1796,
+2,
+128,
+128
+]
+},
+"tile_asphalt_plain": {
+"page": 3,
+"rect": [
+662,
+246,
+128,
+128
+]
+},
+"tile_concrete_cracked": {
+"page": 3,
+"rect": [
+1454,
+246,
+128,
+128
+]
+},
+"tile_crosswalk_books": {
+"page": 3,
+"rect": [
+1136,
+2,
+128,
+128
+]
+},
+"tile_grass_dry": {
+"page": 3,
+"rect": [
+1004,
+2,
+128,
+128
+]
+},
+"tile_grass_flowers": {
+"page": 3,
+"rect": [
+794,
+246,
+128,
+128
+]
+},
+"tile_grass_patch": {
+"page": 3,
+"rect": [
+740,
+2,
+128,
+128
+]
+},
+"tile_grass_with_slab": {
+"page": 3,
+"rect": [
+608,
+2,
+128,
+128
+]
+},
+"tile_hazard_stripes": {
+"page": 3,
+"rect": [
+2,
+246,
+128,
+128
+]
+},
+"tile_manhole": {
+"page": 3,
+"rect": [
+1322,
+246,
+128,
+128
+]
+},
+"tile_parking_p": {
+"page": 3,
+"rect": [
+1586,
+246,
+128,
+128
+]
+},
+"tile_road_arrow_down": {
+"page": 3,
+"rect": [
+1190,
+246,
+128,
+128
+]
+},
+"tile_road_arrow_right": {
+"page": 3,
+"rect": [
+1664,
+2,
+128,
+128
+]
+},
+"tile_road_arrow_up": {
+"page": 3,
+"rect": [
+1268,
+2,
+128,
+128
+]
+},
+"tile_road_corner_yellow": {
+"page": 3,
+"rect": [
+926,
+246,
+128,
+128
+]
+},
+"tile_road_dashed_white_h": {
+"page": 3,
+"rect": [
+398,
+246,
+128,
+128
+]
+},
+"tile_road_dashed_yellow_h": {
+"page": 3,
+"rect": [
+266,
+246,
+128,
+128
+]
+},
+"tile_road_double_yellow_v": {
+"page": 3,
+"rect": [
+530,
+246,
+128,
+128
+]
+},
+"tile_road_edge_grass": {
+"page": 3,
+"rect": [
+1532,
+2,
+128,
+128
+]
+},
+"tile_road_lane_v": {
+"page": 3,
+"rect": [
+1718,
+246,
+128,
+128
+]
+},
+"tile_road_lane_v_dashed": {
+"page": 3,
+"rect": [
+872,
+2,
+128,
+128
+]
+},
+"tile_road_t_junction": {
+"page": 3,
+"rect": [
+134,
+246,
+128,
+128
+]
+},
+"tile_road_turn_arrow": {
+"page": 3,
+"rect": [
+1058,
+246,
+128,
+128
+]
+},
+"tile_roundabout": {
+"page": 3,
+"rect": [
+1400,
+2,
+128,
+128
+]
+},
+"ui_bar_bg": {
+"page": 6,
+"rect": [
+878,
+1760,
+248,
+52
+]
+},
+"ui_bar_fill_blue": {
+"page": 6,
+"rect": [
+626,
+1760,
+248,
+52
+]
+},
+"ui_bar_fill_green": {
+"page": 6,
+"rect": [
+374,
+1760,
+248,
+52
+]
+},
+"ui_bar_fill_lavender": {
+"page": 6,
+"rect": [
+1634,
+1760,
+248,
+52
+]
+},
+"ui_bar_fill_orange": {
+"page": 6,
+"rect": [
+1382,
+1760,
+248,
+52
+]
+},
+"ui_bar_fill_red": {
+"page": 6,
+"rect": [
+1130,
+1760,
+248,
+52
+]
+},
+"ui_bar_fill_teal": {
+"page": 6,
+"rect": [
+122,
+1760,
+248,
+52
+]
+},
+"ui_bar_fill_yellow": {
+"page": 6,
+"rect": [
+2,
+1820,
+248,
+52
+]
+},
+"ui_btn_blue_down": {
+"page": 6,
+"rect": [
+746,
+1552,
+244,
+120
+]
+},
+"ui_btn_blue_up": {
+"page": 6,
+"rect": [
+994,
+1552,
+244,
+120
+]
+},
+"ui_btn_dark_down": {
+"page": 6,
+"rect": [
+1408,
+1290,
+244,
+120
+]
+},
+"ui_btn_dark_up": {
+"page": 6,
+"rect": [
+1160,
+1290,
+244,
+120
+]
+},
+"ui_btn_disabled_up": {
+"page": 6,
+"rect": [
+1490,
+1428,
+244,
+120
+]
+},
+"ui_btn_gray_down": {
+"page": 6,
+"rect": [
+1738,
+1428,
+244,
+120
+]
+},
+"ui_btn_gray_up": {
+"page": 6,
+"rect": [
+498,
+1428,
+244,
+120
+]
+},
+"ui_btn_green_down": {
+"page": 6,
+"rect": [
+250,
+1428,
+244,
+120
+]
+},
+"ui_btn_green_up": {
+"page": 6,
+"rect": [
+168,
+1290,
+244,
+120
+]
+},
+"ui_btn_lavender_down": {
+"page": 6,
+"rect": [
+250,
+1552,
+244,
+120
+]
+},
+"ui_btn_lavender_up": {
+"page": 6,
+"rect": [
+1242,
+1428,
+244,
+120
+]
+},
+"ui_btn_mint_down": {
+"page": 6,
+"rect": [
+746,
+1428,
+244,
+120
+]
+},
+"ui_btn_mint_up": {
+"page": 6,
+"rect": [
+1656,
+1290,
+244,
+120
+]
+},
+"ui_btn_orange_down": {
+"page": 6,
+"rect": [
+2,
+1552,
+244,
+120
+]
+},
+"ui_btn_orange_up": {
+"page": 6,
+"rect": [
+994,
+1428,
+244,
+120
+]
+},
+"ui_btn_red_down": {
+"page": 6,
+"rect": [
+912,
+1290,
+244,
+120
+]
+},
+"ui_btn_red_up": {
+"page": 6,
+"rect": [
+2,
+1428,
+244,
+120
+]
+},
+"ui_btn_teal_down": {
+"page": 6,
+"rect": [
+1242,
+1552,
+244,
+120
+]
+},
+"ui_btn_teal_up": {
+"page": 6,
+"rect": [
+416,
+1290,
+244,
+120
+]
+},
+"ui_btn_yellow_down": {
+"page": 6,
+"rect": [
+498,
+1552,
+244,
+120
+]
+},
+"ui_btn_yellow_up": {
+"page": 6,
+"rect": [
+664,
+1290,
+244,
+120
+]
+},
+"ui_bubble": {
+"page": 6,
+"rect": [
+654,
+1038,
+256,
+170
+]
+},
+"ui_card_common": {
+"page": 6,
+"rect": [
+1238,
+778,
+192,
+248
+]
+},
+"ui_card_epic": {
+"page": 6,
+"rect": [
+1630,
+778,
+192,
+248
+]
+},
+"ui_card_legendary": {
+"page": 6,
+"rect": [
+1434,
+778,
+192,
+248
+]
+},
+"ui_card_mythic": {
+"page": 6,
+"rect": [
+2,
+1038,
+192,
+248
+]
+},
+"ui_card_rare": {
+"page": 6,
+"rect": [
+1826,
+778,
+192,
+248
+]
+},
+"ui_card_uncommon": {
+"page": 6,
+"rect": [
+1042,
+778,
+192,
+248
+]
+},
+"ui_chip_common": {
+"page": 6,
+"rect": [
+1150,
+1820,
+160,
+44
+]
+},
+"ui_chip_epic": {
+"page": 6,
+"rect": [
+856,
+1820,
+160,
+44
+]
+},
+"ui_chip_legendary": {
+"page": 6,
+"rect": [
+1478,
+1820,
+160,
+44
+]
+},
+"ui_chip_mythic": {
+"page": 6,
+"rect": [
+528,
+1820,
+160,
+44
+]
+},
+"ui_chip_rare": {
+"page": 6,
+"rect": [
+1314,
+1820,
+160,
+44
+]
+},
+"ui_chip_uncommon": {
+"page": 6,
+"rect": [
+692,
+1820,
+160,
+44
+]
+},
+"ui_dialog_box": {
+"page": 6,
+"rect": [
+198,
+1038,
+256,
+200
+]
+},
+"ui_grain_tile": {
+"page": 6,
+"rect": [
+2,
+2,
+512,
+512
+]
+},
+"ui_halftone_tile": {
+"page": 6,
+"rect": [
+1146,
+1676,
+64,
+64
+]
+},
+"ui_namebox": {
+"page": 6,
+"rect": [
+898,
+1676,
+176,
+70
+]
+},
+"ui_panel_blue": {
+"page": 6,
+"rect": [
+782,
+778,
+256,
+256
+]
+},
+"ui_panel_cardboard": {
+"page": 6,
+"rect": [
+1038,
+2,
+256,
+256
+]
+},
+"ui_panel_cream": {
+"page": 6,
+"rect": [
+522,
+518,
+256,
+256
+]
+},
+"ui_panel_dark": {
+"page": 6,
+"rect": [
+1558,
+2,
+256,
+256
+]
+},
+"ui_panel_gray": {
+"page": 6,
+"rect": [
+1042,
+518,
+256,
+256
+]
+},
+"ui_panel_green": {
+"page": 6,
+"rect": [
+1298,
+2,
+256,
+256
+]
+},
+"ui_panel_kraft": {
+"page": 6,
+"rect": [
+778,
+2,
+256,
+256
+]
+},
+"ui_panel_lavender": {
+"page": 6,
+"rect": [
+1302,
+518,
+256,
+256
+]
+},
+"ui_panel_mint": {
+"page": 6,
+"rect": [
+522,
+778,
+256,
+256
+]
+},
+"ui_panel_orange": {
+"page": 6,
+"rect": [
+1562,
+518,
+256,
+256
+]
+},
+"ui_panel_paper": {
+"page": 6,
+"rect": [
+2,
+778,
+256,
+256
+]
+},
+"ui_panel_pink": {
+"page": 6,
+"rect": [
+262,
+518,
+256,
+256
+]
+},
+"ui_panel_red": {
+"page": 6,
+"rect": [
+782,
+518,
+256,
+256
+]
+},
+"ui_panel_teal": {
+"page": 6,
+"rect": [
+2,
+518,
+256,
+256
+]
+},
+"ui_panel_yellow": {
+"page": 6,
+"rect": [
+262,
+778,
+256,
+256
+]
+},
+"ui_pill": {
+"page": 6,
+"rect": [
+322,
+1676,
+252,
+80
+]
+},
+"ui_ribbon_red": {
+"page": 6,
+"rect": [
+1690,
+1552,
+316,
+80
+]
+},
+"ui_ribbon_teal": {
+"page": 6,
+"rect": [
+578,
+1676,
+316,
+80
+]
+},
+"ui_ribbon_yellow": {
+"page": 6,
+"rect": [
+2,
+1676,
+316,
+80
+]
+},
+"ui_slot": {
+"page": 6,
+"rect": [
+1406,
+1038,
+162,
+134
+]
+},
+"ui_slot_bad": {
+"page": 6,
+"rect": [
+2,
+1290,
+162,
+134
+]
+},
+"ui_slot_merge": {
+"page": 6,
+"rect": [
+1738,
+1038,
+162,
+134
+]
+},
+"ui_slot_ok": {
+"page": 6,
+"rect": [
+1572,
+1038,
+162,
+134
+]
+},
+"ui_stamp_blue": {
+"page": 6,
+"rect": [
+914,
+1038,
+160,
+160
+]
+},
+"ui_stamp_green": {
+"page": 6,
+"rect": [
+1078,
+1038,
+160,
+160
+]
+},
+"ui_stamp_red": {
+"page": 6,
+"rect": [
+1242,
+1038,
+160,
+160
+]
+},
+"ui_star_gold": {
+"page": 6,
+"rect": [
+1686,
+1820,
+40,
+40
+]
+},
+"ui_star_gray": {
+"page": 6,
+"rect": [
+1730,
+1820,
+40,
+40
+]
+},
+"ui_star_red": {
+"page": 6,
+"rect": [
+1642,
+1820,
+40,
+40
+]
+},
+"ui_status_armor_break": {
+"page": 6,
+"rect": [
+1814,
+1676,
+56,
+56
+]
+},
+"ui_status_burn": {
+"page": 6,
+"rect": [
+1214,
+1676,
+56,
+56
+]
+},
+"ui_status_fear": {
+"page": 6,
+"rect": [
+1694,
+1676,
+56,
+56
+]
+},
+"ui_status_haste": {
+"page": 6,
+"rect": [
+1874,
+1676,
+56,
+56
+]
+},
+"ui_status_jammed": {
+"page": 6,
+"rect": [
+1934,
+1676,
+56,
+56
+]
+},
+"ui_status_marked": {
+"page": 6,
+"rect": [
+1514,
+1676,
+56,
+56
+]
+},
+"ui_status_oil": {
+"page": 6,
+"rect": [
+1454,
+1676,
+56,
+56
+]
+},
+"ui_status_pushback": {
+"page": 6,
+"rect": [
+1574,
+1676,
+56,
+56
+]
+},
+"ui_status_regen": {
+"page": 6,
+"rect": [
+1754,
+1676,
+56,
+56
+]
+},
+"ui_status_shield": {
+"page": 6,
+"rect": [
+2,
+1760,
+56,
+56
+]
+},
+"ui_status_shock": {
+"page": 6,
+"rect": [
+1394,
+1676,
+56,
+56
+]
+},
+"ui_status_silence": {
+"page": 6,
+"rect": [
+62,
+1760,
+56,
+56
+]
+},
+"ui_status_slow": {
+"page": 6,
+"rect": [
+1634,
+1676,
+56,
+56
+]
+},
+"ui_status_stun": {
+"page": 6,
+"rect": [
+1334,
+1676,
+56,
+56
+]
+},
+"ui_status_wet": {
+"page": 6,
+"rect": [
+1274,
+1676,
+56,
+56
+]
+},
+"ui_tape": {
+"page": 6,
+"rect": [
+398,
+1820,
+126,
+44
+]
+},
+"ui_tape_b": {
+"page": 6,
+"rect": [
+1020,
+1820,
+126,
+44
+]
+},
+"ui_tape_small": {
+"page": 6,
+"rect": [
+1774,
+1820,
+76,
+36
+]
+},
+"ui_vignette": {
+"page": 6,
+"rect": [
+518,
+2,
+256,
+256
+]
+},
+"veh_airport_rescue": {
+"page": 7,
+"rect": [
+418,
+450,
+130,
+102
+]
+},
+"veh_ambulance": {
+"page": 7,
+"rect": [
+1584,
+336,
+114,
+106
+]
+},
+"veh_armored_van": {
+"page": 7,
+"rect": [
+140,
+194,
+138,
+134
+]
+},
+"veh_chrono_police": {
+"page": 7,
+"rect": [
+270,
+336,
+130,
+110
+]
+},
+"veh_city_bus": {
+"page": 7,
+"rect": [
+1746,
+2,
+134,
+138
+]
+},
+"veh_compact": {
+"page": 7,
+"rect": [
+2,
+658,
+114,
+88
+]
+},
+"veh_construction_truck": {
+"page": 7,
+"rect": [
+1204,
+336,
+132,
+108
+]
+},
+"veh_courier_bike": {
+"page": 7,
+"rect": [
+572,
+194,
+104,
+130
+]
+},
+"veh_crane_truck": {
+"page": 7,
+"rect": [
+792,
+336,
+124,
+108
+]
+},
+"veh_delivery_van": {
+"page": 7,
+"rect": [
+1466,
+450,
+134,
+96
+]
+},
+"veh_electric_taxi": {
+"page": 7,
+"rect": [
+1338,
+450,
+124,
+98
+]
+},
+"veh_elite_fire_engine": {
+"page": 7,
+"rect": [
+364,
+658,
+124,
+82
+]
+},
+"veh_experimental_ev": {
+"page": 7,
+"rect": [
+238,
+658,
+122,
+84
+]
+},
+"veh_family_wagon": {
+"page": 7,
+"rect": [
+1410,
+558,
+124,
+90
+]
+},
+"veh_fire_engine": {
+"page": 7,
+"rect": [
+552,
+450,
+130,
+102
+]
+},
+"veh_food_truck": {
+"page": 7,
+"rect": [
+2,
+558,
+132,
+96
+]
+},
+"veh_garbage_truck": {
+"page": 7,
+"rect": [
+896,
+194,
+124,
+128
+]
+},
+"veh_ghost_car": {
+"page": 7,
+"rect": [
+120,
+658,
+114,
+88
+]
+},
+"veh_golden_taxi": {
+"page": 7,
+"rect": [
+872,
+558,
+128,
+92
+]
+},
+"veh_hatchback": {
+"page": 7,
+"rect": [
+736,
+558,
+132,
+92
+]
+},
+"veh_heavy_rescue": {
+"page": 7,
+"rect": [
+1062,
+336,
+138,
+108
+]
+},
+"veh_heavy_wrecker": {
+"page": 7,
+"rect": [
+1432,
+194,
+126,
+118
+]
+},
+"veh_highway_patrol": {
+"page": 7,
+"rect": [
+1198,
+2,
+126,
+144
+]
+},
+"veh_hyper_bus": {
+"page": 7,
+"rect": [
+2,
+450,
+150,
+104
+]
+},
+"veh_interceptor": {
+"page": 7,
+"rect": [
+1728,
+450,
+122,
+96
+]
+},
+"veh_limousine": {
+"page": 7,
+"rect": [
+402,
+558,
+198,
+92
+]
+},
+"veh_mail_van": {
+"page": 7,
+"rect": [
+818,
+450,
+128,
+100
+]
+},
+"veh_mecha_vehicle": {
+"page": 7,
+"rect": [
+878,
+2,
+134,
+150
+]
+},
+"veh_military_convoy": {
+"page": 7,
+"rect": [
+920,
+336,
+138,
+108
+]
+},
+"veh_mini_tank": {
+"page": 7,
+"rect": [
+1790,
+558,
+140,
+90
+]
+},
+"veh_minivan": {
+"page": 7,
+"rect": [
+1538,
+558,
+124,
+90
+]
+},
+"veh_mobile_command": {
+"page": 7,
+"rect": [
+1688,
+194,
+126,
+110
+]
+},
+"veh_monster_truck": {
+"page": 7,
+"rect": [
+424,
+194,
+144,
+132
+]
+},
+"veh_news_van": {
+"page": 7,
+"rect": [
+686,
+450,
+128,
+100
+]
+},
+"veh_phantom_ambulance": {
+"page": 7,
+"rect": [
+1702,
+336,
+114,
+106
+]
+},
+"veh_pickup": {
+"page": 7,
+"rect": [
+1604,
+450,
+120,
+96
+]
+},
+"veh_police": {
+"page": 7,
+"rect": [
+136,
+336,
+130,
+110
+]
+},
+"veh_portal_bus": {
+"page": 7,
+"rect": [
+1136,
+558,
+126,
+92
+]
+},
+"veh_possessed_ice_cream_truck": {
+"page": 7,
+"rect": [
+156,
+450,
+128,
+104
+]
+},
+"veh_presidential_limo": {
+"page": 7,
+"rect": [
+1854,
+450,
+170,
+96
+]
+},
+"veh_prototype_supercar": {
+"page": 7,
+"rect": [
+270,
+558,
+128,
+94
+]
+},
+"veh_quantum_taxi": {
+"page": 7,
+"rect": [
+1004,
+558,
+128,
+92
+]
+},
+"veh_race_car": {
+"page": 7,
+"rect": [
+138,
+558,
+128,
+94
+]
+},
+"veh_recovery_truck": {
+"page": 7,
+"rect": [
+1818,
+194,
+118,
+110
+]
+},
+"veh_rescue_van": {
+"page": 7,
+"rect": [
+1466,
+336,
+114,
+106
+]
+},
+"veh_riot_truck": {
+"page": 7,
+"rect": [
+1340,
+336,
+122,
+106
+]
+},
+"veh_road_worker": {
+"page": 7,
+"rect": [
+950,
+450,
+130,
+100
+]
+},
+"veh_school_bus": {
+"page": 7,
+"rect": [
+288,
+450,
+126,
+104
+]
+},
+"veh_scooter": {
+"page": 7,
+"rect": [
+680,
+194,
+104,
+130
+]
+},
+"veh_shuttle": {
+"page": 7,
+"rect": [
+1884,
+2,
+134,
+138
+]
+},
+"veh_snowplow": {
+"page": 7,
+"rect": [
+1266,
+558,
+140,
+90
+]
+},
+"veh_street_sweeper": {
+"page": 7,
+"rect": [
+1458,
+2,
+140,
+140
+]
+},
+"veh_swat_van": {
+"page": 7,
+"rect": [
+666,
+336,
+122,
+108
+]
+},
+"veh_taxi": {
+"page": 7,
+"rect": [
+604,
+558,
+128,
+92
+]
+},
+"veh_time_traveller": {
+"page": 7,
+"rect": [
+1666,
+558,
+120,
+90
+]
+},
+"veh_tow_truck": {
+"page": 7,
+"rect": [
+404,
+336,
+118,
+110
+]
+},
+"veh_traffic_enforcement": {
+"page": 7,
+"rect": [
+2,
+336,
+130,
+110
+]
+},
+"veh_ufo": {
+"page": 7,
+"rect": [
+1294,
+194,
+134,
+124
+]
+},
+"veh_utility_van": {
+"page": 7,
+"rect": [
+1820,
+336,
+122,
+106
+]
+},
+"veh_vintage_hot_rod": {
+"page": 7,
+"rect": [
+1214,
+450,
+120,
+98
+]
+}
+},
+"pages": [
+"atlas_big_0.png",
+"atlas_big_1.png",
+"atlas_chars_0.png",
+"atlas_env_0.png",
+"atlas_fx_0.png",
+"atlas_ui_0.png",
+"atlas_uigen_0.png",
+"atlas_units_0.png"
+]
+}
