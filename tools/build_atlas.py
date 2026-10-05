@@ -85,6 +85,21 @@ def pack(group_items, name):
         cur["x"] += w + PADP * 2; cur["rowh"] = max(cur["rowh"], h + PADP * 2)
     return pages
 
+# standalone repeating textures (atlas regions cannot wrap): road / ground tiles, grain, halftone
+TEXDIR = os.path.join(OUT, "tex")
+os.makedirs(TEXDIR, exist_ok=True)
+for f in glob.glob(TEXDIR + "/*.png"): os.remove(f)
+def clean_tile(f):
+    """Trim the paper-edge border of the sheet tile so repeats do not show seams."""
+    im = Image.open(f).convert("RGBA")
+    m = 3
+    im = im.crop((m, m, im.width - m, im.height - m)).resize((128, 128), Image.LANCZOS)
+    return im
+for f in glob.glob(SRC + "/environment/roads/tile_*.png"):
+    clean_tile(f).save(os.path.join(TEXDIR, stem(f) + ".png"))
+for nm in ["ui_grain_tile", "ui_halftone_tile"]:
+    Image.open(os.path.join(SRC, "ui_gen", nm + ".png")).convert("RGBA").save(os.path.join(TEXDIR, nm + ".png"))
+
 manifest = {"pages": [], "entries": {}}
 groups = {}
 for it in items: groups.setdefault(it[2], []).append(it)
