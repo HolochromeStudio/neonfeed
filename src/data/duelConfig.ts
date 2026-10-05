@@ -131,6 +131,28 @@ export const DUEL_CONFIG: DuelConfig = {
   },
 };
 
+/**
+ * Numbers for the duel-side perk/boss hooks (DuelModifiers, see docs/RUN_DESIGN.md section 6). All of them only
+ * ever ADD time to the enemy or take it from the player's aim; none can shorten an enemy tell (RULE F1).
+ */
+export const MODIFIER_TUNING = {
+  /** Cold Open: a Perfect Draw pushes the enemy's pending shot back by this many ms of enemy clock. */
+  perfectStaggerMs: 350,
+  /** Dead Eye: every headshot that does not kill does the same. */
+  headStaggerMs: 400,
+  /** Trick Shot: shooting an arena prop staggers the enemy. */
+  propStaggerMs: 450,
+  /** Steady Breath: at the end of the aim budget, a reticle that has been still this long (ms)... */
+  stillGapMs: 120,
+  /** ...and moved less than this (px) since the last aim sample extends the budget by... */
+  stillMovePx: 3,
+  /** ...this many ms per extension, at most this many ms in total per aim period. */
+  stillBonusMs: 150,
+  stillBonusMaxMs: 450,
+  /** Boss `aimBudgetScale` is clamped to [min, 1] (docs/BOSSES.md: never below 0.7, slow-mo stays). */
+  bossAimScaleMin: 0.7,
+} as const;
+
 /** Scene-level (not duel-logic) tuning. */
 export const SCENE_TUNING = {
   /** Largest real time one scene update may feed the duel clock; a backgrounded tab cannot replay a duel. */

@@ -37,3 +37,8 @@ export const TIER_LABEL: Record<DrawTier, string> = { perfect: 'PERFECT', good: 
 export function effectiveReaction(rawMs: number, flinched: boolean, penaltyMs = DUEL_CONFIG.draw.flinchPenaltyMs): number {
   return rawMs + (flinched ? penaltyMs : 0);
 }
+
+/** A Perfect grade without a reaction time (tier promotion: Spit and Polish, Second Wind). */
+export function perfectGrade(perfectBonus = DUEL_CONFIG.aim.perfectBudgetBonus): DrawGrade {
+  return { tier: 'perfect', perfect: true, aimBudgetMultiplier: 1 + perfectBonus, crit: true };
+}

@@ -1,11 +1,13 @@
 import { Rng } from '../core/rng';
 import { audioBus } from '../core/audioEvents';
 import type { AudioEvent } from '../core/audioEvents';
-import { DUEL_CONFIG } from '../data/duelConfig';
+import { DUEL_CONFIG, MODIFIER_TUNING } from '../data/duelConfig';
 import type { DrawTier, DuelConfig, ZoneId } from '../data/duelConfig';
+import { neutralDuelModifiers } from '../data/perks';
+import type { DuelModifiers } from '../data/perks';
 import { applyDamage, isDead, makeHealth, shotDamage } from './DamageSystem';
 import type { Health } from './DamageSystem';
-import { effectiveReaction, gradeDraw } from './DrawSystem';
+import { effectiveReaction, gradeDraw, perfectGrade } from './DrawSystem';
 import type { Rect } from './InputSystem';
 import { buildZones, hitTest } from './TargetSystem';
 import type { Zone } from './TargetSystem';
@@ -29,6 +31,12 @@ import type { Zone } from './TargetSystem';
  * clamped to a minimum of 1, a hero with 0 hp is already lost and the duel resolves LOSE at the first
  * enemy shot, hit or miss); non-finite aim/fire coordinates are ignored and `onShot` never carries NaN;
  * `onPhase` reports WAIT (lazily at the first advance/input of an attempt, and on every retry).
+ *
+ * Perk hooks (`params.modifiers`, docs/RUN_DESIGN.md section 6): the duel reads DuelModifiers FIELDS, never perk ids.
+ * Supported here: perfectStaggers, headStagger, propShotsHitEnemy (stagger), alwaysCrit, flinchDisablesCrit,
+ * flinchNoTimeCost, goodAsPerfectPerDuel, afterHitAutoPerfect (a hero who starts wounded), ignoreFirstHits,
+ * reviveCharges, lastStandBudgetMult, aimBudgetStillBonus. Boss `aimBudgetScale` (a property of the opponent) shrinks the
+ * aim budget (>= 0.7). Every stagger only ADDS time to the pending enemy shot (RULE F1 untouched).
  */
 
 /** `advanceTo(Infinity)` is clamped to this many ms past the current clock. */
@@ -94,6 +102,10 @@ export interface DuelParams {
   startT?: number;
   /** Audio sink; defaults to the shared audioBus. */
   audio?: { emit(e: AudioEvent): void };
+  /** Max lives for the HUD/clamping when the hero starts wounded (`heroHp` is then the current lives). Default `heroHp`. */
+  heroMaxHp?: number;
+  /** Perk modifiers (composePerks().duel). Missing fields are neutral. */
+  modifiers?: Partial<DuelModifiers>;
 }
 
 export interface DuelResult {
@@ -113,6 +125,14 @@ export interface DuelResult {
   enemyHp: number;
   durationMs: number;
   attempt: number;
+  /** Headshots that landed on the enemy this attempt. */
+  headshots: number;
+  /** Enemy hits ignored by `ignoreFirstHits` (Tin Star). */
+  hitsIgnored: number;
+  /** Lethal hits prevented by `reviveCharges` (Revive Flask); the caller reports them as consumed once-per-run perks. */
+  revivesUsed: number;
+  /** Times the enemy was staggered (perk, prop or boss environment). */
+  staggers: number;
 }
 
 export interface DuelHitInfo {
@@ -125,6 +145,10 @@ export interface DuelHitInfo {
   assisted: boolean;
   x: number;
   y: number;
+  /** Hit on the hero ignored by `ignoreFirstHits` (damage is 0). */
+  ignored?: boolean;
+  /** Lethal hit on the hero prevented by `reviveCharges` (the hero keeps 1 life). */
+  revived?: boolean;
 }
 
 export interface DuelEvents {
@@ -140,10 +164,14 @@ export interface DuelEvents {
   onMiss: { t: number; shooter: 'player' | 'enemy' };
   onResolve: { t: number; result: DuelResult };
   onRetry: { t: number; attempt: number };
+  /** The enemy's pending shot was pushed back `ms` ms of enemy clock. */
+  onStagger: { t: number; ms: number; source: StaggerSource };
 }
 
+export type StaggerSource = 'perfect_draw' | 'headshot' | 'prop' | 'external';
+
 export const DUEL_EVENT_NAMES: readonly (keyof DuelEvents)[] = [
-  'onPhase', 'onWait', 'onFlinch', 'onCue', 'onDraw', 'onPerfectDraw', 'onAimStart', 'onShot', 'onHit', 'onMiss', 'onResolve', 'onRetry',
+  'onPhase', 'onWait', 'onFlinch', 'onCue', 'onDraw', 'onPerfectDraw', 'onAimStart', 'onShot', 'onHit', 'onMiss', 'onResolve', 'onRetry', 'onStagger',
 ];
 
 type Listener<T> = (payload: T) => void;
@@ -215,7 +243,9 @@ export class DuelSystem {
   private readonly audio: { emit(e: AudioEvent): void };
   private readonly seed: number;
   private readonly heroMax: number;
+  private readonly heroCap: number;
   private readonly enemyMax: number;
+  private readonly mods: DuelModifiers;
 
   private rng!: Rng;
   private hero!: Health;
@@ -243,6 +273,16 @@ export class DuelSystem {
   private hits = 0;
   private result: DuelResult | null = null;
   private disarms = 0;
+  // perk hooks (all reset per attempt)
+  private goodPromos = 0;
+  private autoPerfect = false;
+  private ignoredHits = 0;
+  private revivesLeft = 0;
+  private revivesUsed = 0;
+  private headshots = 0;
+  private staggers = 0;
+  private stillExtra = 0;
+  private lastAimMoveAt = 0;
   /** True once `onPhase` has announced WAIT for the current attempt. */
   private waitAnnounced = false;
 
@@ -265,6 +305,8 @@ export class DuelSystem {
     // no hp would be invulnerable, so it gets 1.
     this.heroMax = Number.isFinite(hh) ? Math.max(0, hh) : this.cfg.damage.heroHp;
     this.enemyMax = Number.isFinite(eh) && eh > 0 ? eh : 1;
+    this.heroCap = Number.isFinite(params.heroMaxHp) ? Math.max(this.heroMax, params.heroMaxHp as number) : this.heroMax;
+    this.mods = { ...neutralDuelModifiers(), ...(params.modifiers ?? {}) };
     const e = this.cfg.arena.enemy;
     const rect = params.enemyRect ?? { x: e.x - e.w / 2, y: e.y - e.h, w: e.w, h: e.h };
     this.zones = buildZones(rect, this.cfg.arena.props, this.cfg);
@@ -275,6 +317,9 @@ export class DuelSystem {
 
   get currentPhase(): DuelPhase {
     return this.phase;
+  }
+  get modifiers(): Readonly<DuelModifiers> {
+    return this.mods;
   }
   get lastResult(): DuelResult | null {
     return this.result;
@@ -354,7 +399,11 @@ export class DuelSystem {
         this.onDrawInput();
         break;
       case 'aim':
-        if (Number.isFinite(e.x) && Number.isFinite(e.y)) this.reticle = { x: e.x, y: e.y };
+        if (Number.isFinite(e.x) && Number.isFinite(e.y)) {
+          const moved = !this.reticle || Math.hypot(e.x - this.reticle.x, e.y - this.reticle.y) >= MODIFIER_TUNING.stillMovePx;
+          if (moved) this.lastAimMoveAt = this.now;
+          this.reticle = { x: e.x, y: e.y };
+        }
         break;
       case 'fire':
         this.onFireInput(e.x, e.y);
@@ -375,6 +424,19 @@ export class DuelSystem {
     this.events.emit('onWait', { t: this.now, attempt: this.attempt });
   }
 
+  /**
+   * Pushes the enemy's pending shot back by `ms` ms of enemy clock (adds time only, so RULE F1 holds).
+   * No-op before the cue, after the duel is over, or for a non-positive/non-finite `ms`.
+   * Perks call it internally; the scene calls it for boss environment payoffs (BossSystem `onEnvironment`).
+   */
+  staggerEnemy(ms: number, source: StaggerSource = 'external'): void {
+    if (!Number.isFinite(ms) || ms <= 0) return;
+    if (!this.enemyRunning() || this.enemyNext === null) return;
+    this.enemyNext += ms;
+    this.staggers++;
+    this.events.emit('onStagger', { t: this.now, ms, source });
+  }
+
   // ---- internals ---------------------------------------------------------
 
   /** QA-06: tell `onPhase` listeners about WAIT once per attempt (the constructor cannot, nobody listens yet). */
@@ -388,8 +450,18 @@ export class DuelSystem {
     this.prevPhase = this.phase;
     this.waitAnnounced = false;
     this.disarms = 0;
+    this.goodPromos = 0;
+    this.ignoredHits = 0;
+    this.revivesLeft = Math.max(0, Math.floor(this.mods.reviveCharges));
+    this.revivesUsed = 0;
+    this.headshots = 0;
+    this.staggers = 0;
+    this.stillExtra = 0;
+    this.lastAimMoveAt = t;
+    // Second Wind: a hero who starts wounded (was hit earlier in the run) draws Perfect
+    this.autoPerfect = this.mods.afterHitAutoPerfect && this.heroMax < this.heroCap;
     this.rng = new Rng(this.seed);
-    this.hero = makeHealth(this.heroMax);
+    this.hero = { hp: this.heroMax, max: this.heroCap };
     this.enemy = makeHealth(this.enemyMax);
     this.phase = 'WAIT';
     this.outcome = null;
@@ -481,7 +553,7 @@ export class DuelSystem {
         this.startAim(false);
         break;
       case 'autoFire':
-        if (this.phase === 'AIM') this.fire();
+        if (this.phase === 'AIM' && !this.stillBonus()) this.fire();
         break;
       case 'recoilEnd':
         if (this.phase === 'SHOT') this.startAim(true);
@@ -511,25 +583,41 @@ export class DuelSystem {
       return;
     }
     const raw = this.now - this.cueAt;
-    const reaction = effectiveReaction(raw, this.flinched, this.cfg.draw.flinchPenaltyMs);
-    const grade = gradeDraw(reaction, this.cfg.draw, this.cfg.aim.perfectBudgetBonus);
+    const penalty = this.mods.flinchNoTimeCost ? 0 : this.cfg.draw.flinchPenaltyMs;
+    const reaction = effectiveReaction(raw, this.flinched, penalty);
+    let grade = gradeDraw(reaction, this.cfg.draw, this.cfg.aim.perfectBudgetBonus);
+    if (!grade.perfect) {
+      // tier promotion: Second Wind (wounded start) first, then Spit and Polish (one Good draw per duel)
+      if (this.autoPerfect) {
+        this.autoPerfect = false;
+        grade = perfectGrade(this.cfg.aim.perfectBudgetBonus);
+      } else if (grade.tier === 'good' && this.goodPromos < this.mods.goodAsPerfectPerDuel) {
+        this.goodPromos++;
+        grade = perfectGrade(this.cfg.aim.perfectBudgetBonus);
+      }
+    }
     this.rawReaction = raw;
     this.reaction = reaction;
     this.tier = grade.tier;
-    this.critReady = grade.crit;
+    this.critReady = grade.crit && !(this.mods.flinchDisablesCrit && this.flinched);
     this.aimBudgetMult = grade.aimBudgetMultiplier;
     this.setPhase('DRAW');
-    const drawTime = this.cfg.draw.drawAnimMs + (this.flinched ? this.cfg.draw.flinchPenaltyMs : 0);
+    const drawTime = this.cfg.draw.drawAnimMs + (this.flinched ? penalty : 0);
     this.deadline = { at: this.now + drawTime, kind: 'drawEnd' };
     this.events.emit('onDraw', { t: this.now, rawMs: raw, reactionMs: reaction, tier: grade.tier, perfect: grade.perfect, flinched: this.flinched });
     if (grade.perfect) {
       this.events.emit('onPerfectDraw', { t: this.now, reactionMs: reaction });
       this.sfx({ type: 'perfect_draw' });
+      if (this.mods.perfectStaggers) this.staggerEnemy(MODIFIER_TUNING.perfectStaggerMs, 'perfect_draw');
     }
   }
 
   private startAim(followUp: boolean): void {
-    const budget = followUp ? this.cfg.aim.followUpBudgetMs : this.cfg.aim.budgetMs * this.aimBudgetMult;
+    let budget = followUp ? this.cfg.aim.followUpBudgetMs : this.cfg.aim.budgetMs * this.aimBudgetMult;
+    budget *= this.opponentAimScale();
+    if (this.hero.hp > 0 && this.hero.hp <= 1) budget *= this.mods.lastStandBudgetMult;
+    this.stillExtra = 0;
+    this.lastAimMoveAt = this.now;
     this.setPhase('AIM');
     this.deadline = { at: this.now + budget, kind: 'autoFire' };
     this.events.emit('onAimStart', { t: this.now, budgetMs: budget, followUp });
@@ -538,6 +626,24 @@ export class DuelSystem {
       this.queuedFire = null;
       this.fire(q.x, q.y);
     }
+  }
+
+  /** Boss/enemy `aimBudgetScale` (docs/BOSSES.md): clamped to [0.7, 1], slow-mo is never touched. */
+  private opponentAimScale(): number {
+    const s = (this.opponent as { aimBudgetScale?: unknown }).aimBudgetScale;
+    if (typeof s !== 'number' || !Number.isFinite(s)) return 1;
+    return Math.min(1, Math.max(MODIFIER_TUNING.bossAimScaleMin, s));
+  }
+
+  /** Steady Breath: a still reticle at the end of the budget earns a short extension (bounded). True when extended. */
+  private stillBonus(): boolean {
+    if (!this.mods.aimBudgetStillBonus) return false;
+    const T = MODIFIER_TUNING;
+    if (this.stillExtra >= T.stillBonusMaxMs || this.now - this.lastAimMoveAt < T.stillGapMs) return false;
+    const chunk = Math.min(T.stillBonusMs, T.stillBonusMaxMs - this.stillExtra);
+    this.stillExtra += chunk;
+    this.deadline = { at: this.now + chunk, kind: 'autoFire' };
+    return true;
   }
 
   private onFireInput(x?: number, y?: number): void {
@@ -552,7 +658,7 @@ export class DuelSystem {
     const own = x !== undefined && y !== undefined && Number.isFinite(x) && Number.isFinite(y);
     const p = own ? { x: x as number, y: y as number } : this.reticle;
     this.deadline = null;
-    const crit = this.critReady && this.shotsFired === 0;
+    const crit = this.mods.alwaysCrit || (this.critReady && this.shotsFired === 0);
     this.shotsFired++;
     if (!p) {
       // QA-08: no aim point: shoot straight ahead of the hero (always a miss) instead of leaking NaN
@@ -577,12 +683,14 @@ export class DuelSystem {
     if (zone.id === 'prop') {
       this.events.emit('onHit', { t: this.now, target: 'prop', zone: 'prop', propId: zone.propId, damage: 0, crit: false, killed: false, assisted: hit.assisted, x: p.x, y: p.y });
       this.sfx({ type: 'hit_prop' });
+      if (this.mods.propShotsHitEnemy) this.staggerEnemy(MODIFIER_TUNING.propStaggerMs, 'prop');
       this.afterPlayerShot(null);
       return;
     }
     const dmg = shotDamage(zone, crit, this.cfg);
     const res = applyDamage(this.enemy, dmg);
     this.hits++;
+    if (zone.id === 'head') this.headshots++;
     this.events.emit('onHit', { t: this.now, target: 'enemy', zone: zone.id, damage: res.dealt, crit, killed: res.killed, assisted: hit.assisted, x: p.x, y: p.y });
     this.sfx({ type: 'hit_flesh' });
     if (res.killed) {
@@ -590,6 +698,7 @@ export class DuelSystem {
       this.resolve('WIN', null);
       return;
     }
+    if (zone.id === 'head' && this.mods.headStagger) this.staggerEnemy(MODIFIER_TUNING.headStaggerMs, 'headshot');
     this.afterPlayerShot(zone);
   }
 
@@ -618,13 +727,29 @@ export class DuelSystem {
     this.events.emit('onShot', { t: this.now, shooter: 'enemy', x: this.cfg.arena.hero.x, y: this.cfg.arena.hero.y, crit: false });
     this.sfx({ type: 'gunshot', shooter: 'enemy' });
     if (err <= this.cfg.fairness.enemyHitTolerancePx) {
-      const res = applyDamage(this.hero, this.cfg.damage.enemyDamage);
-      this.events.emit('onHit', { t: this.now, target: 'hero', zone: null, damage: res.dealt, crit: false, killed: res.killed, assisted: false, x: this.cfg.arena.hero.x, y: this.cfg.arena.hero.y });
-      this.sfx({ type: 'hit_flesh' });
-      if (isDead(this.hero)) {
-        this.sfx({ type: 'death' });
-        this.resolve('LOSE', this.causeFor(phaseAtShot, i));
-        return;
+      const at = { x: this.cfg.arena.hero.x, y: this.cfg.arena.hero.y };
+      if (this.ignoredHits < this.mods.ignoreFirstHits && this.hero.hp > 0) {
+        // Tin Star: the first hits of each duel are ignored
+        this.ignoredHits++;
+        this.events.emit('onHit', { t: this.now, target: 'hero', zone: null, damage: 0, crit: false, killed: false, assisted: false, ignored: true, ...at });
+        this.sfx({ type: 'miss' });
+      } else {
+        const res = applyDamage(this.hero, this.cfg.damage.enemyDamage);
+        let revived = false;
+        if (res.killed && this.revivesLeft > 0) {
+          // Revive Flask: the lethal hit is survived at 1 life
+          this.revivesLeft--;
+          this.revivesUsed++;
+          this.hero.hp = 1;
+          revived = true;
+        }
+        this.events.emit('onHit', { t: this.now, target: 'hero', zone: null, damage: res.dealt, crit: false, killed: res.killed && !revived, assisted: false, revived, ...at });
+        this.sfx({ type: 'hit_flesh' });
+        if (isDead(this.hero)) {
+          this.sfx({ type: 'death' });
+          this.resolve('LOSE', this.causeFor(phaseAtShot, i));
+          return;
+        }
       }
     } else {
       this.events.emit('onMiss', { t: this.now, shooter: 'enemy' });
@@ -666,6 +791,10 @@ export class DuelSystem {
       enemyHp: this.enemy.hp,
       durationMs: this.now - this.startedAt,
       attempt: this.attempt,
+      headshots: this.headshots,
+      hitsIgnored: this.ignoredHits,
+      revivesUsed: this.revivesUsed,
+      staggers: this.staggers,
     };
     this.setPhase('RESOLVE');
     this.events.emit('onResolve', { t: this.now, result: this.result });
