@@ -135,7 +135,7 @@ export class WorldScene extends Phaser.Scene {
     void TILESET_COLS;
     this.rebuiltAt = this.time.now;
   }
-  rebuiltAt = 0;
+  rebuiltAt = 0; noEnc = false;
   tickAnim() {
     this.animF ^= 1;
     for (const a of this.anim) a.layer.putTileAt(a.base + this.animF, a.x, a.y);
@@ -401,7 +401,7 @@ export class WorldScene extends Phaser.Scene {
   // ---------- encounters ----------
   encounterTable() { const id = this.def.area; return id ? ENCOUNTERS[id] : null; }
   rollRandomEncounter() {
-    const zone = this.encounterTable(); if (!zone || zone.rate <= 0) return;
+    const zone = this.encounterTable(); if (!zone || zone.rate <= 0 || this.noEnc) return;
     if (!G.s.party.some((m) => m.hp > 0)) return;
     const mode = G.s.settings.encounters; if (mode === 'VISIBLE') return;
     const onGrass = zone.grass === false ? true : !!this.groundAt(this.player.tx, this.player.ty)?.grass;
@@ -834,6 +834,7 @@ export class WorldScene extends Phaser.Scene {
       give(id: string, n = 1) { addItem(id, n); },
       mon(species: string, level = 5) { addMon(makeMon(species, level)); },
       level(i: number, lv: number) { const m = G.s.party[i]; if (m) { m.level = lv; m.exp = lv ** 3; m.hp = maxHp(m); } },
+      noEncounters(v = true) { self.noEnc = v; },
       levelAll(lv: number) { for (const m of G.s.party) { m.level = lv; m.exp = lv ** 3; m.hp = maxHp(m); } },
       heal() { healParty(); }, keys(n: number) { for (let i = 1; i <= 8; i++) { if (i <= n) G.s.bag[`root_key_0${i}`] = 1; else delete G.s.bag[`root_key_0${i}`]; } },
       battle(species: string, level = 5) { void self.startWild({ s: species, min: level, max: level }); },

@@ -30,9 +30,10 @@ function applyScale() {
   const landscape = vw > vh;
   const padReserve = landscape ? 0 : 190; // portrait: controls sit below the frame
   const availW = vw, availH = vh - padReserve;
-  let scale = Math.min(availW / W, availH / H);
-  if (scale >= 2) scale = Math.floor(scale * 2) / 2 >= Math.floor(scale) + 0.5 && scale - Math.floor(scale) > 0.75 ? Math.floor(scale) + 0.5 : Math.floor(scale);
-  scale = Math.max(1, scale);
+  // integer scale in *device* pixels so every game pixel is the same size on retina/phone screens
+  const dpr = window.devicePixelRatio || 1;
+  let devScale = Math.floor(Math.min((availW * dpr) / W, (availH * dpr) / H));
+  let scale = devScale >= 1 ? devScale / dpr : Math.min(availW / W, availH / H);
   canvas.style.width = `${Math.floor(W * scale)}px`; canvas.style.height = `${Math.floor(H * scale)}px`;
   const stage = document.getElementById('stage')!; stage.style.marginBottom = landscape ? '0' : `${padReserve}px`;
   const pad = document.getElementById('pad')!; pad.style.setProperty('--op', String(G.s.settings.touchOpacity / 10));

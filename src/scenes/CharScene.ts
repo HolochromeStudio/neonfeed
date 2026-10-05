@@ -63,7 +63,7 @@ export class CharScene extends Phaser.Scene {
       opts.forEach((o, i) => rows[i].b.setText(o.get()));
       cur.setPosition(98, 42 + idx * 18);
     };
-    this.add.rectangle(48, 120, 28, 4, 0x000000, 0.3).setDepth(4999);
+    const sh = this.add.rectangle(48, 120, 28, 4, 0x000000, 0.3).setDepth(4999);
     refresh();
     for (;;) {
       const b = await Input.wait(['up', 'down', 'left', 'right', 'a']);
@@ -73,7 +73,7 @@ export class CharScene extends Phaser.Scene {
       Audio.sfx('move'); refresh();
     }
     Audio.sfx('select');
-    L.destroy(); sprite.destroy();
+    L.destroy(); sprite.destroy(); sh.destroy();
     const name = await this.nameEntry('JAX');
     G.s.look = look; G.s.name = name;
     const L2 = ui.layer(); ui.win(L2, 2, 110, 236, 48);
