@@ -13,6 +13,7 @@ const RANK_SPD := [1.0, 1.0, 1.04, 1.08, 1.12, 1.16, 1.2, 1.25]
 const MAX_RANK_STD := 7
 const SP_SCALE := 3.4
 const SPEED_SCALE := 1.7
+const GEOM_HP := 1.4   # orbit lanes keep enemies near every unit, so they carry more health than on the old serpentine
 const FIELD_W := 1080.0
 
 # ---------------------------------------------------------------- inner classes

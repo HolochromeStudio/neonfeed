@@ -805,7 +805,7 @@ func _setup_pvp() -> void:
 	pvp.sent_pressure.connect(func(en, n): view._text(Vector2(900, 760), "SENT!", Color("ff9a8a"), 40))
 	mini = PvpMini.new()
 	mini.setup(pvp, opp)
-	mini.position = Vector2(20, Game.safe_top + 186)
+	mini.position = Vector2(20, Game.safe_top + 202)
 	mini.size = Vector2(vsize().x - 40, 64)
 	hud.add_child(mini)
 
