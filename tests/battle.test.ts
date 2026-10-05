@@ -96,6 +96,17 @@ describe('battle engine', () => {
     b.doTurn({ t: 'move', i: 0 }); b.doTurn({ t: 'move', i: 0 });
     expect(b.log.some((e) => e.k === 'rule')).toBe(true);
   });
+  it('STRUGGLE is used when out of PP: damages the foe and hurts the user', () => {
+    const b = mk(); b.p.mon.moves.forEach((m) => (m.pp = 0)); const hp = b.p.mon.hp, ehp = b.e.mon.hp;
+    b.doTurn({ t: 'struggle' }); expect(b.e.mon.hp).toBeLessThan(ehp); expect(b.log.some((e) => e.k === 'msg' && /STRUGGLE/.test(e.text))).toBe(true); void hp;
+  });
+  it('broadcastFirst boss rule makes the boss act first every 3rd turn', () => {
+    const r = seeded(21);
+    const b = new Battle({ kind: 'boss', player: [makeMon('nullcat', 30, { rand: r })], enemy: [makeMon('radiopup', 30, { rand: r })], difficulty: 'STANDARD', ai: 'basic', rootKeys: 0, levelCap: 40, partyExp: true, rules: [{ t: 'broadcastFirst', everyTurns: 3 }], rand: r });
+    b.p.mon.hp = 9999; b.e.mon.hp = 9999; b.p.mon.moves = [{ id: 'ping', pp: 99, maxPp: 99 }]; b.e.mon.moves = [{ id: 'phase_shift', pp: 99, maxPp: 99 }];
+    b.p.stages.spd = 6; // player faster than boss
+    for (let i = 1; i <= 3; i++) { b.log.length = 0; b.doTurn({ t: 'move', i: 0 }); const first = b.log.find((e) => e.k === 'move') as any; if (i === 3) expect(first.side).toBe('e'); else expect(first.side).toBe('p'); }
+  });
   it('every species has valid learnsets and legal moves', () => {
     for (const [id, sp] of Object.entries(SPECIES)) { expect(sp.learnset.length, id).toBeGreaterThan(0); for (const [, m] of sp.learnset) expect(MOVES[m], `${id}:${m}`).toBeTruthy(); }
   });

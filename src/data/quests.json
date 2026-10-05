@@ -155,7 +155,8 @@
   },
   "completionFlags": [
    "chapter1_done_quest"
-  ]
+  ],
+  "followup": "main_ww"
  },
  "side_savelet": {
   "title": "Save File",
@@ -317,6 +318,247 @@
   },
   "autoStart": {
    "flag": "starter_selected"
+  }
+ },
+ "main_ww": {
+  "title": "Whisperwood",
+  "category": "MAIN",
+  "giver": "Voss's checkpoint",
+  "location": "whisperwood",
+  "locationName": "Whisperwood",
+  "desc": "The south road is open to registered Debuggers. Cross Route 02 and the Whisperwood. Mira was heading that way.",
+  "objectives": [
+   {
+    "text": "Meet Mira in the wood",
+    "type": "flag",
+    "flag": "mira_3_done"
+   },
+   {
+    "text": "Reach Bellwether City",
+    "type": "flag",
+    "flag": "visited_bellwether"
+   }
+  ],
+  "rewards": {
+   "credits": 500,
+   "items": {
+    "patch_kit_l": 2
+   }
+  },
+  "followup": "main_node2"
+ },
+ "main_node2": {
+  "title": "Node 2: Bellwether",
+  "category": "MAIN",
+  "giver": "Sona",
+  "location": "node2_tower",
+  "locationName": "Bellwether Tower",
+  "desc": "People in Bellwether hear tomorrow on the radio. Tune the tower's transmitter. Sona, the Node Keeper, is inside.",
+  "objectives": [
+   {
+    "text": "Meet Sona in the Tower",
+    "type": "flag",
+    "flag": "met_sona"
+   },
+   {
+    "text": "Open the maintenance hatch (listen to the console)",
+    "type": "flag",
+    "flag": "node2_code_ok"
+   },
+   {
+    "text": "Tune the transmitter",
+    "type": "flag",
+    "flag": "node2_power"
+   },
+   {
+    "text": "Defeat Node Keeper Sona",
+    "type": "flag",
+    "flag": "node_2_complete"
+   }
+  ],
+  "rewards": {
+   "credits": 900,
+   "items": {
+    "patch_kit_l": 3,
+    "contain_module": 2
+   }
+  },
+  "followup": "main_ch2"
+ },
+ "main_ch2": {
+  "title": "The Dead Channel",
+  "category": "MAIN",
+  "giver": "Sona",
+  "location": "radio_shed",
+  "locationName": "Old Radio Shed",
+  "desc": "With FREQUENCY, old radios speak. Visit the condemned radio shed in Bellwether and listen.",
+  "objectives": [
+   {
+    "text": "Hear the broadcast from the shed",
+    "type": "flag",
+    "flag": "future_broadcast"
+   }
+  ],
+  "rewards": {
+   "credits": 1000,
+   "items": {
+    "full_patch": 3
+   }
+  }
+ },
+ "side_oldman": {
+  "title": "The NPC Who Remembers You",
+  "category": "SIDE",
+  "giver": "Old Man",
+  "location": "bellwether",
+  "locationName": "Bellwether City",
+  "desc": "Three old men all say 'Have we met?' One lives in a cabin in Whisperwood. Find which memories are real. (Needs FREQUENCY.)",
+  "objectives": [
+   {
+    "text": "Meet the original at the cabin",
+    "type": "flag",
+    "flag": "oldman_cabin"
+   },
+   {
+    "text": "Contain the Archive bug (Memlet)",
+    "type": "owns",
+    "species": "memlet"
+   },
+   {
+    "text": "Return to the old man in Bellwether",
+    "type": "flag",
+    "flag": "oldman_resolved"
+   }
+  ],
+  "rewards": {
+   "credits": 0
+  }
+ },
+ "side_radio": {
+  "title": "Dial Tones",
+  "category": "SIDE",
+  "giver": "Radio Fan",
+  "location": "bellwether",
+  "locationName": "Bellwether City",
+  "desc": "Listen to three stations on the radio fan's kitchen radio: 91.7, 97.3 and 101.5.",
+  "objectives": [
+   {
+    "text": "Hear 91.7 BELLWETHER FM",
+    "type": "flag",
+    "flag": "heard_91.7"
+   },
+   {
+    "text": "Hear 97.3 TRAFFIC NOW",
+    "type": "flag",
+    "flag": "heard_97.3"
+   },
+   {
+    "text": "Hear 101.5 THE DAY AFTER",
+    "type": "flag",
+    "flag": "heard_101.5"
+   },
+   {
+    "text": "Report to the fan",
+    "type": "flag",
+    "flag": "radio_done"
+   }
+  ],
+  "rewards": {
+   "credits": 0
+  }
+ },
+ "side_echo": {
+  "title": "Echoes in the Wood",
+  "category": "SIDE",
+  "giver": "Echolet",
+  "location": "whisperwood",
+  "locationName": "Whisperwood",
+  "desc": "An Echolet told you to come back at night. Find and contain one in the Whisperwood after dark.",
+  "objectives": [
+   {
+    "text": "Contain an Echolet",
+    "type": "owns",
+    "species": "echolet"
+   }
+  ],
+  "rewards": {
+   "credits": 500,
+   "items": {
+    "contain_module": 2
+   }
+  }
+ },
+ "res_seen3": {
+  "title": "Field Notes IV",
+  "category": "RESEARCH",
+  "giver": "Debugger",
+  "location": "",
+  "locationName": "Velora",
+  "desc": "Log 24 species in the ByteDex.",
+  "objectives": [
+   {
+    "text": "Bytekin seen",
+    "type": "seen",
+    "count": 24
+   }
+  ],
+  "rewards": {
+   "credits": 600,
+   "items": {
+    "full_patch": 2
+   }
+  },
+  "autoStart": {
+   "flag": "node_1_complete"
+  }
+ },
+ "res_contain8": {
+  "title": "Field Notes V",
+  "category": "RESEARCH",
+  "giver": "Debugger",
+  "location": "",
+  "locationName": "Velora",
+  "desc": "CONTAIN eight different species.",
+  "objectives": [
+   {
+    "text": "Species contained",
+    "type": "contained",
+    "count": 8
+   }
+  ],
+  "rewards": {
+   "credits": 700,
+   "items": {
+    "contain_module": 3
+   }
+  },
+  "autoStart": {
+   "flag": "node_1_complete"
+  }
+ },
+ "res_lore": {
+  "title": "Archivist",
+  "category": "RESEARCH",
+  "giver": "Historian",
+  "location": "bellwether",
+  "locationName": "Bellwether City",
+  "desc": "Read 5 LORE LOGS found around Velora.",
+  "objectives": [
+   {
+    "text": "Lore logs read",
+    "type": "counter",
+    "flag": "lore_count",
+    "count": 5
+   }
+  ],
+  "rewards": {
+   "credits": 500,
+   "items": {
+    "full_patch": 2
+   }
+  },
+  "autoStart": {
+   "flag": "node_1_complete"
   }
  }
 }

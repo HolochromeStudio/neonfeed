@@ -1,0 +1,409 @@
+{
+ "id": "node2_tower",
+ "name": "BELLWETHER TOWER",
+ "w": 15,
+ "h": 16,
+ "base": "metal",
+ "outdoor": false,
+ "bgm": "indoor",
+ "battleBg": "node",
+ "tint": "#e0e8ff",
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "metal2",
+   "x": 6,
+   "y": 1,
+   "w": 3,
+   "h": 14
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "L": "lab_machine",
+    "S": "statue"
+   },
+   "rows": [
+    "DDDDDDDGDDDDDDD",
+    "CR.M..R.R..M.RC",
+    "C.............C",
+    "C.............C",
+    "C.............C",
+    "C...RR...RR...C",
+    "C.............C",
+    "C.............C",
+    "C.............C",
+    "C.............C",
+    "C.............C",
+    "C.............C",
+    "C.............C",
+    "C.............C",
+    "C.............C",
+    "CCCCCCC.CCCCCCC"
+   ]
+  },
+  {
+   "op": "clear",
+   "x": 14,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "when": "node2_code_ok"
+  },
+  {
+   "op": "clear",
+   "x": 7,
+   "y": 0,
+   "w": 1,
+   "h": 1,
+   "when": "node2_power"
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "gate_open",
+   "pts": [
+    [
+     7,
+     0
+    ]
+   ],
+   "when": "node2_power"
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "terminal",
+   "pts": [
+    [
+     3,
+     6
+    ],
+    [
+     13,
+     5
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "gate",
+   "pts": [
+    [
+     14,
+     6
+    ]
+   ],
+   "when": {
+    "not": "node2_code_ok"
+   }
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "gate_open",
+   "pts": [
+    [
+     14,
+     6
+    ]
+   ],
+   "when": "node2_code_ok"
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "crate",
+   "pts": [
+    [
+     1,
+     12
+    ],
+    [
+     2,
+     12
+    ],
+    [
+     3,
+     12
+    ],
+    [
+     4,
+     13
+    ]
+   ],
+   "when": {
+    "not": "node2_secret"
+   }
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "note",
+   "pts": [
+    [
+     5,
+     2
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "antenna",
+   "pts": [
+    [
+     1,
+     3
+    ],
+    [
+     13,
+     3
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "glitch_b",
+   "pts": [
+    [
+     2,
+     13
+    ],
+    [
+     1,
+     13
+    ],
+    [
+     3,
+     13
+    ]
+   ],
+   "when": "node2_secret"
+  }
+ ],
+ "warps": [
+  {
+   "x": 7,
+   "y": 15,
+   "to": "bellwether",
+   "tx": 21,
+   "ty": 12,
+   "dir": "down"
+  },
+  {
+   "x": 14,
+   "y": 6,
+   "to": "node2_transmitter",
+   "tx": 1,
+   "ty": 3,
+   "dir": "right",
+   "when": "node2_code_ok"
+  },
+  {
+   "x": 7,
+   "y": 0,
+   "to": "node2_arena",
+   "tx": 5,
+   "ty": 9,
+   "dir": "up",
+   "when": "node2_power"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "n2_enter",
+   "x": 7,
+   "y": 13,
+   "onEnter": true,
+   "once": "node2_enter_seen",
+   "script": "node2_enter"
+  }
+ ],
+ "trainers": [
+  {
+   "id": "n2_tech1",
+   "x": 4,
+   "y": 9,
+   "look": "tech",
+   "dir": "right",
+   "sight": 3
+  },
+  {
+   "id": "n2_broadcaster",
+   "x": 11,
+   "y": 11,
+   "look": "broadcaster",
+   "dir": "left",
+   "sight": 4
+  },
+  {
+   "id": "n2_apprentice",
+   "x": 7,
+   "y": 3,
+   "look": "coder",
+   "dir": "down",
+   "sight": 4
+  }
+ ],
+ "npcs": [
+  {
+   "id": "sona",
+   "x": 7,
+   "y": 11,
+   "look": "sona",
+   "dir": "down",
+   "name": "SONA",
+   "show": {
+    "not": "node2_power"
+   },
+   "scripts": [
+    {
+     "run": "sona_station"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "radio",
+   "x": 3,
+   "y": 6,
+   "title": "TOWER CONSOLE",
+   "stations": [
+    {
+     "f": "88.1",
+     "name": "TOWER WEATHER",
+     "lines": [
+      "Tower weather. Currently: tower.",
+      "Visibility: the tower. Wind: also the tower."
+     ]
+    },
+    {
+     "f": "91.7",
+     "name": "BELLWETHER FM",
+     "lines": [
+      "Bellwether FM. All hits. No misses. Few remembered.",
+      "This next one goes out to the person who is listening. You know who you are. We do not."
+     ]
+    },
+    {
+     "f": "97.3",
+     "name": "TRAFFIC NOW",
+     "lines": [
+      "Traffic now: a pigeon is standing on the road. Traffic is: the pigeon.",
+      "Expect delays of between zero and also zero."
+     ]
+    },
+    {
+     "f": "101.5",
+     "name": "THE DAY AFTER",
+     "lines": [
+      "...tomorrow's weather has already happened. Please disregard yesterday.",
+      "The Clean State will switch the lights back on at an unspecified time. Thank you for not asking."
+     ]
+    },
+    {
+     "f": "104.2",
+     "name": "NUMBERS",
+     "lines": [
+      "Four. Zero. Nine. Four. Zero. Nine.",
+      "...the tower sings at ninety-five point five. Four. Zero. Nine. Four. Zero. Nine."
+     ],
+     "set": "node2_code_heard"
+    },
+    {
+     "f": "77.7",
+     "name": "BEHIND THE STATIC",
+     "needs": {
+      "flag": "node2_code_heard"
+     },
+     "lines": [
+      "...(static)... there is a shelf behind the crates... (static)...",
+      "...the engineer who built it left a spare Beacon and a lot of patch... (static)..."
+     ],
+     "set": "node2_secret"
+    }
+   ]
+  },
+  {
+   "type": "keypad",
+   "x": 13,
+   "y": 5,
+   "code": "409",
+   "flag": "node2_code_ok",
+   "title": "MAINTENANCE",
+   "text": "A maintenance keypad bolted to the wall beside a sealed hatch. It wants three digits.",
+   "ok": "Click-clack. The maintenance hatch slides open!",
+   "fail": "The keypad buzzes. Wrong code.",
+   "done": "The hatch is open."
+  },
+  {
+   "type": "sign",
+   "x": 5,
+   "y": 2,
+   "text": "A note pinned to the wall: 'MAINTENANCE HATCH CODE: the number the tower says when nobody asks. Listen on the console. - SONA'"
+  },
+  {
+   "type": "item",
+   "x": 2,
+   "y": 13,
+   "item": "full_patch",
+   "n": 1,
+   "when": "node2_secret"
+  },
+  {
+   "type": "item",
+   "x": 3,
+   "y": 13,
+   "item": "signal_beacon",
+   "n": 2,
+   "when": "node2_secret"
+  },
+  {
+   "type": "item",
+   "x": 1,
+   "y": 13,
+   "item": "patch_kit_l",
+   "n": 2,
+   "when": "node2_secret"
+  },
+  {
+   "type": "sign",
+   "x": 1,
+   "y": 1,
+   "text": "A monitor shows three channels fighting over one antenna."
+  },
+  {
+   "type": "sign",
+   "x": 11,
+   "y": 1,
+   "text": "A monitor shows the sky. The sky is delayed by four seconds."
+  },
+  {
+   "type": "lore",
+   "x": 13,
+   "y": 1,
+   "id": "lore_tower",
+   "text": "LORE LOG 07 - TOWER LOGBOOK: 'Day 14,611. The antenna did not drift this morning. Day 14,612. The antenna did not drift. Day 14,613. I would like to report that the antenna has been replaced by something that does not drift. I do not know when.'"
+  }
+ ]
+}

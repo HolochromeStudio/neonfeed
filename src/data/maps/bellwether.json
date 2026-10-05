@@ -1,0 +1,772 @@
+{
+ "id": "bellwether",
+ "name": "BELLWETHER CITY",
+ "w": 44,
+ "h": 36,
+ "base": "grass",
+ "outdoor": true,
+ "weather": true,
+ "bgm": "route",
+ "battleBg": "grass",
+ "area": "bellwether_lawn",
+ "ops": [
+  {
+   "op": "speckle",
+   "t": "grass2",
+   "seed": 3,
+   "rect": [
+    1,
+    1,
+    42,
+    34
+   ],
+   "count": 200,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "speckle",
+   "t": "grass3",
+   "seed": 4,
+   "rect": [
+    1,
+    1,
+    42,
+    34
+   ],
+   "count": 60,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "speckle",
+   "t": "flowers_r",
+   "seed": 5,
+   "rect": [
+    1,
+    1,
+    42,
+    34
+   ],
+   "count": 24,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "speckle",
+   "t": "flowers_y",
+   "seed": 6,
+   "rect": [
+    1,
+    1,
+    42,
+    34
+   ],
+   "count": 24,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 5,
+   "y": 1,
+   "w": 2,
+   "h": 12
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 5,
+   "y": 12,
+   "w": 34,
+   "h": 2
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "cobble",
+   "x": 14,
+   "y": 12,
+   "w": 16,
+   "h": 6
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 21,
+   "y": 18,
+   "w": 2,
+   "h": 4
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 5,
+   "y": 14,
+   "w": 2,
+   "h": 8
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 5,
+   "y": 22,
+   "w": 34,
+   "h": 2
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 10,
+   "y": 22,
+   "w": 1,
+   "h": 0
+  },
+  {
+   "op": "stamp",
+   "name": "hub",
+   "x": 8,
+   "y": 8
+  },
+  {
+   "op": "stamp",
+   "name": "node",
+   "x": 18,
+   "y": 8
+  },
+  {
+   "op": "stamp",
+   "name": "house_blue",
+   "x": 29,
+   "y": 8
+  },
+  {
+   "op": "stamp",
+   "name": "house_red",
+   "x": 35,
+   "y": 8
+  },
+  {
+   "op": "stamp",
+   "name": "house_green",
+   "x": 6,
+   "y": 18
+  },
+  {
+   "op": "stamp",
+   "name": "lab_grey",
+   "x": 33,
+   "y": 18
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "antenna",
+   "pts": [
+    [
+     21,
+     7
+    ],
+    [
+     19,
+     7
+    ],
+    [
+     24,
+     7
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "beacon",
+   "pts": [
+    [
+     22,
+     7
+    ],
+    [
+     20,
+     7
+    ]
+   ]
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 1,
+   "rect": [
+    2,
+    25,
+    16,
+    8
+   ],
+   "blobs": 3,
+   "r": 3,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 2,
+   "rect": [
+    24,
+    25,
+    16,
+    8
+   ],
+   "blobs": 3,
+   "r": 3,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 3,
+   "rect": [
+    2,
+    2,
+    2,
+    8
+   ],
+   "blobs": 1,
+   "r": 2,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "border",
+   "l": "o",
+   "t": "tree",
+   "gaps": [
+    [
+     5,
+     0
+    ],
+    [
+     6,
+     0
+    ]
+   ]
+  },
+  {
+   "op": "scatter",
+   "t": "tree",
+   "seed": 41,
+   "rect": [
+    1,
+    1,
+    40,
+    6
+   ],
+   "count": 12,
+   "keep": [
+    [
+     4,
+     0,
+     4,
+     13
+    ]
+   ]
+  },
+  {
+   "op": "scatter",
+   "t": "pine",
+   "seed": 42,
+   "rect": [
+    1,
+    25,
+    42,
+    9
+   ],
+   "count": 18
+  },
+  {
+   "op": "scatter",
+   "t": "tree",
+   "seed": 43,
+   "rect": [
+    40,
+    1,
+    3,
+    34
+   ],
+   "count": 6
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "lamp",
+   "pts": [
+    [
+     14,
+     12
+    ],
+    [
+     29,
+     12
+    ],
+    [
+     14,
+     17
+    ],
+    [
+     29,
+     17
+    ],
+    [
+     26,
+     22
+    ],
+    [
+     16,
+     22
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "flowerbox",
+   "pts": [
+    [
+     17,
+     14
+    ],
+    [
+     26,
+     14
+    ],
+    [
+     17,
+     16
+    ],
+    [
+     26,
+     16
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "terminal",
+   "pts": [
+    [
+     28,
+     19
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "sign",
+   "pts": [
+    [
+     7,
+     2
+    ],
+    [
+     12,
+     11
+    ],
+    [
+     27,
+     11
+    ],
+    [
+     32,
+     22
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     39,
+     15
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "fence_v",
+   "pts": [
+    [
+     39,
+     12
+    ],
+    [
+     39,
+     13
+    ],
+    [
+     40,
+     12
+    ],
+    [
+     40,
+     13
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "mailbox",
+   "pts": [
+    [
+     28,
+     11
+    ],
+    [
+     34,
+     11
+    ],
+    [
+     11,
+     21
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "rock",
+   "pts": [
+    [
+     3,
+     30
+    ],
+    [
+     38,
+     28
+    ],
+    [
+     20,
+     28
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 5,
+   "y": 0,
+   "to": "whisperwood",
+   "tx": 14,
+   "ty": 44,
+   "dir": "up"
+  },
+  {
+   "x": 6,
+   "y": 0,
+   "to": "whisperwood",
+   "tx": 15,
+   "ty": 44,
+   "dir": "up"
+  },
+  {
+   "x": 10,
+   "y": 11,
+   "to": "bellwether_hub",
+   "tx": 4,
+   "ty": 6,
+   "dir": "up"
+  },
+  {
+   "x": 21,
+   "y": 11,
+   "to": "node2_tower",
+   "tx": 7,
+   "ty": 14,
+   "dir": "up"
+  },
+  {
+   "x": 31,
+   "y": 11,
+   "to": "bw_house_a",
+   "tx": 3,
+   "ty": 4,
+   "dir": "up"
+  },
+  {
+   "x": 37,
+   "y": 11,
+   "to": "bw_house_b",
+   "tx": 3,
+   "ty": 4,
+   "dir": "up"
+  },
+  {
+   "x": 8,
+   "y": 21,
+   "to": "bw_house_fan",
+   "tx": 3,
+   "ty": 4,
+   "dir": "up"
+  },
+  {
+   "x": 35,
+   "y": 21,
+   "to": "radio_shed",
+   "tx": 3,
+   "ty": 4,
+   "dir": "up"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "bw_arrive",
+   "x": 5,
+   "y": 1,
+   "onEnter": true,
+   "once": "visited_bellwether",
+   "script": "bw_arrive"
+  }
+ ],
+ "trainers": [
+  {
+   "id": "bw_busker",
+   "x": 12,
+   "y": 15,
+   "look": "busker",
+   "dir": "right",
+   "sight": 3
+  },
+  {
+   "id": "bw_tech",
+   "x": 31,
+   "y": 23,
+   "look": "tech",
+   "dir": "left",
+   "sight": 4
+  },
+  {
+   "id": "bw_broadcaster",
+   "x": 24,
+   "y": 15,
+   "look": "broadcaster",
+   "dir": "left",
+   "sight": 3
+  }
+ ],
+ "npcs": [
+  {
+   "id": "oldman_bw",
+   "x": 22,
+   "y": 20,
+   "look": "grandpa",
+   "dir": "left",
+   "move": "look",
+   "name": "OLD MAN",
+   "scripts": [
+    {
+     "when": {
+      "flag": "oldman_resolved"
+     },
+     "run": "oldman_bw_after"
+    },
+    {
+     "when": {
+      "flag": "oldman_quest"
+     },
+     "run": "oldman_bw_quest"
+    },
+    {
+     "run": "oldman_bw"
+    }
+   ]
+  },
+  {
+   "id": "bw_resident1",
+   "x": 16,
+   "y": 19,
+   "look": "mom",
+   "dir": "down",
+   "move": "wander",
+   "r": 2,
+   "name": "RESIDENT",
+   "scripts": [
+    {
+     "when": "node_2_complete",
+     "run": "bw_res1_after"
+    },
+    {
+     "run": "bw_res1"
+    }
+   ]
+  },
+  {
+   "id": "bw_resident2",
+   "x": 26,
+   "y": 20,
+   "look": "farmer",
+   "dir": "left",
+   "move": "look",
+   "name": "RESIDENT",
+   "scripts": [
+    {
+     "when": "node_2_complete",
+     "run": "bw_res2_after"
+    },
+    {
+     "run": "bw_res2"
+    }
+   ]
+  },
+  {
+   "id": "bw_kid",
+   "x": 13,
+   "y": 23,
+   "look": "kid2",
+   "dir": "down",
+   "move": "wander",
+   "r": 2,
+   "name": "KID",
+   "text": "I tuned the radio between stations and heard two people arguing about whether I exist. I voted yes."
+  },
+  {
+   "id": "bw_clean",
+   "x": 34,
+   "y": 13,
+   "look": "clean",
+   "dir": "left",
+   "move": "none",
+   "name": "CLEAN STATE",
+   "scripts": [
+    {
+     "run": "bw_clean_npc"
+    }
+   ]
+  },
+  {
+   "id": "bw_clean2",
+   "x": 38,
+   "y": 14,
+   "look": "clean",
+   "dir": "up",
+   "move": "none",
+   "name": "CLEAN STATE",
+   "scripts": [
+    {
+     "run": "bw_clean2_npc"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "terminal",
+   "x": 28,
+   "y": 19,
+   "text": "A public Debugger terminal. A speaker beside it plays a faint tune, then the same tune a second earlier.",
+   "rest": false
+  },
+  {
+   "type": "sign",
+   "x": 7,
+   "y": 2,
+   "text": "BELLWETHER CITY. Population: 11,412. The tower is the tall one. You will hear it before you see it."
+  },
+  {
+   "type": "sign",
+   "x": 12,
+   "y": 11,
+   "text": "BELLWETHER HUB: Patch Center, Shop, Byte Vault."
+  },
+  {
+   "type": "sign",
+   "x": 27,
+   "y": 11,
+   "text": "BELLWETHER SIGNAL TOWER. Node 2. Keeper: SONA. Visitors: please keep your Bytekin's radios muted."
+  },
+  {
+   "type": "sign",
+   "x": 32,
+   "y": 22,
+   "text": "OLD RADIO SHED. Condemned. Do not listen to the radios. (They listen to you.)"
+  },
+  {
+   "type": "sign",
+   "x": 13,
+   "y": 14,
+   "text": "CITY BULLETIN: The 7:00 news is now broadcast at 6:58. Please plan accordingly."
+  },
+  {
+   "type": "sign",
+   "x": 39,
+   "y": 15,
+   "text": "EAST ROAD TO STATIC MARSH. CLOSED. Flooding. Clean State pumps deployed. NO ERRORS. NO UNCERTAINTY."
+  },
+  {
+   "type": "item",
+   "x": 3,
+   "y": 9,
+   "item": "patch_kit_l",
+   "n": 2
+  },
+  {
+   "type": "item",
+   "x": 41,
+   "y": 33,
+   "item": "restore_chip",
+   "n": 1
+  },
+  {
+   "type": "item",
+   "x": 3,
+   "y": 32,
+   "item": "stability_clamp",
+   "n": 3
+  },
+  {
+   "type": "scan",
+   "x": 16,
+   "y": 30,
+   "item": "cache_fragment",
+   "n": 2,
+   "text": "FIELD SCAN: a shard of data wedged into a lawn sprinkler."
+  },
+  {
+   "type": "scan",
+   "x": 30,
+   "y": 33,
+   "item": "pixel_dust",
+   "n": 3,
+   "text": "FIELD SCAN: pixel dust, still warm."
+  },
+  {
+   "type": "lore",
+   "x": 36,
+   "y": 13,
+   "id": "lore_bw",
+   "text": "LORE LOG 05 - TOWER MAINTENANCE: 'Bellwether Tower does not broadcast. It RELAYS. The Signal enters at the base and is carried upward. We only ever added the words.'"
+  }
+ ]
+}

@@ -1,0 +1,128 @@
+{
+ "id": "bw_house_b",
+ "name": "HISTORIAN'S HOUSE",
+ "w": 7,
+ "h": 6,
+ "base": "wood",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "carpet_r",
+   "x": 2,
+   "y": 2,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "S": "shelf",
+    "Y": "plant",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "L": "lab_machine",
+    "q": "table",
+    "h": "pipe_h",
+    "u": "vault",
+    "O": "statue",
+    "e": "channel",
+    "y": "channel_dry"
+   },
+   "rows": [
+    "WWwWWWW",
+    ".SSSSS.",
+    "....Y..",
+    "t.....t"
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     3,
+     5
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 3,
+   "y": 5,
+   "to": "bellwether",
+   "tx": 37,
+   "ty": 12,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "historian",
+   "x": 4,
+   "y": 3,
+   "look": "vale",
+   "dir": "left",
+   "name": "HISTORIAN",
+   "scripts": [
+    {
+     "when": {
+      "flag": "node_2_complete"
+     },
+     "run": "historian_after"
+    },
+    {
+     "run": "historian"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "lore",
+   "x": 3,
+   "y": 1,
+   "id": "lore_hist",
+   "text": "LORE LOG 06 - HISTORIAN'S MARGINALIA: 'The towers were built in a single decade by people who left no names. Not 'lost' names. No names. The blueprints are signed with a symbol I cannot draw twice the same way.'"
+  },
+  {
+   "type": "sign",
+   "x": 1,
+   "y": 1,
+   "text": "Shelves of books about towers. The spines all say 'TOWERS'. The covers all say 'TOWERS'. The insides say 'TOWERS' in many typefaces."
+  },
+  {
+   "type": "sign",
+   "x": 5,
+   "y": 1,
+   "text": "Maps of the Velora Region with no scale. Every town has a small circle drawn around it. One circle is drawn around a patch of sea."
+  }
+ ]
+}

@@ -37,7 +37,7 @@ function statusScore(b: Battle, f: Fighter, foe: Fighter, moveId: string): numbe
 export function chooseAction(b: Battle, side: Side): Action {
   const f = b.fighter(side); const foe = b.foe(side);
   const usable = b.usable(f);
-  if (usable.length === 0) return { t: 'move', i: 0 };
+  if (usable.length === 0) return { t: 'struggle' };
   const level = side === 'e' ? b.cfg.ai : 'basic';
   if (level === 'random') return { t: 'move', i: usable[(b.rand() * usable.length) | 0] };
   const hpF = f.mon.hp / maxHp(f.mon);

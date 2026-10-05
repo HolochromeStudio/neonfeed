@@ -16,6 +16,7 @@ import { bagMenu, shopMenu } from '../ui/bag';
 import { dexMenu, questMenu, mapMenu, debuggerMenu } from '../ui/info';
 import { openOptions, saveMenu } from '../ui/options';
 import { playEvolution } from '../ui/evolution';
+import { radioMenu, numberEntry } from '../ui/devices';
 import { rng } from '../gfx/pen';
 import type { BattleConfig } from '../battle/engine';
 
@@ -229,7 +230,7 @@ export class WorldScene extends Phaser.Scene {
     // clock + playtime
     this.clockAcc += dtRaw;
     if (this.clockAcc > 2500) { this.clockAcc = 0; if (!this.def.freezeTime) G.s.clock++; if (G.s.clock % 30 === 0) this.updateTint(); }
-    if (this.dirty && !this.moveInProgress()) { this.rebuildTiles(); this.sparkleRefresh(); this.actors.forEach((a) => { if (!a.isPlayer) this.applyNpcVisibility(a); }); this.refreshObjects(); this.setupCameraKeep(); }
+    if (this.dirty && !this.moveInProgress()) { this.rebuildTiles(); this.ensurePlayerFree(); this.sparkleRefresh(); this.actors.forEach((a) => { if (!a.isPlayer) this.applyNpcVisibility(a); }); this.refreshObjects(); this.setupCameraKeep(); }
     // weather
     if (this.weather === 'rain') for (const r of this.rain) { r.y += dt * 0.25; r.x -= dt * 0.06; if (r.y > 164) { r.y = -6; r.x = Math.random() * 260; } }
     // static storm: pixel-authentic tearing bars
@@ -248,6 +249,12 @@ export class WorldScene extends Phaser.Scene {
     if (this.turnCd > 0) this.turnCd -= dt;
     const d: Dir | null = Input.isDown('up') ? 'up' : Input.isDown('down') ? 'down' : Input.isDown('left') ? 'left' : Input.isDown('right') ? 'right' : null;
     if (d) this.tryMove(d);
+  }
+  /** If a rebuild (time-of-day path change, puzzle) put solid terrain under the player, nudge them to the nearest free tile. */
+  ensurePlayerFree() {
+    const p = this.player; if (!isSolidAt(this.cm, p.tx, p.ty)) return;
+    const w = this.cm.w, h = this.cm.h; const seen = new Set<number>([p.ty * w + p.tx]); const q: [number, number][] = [[p.tx, p.ty]];
+    while (q.length) { const [x, y] = q.shift()!; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= w || ny >= h || seen.has(ny * w + nx)) continue; seen.add(ny * w + nx); if (!isSolidAt(this.cm, nx, ny) && !this.actorAt(nx, ny)) { p.tx = nx; p.ty = ny; p.spr.setPosition(nx * T + 8, ny * T + 17); p.shadow.setPosition(nx * T + 8, ny * T + 16); return; } q.push([nx, ny]); } }
   }
   moveInProgress() { return this.player.moving || this.busy; }
   setupCameraKeep() { /* camera keeps following */ }
@@ -417,6 +424,7 @@ export class WorldScene extends Phaser.Scene {
   entryAllowed(e: any) {
     if (e.time && !e.time.includes(timeOfDay())) return false;
     if (e.weather && !e.weather.includes(this.weather)) return false;
+    if (e.needs && !cond(e.needs)) return false;
     return true;
   }
   pickWeighted(pool: any[]) { let tot = pool.reduce((s, e) => s + e.w, 0); let r = Math.random() * tot; for (const e of pool) { r -= e.w; if (r <= 0) return e; } return pool[0]; }
@@ -473,8 +481,7 @@ export class WorldScene extends Phaser.Scene {
   // ---------- sparkles for hidden scan points ----------
   sparkleRefresh() { this.sparkles.forEach((s) => s.destroy()); this.sparkles = []; }
   sparkleUpdate() {
-    if (!flag('has_scan')) return;
-    const objs = (this.def.objects ?? []).filter((o: any) => o.type === 'scan' && !flag(this.objFlag(o)) && (o.when === undefined || cond(o.when)));
+    const objs = (this.def.objects ?? []).filter((o: any) => ((o.type === 'scan' && flag('has_scan')) || (o.type === 'freq' && flag('has_freq'))) && !flag(this.objFlag(o)) && (o.when === undefined || cond(o.when)));
     if (this.sparkles.length !== objs.length) { this.sparkles.forEach((s) => s.destroy()); this.sparkles = objs.map((o: any) => this.add.image(o.x * T + 8, o.y * T + 8, 'sparkle').setDepth(500).setVisible(false)); }
     objs.forEach((o: any, i: number) => { const d = Math.abs(o.x - this.player.tx) + Math.abs(o.y - this.player.ty); const s = this.sparkles[i]; s.setVisible(d <= 4 && (this.time.now % 600 < 400)); });
   }
@@ -491,7 +498,7 @@ export class WorldScene extends Phaser.Scene {
       if (!o) { const here = this.objectAt(p.tx, p.ty); if (here && here.type === 'scan') o = here; }
       if (o) { await this.useObject(o); return; }
       // hidden scan adjacent
-      if (flag('has_scan')) for (const so of this.def.objects ?? []) if (so.type === 'scan' && Math.abs(so.x - p.tx) + Math.abs(so.y - p.ty) <= 1 && !flag(this.objFlag(so))) { await this.useObject(so); return; }
+      if (flag('has_scan')) for (const so of this.def.objects ?? []) if ((so.type === 'scan') && Math.abs(so.x - p.tx) + Math.abs(so.y - p.ty) <= 1 && !flag(this.objFlag(so))) { await this.useObject(so); return; }
     } finally { this.lockCount--; Input.clearPressed(); }
   }
   async talkTo(a: Actor) {
@@ -520,6 +527,33 @@ export class WorldScene extends Phaser.Scene {
         setFlag(f); if (o.counter) incFlag(o.counter);
         if (o.item) { addItem(o.item, o.n ?? 1); Audio.jingle('jingle_item', this.def.bgm); await this.ui.say(`Found ${o.n && o.n > 1 ? o.n + ' ' : 'a '}${ITEMS[o.item].name}!`); }
         if (o.script) await this.runScriptId(o.script);
+        break;
+      }
+      case 'freq': {
+        const f = this.objFlag(o); if (flag(f)) { await this.ui.say('The channel is quiet now.'); break; }
+        if (!flag('has_freq')) { await this.ui.say(o.blind ?? 'An old radio. Only static. Maybe with the right tuning...'); break; }
+        Audio.sfx('glitch'); setFlag(f); this.rebuildTiles();
+        if (o.script) await this.runScriptId(o.script);
+        break;
+      }
+      case 'radio': {
+        await radioMenu(this, this.ui, o.title ?? 'RADIO', o.stations);
+        for (const a of o.after ?? []) if (cond(a.when)) await this.runScriptId(a.run);
+        break;
+      }
+      case 'lore': {
+        const f = `lore_${o.id}`;
+        Audio.sfx('select'); await this.ui.say(o.text, { kind: 'winDark' });
+        if (!flag(f)) { setFlag(f); const n = incFlag('lore_count'); this.ui.toast(`LORE LOG ${n} FOUND`); }
+        break;
+      }
+      case 'keypad': {
+        if (flag(o.flag)) { await this.ui.say(o.done ?? 'The lock is open.'); break; }
+        await this.ui.say(o.text ?? 'A numeric keypad. It wants a code.');
+        const code = await numberEntry(this, this.ui, String(o.code).length, o.title ?? 'ENTER CODE');
+        if (code === null) break;
+        if (code === String(o.code)) { Audio.sfx('door'); setFlag(o.flag); this.rebuildTiles(); this.refreshObjects(); await this.ui.say(o.ok ?? 'Click. The lock opens!'); if (o.script) await this.runScriptId(o.script); }
+        else { Audio.sfx('error'); await this.ui.say(o.fail ?? 'Wrong code. The keypad buzzes.'); }
         break;
       }
       case 'terminal': await this.terminal(o); break;
@@ -813,7 +847,9 @@ export class WorldScene extends Phaser.Scene {
   async confirmQuit() { const L = this.ui.layer(); this.ui.win(L, 40, 60, 160, 36); this.ui.text(L, 50, 68, 'RETURN TO TITLE?', INK); this.ui.text(L, 50, 80, 'UNSAVED PROGRESS IS LOST.', DIM); const c = await this.ui.choose(['NO', 'YES'], { x: 150, y: 96, w: 48 }); L.destroy(); return c === 1; }
 
   // ====================== TINT / DEBUG ======================
+  phase = '';
   updateTint() {
+    const ph = timeOfDay(); if (ph !== this.phase) { if (this.phase) this.dirty = true; this.phase = ph; }
     if (!this.tint) return;
     const indoor = this.def.outdoor === false;
     let col = 0xffffff; const t = timeOfDay();

@@ -1,8 +1,27 @@
 {
-  "mara": {
-    "title": "NODE 1 - BRIARFIELD",
-    "intro": "MARA's Bytekin share a CACHE LINK. Every 2 turns they recover 12% HP - unless LINK Stability drops below 50%.",
-    "rules": [ { "t": "cacheLink", "everyTurns": 2, "pct": 12, "breakBelow": 50 } ],
-    "startStability": 100
-  }
+ "mara": {
+  "title": "NODE 1 - BRIARFIELD",
+  "intro": "MARA's Bytekin share a CACHE LINK. Every 2 turns they recover 12% HP - unless LINK Stability drops below 50%.",
+  "rules": [
+   {
+    "t": "cacheLink",
+    "everyTurns": 2,
+    "pct": 12,
+    "breakBelow": 50
+   }
+  ],
+  "startStability": 100
+ },
+ "sona": {
+  "title": "NODE 2 - BELLWETHER",
+  "intro": "SONA tunes a priority channel: every 3rd turn her Bytekin strike first. Disrupt her SPD with DESYNC or priority moves.",
+  "rules": [
+   {
+    "t": "broadcastFirst",
+    "everyTurns": 3,
+    "text": "SONA tuned a priority channel! Her Bytekin move first!"
+   }
+  ],
+  "startStability": 100
+ }
 }

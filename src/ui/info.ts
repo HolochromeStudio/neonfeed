@@ -179,11 +179,11 @@ export async function debuggerMenu(scene: Phaser.Scene, ui: Ui) {
   ui.text(L, 60, 50, `CREDITS ${G.s.credits}`, GOLD);
   ui.text(L, 60, 60, `BYTEDEX ${d.seen}/${d.total}  OWN ${d.got}`, INK);
   ui.text(L, 60, 70, `WINS ${G.s.stats.wins}/${G.s.stats.battles}  CONTAINED ${G.s.stats.contained}`.slice(0, 29), INK);
-  ui.text(L, 60, 80, `STEPS ${G.s.stats.steps}  ${G.s.settings.difficulty}`, DIM);
+  ui.text(L, 60, 80, `STEPS ${G.s.stats.steps}  LORE ${(G.s.flags.lore_count as number) || 0}  ${G.s.settings.difficulty}`.slice(0, 29), DIM);
   ui.text(L, 10, 92, 'ROOT KEYS', BLUE);
   for (let i = 1; i <= 8; i++) { const have = G.s.bag[`root_key_0${i}`] > 0; ui.rect(L, 10 + (i - 1) * 28, 102, 24, 14, '#1a1830'); ui.rect(L, 11 + (i - 1) * 28, 103, 22, 12, have ? '#38e0e8' : '#d8dcec'); ui.text(L, 19 + (i - 1) * 28, 106, have ? String(i) : '?', have ? INK : DIM); }
   ui.text(L, 10, 122, 'FIELD ABILITIES', BLUE);
-  const ab: [string, boolean][] = [['SCAN', flag('has_scan')], ['PULSE', flag('has_pulse')], ['FREQ', false], ['OVRD', false], ['TRCE', false], ['DCPT', false], ['PHSE', false], ['ANCR', false]];
+  const ab: [string, boolean][] = [['SCAN', flag('has_scan')], ['PULSE', flag('has_pulse')], ['FREQ', flag('has_freq')], ['OVRD', false], ['TRCE', false], ['DCPT', false], ['PHSE', false], ['ANCR', false]];
   ab.forEach(([n, on], i) => ui.text(L, 10 + (i % 4) * 56, 132 + Math.floor(i / 4) * 10, on ? n : '----', on ? GREEN : DIM));
   if (G.s.settings.hints) ui.textR(L, 232, 148, 'B:BACK', DIM);
   await Input.wait(['b', 'a']); Audio.sfx('back'); L.destroy(); void RED; void WHITE; void ABILITIES;

@@ -645,6 +645,10 @@
    "name": "OLD MAN",
    "scripts": [
     {
+     "when": "oldman_resolved",
+     "run": "oldman_r1_resolved"
+    },
+    {
      "when": "relay_done",
      "run": "oldman_r1_after"
     },

@@ -55,7 +55,7 @@ export function cond(c: Cond, ctx?: { time?: string }): boolean {
   if (c.item && !(G.s.bag[c.item] > 0)) return false;
   if (c.keys !== undefined && rootKeys() < c.keys) return false;
   if (c.min && ((flagVal(c.min[0]) as number) || 0) < c.min[1]) return false;
-  if (c.time && ctx?.time && !c.time.includes(ctx.time)) return false;
+  if (c.time && !c.time.includes(ctx?.time ?? timeOfDay())) return false;
   if (c.all && !c.all.every((x) => cond(x, ctx))) return false;
   if (c.any && !c.any.some((x) => cond(x, ctx))) return false;
   return true;
@@ -122,6 +122,7 @@ export function objectiveDone(o: any): boolean {
     case 'wins': return G.s.stats.wins >= o.count;
     case 'party': return G.s.party.some((m) => m.species === o.species);
     case 'beat': return G.s.trainersBeaten.includes(o.trainer);
+    case 'owns': return (G.s.dex[o.species] || 0) >= 2;
     default: return false;
   }
 }

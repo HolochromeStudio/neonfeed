@@ -145,4 +145,10 @@ export const PALETTES: Record<string, Look> = {
   rex: { skin: '#e8b080', hair: '#b43cd8', jacket: '#262c48', pants: '#58586a', style: 'short', accent: '#38e0e8', bag: null },
   nurse: { skin: '#f8d0a8', hair: '#e888b8', jacket: '#f4f4f8', pants: '#f4f4f8', style: 'bun', accent: '#e04848' },
   shadow: { skin: '#2a2a40', hair: '#1a1830', jacket: '#2a2a40', pants: '#2a2a40', style: 'short' },
+  ranger: { skin: '#e8b080', hair: '#6a4426', jacket: '#4a7a58', pants: '#5a4a38', style: 'hat', hat: '#4a7a58', bag: '#c8a868' },
+  broadcaster: { skin: '#c88858', hair: '#8a4ac8', jacket: '#d85aa8', pants: '#262c48', style: 'short', accent: '#f0e070' },
+  sona: { skin: '#8a5a38', hair: '#e8e8f0', jacket: '#3a78d8', pants: '#e8e8f0', style: 'long', accent: '#38e0e8', bag: null },
+  hermit: { skin: '#e8b080', hair: '#e8e8f0', jacket: '#7a5a38', pants: '#58503a', style: 'hat', hat: '#8a6a40', old: true },
+  busker: { skin: '#f8d0a8', hair: '#d84a3a', jacket: '#58b8a8', pants: '#3a3a58', style: 'beanie', hat: '#d84a3a', bag: '#e8b028' },
+  grandpa: { skin: '#f8d0a8', hair: '#e8e8f0', jacket: '#8a7a58', pants: '#58503a', style: 'hat', hat: '#6a5a3a', old: true, bag: '#c85a48' },
 };

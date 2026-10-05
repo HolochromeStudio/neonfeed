@@ -38,7 +38,18 @@ export async function createBot(opts = {}) {
         const wantContain = bot.wantContain && act.wild;
         if (wantContain) { await page.evaluate(() => { const i = window.__input; const seq = ['down', 'right', 'a']; seq.forEach((k, n) => setTimeout(() => { i.press(k); i.release(k); }, n * 80)); }); await P(400); }
         else { await page.evaluate(() => { const i = window.__input; i.press('a'); i.release('a'); }); await P(250); }
-      } else if (act.menu === 'move') { await page.evaluate(() => { const i = window.__input; i.press('a'); i.release('a'); }); await P(250); }
+      } else if (act.menu === 'move') {
+        const plan = await page.evaluate(() => {
+          const b = window.__battle; const mons = b.b.p.mon.moves; const M = window.__dev.MOVES;
+          let best = -1, bp = -1; mons.forEach((m, i) => { const d = M[m.id]; if (m.pp > 0) { const sc = d.cat === 'status' ? 1 : d.power; if (sc > bp) { bp = sc; best = i; } } });
+          return { best, cur: b.lastMove };
+        });
+        if (plan.best < 0) { await page.evaluate(() => { const i = window.__input; i.press('b'); i.release('b'); }); await P(250); return; }
+        const nav = { 0: { right: 1, down: 2 }, 1: { left: 0, down: 3 }, 2: { right: 3, up: 0 }, 3: { left: 2, up: 1 } };
+        const path = (from, to) => { const q = [[from, []]]; const seen = new Set([from]); while (q.length) { const [n, p] = q.shift(); if (n === to) return p; for (const [d, m] of Object.entries(nav[n] || {})) if (!seen.has(m)) { seen.add(m); q.push([m, [...p, d]]); } } return []; };
+        const keys = [...path(plan.cur, plan.best), 'a'];
+        await page.evaluate((keys) => { const i = window.__input; keys.forEach((k, n) => setTimeout(() => { i.press(k); i.release(k); }, n * 170)); }, keys); await P(200 + keys.length * 170);
+      }
     },
     wantContain: false,
     async goto(tx, ty, maxMs = 600000) {

@@ -1,0 +1,132 @@
+{
+ "id": "whisper_cabin",
+ "name": "HERMIT'S CABIN",
+ "w": 7,
+ "h": 6,
+ "base": "wood_dark",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "carpet_r",
+   "x": 2,
+   "y": 2,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "S": "shelf",
+    "Y": "plant",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "L": "lab_machine",
+    "q": "table",
+    "h": "pipe_h",
+    "u": "vault",
+    "O": "statue"
+   },
+   "rows": [
+    "WWwWWWW",
+    ".SqY.SF",
+    ".......",
+    "t......"
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     3,
+     5
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 3,
+   "y": 5,
+   "to": "whisperwood",
+   "tx": 26,
+   "ty": 27,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "hermit",
+   "x": 5,
+   "y": 3,
+   "look": "hermit",
+   "dir": "left",
+   "name": "HERMIT",
+   "scripts": [
+    {
+     "when": {
+      "flag": "oldman_resolved"
+     },
+     "run": "hermit_after"
+    },
+    {
+     "when": {
+      "flag": "oldman_quest"
+     },
+     "run": "hermit_quest"
+    },
+    {
+     "run": "hermit_hello"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "sign",
+   "x": 1,
+   "y": 1,
+   "text": "Shelves of jars. Each jar holds a single tiny thing: a button, a key, a name tag. All of them are labelled 'MINE'."
+  },
+  {
+   "type": "sign",
+   "x": 2,
+   "y": 1,
+   "text": "A photo of a man with a blue bicycle and a little girl. On the back: 'WREN, AGE 6. DON'T FORGET.'"
+  },
+  {
+   "type": "lore",
+   "x": 6,
+   "y": 1,
+   "id": "lore_cabin",
+   "text": "LORE LOG 04 - THE HERMIT'S TALLY: 'Eleven winters, seven springs. The forest remembers me more than I remember it. I write down the names of my visitors so that I can pretend I remember.'"
+  }
+ ]
+}

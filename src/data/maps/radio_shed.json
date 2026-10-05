@@ -1,0 +1,146 @@
+{
+ "id": "radio_shed",
+ "name": "OLD RADIO SHED",
+ "w": 7,
+ "h": 6,
+ "base": "wood_dark",
+ "outdoor": false,
+ "bgm": "relay",
+ "tint": "#c8c0f0",
+ "glitchMusic": true,
+ "noTitle": false,
+ "ops": [
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "S": "shelf",
+    "Y": "plant",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "L": "lab_machine",
+    "q": "table",
+    "h": "pipe_h",
+    "u": "vault",
+    "O": "statue",
+    "e": "channel",
+    "y": "channel_dry"
+   },
+   "rows": [
+    "WWwWWWW",
+    ".MqMqM.",
+    "X.....X",
+    "...Z..."
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     3,
+     5
+    ]
+   ]
+  },
+  {
+   "op": "patch",
+   "l": "g",
+   "t": "glitch_b",
+   "seed": 4,
+   "rect": [
+    1,
+    2,
+    5,
+    3
+   ],
+   "blobs": 2,
+   "r": 1,
+   "onlyOn": [
+    "wood_dark"
+   ],
+   "when": "has_freq"
+  }
+ ],
+ "warps": [
+  {
+   "x": 3,
+   "y": 5,
+   "to": "bellwether",
+   "tx": 35,
+   "ty": 22,
+   "dir": "down"
+  }
+ ],
+ "objects": [
+  {
+   "type": "freq",
+   "x": 1,
+   "y": 1,
+   "flag": "freq_radio1",
+   "script": "freq_radio1",
+   "blind": "An abandoned radio. You hear only static. You get the feeling it hears you."
+  },
+  {
+   "type": "freq",
+   "x": 3,
+   "y": 1,
+   "flag": "freq_radio2",
+   "script": "freq_radio2",
+   "blind": "A second old radio. Static. It seems to be waiting for something."
+  },
+  {
+   "type": "freq",
+   "x": 5,
+   "y": 1,
+   "flag": "freq_radio3",
+   "script": "freq_radio3",
+   "blind": "A third radio. Static. Slightly warmer than the others."
+  },
+  {
+   "type": "freq",
+   "x": 3,
+   "y": 3,
+   "flag": "memlet_spot",
+   "script": "memlet_scan",
+   "when": {
+    "flag": "oldman_quest"
+   },
+   "blind": "A workbench. A faint warmth under the surface, like someone just left."
+  },
+  {
+   "type": "sign",
+   "x": 2,
+   "y": 1,
+   "text": "A table piled with radio parts. A note: 'DO NOT LISTEN TO THE ONE ON THE LEFT.'"
+  },
+  {
+   "type": "sign",
+   "x": 4,
+   "y": 1,
+   "text": "A table piled with manuals. Every manual is open at the same page. The page is blank."
+  }
+ ]
+}

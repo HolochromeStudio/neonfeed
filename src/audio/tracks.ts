@@ -8,7 +8,7 @@ const rep = (n: number, s: string) => Array(n).fill(s).join(' ');
 export const TRACKS: Record<string, Track> = {
   // ---------- TITLE: low, lonely, tower-in-the-distance ----------
   title: { bpm: 84, ch: [
-    { w: 'square', v: 0.07, duty: 0.25, p: '-:8 E5:6 -:2 D5:4 B4:4 -:8 G4:6 -:2 A4:4 B4:4 -:8 E5:6 -:2 G5:4 F#5:4 E5:8 D5:4 B4:4' },
+    { w: 'square', v: 0.07, duty: 0.25, p: '-:8 E5:6 -:2 D5:4 B4:4 -:8 G4:6 -:2 A4:4 B4:4 E5:8 G5:4 F#5:4' },
     { w: 'tri', v: 0.17, p: 'E2:16 C2:16 G2:16 D2:16' },
     { w: 'square', v: 0.035, duty: 0.5, p: 'B3 E4 G4 E4 B3 E4 G4 E4 G3 C4 E4 C4 G3 C4 E4 C4 D3 G3 B3 G3 D3 G3 B3 G3 F#3 A3 D4 A3 F#3 A3 D4 A3' },
   ] },
@@ -27,7 +27,7 @@ export const TRACKS: Record<string, Track> = {
   ] },
   // ---------- BRIARFIELD: pastoral waltz-ish ----------
   briarfield: { bpm: 100, ch: [
-    { w: 'square', v: 0.07, duty: 0.5, p: 'G5:4 E5:2 F5:2 G5:4 A5:4 G5:4 E5:4 D5:4 C5:4 D5:4 E5:2 D5:2 C5:8 -:4 G5:4 E5:2 F5:2 G5:4 C6:4 B5:4 G5:4 A5:4 F5:4 E5:4 D5:4 C5:8 -:4' },
+    { w: 'square', v: 0.07, duty: 0.5, p: 'G5:4 E5:2 F5:2 G5:4 A5:4 G5:4 E5:4 D5:4 C5:4 D5:4 E5:2 D5:2 C5:8 G5:4 E5:2 F5:2 G5:4 C6:4 B5:4 G5:4 A5:4 F5:4 E5:4 D5:4 C5:8' },
     { w: 'tri', v: 0.17, p: 'C3:4 E3:4 G3:4 C3:4 E3:4 G3:4 F3:4 A3:4 C4:4 G3:4 B3:4 D4:4 C3:4 E3:4 G3:4 C3:4 E3:4 G3:4 F3:4 A3:4 C4:4 G3:4 B3:4 D4:4' },
     { w: 'square', v: 0.028, duty: 0.25, p: '-:2 E4:2 G4:2 -:2 E4:2 G4:2 -:2 E4:2 A4:2 -:2 E4:2 A4:2 -:2 D4:2 G4:2 -:2 D4:2 G4:2 -:2 E4:2 G4:2 -:2 E4:2 G4:2' },
   ] },
@@ -38,7 +38,7 @@ export const TRACKS: Record<string, Track> = {
   ] },
   // ---------- OLD RELAY: eerie, sparse, drifting ----------
   relay: { bpm: 76, ch: [
-    { w: 'square', v: 0.05, duty: 0.125, p: '-:8 D5:2 -:2 A4:2 -:6 -:8 C#5:2 -:2 G#4:2 -:6 -:8 F5:2 -:2 C5:2 -:2 D5:2 -:2 -:8 E5:2 -:14' },
+    { w: 'square', v: 0.05, duty: 0.125, p: '-:6 D5:2 -:2 A4:2 -:4 -:6 C#5:2 -:2 G#4:2 -:4 -:6 F5:2 -:2 C5:2 -:2 D5:2 -:6 E5:2 -:8' },
     { w: 'tri', v: 0.17, p: 'D2:16 C#2:16 Bb1:16 A1:16' },
     { w: 'saw', v: 0.018, p: 'D4:16 -:0 C#4:16 Bb3:16 A3:16' },
     { w: 'drum', v: 0.035, p: 'h . . . . . . . h . . . . . h . h . . . . . . . h . . . . . h .' },

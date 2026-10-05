@@ -1,0 +1,119 @@
+{
+ "id": "bw_house_fan",
+ "name": "SPARE HOUSE",
+ "w": 7,
+ "h": 6,
+ "base": "wood",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "carpet_b",
+   "x": 2,
+   "y": 2,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "S": "shelf",
+    "Y": "plant",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "L": "lab_machine",
+    "q": "table",
+    "h": "pipe_h",
+    "u": "vault",
+    "O": "statue",
+    "e": "channel",
+    "y": "channel_dry"
+   },
+   "rows": [
+    "WWwWWWW",
+    ".FKn.SY",
+    "..tt...",
+    "..cc..."
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     3,
+     5
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 3,
+   "y": 5,
+   "to": "bellwether",
+   "tx": 8,
+   "ty": 22,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "bw_cook",
+   "x": 1,
+   "y": 3,
+   "look": "oldlady",
+   "dir": "right",
+   "name": "NEIGHBOR",
+   "scripts": [
+    {
+     "when": "node_2_complete",
+     "run": "bw_cook_after"
+    },
+    {
+     "run": "bw_cook"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "sign",
+   "x": 1,
+   "y": 1,
+   "text": "A fridge with a dial on it. The dial is labelled 'CHILL / WARM / PREVIOUSLY'."
+  },
+  {
+   "type": "sign",
+   "x": 6,
+   "y": 1,
+   "text": "A plant that follows the sun. And occasionally follows you."
+  }
+ ]
+}

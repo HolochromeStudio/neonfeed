@@ -216,7 +216,10 @@ export class BattleScene extends Phaser.Scene {
         Audio.sfx('move');
       }
       this.lastCmd = chosen; L.destroy(); this.menu = '';
-      if (chosen === 0) { const a = await this.moveMenu(); if (a) return a; }
+      if (chosen === 0) {
+        if (!this.b.usable(this.b.p).length) { await this.say(`${displayName(b.p.mon)} has no moves left!`, { auto: 500 }); return { t: 'struggle' }; }
+        const a = await this.moveMenu(); if (a) return a;
+      }
       else if (chosen === 1) {
         const t = await this.partyPick(false); if (t >= 0) return { t: 'switch', to: t };
       } else if (chosen === 2) {

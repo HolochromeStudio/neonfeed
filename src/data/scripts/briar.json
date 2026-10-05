@@ -381,7 +381,7 @@
    "who": "DIR. VOSS"
   },
   {
-   "say": "We're closing the road to Whisperwood while we recalibrate the region's Signal. A temporary measure. Nobody should be hurt by uncertainty.",
+   "say": "We have placed a checkpoint on the south road to Whisperwood while we recalibrate the region's Signal. Registered Debuggers may pass. You are registered. Do try to be seen.",
    "who": "DIR. VOSS"
   },
   {
@@ -437,7 +437,7 @@
    "set": "chapter1_done"
   },
   {
-   "say": "The road to Whisperwood is closed. But Briarfield, Route 01, and every corner you skipped are open. The Signal keeps humming. Explore! You may find more than you expected."
+   "say": "The road south is open to you, registered Debugger. Whisperwood, then Bellwether City. And everything you skipped here is still waiting. The Signal keeps humming."
   }
  ],
  "voss_idle": [
@@ -464,7 +464,7 @@
  ],
  "cs_worker3": [
   {
-   "say": "The road south is closed. Signal maintenance. NO ERRORS. NO UNCERTAINTY.",
+   "say": "Debugger registered. You may pass. NO ERRORS. NO UNCERTAINTY.",
    "who": "CLEAN STATE"
   },
   {

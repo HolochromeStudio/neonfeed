@@ -30,9 +30,10 @@ export type Action =
   | { t: 'item'; id: string; target: number; moveIdx?: number }
   | { t: 'contain'; module?: string }
   | { t: 'run' }
-  | { t: 'struggle' };
+  | { t: 'struggle' }
+  | { t: 'flee' };
 
-export interface BossRule { t: 'cacheLink'; everyTurns: number; pct: number; breakBelow: number }
+export type BossRule = { t: 'cacheLink'; everyTurns: number; pct: number; breakBelow: number } | { t: 'broadcastFirst'; everyTurns: number; text?: string }
 export interface BattleConfig {
   kind: 'wild' | 'trainer' | 'boss';
   player: Bytekin[]; enemy: Bytekin[];
@@ -67,7 +68,7 @@ export class Battle {
   log: BEvent[] = [];
   expGained: Record<string, number> = {};
   pendingLearn: { uid: string; moves: string[] }[] = [];
-  trainerPotions = 1;
+  trainerPotions = 1; priorityTurn = false;
   stabBattleLow: Record<string, boolean> = {};
 
   constructor(cfg: BattleConfig) {
@@ -110,7 +111,9 @@ export class Battle {
     const start = this.log.length;
     if (this.over) return [];
     this.turn++;
-    const eAct = this.cfg.kind === 'wild' && this.e.fleeing ? ({ t: 'struggle' } as Action) : chooseAction(this, 'e');
+    this.priorityTurn = false;
+    for (const r of this.cfg.rules ?? []) if (r.t === 'broadcastFirst' && this.turn % r.everyTurns === 0 && this.e.mon.hp > 0) { this.priorityTurn = true; this.msg(r.text ?? 'The foe tuned to a priority channel!'); this.ev({ k: 'rule', id: 'broadcastFirst' }); }
+    const eAct = this.cfg.kind === 'wild' && this.e.fleeing ? ({ t: 'flee' } as Action) : chooseAction(this, 'e');
     const order = this.order(pAct, eAct);
     for (const [side, act] of order) {
       if (this.over) break;
@@ -136,10 +139,11 @@ export class Battle {
   order(pAct: Action, eAct: Action): [Side, Action][] {
     const pri = (side: Side, a: Action) => {
       if (a.t === 'switch') return 7;
-      if (a.t === 'item' || a.t === 'contain' || a.t === 'run') return 8;
+      if (a.t === 'item' || a.t === 'contain' || a.t === 'run' || a.t === 'flee') return 8;
       if (a.t === 'struggle') return 0;
       const f = this.fighter(side); const mv = MOVES[f.mon.moves[a.i].id];
       let p = mv.pri ?? 0; if (f.mon.ability === 'QUICK_BOOT' && f.turnsOut === 0) p += 1;
+      if (side === 'e' && this.priorityTurn) p += 5;
       return p;
     };
     const items: [Side, Action, number, number][] = [
@@ -157,7 +161,8 @@ export class Battle {
       case 'item': this.useItem(a); return;
       case 'contain': this.attemptContain(a.module); return;
       case 'run': this.attemptRun(); return;
-      case 'struggle': this.doFlee(side); return;
+      case 'flee': this.doFlee(side); return;
+      case 'struggle': this.useStruggle(f); return;
       case 'move': this.useMove(f, a.i); return;
     }
   }
@@ -233,6 +238,16 @@ export class Battle {
   }
 
   // ---- moves ----
+  /** When every move is out of PP: a weak typeless-ish hit that hurts the user. */
+  useStruggle(f: Fighter) {
+    const foe = this.foe(f.side);
+    if (!this.canAct(f)) return;
+    this.msg(`${this.nameOf(f)} has no PP left!`); this.msg(`${this.nameOf(f)} used STRUGGLE!`);
+    this.ev({ k: 'move', side: f.side, move: 'struggle' });
+    const mv = MOVES.struggle;
+    const r = this.dealDamage(f, foe, mv, 'struggle');
+    if (r) { const rec = Math.max(1, Math.floor(maxHp(f.mon) / 4)); this.msg(`${this.nameOf(f)} was hurt by recoil!`); this.applyDamage(f, rec, undefined); }
+  }
   canAct(f: Fighter): boolean {
     const st = f.mon.status;
     if (st === 'FROZEN') {

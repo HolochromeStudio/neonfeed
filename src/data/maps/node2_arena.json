@@ -1,0 +1,106 @@
+{
+ "id": "node2_arena",
+ "name": "BROADCAST ROOM",
+ "w": 11,
+ "h": 10,
+ "base": "metal",
+ "outdoor": false,
+ "bgm": "relay",
+ "battleBg": "node",
+ "tint": "#e0e8ff",
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "metal2",
+   "x": 4,
+   "y": 1,
+   "w": 3,
+   "h": 9
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "L": "lab_machine",
+    "S": "statue"
+   },
+   "rows": [
+    "DDDDDDDDDDD",
+    "CM.ATAAL.MC",
+    "C.........C",
+    "C.........C",
+    "C.........C",
+    "C.........C",
+    "C.........C",
+    "C.........C",
+    "C.........C",
+    "CCCCC.CCCCC"
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 5,
+   "y": 9,
+   "to": "node2_tower",
+   "tx": 7,
+   "ty": 1,
+   "dir": "down"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "boss2",
+   "x": 4,
+   "y": 5,
+   "w": 3,
+   "h": 1,
+   "script": "sona_boss",
+   "when": {
+    "not": "node_2_complete"
+   }
+  }
+ ],
+ "npcs": [
+  {
+   "id": "sona",
+   "x": 5,
+   "y": 2,
+   "look": "sona",
+   "dir": "down",
+   "name": "SONA",
+   "scripts": [
+    {
+     "when": "node_2_complete",
+     "run": "sona_after"
+    },
+    {
+     "run": "sona_boss"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "terminal",
+   "x": 5,
+   "y": 1,
+   "text": "The Node 2 broadcast terminal. Status: TOWER CARRIER: SYNCED. LOOP INTEGRITY: 100%."
+  }
+ ]
+}

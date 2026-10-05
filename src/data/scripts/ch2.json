@@ -1,0 +1,782 @@
+{
+ "r2_kid": [
+  {
+   "say": "I tried to follow the stream to its end. It ended where it started. I'm still deciding whether that counts.",
+   "who": "KID"
+  }
+ ],
+ "r2_kid_after": [
+  {
+   "say": "The radios in Bellwether stopped repeating themselves. Now they repeat other people. It's worse.",
+   "who": "KID"
+  }
+ ],
+ "ww_loop_npc": [
+  {
+   "inc": "ww_loop_n"
+  },
+  {
+   "if": {
+    "min": [
+     "ww_loop_n",
+     4
+    ]
+   },
+   "then": [
+    {
+     "say": "...I said that already, didn't I?",
+     "who": "RANGER"
+    }
+   ],
+   "else": [
+    {
+     "if": {
+      "min": [
+       "ww_loop_n",
+       2
+      ]
+     },
+     "then": [
+      {
+       "say": "The trail goes left. The trail goes left.",
+       "who": "RANGER"
+      },
+      {
+       "say": "Sorry. The trail goes left.",
+       "who": "RANGER"
+      }
+     ],
+     "else": [
+      {
+       "say": "The trail goes left. Keep to the trail. The trail goes left.",
+       "who": "RANGER"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "ww_wanderer": [
+  {
+   "say": "The sign said 'BELLWETHER 3 KM'. Then I turned around. Now it says 'BELLWETHER 3 KM'. From the other side.",
+   "who": "WANDERER"
+  },
+  {
+   "say": "I would like to go home. Do you know where that is? I will believe you.",
+   "who": "WANDERER"
+  }
+ ],
+ "ww_sign_loop": [
+  {
+   "inc": "ww_sign_n"
+  },
+  {
+   "if": {
+    "min": [
+     "ww_sign_n",
+     3
+    ]
+   },
+   "then": [
+    {
+     "say": "The sign now reads: 'YOU HAVE READ THIS BEFORE.' You have."
+    }
+   ],
+   "else": [
+    {
+     "if": {
+      "min": [
+       "ww_sign_n",
+       2
+      ]
+     },
+     "then": [
+      {
+       "say": "The sign reads: 'WHISPERWOOD: STILL HERE.'"
+      }
+     ],
+     "else": [
+      {
+       "say": "The sign reads: 'WHISPERWOOD. PLEASE DO NOT SIGN THIS SIGN.'"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "echolet_event": [
+  {
+   "set": "echolet_vis"
+  },
+  {
+   "rebuild": true
+  },
+  {
+   "glitch": 300
+  },
+  {
+   "say": "In the middle of the clearing, a small violet shape drifts out of the air. It has no face. It has the idea of one."
+  },
+  {
+   "say": "It tilts toward you, as if listening."
+  },
+  {
+   "say": "It repeats the last thing you thought of, a few seconds late.",
+   "who": "ECHOLET"
+  },
+  {
+   "glitch": 400
+  },
+  {
+   "shake": 300
+  },
+  {
+   "say": "The Echolet is gone. Where it hovered, the grass has been written over with a faint, glowing line of text. It reads: 'COME BACK AT NIGHT.'"
+  },
+  {
+   "set": "echolet_gone"
+  },
+  {
+   "quest": "start",
+   "id": "side_echo"
+  },
+  {
+   "rebuild": true
+  }
+ ],
+ "echolet_poke": [
+  {
+   "say": "Nothing is there. A shimmer, maybe. The grass here has been written over, then erased."
+  }
+ ],
+ "mira_whisperwood": [
+  {
+   "set": "mira_w_vis"
+  },
+  {
+   "show": "mira",
+   "x": 14,
+   "y": 41,
+   "dir": "up"
+  },
+  {
+   "face": "player",
+   "dir": "down"
+  },
+  {
+   "say": "{p}! I was hoping you'd come through. Did you see the checkpoint? The Clean State relay registers every Debugger and measures its stability. It's marvelous!",
+   "who": "MIRA"
+  },
+  {
+   "move": "mira",
+   "path": "u1",
+   "slow": true
+  },
+  {
+   "say": "They told me it can *contain* corrupted Signal. Safely. Without hurting anything. I'm thinking about helping them calibrate it.",
+   "who": "MIRA"
+  },
+  {
+   "say": "I know what Vale would say. But Vale doesn't say much, does he? That's rather the problem.",
+   "who": "MIRA"
+  },
+  {
+   "say": "Anyway! Battle me. I leveled up my whole team on the Millstream stream trout. They're not trout. It's complicated.",
+   "who": "MIRA"
+  },
+  {
+   "battle": "mira_3",
+   "skipPre": true,
+   "skipWin": true,
+   "on": {
+    "win": [
+     {
+      "say": "You keep winning with the same face. I'm starting to suspect it's the face.",
+      "who": "MIRA"
+     },
+     {
+      "say": "Okay. Listen. Bellwether's Node. Sona is the Keeper. She won't tell me why people are hearing tomorrow on the radio.",
+      "who": "MIRA"
+     },
+     {
+      "say": "She'll tell you. People tell you things. I don't know why. Go on. I'll catch up.",
+      "who": "MIRA"
+     },
+     {
+      "give": "patch_kit_l",
+      "n": 2
+     },
+     {
+      "move": "mira",
+      "path": "d2",
+      "fast": true
+     },
+     {
+      "hide": "mira"
+     },
+     {
+      "unset": "mira_w_vis"
+     },
+     {
+      "set": "mira_3_done"
+     }
+    ]
+   }
+  },
+  {
+   "unset": "mira_w_vis"
+  }
+ ],
+ "hermit_hello": [
+  {
+   "say": "Have we met?",
+   "who": "HERMIT"
+  },
+  {
+   "say": "No. No, I'd remember. I write everyone down. Sit, if you like. The tea is as old as the forest.",
+   "who": "HERMIT"
+  },
+  {
+   "say": "The tea is not actually old. I just say that.",
+   "who": "HERMIT"
+  }
+ ],
+ "hermit_quest": [
+  {
+   "say": "Have we... oh. You've met him. The other one. The old man who says what I say.",
+   "who": "HERMIT"
+  },
+  {
+   "say": "I am the original. Blue bicycle. A daughter named Wren. A cabin in a wood. He has the same memories, except his bicycle is RED. A copy keeps the shape and gets the colours wrong.",
+   "who": "HERMIT"
+  },
+  {
+   "say": "An ARCHIVE bug has been copying my memories since spring. It lives in Bellwether, in the old radio shed. I can hear it when the wind is right. I can't make out what it says.",
+   "who": "HERMIT"
+  },
+  {
+   "say": "You'd need to hear the Signal's hidden layer. The Bellwether Keeper might have a way. Once you do... find the little archive. Ask it, kindly, to stop copying me.",
+   "who": "HERMIT"
+  },
+  {
+   "set": "oldman_cabin"
+  }
+ ],
+ "hermit_after": [
+  {
+   "say": "Have we met? ...Ah. We have. The copies have gone quiet. I can remember my own bicycle again. It's blue. It was always blue.",
+   "who": "HERMIT"
+  }
+ ],
+ "bw_arrive": [
+  {
+   "set": "visited_bellwether"
+  },
+  {
+   "bgm": "route"
+  },
+  {
+   "say": "You can hear the tower before you see it: a long note, like a finger on the rim of a glass."
+  }
+ ],
+ "oldman_bw": [
+  {
+   "say": "Have we met?",
+   "who": "OLD MAN"
+  },
+  {
+   "say": "...No? Funny. I feel like we've met on a road somewhere. A different road. Several roads.",
+   "who": "OLD MAN"
+  },
+  {
+   "say": "My name is... I'm sure it's the same as the one I had earlier. Do you know me? I live in a cabin in a wood. I think. I'm also here.",
+   "who": "OLD MAN"
+  },
+  {
+   "ask": "Would you look into it? I'd like to know which of me is real.",
+   "yes": [
+    {
+     "quest": "start",
+     "id": "side_oldman"
+    },
+    {
+     "set": "oldman_quest"
+    },
+    {
+     "say": "Thank you. If you find the one in the cabin, ask about the bicycle. Mine is red. I'm sure it's red.",
+     "who": "OLD MAN"
+    }
+   ],
+   "no": [
+    {
+     "say": "I understand. It's not every day one asks a stranger about oneself.",
+     "who": "OLD MAN"
+    }
+   ]
+  }
+ ],
+ "oldman_bw_quest": [
+  {
+   "if": {
+    "flag": "memlet_found"
+   },
+   "then": [
+    {
+     "say": "Have we met? ...Yes! Yes. I remember you. I was looking for you. I'm... the copy, aren't I? The red bicycle.",
+     "who": "OLD MAN"
+    },
+    {
+     "say": "The archive bug is with you? Good. Take care of it. It meant well. It copied what it loved. It just didn't know it should stop.",
+     "who": "OLD MAN"
+    },
+    {
+     "say": "I think I'll fade now. Not in a sad way. In the way a reflection leaves a puddle. Tell the man in the wood the bicycle is blue.",
+     "who": "OLD MAN"
+    },
+    {
+     "set": "oldman_resolved"
+    },
+    {
+     "credits": 600
+    },
+    {
+     "give": "full_patch",
+     "n": 2
+    },
+    {
+     "hide": "oldman_bw"
+    }
+   ],
+   "else": [
+    {
+     "say": "Have we met? ...I've asked you that, haven't I. Find the cabin in the wood. Find the one with the blue bicycle.",
+     "who": "OLD MAN"
+    }
+   ]
+  }
+ ],
+ "oldman_bw_after": [
+  {
+   "say": "Have we met? ...Ah. Yes. The little archive. Thank you. I remember now.",
+   "who": "OLD MAN"
+  }
+ ],
+ "bw_res1": [
+  {
+   "say": "The tower's been humming a half-step flat all week. I've started humming along flat. It's a relief.",
+   "who": "RESIDENT"
+  }
+ ],
+ "bw_res1_after": [
+  {
+   "say": "The humming stopped drifting. It feels... fixed. The kind of fixed that's quiet, not the kind that's tidy.",
+   "who": "RESIDENT"
+  }
+ ],
+ "bw_res2": [
+  {
+   "say": "My radio says tomorrow's weather. Then it's tomorrow. Then it says yesterday's. I don't need a forecast. I need a vacation.",
+   "who": "RESIDENT"
+  }
+ ],
+ "bw_res2_after": [
+  {
+   "say": "The radio's back to being wrong about the weather the normal way. I missed that.",
+   "who": "RESIDENT"
+  }
+ ],
+ "bw_clean_npc": [
+  {
+   "say": "Clean State field team. We're measuring the tower's carrier drift. It's within the usual range.",
+   "who": "CLEAN STATE"
+  },
+  {
+   "say": "Usual range is zero. We're proud.",
+   "who": "CLEAN STATE"
+  }
+ ],
+ "bw_clean2_npc": [
+  {
+   "say": "The marsh road is closed. Flooding. We have installed pumps. The pumps are installed. Do not ask what they are pumping.",
+   "who": "CLEAN STATE"
+  }
+ ],
+ "bw_hub_clerk": [
+  {
+   "say": "Welcome to the BELLWETHER HUB. Everything is in stock. Mostly. Technically.",
+   "who": "CLERK"
+  },
+  {
+   "shop": "bellwether_hub"
+  },
+  {
+   "say": "Come again. We're open until the radio says we're closed.",
+   "who": "CLERK"
+  }
+ ],
+ "radiofan_start": [
+  {
+   "say": "Shh! The kitchen radio! It's the best in town. It plays three stations that I'm sure are the same station.",
+   "who": "RADIO FAN"
+  },
+  {
+   "say": "I'm trying to catalogue them but I keep falling asleep. Would you listen to the three stations for me? 91.7, 97.3, and 101.5. The radio's right there.",
+   "who": "RADIO FAN"
+  },
+  {
+   "ask": "Will you tune in for me?",
+   "yes": [
+    {
+     "quest": "start",
+     "id": "side_radio"
+    },
+    {
+     "set": "radio_quest"
+    }
+   ],
+   "no": [
+    {
+     "say": "Fair. I'd say 'it's a lot', but it's three stations.",
+     "who": "RADIO FAN"
+    }
+   ]
+  }
+ ],
+ "radiofan_wait": [
+  {
+   "if": {
+    "flag": [
+     "heard_91.7",
+     "heard_97.3",
+     "heard_101.5"
+    ]
+   },
+   "then": [
+    {
+     "say": "All three?! Let me guess: the third one was about tomorrow.",
+     "who": "RADIO FAN"
+    },
+    {
+     "say": "Thank you! It's not much of a reward. It's a crystal I found in a drain. It hums. I'm told it makes Pingmoths evolve.",
+     "who": "RADIO FAN"
+    },
+    {
+     "give": "signal_crystal",
+     "n": 1
+    },
+    {
+     "credits": 300
+    },
+    {
+     "set": "radio_done"
+    }
+   ],
+   "else": [
+    {
+     "say": "Listen to 91.7, 97.3, and 101.5 on the kitchen radio. Press A to listen, B to turn it off.",
+     "who": "RADIO FAN"
+    }
+   ]
+  }
+ ],
+ "radiofan_done": [
+  {
+   "say": "The third station says tomorrow it rains. Today it's raining. I like to think the forecast is a long-term commitment.",
+   "who": "RADIO FAN"
+  }
+ ],
+ "historian": [
+  {
+   "say": "Ah, a visitor. Do you know why Bellwether's tower is the tallest in Velora? Because the others are shorter. That's the whole answer.",
+   "who": "HISTORIAN"
+  },
+  {
+   "say": "But also: the towers are not decorations. They are *maintenance*. For what, my sources are... consistent and silent.",
+   "who": "HISTORIAN"
+  },
+  {
+   "say": "Read the logs. Collect them. If you're curious, they're all over the region.",
+   "who": "HISTORIAN"
+  }
+ ],
+ "historian_after": [
+  {
+   "say": "Node 2 has been restored? Then the tower is one step closer to remembering what it was built for. I hope it's something kind.",
+   "who": "HISTORIAN"
+  }
+ ],
+ "bw_cook": [
+  {
+   "say": "I made soup. The soup tastes like yesterday's soup. It was good yesterday.",
+   "who": "NEIGHBOR"
+  }
+ ],
+ "bw_cook_after": [
+  {
+   "say": "The soup tastes like today's soup now. It isn't as good as yesterday's. But it's today's. I'll take it.",
+   "who": "NEIGHBOR"
+  }
+ ],
+ "freq_radio1": [
+  {
+   "glitch": 300
+  },
+  {
+   "say": "FREQUENCY: the static parts like a curtain. A voice, clear as glass, reads a date:",
+   "kind": "winDark"
+  },
+  {
+   "say": "DAY 1882.",
+   "kind": "winDark"
+  },
+  {
+   "say": "ZERO STATE TEST FAILED.",
+   "kind": "winDark"
+  },
+  {
+   "say": "DO NOT ACTIVATE THE-",
+   "kind": "winDark"
+  },
+  {
+   "say": "The transmission cuts out. The timestamp on the dial reads twenty years in the future."
+  },
+  {
+   "set": "future_broadcast"
+  },
+  {
+   "text": "A broadcast from the future..."
+  }
+ ],
+ "freq_radio2": [
+  {
+   "glitch": 250
+  },
+  {
+   "say": "FREQUENCY: a man's voice, very tired: 'We told them the Signal wasn't a machine. They built a machine around it anyway.'",
+   "kind": "winDark"
+  },
+  {
+   "say": "A second voice, quieter: 'Lena would have understood.'",
+   "kind": "winDark"
+  },
+  {
+   "set": "heard_lena"
+  }
+ ],
+ "freq_radio3": [
+  {
+   "glitch": 250
+  },
+  {
+   "say": "FREQUENCY: only a child's laughter. Then the child says, very clearly: 'You took a long time.' Then the radio turns itself off.",
+   "kind": "winDark"
+  },
+  {
+   "set": "heard_child"
+  }
+ ],
+ "memlet_scan": [
+  {
+   "say": "The workbench is warm. Under the dust, a small cream-coloured shape curls around a half-melted radio dial. It has your face, a little."
+  },
+  {
+   "say": "It is very sorry. It would like to stop. It does not know how.",
+   "who": "MEMLET"
+  },
+  {
+   "battle": "wild",
+   "species": "memlet",
+   "level": 16,
+   "on": {
+    "contained": [
+     {
+      "set": "memlet_found"
+     }
+    ],
+    "win": [
+     {
+      "unset": "memlet_spot"
+     }
+    ],
+    "ran": [
+     {
+      "unset": "memlet_spot"
+     }
+    ],
+    "fled": [
+     {
+      "unset": "memlet_spot"
+     }
+    ]
+   }
+  }
+ ],
+ "node2_enter": [
+  {
+   "bgm": "indoor"
+  },
+  {
+   "say": "You're the Debugger. Mara sent word. Good.",
+   "who": "SONA"
+  },
+  {
+   "say": "I'm SONA. Keeper of Node 2. Bellwether's tower doesn't broadcast. It relays. Signal comes in at the base, the antenna carries it up, and the radios in town speak it out.",
+   "who": "SONA"
+  },
+  {
+   "say": "For a month, they've been speaking *tomorrow*. The tower is carrying a signal from ahead of itself, and it can't be switched off.",
+   "who": "SONA"
+  },
+  {
+   "say": "The transmitter needs tuning. The room is behind a maintenance hatch. The hatch code is whatever the tower says when nobody asks. Use the console. Listen.",
+   "who": "SONA"
+  },
+  {
+   "say": "My apprentices are in the way. Battle them if they spot you. They take 'trespasser' very seriously.",
+   "who": "SONA"
+  },
+  {
+   "set": "met_sona"
+  }
+ ],
+ "sona_station": [
+  {
+   "if": {
+    "flag": "node2_power"
+   },
+   "then": [
+    {
+     "say": "The antenna's singing. Come up. I'll be waiting.",
+     "who": "SONA"
+    }
+   ],
+   "else": [
+    {
+     "say": "Stuck? The console: 104.2. The transmitter: 95.5. The hatch: three digits.",
+     "who": "SONA"
+    },
+    {
+     "say": "Listen to the numbers station. Press A on the console. It tells you everything twice, which is how you know it's honest.",
+     "who": "SONA"
+    }
+   ]
+  }
+ ],
+ "node2_tuned_ok": [
+  {
+   "set": "node2_power"
+  },
+  {
+   "sfx": "power"
+  },
+  {
+   "shake": 700
+  },
+  {
+   "flash": 300
+  },
+  {
+   "rebuild": true
+  },
+  {
+   "say": "Far below, every cable in the tower sings the same note. The carrier locks. A heavy gate at the top of the tower slides open."
+  }
+ ],
+ "sona_boss": [
+  {
+   "if": {
+    "flag": "node_2_complete"
+   },
+   "then": [
+    {
+     "run": "sona_after"
+    },
+    {
+     "end": true
+    }
+   ]
+  },
+  {
+   "say": "Welcome to the Broadcast Room, {p}.",
+   "who": "SONA"
+  },
+  {
+   "say": "My Bytekin are tuned to a priority channel. Every third turn they move first. It isn't cheating. It's *bandwidth*.",
+   "who": "SONA"
+  },
+  {
+   "say": "Slow them down. DESYNC, priority moves, or good old speed. Let's see what you've got!",
+   "who": "SONA"
+  },
+  {
+   "battle": "sona",
+   "skipPre": true,
+   "skipWin": true,
+   "on": {
+    "win": [
+     {
+      "say": "The carrier is clear. You earned this.",
+      "who": "SONA"
+     },
+     {
+      "give": "root_key_02",
+      "n": 1,
+      "key": true
+     },
+     {
+      "say": "That's ROOT KEY 02. And with it, a new ability for your Debugger.",
+      "who": "SONA"
+     },
+     {
+      "give": "freq_module",
+      "n": 1,
+      "key": true
+     },
+     {
+      "set": "has_freq"
+     },
+     {
+      "say": "FREQUENCY. Your Debugger can hear the hidden layer of the Signal. Old radios will talk to you. Some of what they say is... dangerous. Some of it is us, from later.",
+      "who": "SONA"
+     },
+     {
+      "sfx": "pulse"
+     },
+     {
+      "flash": 300
+     },
+     {
+      "say": "There's an old radio shed on the east side of town. It's been condemned for six years. I think the radios inside have been trying to tell me something. I never had the right ears.",
+      "who": "SONA"
+     },
+     {
+      "say": "Try them. Listen to everything. Even the ones that sound like you.",
+      "who": "SONA"
+     },
+     {
+      "set": "node_2_complete"
+     }
+    ]
+   }
+  }
+ ],
+ "sona_after": [
+  {
+   "say": "Listen to the old radios. Please. And {p}... be careful who you tell.",
+   "who": "SONA"
+  },
+  {
+   "ask": "Need patching up?",
+   "yes": [
+    {
+     "heal": true
+    },
+    {
+     "say": "There. Tuned.",
+     "who": "SONA"
+    }
+   ],
+   "no": []
+  }
+ ]
+}

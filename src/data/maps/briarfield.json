@@ -339,7 +339,15 @@
     32,
     2
    ],
-   "count": 14
+   "count": 14,
+   "keep": [
+    [
+     14,
+     26,
+     4,
+     3
+    ]
+   ]
   },
   {
    "op": "scatter",
@@ -461,15 +469,6 @@
    ]
   },
   {
-   "op": "fill",
-   "l": "o",
-   "t": "fence_h",
-   "x": 13,
-   "y": 26,
-   "w": 5,
-   "h": 1
-  },
-  {
    "op": "set",
    "l": "o",
    "t": "flowerbox",
@@ -516,6 +515,70 @@
    "when": {
     "flag": "node_1_complete"
    }
+  },
+  {
+   "op": "fill",
+   "l": "o",
+   "t": "fence_h",
+   "x": 13,
+   "y": 26,
+   "w": 5,
+   "h": 1,
+   "when": {
+    "not": "chapter1_done"
+   }
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 15,
+   "y": 27,
+   "w": 2,
+   "h": 2,
+   "when": "chapter1_done"
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "tree",
+   "pts": [
+    [
+     15,
+     29
+    ],
+    [
+     16,
+     29
+    ]
+   ],
+   "when": {
+    "not": "chapter1_done"
+   }
+  },
+  {
+   "op": "clear",
+   "x": 15,
+   "y": 29,
+   "w": 2,
+   "h": 1,
+   "when": "chapter1_done"
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "path",
+   "pts": [
+    [
+     15,
+     29
+    ],
+    [
+     16,
+     29
+    ]
+   ],
+   "when": "chapter1_done"
   }
  ],
  "warps": [
@@ -566,6 +629,24 @@
    "tx": 6,
    "ty": 14,
    "dir": "up"
+  },
+  {
+   "x": 15,
+   "y": 29,
+   "to": "route_02",
+   "tx": 11,
+   "ty": 1,
+   "dir": "down",
+   "when": "chapter1_done"
+  },
+  {
+   "x": 16,
+   "y": 29,
+   "to": "route_02",
+   "tx": 12,
+   "ty": 1,
+   "dir": "down",
+   "when": "chapter1_done"
   }
  ],
  "triggers": [
@@ -735,7 +816,7 @@
   {
    "id": "cs3",
    "x": 17,
-   "y": 25,
+   "y": 24,
    "look": "clean",
    "dir": "up",
    "move": "none",
@@ -810,7 +891,7 @@
    "type": "sign",
    "x": 14,
    "y": 25,
-   "text": "ROAD TO WHISPERWOOD (SOUTH).",
+   "text": "ROAD TO WHISPERWOOD (SOUTH). A Clean State checkpoint stands here. Registered Debuggers may pass once the Node is restored.",
    "when": {
     "not": "node_1_complete"
    }
@@ -819,7 +900,7 @@
    "type": "sign",
    "x": 14,
    "y": 25,
-   "text": "CLEAN STATE NOTICE: Signal maintenance in progress. The Whisperwood road is CLOSED until further notice. NO ERRORS. NO UNCERTAINTY.",
+   "text": "CLEAN STATE CHECKPOINT: Registered Debuggers may pass. Please do not bring any uncertainty with you. WHISPERWOOD / BELLWETHER.",
    "when": {
     "flag": "node_1_complete"
    }

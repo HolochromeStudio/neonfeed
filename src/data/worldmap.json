@@ -1,18 +1,182 @@
 {
-  "w": 224, "h": 112,
-  "locations": [
-    { "id": "rivermoor", "name": "RIVERMOOR", "x": 30, "y": 90, "kind": "town", "maps": ["player_house_1f","player_house_2f","rivermoor","mira_house","vale_lab","rivermoor_mart","old_relay_1","old_relay_2","old_relay_core"] },
-    { "id": "route1", "name": "ROUTE 01 GREENLINE", "x": 40, "y": 70, "kind": "route", "maps": ["route_01","drainage_pipe_01"] },
-    { "id": "briarfield", "name": "BRIARFIELD", "x": 56, "y": 52, "kind": "town", "maps": ["briarfield","briarfield_hub","briar_house","briarfield_barn","node1_station","node1_arena"] },
-    { "id": "whisperwood", "name": "WHISPERWOOD", "x": 82, "y": 36, "kind": "route", "maps": [] },
-    { "id": "bellwether", "name": "BELLWETHER CITY", "x": 112, "y": 24, "kind": "town", "maps": [] },
-    { "id": "marsh", "name": "STATIC MARSH", "x": 118, "y": 54, "kind": "route", "maps": [] },
-    { "id": "port", "name": "PORT CIRCUIT", "x": 160, "y": 56, "kind": "town", "maps": [] },
-    { "id": "morrow", "name": "MORROWVALE", "x": 92, "y": 78, "kind": "town", "maps": [] },
-    { "id": "neonford", "name": "NEONFORD", "x": 132, "y": 88, "kind": "town", "maps": [] },
-    { "id": "relay", "name": "MOUNT RELAY", "x": 178, "y": 26, "kind": "town", "maps": [] },
-    { "id": "nullcoast", "name": "NULL COAST", "x": 200, "y": 74, "kind": "town", "maps": [] },
-    { "id": "isle", "name": "RECURSION ISLE", "x": 206, "y": 100, "kind": "town", "maps": [] }
+ "w": 224,
+ "h": 112,
+ "locations": [
+  {
+   "id": "rivermoor",
+   "name": "RIVERMOOR",
+   "x": 30,
+   "y": 90,
+   "kind": "town",
+   "maps": [
+    "player_house_1f",
+    "player_house_2f",
+    "rivermoor",
+    "mira_house",
+    "vale_lab",
+    "rivermoor_mart",
+    "old_relay_1",
+    "old_relay_2",
+    "old_relay_core"
+   ]
+  },
+  {
+   "id": "route1",
+   "name": "ROUTE 01 GREENLINE",
+   "x": 40,
+   "y": 70,
+   "kind": "route",
+   "maps": [
+    "route_01",
+    "drainage_pipe_01"
+   ]
+  },
+  {
+   "id": "briarfield",
+   "name": "BRIARFIELD",
+   "x": 56,
+   "y": 52,
+   "kind": "town",
+   "maps": [
+    "briarfield",
+    "briarfield_hub",
+    "briar_house",
+    "briarfield_barn",
+    "node1_station",
+    "node1_arena"
+   ]
+  },
+  {
+   "id": "whisperwood",
+   "name": "WHISPERWOOD",
+   "x": 82,
+   "y": 36,
+   "kind": "route",
+   "maps": [
+    "route_02",
+    "whisperwood",
+    "whisper_cabin"
+   ]
+  },
+  {
+   "id": "bellwether",
+   "name": "BELLWETHER CITY",
+   "x": 112,
+   "y": 24,
+   "kind": "town",
+   "maps": [
+    "bellwether",
+    "bellwether_hub",
+    "bw_house_a",
+    "bw_house_b",
+    "bw_house_fan",
+    "radio_shed",
+    "node2_tower",
+    "node2_transmitter",
+    "node2_arena"
+   ]
+  },
+  {
+   "id": "marsh",
+   "name": "STATIC MARSH",
+   "x": 118,
+   "y": 54,
+   "kind": "route",
+   "maps": []
+  },
+  {
+   "id": "port",
+   "name": "PORT CIRCUIT",
+   "x": 160,
+   "y": 56,
+   "kind": "town",
+   "maps": []
+  },
+  {
+   "id": "morrow",
+   "name": "MORROWVALE",
+   "x": 92,
+   "y": 78,
+   "kind": "town",
+   "maps": []
+  },
+  {
+   "id": "neonford",
+   "name": "NEONFORD",
+   "x": 132,
+   "y": 88,
+   "kind": "town",
+   "maps": []
+  },
+  {
+   "id": "relay",
+   "name": "MOUNT RELAY",
+   "x": 178,
+   "y": 26,
+   "kind": "town",
+   "maps": []
+  },
+  {
+   "id": "nullcoast",
+   "name": "NULL COAST",
+   "x": 200,
+   "y": 74,
+   "kind": "town",
+   "maps": []
+  },
+  {
+   "id": "isle",
+   "name": "RECURSION ISLE",
+   "x": 206,
+   "y": 100,
+   "kind": "town",
+   "maps": []
+  }
+ ],
+ "links": [
+  [
+   "rivermoor",
+   "route1"
   ],
-  "links": [["rivermoor","route1"],["route1","briarfield"],["briarfield","whisperwood"],["whisperwood","bellwether"],["bellwether","marsh"],["marsh","port"],["whisperwood","morrow"],["morrow","neonford"],["bellwether","relay"],["port","nullcoast"],["nullcoast","isle"]]
+  [
+   "route1",
+   "briarfield"
+  ],
+  [
+   "briarfield",
+   "whisperwood"
+  ],
+  [
+   "whisperwood",
+   "bellwether"
+  ],
+  [
+   "bellwether",
+   "marsh"
+  ],
+  [
+   "marsh",
+   "port"
+  ],
+  [
+   "whisperwood",
+   "morrow"
+  ],
+  [
+   "morrow",
+   "neonford"
+  ],
+  [
+   "bellwether",
+   "relay"
+  ],
+  [
+   "port",
+   "nullcoast"
+  ],
+  [
+   "nullcoast",
+   "isle"
+  ]
+ ]
 }

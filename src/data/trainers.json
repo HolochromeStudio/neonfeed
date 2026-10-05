@@ -262,5 +262,339 @@
   ],
   "win": "The channels run clean. You earned this.",
   "lose": "Cache cleared. Try again."
+ },
+ "r2_farmer": {
+  "name": "FARMER BRAM",
+  "cls": "FARMER",
+  "look": "farmer",
+  "ai": "basic",
+  "reward": 220,
+  "team": [
+   [
+    "cropclone",
+    13
+   ],
+   [
+    "dripulse",
+    13
+   ]
+  ],
+  "win": "The sprouts voted for you.",
+  "lose": ""
+ },
+ "r2_courier": {
+  "name": "COURIER NELL",
+  "cls": "COURIER",
+  "look": "courier",
+  "ai": "basic",
+  "reward": 240,
+  "team": [
+   [
+    "pigeonet",
+    14
+   ],
+   [
+    "wirelet",
+    13
+   ]
+  ],
+  "win": "Delivered: one loss.",
+  "lose": ""
+ },
+ "r2_hiker": {
+  "name": "HIKER ODO",
+  "cls": "HIKER",
+  "look": "hiker",
+  "ai": "basic",
+  "reward": 270,
+  "team": [
+   [
+    "rustbot",
+    14
+   ],
+   [
+    "trailworm",
+    14
+   ],
+   [
+    "mudbyte",
+    13
+   ]
+  ],
+  "win": "My boots are fine. My pride is not.",
+  "lose": ""
+ },
+ "ww_explorer1": {
+  "name": "RANGER IVY",
+  "cls": "RANGER",
+  "look": "ranger",
+  "ai": "basic",
+  "reward": 290,
+  "team": [
+   [
+    "antlerbit",
+    15
+   ],
+   [
+    "trailworm",
+    15
+   ]
+  ],
+  "win": "The wood let you pass. It does that sometimes.",
+  "lose": ""
+ },
+ "ww_collector": {
+  "name": "COLLECTOR GRUMP",
+  "cls": "COLLECTOR",
+  "look": "grandpa",
+  "ai": "basic",
+  "reward": 310,
+  "team": [
+   [
+    "lumicap",
+    16
+   ],
+   [
+    "rootlurk",
+    16
+   ]
+  ],
+  "win": "I collect rare things. You are now on the list.",
+  "lose": ""
+ },
+ "ww_coder": {
+  "name": "CODER ASHA",
+  "cls": "STREET CODER",
+  "look": "coder",
+  "ai": "smart",
+  "reward": 330,
+  "team": [
+   [
+    "wirelet",
+    16
+   ],
+   [
+    "sporebyte",
+    16
+   ],
+   [
+    "radiopup",
+    16
+   ]
+  ],
+  "win": "Syntax error. In my confidence.",
+  "lose": ""
+ },
+ "ww_hiker2": {
+  "name": "HIKER BRUNO",
+  "cls": "HIKER",
+  "look": "hiker",
+  "ai": "basic",
+  "reward": 300,
+  "team": [
+   [
+    "trailworm",
+    16
+   ],
+   [
+    "antlerbit",
+    16
+   ]
+  ],
+  "win": "The trail told me you'd win.",
+  "lose": ""
+ },
+ "bw_busker": {
+  "name": "BUSKER LUCA",
+  "cls": "BUSKER",
+  "look": "busker",
+  "ai": "basic",
+  "reward": 340,
+  "team": [
+   [
+    "radiopup",
+    17
+   ],
+   [
+    "pigeonet",
+    17
+   ]
+  ],
+  "win": "I'll write a song about this. It will lose.",
+  "lose": ""
+ },
+ "bw_tech": {
+  "name": "TECH MIRO",
+  "cls": "SIGNAL TECH",
+  "look": "tech",
+  "ai": "smart",
+  "reward": 350,
+  "team": [
+   [
+    "wirelet",
+    17
+   ],
+   [
+    "antennox",
+    17
+   ]
+  ],
+  "win": "Signal received. Signal lost.",
+  "lose": ""
+ },
+ "bw_broadcaster": {
+  "name": "HOST VEGA",
+  "cls": "BROADCASTER",
+  "look": "broadcaster",
+  "ai": "smart",
+  "reward": 380,
+  "team": [
+   [
+    "boomtoad",
+    18
+   ],
+   [
+    "radiopup",
+    18
+   ]
+  ],
+  "win": "And that's the news: you won.",
+  "lose": ""
+ },
+ "n2_tech1": {
+  "name": "TECH ARI",
+  "cls": "SIGNAL TECH",
+  "look": "tech",
+  "ai": "basic",
+  "reward": 340,
+  "team": [
+   [
+    "wirelet",
+    17
+   ],
+   [
+    "boomtoad",
+    17
+   ]
+  ],
+  "win": "The code's 409. Oh no. I said that.",
+  "lose": ""
+ },
+ "n2_broadcaster": {
+  "name": "HOST NOVA",
+  "cls": "BROADCASTER",
+  "look": "broadcaster",
+  "ai": "smart",
+  "reward": 370,
+  "team": [
+   [
+    "pigeonet",
+    18
+   ],
+   [
+    "antennox",
+    18
+   ]
+  ],
+  "win": "Back to you in the studio. I am the studio.",
+  "lose": ""
+ },
+ "n2_apprentice": {
+  "name": "APPRENTICE RHO",
+  "cls": "NODE APPRENTICE",
+  "look": "coder",
+  "ai": "basic",
+  "reward": 360,
+  "team": [
+   [
+    "radiopup",
+    18
+   ],
+   [
+    "lumicap",
+    18
+   ]
+  ],
+  "win": "Sona said you'd be good. She undersold it.",
+  "lose": ""
+ },
+ "mira_3": {
+  "name": "MIRA",
+  "cls": "RIVAL",
+  "look": "mira",
+  "ai": "smart",
+  "reward": 700,
+  "win": "...Your Bytekin move like they trust each other. Mine are still learning how.",
+  "lose": "Data does not lie.",
+  "bgm": "battle_rival",
+  "teamBy": {
+   "nullcat": [
+    [
+     "chaincoil",
+     17
+    ],
+    [
+     "wirelet",
+     15
+    ],
+    [
+     "pigeonet",
+     15
+    ]
+   ],
+   "segbyte": [
+    [
+     "datwing",
+     17
+    ],
+    [
+     "wirelet",
+     15
+    ],
+    [
+     "pigeonet",
+     15
+    ]
+   ],
+   "bitbird": [
+    [
+     "voidlynx",
+     17
+    ],
+    [
+     "wirelet",
+     15
+    ],
+    [
+     "pigeonet",
+     15
+    ]
+   ]
+  }
+ },
+ "sona": {
+  "name": "NODE KEEPER SONA",
+  "cls": "NODE KEEPER",
+  "look": "sona",
+  "ai": "smart",
+  "reward": 1100,
+  "team": [
+   [
+    "radiopup",
+    18
+   ],
+   [
+    "datwing",
+    19
+   ],
+   [
+    "tunehound",
+    20
+   ]
+  ],
+  "win": "The carrier is clear. You earned this.",
+  "lose": "Static. Try again.",
+  "bgm": "battle_node",
+  "boss": "sona"
  }
 }

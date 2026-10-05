@@ -1,0 +1,148 @@
+{
+ "id": "bellwether_hub",
+ "name": "BELLWETHER HUB",
+ "w": 9,
+ "h": 8,
+ "base": "tile_floor",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "S": "shelf",
+    "Y": "plant",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "L": "lab_machine",
+    "q": "table",
+    "h": "pipe_h",
+    "u": "vault",
+    "O": "statue",
+    "e": "channel",
+    "y": "channel_dry"
+   },
+   "rows": [
+    "WWwWWwWWW",
+    ".SS...SS.",
+    ".nn.n.nn.",
+    ".........",
+    ".........",
+    "Y.......Y"
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "healpad",
+   "pts": [
+    [
+     3,
+     1
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     4,
+     7
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "vault",
+   "pts": [
+    [
+     7,
+     4
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 4,
+   "y": 7,
+   "to": "bellwether",
+   "tx": 10,
+   "ty": 12,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "nurse",
+   "x": 3,
+   "y": 2,
+   "look": "nurse",
+   "dir": "down",
+   "name": "PATCH NURSE",
+   "scripts": [
+    {
+     "run": "nurse_heal"
+    }
+   ]
+  },
+  {
+   "id": "bw_hub_clerk",
+   "x": 5,
+   "y": 2,
+   "look": "clerk",
+   "dir": "down",
+   "name": "CLERK",
+   "scripts": [
+    {
+     "run": "bw_hub_clerk"
+    }
+   ]
+  },
+  {
+   "id": "bw_hub_fan",
+   "x": 2,
+   "y": 4,
+   "look": "broadcaster",
+   "dir": "right",
+   "move": "look",
+   "name": "LISTENER",
+   "text": "I come here for the lobby music. It never repeats. I have been here for three hours and it still hasn't repeated. Please help."
+  }
+ ],
+ "objects": [
+  {
+   "type": "terminal",
+   "x": 7,
+   "y": 4,
+   "text": "BYTE VAULT TERMINAL.",
+   "rest": true
+  }
+ ]
+}

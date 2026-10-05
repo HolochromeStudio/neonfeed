@@ -733,5 +733,226 @@
   "pp": 30,
   "desc": "Slams into the foe.",
   "fx": []
+ },
+ "resonance": {
+  "name": "RESONANCE",
+  "type": "SIGNAL",
+  "cat": "sys",
+  "power": 85,
+  "acc": 100,
+  "pp": 10,
+  "desc": "Resonates until something gives. Chips Stability.",
+  "fx": [
+   {
+    "t": "stab",
+    "amt": -10
+   }
+  ]
+ },
+ "echo_slam": {
+  "name": "ECHO SLAM",
+  "type": "ARCHIVE",
+  "cat": "hit",
+  "power": 65,
+  "acc": 100,
+  "pp": 20,
+  "desc": "Strikes with a remembered blow.",
+  "fx": [
+   {
+    "t": "stab",
+    "amt": -6
+   }
+  ]
+ },
+ "spore_cloud": {
+  "name": "SPORE CLOUD",
+  "type": "VIRAL",
+  "cat": "sys",
+  "power": 40,
+  "acc": 100,
+  "pp": 20,
+  "desc": "May CORRUPT.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "CORRUPTED",
+    "chance": 40,
+    "who": "foe"
+   }
+  ]
+ },
+ "root_bind": {
+  "name": "ROOT BIND",
+  "type": "CRYPT",
+  "cat": "status",
+  "power": 0,
+  "acc": 90,
+  "pp": 15,
+  "desc": "MUTES the foe.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "MUTED",
+    "chance": 100,
+    "who": "foe"
+   }
+  ]
+ },
+ "bright_flash": {
+  "name": "BRIGHT FLASH",
+  "type": "PULSE",
+  "cat": "sys",
+  "power": 55,
+  "acc": 100,
+  "pp": 20,
+  "desc": "May DESYNC the foe.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "DESYNCED",
+    "chance": 20,
+    "who": "foe"
+   }
+  ]
+ },
+ "dead_air": {
+  "name": "DEAD AIR",
+  "type": "STATIC",
+  "cat": "status",
+  "power": 0,
+  "acc": 90,
+  "pp": 15,
+  "desc": "MUTES the foe and lowers SYS.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "MUTED",
+    "chance": 100,
+    "who": "foe"
+   },
+   {
+    "t": "stat",
+    "stat": "sys",
+    "n": -1,
+    "who": "foe"
+   }
+  ]
+ },
+ "antler_rush": {
+  "name": "ANTLER RUSH",
+  "type": "VECTOR",
+  "cat": "hit",
+  "power": 75,
+  "acc": 95,
+  "pp": 15,
+  "desc": "A charge along a perfect line.",
+  "fx": []
+ },
+ "trail_loop": {
+  "name": "TRAIL LOOP",
+  "type": "LOOP",
+  "cat": "sys",
+  "power": 50,
+  "acc": 100,
+  "pp": 20,
+  "desc": "May LOOP the foe.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "LOOPED",
+    "chance": 25,
+    "who": "foe"
+   }
+  ]
+ },
+ "signal_jam": {
+  "name": "SIGNAL JAM",
+  "type": "STATIC",
+  "cat": "status",
+  "power": 0,
+  "acc": 100,
+  "pp": 15,
+  "desc": "SPD -2 on the foe.",
+  "fx": [
+   {
+    "t": "stat",
+    "stat": "spd",
+    "n": -2,
+    "who": "foe"
+   }
+  ]
+ },
+ "fog_veil": {
+  "name": "FOG VEIL",
+  "type": "GLITCH",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 15,
+  "desc": "DEF +1 and SPD +1.",
+  "fx": [
+   {
+    "t": "stat",
+    "stat": "def",
+    "n": 1,
+    "who": "self"
+   },
+   {
+    "t": "stat",
+    "stat": "spd",
+    "n": 1,
+    "who": "self"
+   }
+  ]
+ },
+ "memory_wipe": {
+  "name": "MEMORY WIPE",
+  "type": "ARCHIVE",
+  "cat": "status",
+  "power": 0,
+  "acc": 85,
+  "pp": 15,
+  "desc": "FRAGMENTS the foe and lowers ATK.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "FRAGMENTED",
+    "chance": 100,
+    "who": "foe"
+   },
+   {
+    "t": "stat",
+    "stat": "atk",
+    "n": -1,
+    "who": "foe"
+   }
+  ]
+ },
+ "cable_whip": {
+  "name": "CABLE WHIP",
+  "type": "STATIC",
+  "cat": "hit",
+  "power": 60,
+  "acc": 100,
+  "pp": 20,
+  "desc": "May OVERLOAD.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "OVERLOADED",
+    "chance": 15,
+    "who": "foe"
+   }
+  ]
+ },
+ "struggle": {
+  "name": "STRUGGLE",
+  "type": "CORE",
+  "cat": "hit",
+  "power": 50,
+  "acc": 0,
+  "pp": 1,
+  "desc": "Used when no PP is left. Hurts the user.",
+  "fx": []
  }
 }

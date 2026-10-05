@@ -93,12 +93,25 @@
  ],
  "oldman_b": [
   {
-   "say": "Have we met?",
-   "who": "OLD MAN"
-  },
-  {
-   "say": "No... no, that was Route 01. Wasn't it? Odd. I feel like I'm in two places at once.",
-   "who": "OLD MAN"
+   "if": {
+    "flag": "oldman_resolved"
+   },
+   "then": [
+    {
+     "say": "Have we met? ...Yes. I remember. Thank you. I'm on Route 01 and here and in Bellwether and nowhere. It's very peaceful.",
+     "who": "OLD MAN"
+    }
+   ],
+   "else": [
+    {
+     "say": "Have we met?",
+     "who": "OLD MAN"
+    },
+    {
+     "say": "No... no, that was Route 01. Wasn't it? Odd. I feel like I'm in two places at once.",
+     "who": "OLD MAN"
+    }
+   ]
   }
  ]
 }

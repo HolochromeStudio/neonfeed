@@ -9,10 +9,14 @@ import { G } from '../src/core/state';
 function withFlags<T>(flags: Record<string, any>, fn: () => T): T {
   const old = G.s.flags; G.s.flags = flags; try { return fn(); } finally { G.s.flags = old; }
 }
+const PHASES = [9 * 60, 12 * 60, 18 * 60, 23 * 60];
+function eachPhase(fn: (clock: number) => void) { const old = G.s.clock; try { for (const c of PHASES) { G.s.clock = c; fn(c); } } finally { G.s.clock = old; } }
 const allFlags = () => {
   const f: Record<string, boolean> = {};
   const walk = (x: any) => { if (Array.isArray(x)) x.forEach(walk); else if (x && typeof x === 'object') { for (const [k, v] of Object.entries(x)) { if (['set', 'flag', 'not', 'unset'].includes(k) && typeof v === 'string') f[v] = true; walk(v); } } };
   walk(MAPS); walk(SCRIPTS);
+  // flags set by the engine's radio devices
+  for (const def of Object.values<any>(MAPS)) for (const o of def.objects ?? []) if (o.type === 'radio') for (const st of o.stations) { f[st.heard ?? `heard_${st.f}`] = true; if (st.set) f[st.set] = true; }
   return f;
 };
 
@@ -37,7 +41,7 @@ describe('maps', () => {
     }
   });
   it('every warp arrival can reach every other warp tile (connectivity)', () => {
-    for (const [id, def] of Object.entries<any>(MAPS)) {
+    for (const [id, def] of Object.entries<any>(MAPS)) eachPhase((clock) => {
       withFlags(allFlags(), () => {
         const cm = compileMap(def); const { w, h } = cm;
         const blocked = new Set<string>();
@@ -51,10 +55,32 @@ describe('maps', () => {
         if (targets.length < 2) return;
         const [sx, sy] = targets[0]; const seen = new Set<string>([sx + ',' + sy]); const q = [[sx, sy]];
         while (q.length) { const [x, y] = q.shift()!; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy; const k = nx + ',' + ny; if (nx < 0 || ny < 0 || nx >= w || ny >= h || seen.has(k)) continue; const g = tileDef(cm.g[ny * w + nx]); if (g?.ledge && dy !== 1) continue; if (!passable(nx, ny) && !(targets.some((t) => t[0] === nx && t[1] === ny) && !isSolidAt(cm, nx, ny))) continue; seen.add(k); q.push([nx, ny]); } }
-        for (const [tx, ty] of targets) expect(seen.has(tx + ',' + ty), `${id}: ${tx},${ty} unreachable from ${sx},${sy}`).toBe(true);
+        for (const [tx, ty] of targets) expect(seen.has(tx + ',' + ty), `${id}@${clock / 60}h: ${tx},${ty} unreachable from ${sx},${sy}`).toBe(true);
         void npcCells;
       });
+    });
+  });
+  it('every item, scan point, lore log, NPC and trainer can be reached in at least one time phase', () => {
+    const bad: string[] = [];
+    for (const [id, def] of Object.entries<any>(MAPS)) {
+      const union = new Set<string>();
+      eachPhase(() => withFlags(allFlags(), () => {
+        const cm = compileMap(def); const { w, h } = cm;
+        const blocked = new Set<string>(); for (const o of def.objects ?? []) if (o.sprite || o.solid) blocked.add(o.x + ',' + o.y);
+        const starts: [number, number][] = []; for (const wp of def.warps ?? []) starts.push([wp.x, wp.y]); for (const od of Object.values<any>(MAPS)) for (const wp of od.warps ?? []) if (wp.to === id) starts.push([wp.tx, wp.ty]);
+        if (!starts.length) return;
+        const seen = new Set<string>([starts[0].join(',')]); const q = [starts[0]];
+        while (q.length) { const [x, y] = q.shift()!; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy, k = nx + ',' + ny; if (nx < 0 || ny < 0 || nx >= w || ny >= h || seen.has(k)) continue; if (isSolidAt(cm, nx, ny) || blocked.has(k)) continue; seen.add(k); q.push([nx, ny]); } }
+        seen.forEach((k) => union.add(k));
+      }));
+      const near = (x: number, y: number) => [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => union.has(`${x + dx},${y + dy}`));
+      const things: [string, number, number][] = [];
+      for (const o of def.objects ?? []) if (['item', 'scan', 'lore', 'sign', 'radio', 'keypad', 'freq', 'terminal', 'pulse', 'script'].includes(o.type)) things.push([`${o.type}${o.id ? ':' + o.id : ''}`, o.x, o.y]);
+      for (const n of [...(def.npcs ?? []), ...(def.trainers ?? [])]) things.push([`npc:${n.id}`, n.x, n.y]);
+      if (!union.size) continue;
+      for (const [nm, x, y] of things) if (!near(x, y)) bad.push(`${id}: ${nm} at (${x},${y}) unreachable`);
     }
+    expect(bad).toEqual([]);
   });
   it('NPCs, trainers, objects stand on walkable tiles (or solid furniture for objects)', () => {
     for (const [id, def] of Object.entries<any>(MAPS)) withFlags(allFlags(), () => {

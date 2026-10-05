@@ -183,5 +183,230 @@
     "w": 1
    }
   ]
+ },
+ "route_02": {
+  "rate": 10,
+  "table": [
+   {
+    "s": "cachemouse",
+    "min": 11,
+    "max": 13,
+    "w": 14
+   },
+   {
+    "s": "cropclone",
+    "min": 11,
+    "max": 13,
+    "w": 18
+   },
+   {
+    "s": "dripulse",
+    "min": 12,
+    "max": 14,
+    "w": 18
+   },
+   {
+    "s": "pigeonet",
+    "min": 12,
+    "max": 14,
+    "w": 24
+   },
+   {
+    "s": "wirelet",
+    "min": 12,
+    "max": 14,
+    "w": 16
+   },
+   {
+    "s": "trailworm",
+    "min": 12,
+    "max": 14,
+    "w": 18
+   },
+   {
+    "s": "radiopup",
+    "min": 13,
+    "max": 14,
+    "w": 8,
+    "rare": true
+   },
+   {
+    "s": "lampwisp",
+    "min": 12,
+    "max": 13,
+    "w": 14,
+    "time": [
+     "evening",
+     "night"
+    ]
+   },
+   {
+    "s": "staticfrog",
+    "min": 12,
+    "max": 14,
+    "w": 16,
+    "weather": [
+     "rain"
+    ]
+   }
+  ]
+ },
+ "whisperwood": {
+  "rate": 12,
+  "table": [
+   {
+    "s": "trailworm",
+    "min": 13,
+    "max": 15,
+    "w": 24,
+    "time": [
+     "morning",
+     "day",
+     "evening"
+    ]
+   },
+   {
+    "s": "sporebyte",
+    "min": 13,
+    "max": 16,
+    "w": 22
+   },
+   {
+    "s": "lumicap",
+    "min": 14,
+    "max": 16,
+    "w": 16
+   },
+   {
+    "s": "rootlurk",
+    "min": 14,
+    "max": 16,
+    "w": 14
+   },
+   {
+    "s": "antlerbit",
+    "min": 15,
+    "max": 17,
+    "w": 8,
+    "rare": true,
+    "time": [
+     "morning",
+     "day",
+     "evening"
+    ]
+   },
+   {
+    "s": "whispermoth",
+    "min": 15,
+    "max": 17,
+    "w": 8,
+    "rare": true,
+    "time": [
+     "evening",
+     "night"
+    ]
+   },
+   {
+    "s": "hoothex",
+    "min": 15,
+    "max": 17,
+    "w": 10,
+    "rare": true,
+    "time": [
+     "night"
+    ]
+   },
+   {
+    "s": "fogwisp",
+    "min": 15,
+    "max": 17,
+    "w": 6,
+    "rare": true,
+    "time": [
+     "night"
+    ]
+   },
+   {
+    "s": "echolet",
+    "min": 15,
+    "max": 16,
+    "w": 3,
+    "rare": true,
+    "time": [
+     "night"
+    ],
+    "needs": {
+     "flag": "echolet_seen"
+    }
+   },
+   {
+    "s": "lampwisp",
+    "min": 13,
+    "max": 15,
+    "w": 14,
+    "time": [
+     "evening",
+     "night"
+    ]
+   }
+  ]
+ },
+ "bellwether_lawn": {
+  "rate": 9,
+  "table": [
+   {
+    "s": "pigeonet",
+    "min": 14,
+    "max": 16,
+    "w": 28
+   },
+   {
+    "s": "radiopup",
+    "min": 14,
+    "max": 16,
+    "w": 22
+   },
+   {
+    "s": "wirelet",
+    "min": 14,
+    "max": 16,
+    "w": 22
+   },
+   {
+    "s": "boomtoad",
+    "min": 15,
+    "max": 17,
+    "w": 6,
+    "rare": true
+   },
+   {
+    "s": "antennox",
+    "min": 15,
+    "max": 17,
+    "w": 6,
+    "rare": true
+   },
+   {
+    "s": "lampwisp",
+    "min": 14,
+    "max": 16,
+    "w": 12,
+    "time": [
+     "evening",
+     "night"
+    ]
+   }
+  ]
+ },
+ "memlet_spot": {
+  "rate": 0,
+  "table": [
+   {
+    "s": "memlet",
+    "min": 16,
+    "max": 16,
+    "w": 1
+   }
+  ]
  }
 }

@@ -1,0 +1,562 @@
+{
+ "id": "route_02",
+ "name": "ROUTE 02 - MILLSTREAM",
+ "w": 24,
+ "h": 34,
+ "base": "grass",
+ "outdoor": true,
+ "weather": true,
+ "bgm": "route",
+ "battleBg": "grass",
+ "area": "route_02",
+ "ops": [
+  {
+   "op": "speckle",
+   "t": "grass2",
+   "seed": 3,
+   "rect": [
+    1,
+    1,
+    22,
+    32
+   ],
+   "count": 110,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "speckle",
+   "t": "grass3",
+   "seed": 4,
+   "rect": [
+    1,
+    1,
+    22,
+    32
+   ],
+   "count": 40,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "speckle",
+   "t": "flowers_y",
+   "seed": 5,
+   "rect": [
+    1,
+    1,
+    22,
+    32
+   ],
+   "count": 14,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "speckle",
+   "t": "flowers_r",
+   "seed": 6,
+   "rect": [
+    1,
+    1,
+    22,
+    32
+   ],
+   "count": 12,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 11,
+   "y": 1,
+   "w": 2,
+   "h": 9
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 11,
+   "y": 9,
+   "w": 8,
+   "h": 2
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 17,
+   "y": 10,
+   "w": 2,
+   "h": 14
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 8,
+   "y": 23,
+   "w": 11,
+   "h": 2
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 8,
+   "y": 24,
+   "w": 2,
+   "h": 9
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "water",
+   "x": 1,
+   "y": 15,
+   "w": 22,
+   "h": 2
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "bridge_v",
+   "x": 17,
+   "y": 15,
+   "w": 2,
+   "h": 2
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 1,
+   "rect": [
+    2,
+    2,
+    8,
+    8
+   ],
+   "blobs": 3,
+   "r": 3,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 2,
+   "rect": [
+    14,
+    2,
+    8,
+    6
+   ],
+   "blobs": 2,
+   "r": 3,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 3,
+   "rect": [
+    2,
+    17,
+    14,
+    5
+   ],
+   "blobs": 3,
+   "r": 3,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 4,
+   "rect": [
+    11,
+    25,
+    9,
+    7
+   ],
+   "blobs": 3,
+   "r": 3,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 5,
+   "rect": [
+    2,
+    25,
+    5,
+    7
+   ],
+   "blobs": 2,
+   "r": 3,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 6,
+   "rect": [
+    20,
+    18,
+    2,
+    5
+   ],
+   "blobs": 1,
+   "r": 2,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "border",
+   "l": "o",
+   "t": "tree",
+   "gaps": [
+    [
+     11,
+     0
+    ],
+    [
+     12,
+     0
+    ],
+    [
+     8,
+     33
+    ],
+    [
+     9,
+     33
+    ]
+   ]
+  },
+  {
+   "op": "scatter",
+   "t": "tree",
+   "seed": 21,
+   "rect": [
+    1,
+    1,
+    9,
+    12
+   ],
+   "count": 10
+  },
+  {
+   "op": "scatter",
+   "t": "pine",
+   "seed": 22,
+   "rect": [
+    14,
+    11,
+    8,
+    3
+   ],
+   "count": 4
+  },
+  {
+   "op": "scatter",
+   "t": "tree",
+   "seed": 23,
+   "rect": [
+    1,
+    18,
+    15,
+    5
+   ],
+   "count": 6
+  },
+  {
+   "op": "scatter",
+   "t": "pine",
+   "seed": 24,
+   "rect": [
+    1,
+    24,
+    6,
+    8
+   ],
+   "count": 5
+  },
+  {
+   "op": "scatter",
+   "t": "tree",
+   "seed": 25,
+   "rect": [
+    20,
+    24,
+    3,
+    9
+   ],
+   "count": 6
+  },
+  {
+   "op": "scatter",
+   "t": "pine",
+   "seed": 26,
+   "rect": [
+    11,
+    28,
+    10,
+    5
+   ],
+   "count": 6
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "fence_h",
+   "pts": [
+    [
+     14,
+     6
+    ],
+    [
+     15,
+     6
+    ],
+    [
+     16,
+     6
+    ],
+    [
+     14,
+     12
+    ],
+    [
+     15,
+     12
+    ],
+    [
+     16,
+     12
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "sign",
+   "pts": [
+    [
+     13,
+     2
+    ],
+    [
+     10,
+     31
+    ],
+    [
+     19,
+     8
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "rock",
+   "pts": [
+    [
+     5,
+     12
+    ],
+    [
+     20,
+     27
+    ],
+    [
+     4,
+     22
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "flowerbox",
+   "pts": [
+    [
+     10,
+     12
+    ],
+    [
+     13,
+     20
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 11,
+   "y": 0,
+   "to": "briarfield",
+   "tx": 15,
+   "ty": 28,
+   "dir": "up"
+  },
+  {
+   "x": 12,
+   "y": 0,
+   "to": "briarfield",
+   "tx": 16,
+   "ty": 28,
+   "dir": "up"
+  },
+  {
+   "x": 8,
+   "y": 33,
+   "to": "whisperwood",
+   "tx": 14,
+   "ty": 1,
+   "dir": "down"
+  },
+  {
+   "x": 9,
+   "y": 33,
+   "to": "whisperwood",
+   "tx": 15,
+   "ty": 1,
+   "dir": "down"
+  }
+ ],
+ "trainers": [
+  {
+   "id": "r2_farmer",
+   "x": 14,
+   "y": 5,
+   "look": "farmer",
+   "dir": "left",
+   "sight": 3
+  },
+  {
+   "id": "r2_courier",
+   "x": 21,
+   "y": 12,
+   "look": "courier",
+   "dir": "left",
+   "sight": 4
+  },
+  {
+   "id": "r2_hiker",
+   "x": 13,
+   "y": 27,
+   "look": "hiker",
+   "dir": "left",
+   "sight": 4
+  }
+ ],
+ "npcs": [
+  {
+   "id": "r2_kid",
+   "x": 6,
+   "y": 19,
+   "look": "kid",
+   "dir": "down",
+   "move": "wander",
+   "r": 1,
+   "name": "KID",
+   "scripts": [
+    {
+     "when": "node_2_complete",
+     "run": "r2_kid_after"
+    },
+    {
+     "run": "r2_kid"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "sign",
+   "x": 13,
+   "y": 2,
+   "text": "ROUTE 02 - MILLSTREAM ROAD. Whisperwood 2 km. Bellwether City 5 km. The stream is shallow. The bridge is for show."
+  },
+  {
+   "type": "sign",
+   "x": 10,
+   "y": 31,
+   "text": "WHISPERWOOD AHEAD. Paths in the wood are not guaranteed to be there when you come back. Keep to the main trail. Trust the trail. (Do not trust the trail.)"
+  },
+  {
+   "type": "sign",
+   "x": 19,
+   "y": 8,
+   "text": "A mill once stood here. The stream still turns a wheel nobody built."
+  },
+  {
+   "type": "item",
+   "x": 3,
+   "y": 6,
+   "item": "patch_kit_l",
+   "n": 1
+  },
+  {
+   "type": "item",
+   "x": 21,
+   "y": 20,
+   "item": "stability_clamp",
+   "n": 2
+  },
+  {
+   "type": "item",
+   "x": 4,
+   "y": 29,
+   "item": "status_wipe",
+   "n": 1
+  },
+  {
+   "type": "scan",
+   "x": 20,
+   "y": 30,
+   "item": "cache_fragment",
+   "n": 1,
+   "text": "FIELD SCAN: a cached shard buried under the roots."
+  },
+  {
+   "type": "scan",
+   "x": 5,
+   "y": 10,
+   "item": "pixel_dust",
+   "n": 2,
+   "text": "FIELD SCAN: glittering dust at the foot of a boulder."
+  }
+ ]
+}

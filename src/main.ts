@@ -8,6 +8,8 @@ import { CreditsScene } from './scenes/CreditsScene';
 import { Input } from './core/input';
 import { Audio } from './audio/audio';
 import { G, loadGlobalSettings } from './core/state';
+import { SPECIES, MOVES } from './data';
+import { creatureTex } from './gfx/textures';
 
 export const W = 240, H = 160;
 
@@ -52,6 +54,7 @@ G.s.settings = loadGlobalSettings();
 (window as any).__game = game;
 (window as any).G = G;
 (window as any).__input = Input;
+(window as any).__dev = { SPECIES, MOVES, creatureTex, Audio };
 
 // Prevent browser gestures from hijacking the game on touch devices
 document.addEventListener('gesturestart', (e) => e.preventDefault());

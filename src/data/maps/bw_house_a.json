@@ -1,0 +1,167 @@
+{
+ "id": "bw_house_a",
+ "name": "RADIO HOUSE",
+ "w": 7,
+ "h": 6,
+ "base": "wood",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "carpet_b",
+   "x": 2,
+   "y": 2,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "S": "shelf",
+    "Y": "plant",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "L": "lab_machine",
+    "q": "table",
+    "h": "pipe_h",
+    "u": "vault",
+    "O": "statue",
+    "e": "channel",
+    "y": "channel_dry"
+   },
+   "rows": [
+    "WWwWWWW",
+    ".SMqMS.",
+    "....Y..",
+    "t.....t"
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     3,
+     5
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 3,
+   "y": 5,
+   "to": "bellwether",
+   "tx": 31,
+   "ty": 12,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "radio_fan",
+   "x": 2,
+   "y": 3,
+   "look": "broadcaster",
+   "dir": "right",
+   "name": "RADIO FAN",
+   "scripts": [
+    {
+     "when": {
+      "flag": "radio_done"
+     },
+     "run": "radiofan_done"
+    },
+    {
+     "when": {
+      "flag": "radio_quest"
+     },
+     "run": "radiofan_wait"
+    },
+    {
+     "run": "radiofan_start"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "radio",
+   "x": 3,
+   "y": 1,
+   "title": "KITCHEN RADIO",
+   "stations": [
+    {
+     "f": "88.1",
+     "name": "TOWER WEATHER",
+     "lines": [
+      "Tower weather. It is currently the weather. Expect more of it later.",
+      "Wind: from the east, then from the south, then from the east again."
+     ]
+    },
+    {
+     "f": "91.7",
+     "name": "BELLWETHER FM",
+     "lines": [
+      "Bellwether FM, where the hits just keep coming. This one is a hit. Probably.",
+      "And now, a song you will not remember hearing. Enjoy."
+     ]
+    },
+    {
+     "f": "97.3",
+     "name": "TRAFFIC NOW",
+     "lines": [
+      "Traffic now. There is no traffic. There has never been traffic. Please do not look for it.",
+      "In other news, a pigeon has been elected to the school board."
+     ]
+    },
+    {
+     "f": "101.5",
+     "name": "THE DAY AFTER",
+     "lines": [
+      "...rain. Tomorrow's rain. It is raining today too. Please bring two umbrellas.",
+      "The Clean State thanks you for your cooperation. Cooperation is mandatory beginning... yesterday."
+     ]
+    }
+   ]
+  },
+  {
+   "type": "sign",
+   "x": 1,
+   "y": 1,
+   "text": "A shelf of radios. Each one is tuned to a different station. Each one is playing the same sentence."
+  },
+  {
+   "type": "sign",
+   "x": 5,
+   "y": 1,
+   "text": "Cables. So many cables. One of them is plugged into another cable which is plugged into the first."
+  }
+ ]
+}
