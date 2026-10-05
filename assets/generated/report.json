@@ -1,0 +1,52 @@
+{
+ "sheets": {
+  "town": {
+   "source": "assets/source/town_interior_sheet.webp",
+   "bg": [
+    254,
+    244,
+    222
+   ],
+   "sprites": 114,
+   "dropped": 58,
+   "validationFailures": 0
+  }
+ },
+ "odd": [
+  {
+   "name": "lamp_post",
+   "size": "31x165",
+   "reasons": [
+    "extreme aspect ratio"
+   ]
+  },
+  {
+   "name": "trim_post_tall_a",
+   "size": "19x96",
+   "reasons": [
+    "extreme aspect ratio"
+   ]
+  },
+  {
+   "name": "trim_rail_long",
+   "size": "191x18",
+   "reasons": [
+    "extreme aspect ratio"
+   ]
+  },
+  {
+   "name": "trim_rail_medium",
+   "size": "118x16",
+   "reasons": [
+    "extreme aspect ratio"
+   ]
+  }
+ ],
+ "failures": [],
+ "awaiting": [
+  "characters_sheet",
+  "desert_sheet"
+ ],
+ "warnings": [],
+ "errors": []
+}

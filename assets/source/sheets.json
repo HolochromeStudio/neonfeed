@@ -1,66 +1,1306 @@
 {
-  "sheets": [
+ "sheets": [
+  {
+   "id": "town",
+   "source": "town_interior_sheet",
+   "atlas": "town_atlas",
+   "mode": "named",
+   "dilate": 3,
+   "splitDilate": 0,
+   "minArea": 40,
+   "split": [
+    [
+     700,
+     600
+    ],
+    [
+     1200,
+     600
+    ],
+    [
+     350,
+     350
+    ],
+    [
+     1000,
+     350
+    ],
+    [
+     1000,
+     800
+    ],
+    [
+     1150,
+     840
+    ],
+    [
+     800,
+     150,
+     "x",
+     808
+    ],
+    [
+     1300,
+     400,
+     "y",
+     378
+    ]
+   ],
+   "sprites": [
     {
-      "id": "town",
-      "source": "town_interior_sheet",
-      "atlas": "town_atlas",
-      "mode": "named",
-      "dilate": 3,
-      "splitDilate": 0,
-      "minArea": 40,
-      "labelBands": [
-        [
-          10,
-          30
-        ],
-        [
-          282,
-          301
-        ],
-        [
-          534,
-          553
-        ],
-        [
-          701,
-          720
-        ],
-        [
-          795,
-          810
-        ],
-        [
-          918,
-          934
-        ]
-      ],
-      "split": [
-        [
-          700,
-          600
-        ],
-        [
-          1200,
-          600
-        ],
-        [
-          350,
-          350
-        ],
-        [
-          1000,
-          350
-        ],
-        [
-          1000,
-          800
-        ],
-        [
-          1150,
-          840
-        ]
-      ],
-      "sprites": []
+     "name": "station_front",
+     "category": "building_front",
+     "dir": "buildings",
+     "at": [
+      1326,
+      143
+     ]
+    },
+    {
+     "name": "bank_front",
+     "category": "building_front",
+     "dir": "buildings",
+     "at": [
+      1126,
+      145
+     ]
+    },
+    {
+     "name": "jail_front",
+     "category": "building_front",
+     "dir": "buildings",
+     "at": [
+      513,
+      146
+     ]
+    },
+    {
+     "name": "saloon_front",
+     "category": "building_front",
+     "dir": "buildings",
+     "at": [
+      124,
+      148
+     ]
+    },
+    {
+     "name": "sheriff_front",
+     "category": "building_front",
+     "dir": "buildings",
+     "at": [
+      330,
+      156
+     ]
+    },
+    {
+     "name": "general_store_front",
+     "category": "building_front",
+     "dir": "buildings",
+     "at": [
+      707,
+      157
+     ]
+    },
+    {
+     "name": "stable_front",
+     "category": "building_front",
+     "dir": "buildings",
+     "at": [
+      918,
+      160
+     ]
+    },
+    {
+     "name": "chimney_stone",
+     "category": "rooftop",
+     "dir": "buildings",
+     "at": [
+      1157,
+      343
+     ]
+    },
+    {
+     "name": "section_saloon",
+     "category": "building_section",
+     "dir": "buildings",
+     "at": [
+      60,
+      364
+     ]
+    },
+    {
+     "name": "section_sheriff",
+     "category": "building_section",
+     "dir": "buildings",
+     "at": [
+      152,
+      364
+     ],
+     "keepHoles": true
+    },
+    {
+     "name": "section_jail",
+     "category": "building_section",
+     "dir": "buildings",
+     "at": [
+      249,
+      368
+     ]
+    },
+    {
+     "name": "section_general_store",
+     "category": "building_section",
+     "dir": "buildings",
+     "at": [
+      347,
+      368
+     ]
+    },
+    {
+     "name": "section_station",
+     "category": "building_section",
+     "dir": "buildings",
+     "at": [
+      451,
+      365
+     ]
+    },
+    {
+     "name": "door_wood",
+     "category": "door_window",
+     "dir": "buildings",
+     "at": [
+      558,
+      350
+     ]
+    },
+    {
+     "name": "door_dark",
+     "category": "door_window",
+     "dir": "buildings",
+     "at": [
+      620,
+      350
+     ]
+    },
+    {
+     "name": "door_jail",
+     "category": "door_window",
+     "dir": "buildings",
+     "at": [
+      682,
+      350
+     ]
+    },
+    {
+     "name": "door_glass",
+     "category": "door_window",
+     "dir": "buildings",
+     "at": [
+      743,
+      350
+     ]
+    },
+    {
+     "name": "sign_jail",
+     "category": "sign",
+     "dir": "props",
+     "at": [
+      1391,
+      341
+     ]
+    },
+    {
+     "name": "roof_wood_planks",
+     "category": "rooftop",
+     "dir": "buildings",
+     "at": [
+      922,
+      350
+     ]
+    },
+    {
+     "name": "roof_red_tiles",
+     "category": "rooftop",
+     "dir": "buildings",
+     "at": [
+      1011,
+      349
+     ]
+    },
+    {
+     "name": "roof_gray_slate",
+     "category": "rooftop",
+     "dir": "buildings",
+     "at": [
+      1092,
+      349
+     ]
+    },
+    {
+     "name": "sign_saloon",
+     "category": "sign",
+     "dir": "props",
+     "at": [
+      1227,
+      342
+     ]
+    },
+    {
+     "name": "sign_sheriff",
+     "category": "sign",
+     "dir": "props",
+     "at": [
+      1312,
+      344
+     ]
+    },
+    {
+     "name": "door_saloon_swing",
+     "category": "door_window",
+     "dir": "buildings",
+     "at": [
+      816,
+      351
+     ]
+    },
+    {
+     "name": "sign_store",
+     "category": "sign",
+     "dir": "props",
+     "at": [
+      1227,
+      408
+     ]
+    },
+    {
+     "name": "sign_bank",
+     "category": "sign",
+     "dir": "props",
+     "at": [
+      1390,
+      408
+     ]
+    },
+    {
+     "name": "sign_stable",
+     "category": "sign",
+     "dir": "props",
+     "at": [
+      1311,
+      406
+     ]
+    },
+    {
+     "name": "roof_parapet_stone",
+     "category": "rooftop",
+     "dir": "buildings",
+     "at": [
+      1118,
+      441
+     ]
+    },
+    {
+     "name": "window_wood_tall",
+     "category": "door_window",
+     "dir": "buildings",
+     "at": [
+      621,
+      439
+     ]
+    },
+    {
+     "name": "roof_green_shingles",
+     "category": "rooftop",
+     "dir": "buildings",
+     "at": [
+      922,
+      444
+     ]
+    },
+    {
+     "name": "roof_wood_dark",
+     "category": "rooftop",
+     "dir": "buildings",
+     "at": [
+      1014,
+      444
+     ]
+    },
+    {
+     "name": "window_jail",
+     "category": "door_window",
+     "dir": "buildings",
+     "at": [
+      683,
+      442
+     ]
+    },
+    {
+     "name": "window_wood_small",
+     "category": "door_window",
+     "dir": "buildings",
+     "at": [
+      559,
+      444
+     ]
+    },
+    {
+     "name": "window_dark_b",
+     "category": "door_window",
+     "dir": "buildings",
+     "at": [
+      825,
+      444
+     ]
+    },
+    {
+     "name": "window_dark_a",
+     "category": "door_window",
+     "dir": "buildings",
+     "at": [
+      754,
+      444
+     ]
+    },
+    {
+     "name": "section_door_glass",
+     "category": "building_section",
+     "dir": "buildings",
+     "at": [
+      57,
+      472
+     ]
+    },
+    {
+     "name": "section_window_glass",
+     "category": "building_section",
+     "dir": "buildings",
+     "at": [
+      144,
+      472
+     ]
+    },
+    {
+     "name": "porch_frame",
+     "category": "building_section",
+     "dir": "buildings",
+     "at": [
+      238,
+      475
+     ]
+    },
+    {
+     "name": "porch_awning",
+     "category": "building_section",
+     "dir": "buildings",
+     "at": [
+      344,
+      475
+     ]
+    },
+    {
+     "name": "porch_shed",
+     "category": "building_section",
+     "dir": "buildings",
+     "at": [
+      455,
+      474
+     ]
+    },
+    {
+     "name": "signpost_directions",
+     "category": "sign_decor",
+     "dir": "props",
+     "at": [
+      1396,
+      486
+     ]
+    },
+    {
+     "name": "lantern_hanging",
+     "category": "sign_decor",
+     "dir": "props",
+     "at": [
+      1280,
+      482
+     ]
+    },
+    {
+     "name": "signpost_arm",
+     "category": "sign_decor",
+     "dir": "props",
+     "at": [
+      1329,
+      481
+     ]
+    },
+    {
+     "name": "clock_sign",
+     "category": "sign_decor",
+     "dir": "props",
+     "at": [
+      1221,
+      478
+     ]
+    },
+    {
+     "name": "lamp_post",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      442,
+      617
+     ]
+    },
+    {
+     "name": "signpost_wood",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      382,
+      594
+     ]
+    },
+    {
+     "name": "wall_saloon_shelf",
+     "category": "interior_wall",
+     "dir": "tiles",
+     "at": [
+      750,
+      622
+     ]
+    },
+    {
+     "name": "tile_floor_planks",
+     "category": "interior_tile",
+     "dir": "tiles",
+     "at": [
+      1168,
+      613
+     ]
+    },
+    {
+     "name": "pillar_a",
+     "category": "interior_trim",
+     "dir": "tiles",
+     "at": [
+      1368,
+      613
+     ]
+    },
+    {
+     "name": "wall_saloon_plain",
+     "category": "interior_wall",
+     "dir": "tiles",
+     "at": [
+      534,
+      622
+     ]
+    },
+    {
+     "name": "wall_saloon_lantern",
+     "category": "interior_wall",
+     "dir": "tiles",
+     "at": [
+      631,
+      622
+     ]
+    },
+    {
+     "name": "wall_saloon_painting",
+     "category": "interior_wall",
+     "dir": "tiles",
+     "at": [
+      884,
+      622
+     ]
+    },
+    {
+     "name": "wall_saloon_wanted_skull",
+     "category": "interior_wall",
+     "dir": "tiles",
+     "at": [
+      1014,
+      622
+     ]
+    },
+    {
+     "name": "tile_carpet_red",
+     "category": "interior_tile",
+     "dir": "tiles",
+     "at": [
+      1294,
+      614
+     ]
+    },
+    {
+     "name": "pillar_b",
+     "category": "interior_trim",
+     "dir": "tiles",
+     "at": [
+      1409,
+      614
+     ]
+    },
+    {
+     "name": "fence_rail",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      111,
+      591
+     ]
+    },
+    {
+     "name": "fence_gate_cross",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      277,
+      592
+     ]
+    },
+    {
+     "name": "fence_post",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      211,
+      592
+     ]
+    },
+    {
+     "name": "crate_small",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      44,
+      655
+     ]
+    },
+    {
+     "name": "crate_stack",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      114,
+      662
+     ]
+    },
+    {
+     "name": "hay_bale",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      306,
+      666
+     ]
+    },
+    {
+     "name": "barrel_a",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      192,
+      668
+     ]
+    },
+    {
+     "name": "barrel_b",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      248,
+      668
+     ]
+    },
+    {
+     "name": "water_trough",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      378,
+      679
+     ]
+    },
+    {
+     "name": "tile_sand_a",
+     "category": "interior_tile",
+     "dir": "tiles",
+     "at": [
+      1137,
+      728
+     ]
+    },
+    {
+     "name": "tile_carpet_runner",
+     "category": "interior_tile",
+     "dir": "tiles",
+     "at": [
+      1217,
+      728
+     ]
+    },
+    {
+     "name": "tile_stone_wall",
+     "category": "interior_tile",
+     "dir": "tiles",
+     "at": [
+      1300,
+      728
+     ]
+    },
+    {
+     "name": "tile_sand_wainscot",
+     "category": "interior_tile",
+     "dir": "tiles",
+     "at": [
+      1383,
+      728
+     ]
+    },
+    {
+     "name": "cactus_tall",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      50,
+      743
+     ]
+    },
+    {
+     "name": "hitching_post",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      131,
+      748
+     ]
+    },
+    {
+     "name": "wagon",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      277,
+      755
+     ]
+    },
+    {
+     "name": "hay_patch_a",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      376,
+      731
+     ]
+    },
+    {
+     "name": "hay_patch_b",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      440,
+      731
+     ]
+    },
+    {
+     "name": "bar_counter",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      610,
+      794
+     ]
+    },
+    {
+     "name": "piano",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      975,
+      794
+     ]
+    },
+    {
+     "name": "table_round_bottle",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      837,
+      771
+     ]
+    },
+    {
+     "name": "chair_wood",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      766,
+      777
+     ]
+    },
+    {
+     "name": "hay_pile",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      409,
+      786
+     ]
+    },
+    {
+     "name": "bench",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      136,
+      837
+     ]
+    },
+    {
+     "name": "shrub_green_a",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      53,
+      823
+     ]
+    },
+    {
+     "name": "hitching_rail",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      308,
+      842
+     ]
+    },
+    {
+     "name": "trim_post_tall_a",
+     "category": "interior_trim",
+     "dir": "tiles",
+     "at": [
+      1363,
+      858
+     ]
+    },
+    {
+     "name": "trim_post_short",
+     "category": "interior_trim",
+     "dir": "tiles",
+     "at": [
+      1320,
+      847
+     ]
+    },
+    {
+     "name": "trim_post_tall_b",
+     "category": "interior_trim",
+     "dir": "tiles",
+     "at": [
+      1405,
+      860
+     ]
+    },
+    {
+     "name": "chair_red",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      761,
+      844
+     ]
+    },
+    {
+     "name": "trim_rail_long",
+     "category": "interior_trim",
+     "dir": "tiles",
+     "at": [
+      1195,
+      829
+     ]
+    },
+    {
+     "name": "shrub_green_b",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      223,
+      845
+     ]
+    },
+    {
+     "name": "dirt_patch",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      412,
+      852
+     ]
+    },
+    {
+     "name": "table_round",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      831,
+      857
+     ]
+    },
+    {
+     "name": "trim_rail_short",
+     "category": "interior_trim",
+     "dir": "tiles",
+     "at": [
+      1265,
+      853
+     ]
+    },
+    {
+     "name": "trim_rail_medium",
+     "category": "interior_trim",
+     "dir": "tiles",
+     "at": [
+      1162,
+      854
+     ]
+    },
+    {
+     "name": "cactus_potted",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      1006,
+      885
+     ]
+    },
+    {
+     "name": "rocks_small",
+     "category": "town_prop",
+     "dir": "props",
+     "at": [
+      50,
+      866
+     ]
+    },
+    {
+     "name": "candelabra",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      1076,
+      907
+     ]
+    },
+    {
+     "name": "rug_red",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      615,
+      904
+     ]
+    },
+    {
+     "name": "barrel_interior_a",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      954,
+      902
+     ]
+    },
+    {
+     "name": "barrel_interior_b",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      894,
+      911
+     ]
+    },
+    {
+     "name": "staircase",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      1203,
+      965
+     ]
+    },
+    {
+     "name": "stool_red_a",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      770,
+      914
+     ]
+    },
+    {
+     "name": "stool_red_b",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      827,
+      919
+     ]
+    },
+    {
+     "name": "railing_balcony",
+     "category": "interior_furniture",
+     "dir": "props",
+     "at": [
+      1359,
+      965
+     ]
+    },
+    {
+     "name": "cow_skull",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      233,
+      969
+     ]
+    },
+    {
+     "name": "side_table_lantern",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      171,
+      984
+     ]
+    },
+    {
+     "name": "rocking_chair",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      85,
+      996
+     ]
+    },
+    {
+     "name": "bottles_a",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      377,
+      972
+     ]
+    },
+    {
+     "name": "painting_framed",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      301,
+      985
+     ]
+    },
+    {
+     "name": "bookshelf_bottles",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      697,
+      996
+     ]
+    },
+    {
+     "name": "saddle",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      586,
+      999
+     ]
+    },
+    {
+     "name": "wall_pegs",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      447,
+      974
+     ]
+    },
+    {
+     "name": "safe",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      808,
+      1000
+     ]
+    },
+    {
+     "name": "bed",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      934,
+      1001
+     ]
+    },
+    {
+     "name": "lasso",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      513,
+      992
+     ]
+    },
+    {
+     "name": "crate_stack_b",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      1055,
+      1007
+     ]
+    },
+    {
+     "name": "rail_wood",
+     "category": "misc",
+     "dir": "props",
+     "at": [
+      417,
+      1024
+     ]
     }
-  ]
+   ],
+   "labelRects": [
+    [
+     20,
+     10,
+     270,
+     22
+    ],
+    [
+     24,
+     283,
+     330,
+     18
+    ],
+    [
+     530,
+     283,
+     185,
+     17
+    ],
+    [
+     880,
+     283,
+     98,
+     16
+    ],
+    [
+     1192,
+     283,
+     150,
+     17
+    ],
+    [
+     24,
+     534,
+     125,
+     16
+    ],
+    [
+     493,
+     534,
+     260,
+     17
+    ],
+    [
+     1100,
+     534,
+     160,
+     16
+    ],
+    [
+     490,
+     701,
+     400,
+     18
+    ],
+    [
+     1100,
+     794,
+     140,
+     16
+    ],
+    [
+     22,
+     918,
+     132,
+     16
+    ]
+   ]
+  },
+  {
+   "id": "characters",
+   "source": "characters_sheet",
+   "atlas": "characters_atlas",
+   "mode": "characters",
+   "dir": "sprites",
+   "dilate": 2,
+   "minArea": 60,
+   "rowTolerance": 0.6,
+   "_note": "AWAITING SOURCE. Rows assumed top-to-bottom in this order, frames left-to-right; verify against the real sheet and add labelRects for title text.",
+   "labelRects": [],
+   "rows": [
+    {
+     "name": "bandit",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    },
+    {
+     "name": "gunslinger",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    },
+    {
+     "name": "sheriff",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    },
+    {
+     "name": "dual_wielder",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    },
+    {
+     "name": "sniper",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    },
+    {
+     "name": "knife_thrower",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    },
+    {
+     "name": "prospector",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    },
+    {
+     "name": "bartender",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    },
+    {
+     "name": "townsfolk_woman",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    },
+    {
+     "name": "train_guard",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    },
+    {
+     "name": "boss_outlaw",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    },
+    {
+     "name": "horse_rider",
+     "frames": [
+      "idle",
+      "idle2",
+      "aim",
+      "shoot",
+      "hit",
+      "dead"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "desert",
+   "source": "desert_sheet",
+   "atlas": "desert_atlas",
+   "mode": "auto",
+   "dir": "props",
+   "category": "desert",
+   "dilate": 3,
+   "minArea": 40,
+   "labelRects": [],
+   "_note": "AWAITING SOURCE. Switch to mode 'named' with anchors (see town entry) once the sheet exists and the auto output has been reviewed."
+  }
+ ]
 }

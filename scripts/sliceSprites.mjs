@@ -27,7 +27,7 @@ export function sampleBackground(sheet) {
  * `clearHoles` and they are very close to bg (<= holeTol) and >= holeMin pixels, so interior
  * cream paint survives.
  */
-export function buildForeground(sheet, bg, { tol = 36, clearHoles = true, holeTol = 8, holeMin = 8 } = {}) {
+export function buildForeground(sheet, bg, { tol = 36, clearHoles = true, holeTol = 8, holeMin = 40, growTol = 44 } = {}) {
   const { data, W, H } = sheet;
   const N = W * H;
   const near = (p, t) => L1(data[p * 4], data[p * 4 + 1], data[p * 4 + 2], bg) <= t;
@@ -55,7 +55,18 @@ export function buildForeground(sheet, bg, { tol = 36, clearHoles = true, holeTo
           seen[q] = 1; comp.push(q);
         }
       }
-      if (comp.length >= holeMin) for (const p of comp) fg[p] = 0;
+      if (comp.length >= holeMin) {
+        // clear the bg-like core, then grow through the paler anti-aliased ring around it
+        const q = [];
+        for (const p of comp) { fg[p] = 0; q.push(p); }
+        for (let i = 0; i < q.length; i++) {
+          const p = q[i]; const x = p % W;
+          for (const n of [x > 0 ? p - 1 : -1, x < W - 1 ? p + 1 : -1, p - W, p + W]) {
+            if (n < 0 || n >= N || !fg[n] || !near(n, growTol)) continue;
+            fg[n] = 0; q.push(n);
+          }
+        }
+      }
     }
   }
   return fg;
@@ -82,23 +93,26 @@ export function findComponents(fg, W, H, { dilate = 3, restrictTo = null } = {})
     const id = comps.length + 1;
     const st = [s]; label[s] = id;
     let x0 = W, y0 = H, x1 = 0, y1 = 0, area = 0;
+    const pixels = [];
     while (st.length) {
       const p = st.pop(); const x = p % W, y = (p / W) | 0;
       if (fg[p] && (!restrictTo || restrictTo[p])) {
-        area++; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+        area++; pixels.push(p); if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
       }
       for (const q of [x > 0 ? p - 1 : -1, x < W - 1 ? p + 1 : -1, p - W, p + W]) {
         if (q < 0 || q >= N || !dil[q] || label[q]) continue;
         label[q] = id; st.push(q);
       }
     }
-    if (area) comps.push({ id, x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1, area });
+    if (area) comps.push({ id, x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1, area, pixels: Int32Array.from(pixels) });
   }
   return { comps, label };
 }
 
 export function detectSprites(sheet, fg, cfg) {
   const { W, H } = sheet;
+  // Erase section-title text (rects) so it can neither become a sprite nor glue onto one.
+  for (const [rx, ry, rw, rh] of cfg.labelRects ?? []) for (let y = ry; y < ry + rh; y++) for (let x = rx; x < rx + rw; x++) fg[y * W + x] = 0;
   const { comps, label } = findComponents(fg, W, H, { dilate: cfg.dilate ?? 3 });
   const bands = cfg.labelBands ?? [];
   const minArea = cfg.minArea ?? 40;
@@ -109,16 +123,30 @@ export function detectSprites(sheet, fg, cfg) {
     if (c.area < minArea) { dropped.push({ ...c, why: 'speck' }); continue; }
     out.push(c);
   }
-  // Split merged components (explicit anchors): re-label with a tighter dilation inside the component.
+  // Split merged components at explicit anchors. Entry forms:
+  //   [px, py]               re-label the component with a tighter dilation (splitDilate)
+  //   [px, py, 'x'|'y', pos] cut the component along a column/row, then re-detect each side
   const splitPts = cfg.split ?? [];
   const final = [];
   for (const c of out) {
-    const hit = splitPts.some(([px, py]) => px >= c.x && px < c.x + c.w && py >= c.y && py < c.y + c.h);
+    const hit = splitPts.find(([px, py]) => px >= c.x && px < c.x + c.w && py >= c.y && py < c.y + c.h);
     if (!hit) { final.push(c); continue; }
-    const only = new Uint8Array(W * H);
-    for (let i = 0; i < only.length; i++) only[i] = label[i] === c.id ? 1 : 0;
-    const sub = findComponents(fg, W, H, { dilate: cfg.splitDilate ?? 1, restrictTo: only });
-    for (const s of sub.comps) {
+    const owned = new Uint8Array(W * H);
+    for (let i = 0; i < owned.length; i++) owned[i] = label[i] === c.id ? 1 : 0;
+    const parts = [];
+    if (hit.length >= 4) {
+      const [, , axis, pos] = hit;
+      const a = new Uint8Array(W * H), b = new Uint8Array(W * H);
+      for (let i = 0; i < owned.length; i++) {
+        if (!owned[i]) continue;
+        const v = axis === 'x' ? i % W : (i / W) | 0;
+        (v < pos ? a : b)[i] = 1;
+      }
+      for (const side of [a, b]) parts.push(findComponents(fg, W, H, { dilate: cfg.dilate ?? 3, restrictTo: side }).comps);
+    } else {
+      parts.push(findComponents(fg, W, H, { dilate: cfg.splitDilate ?? 0, restrictTo: owned }).comps);
+    }
+    for (const comps of parts) for (const s of comps) {
       if (s.area < minArea) { dropped.push({ ...s, why: 'speck' }); continue; }
       final.push({ ...s, split: true });
     }
@@ -136,7 +164,7 @@ export function matchAnchor(sprites, [px, py]) {
 }
 
 /** Strip cream fringe: opaque pixels bordering transparency that are still close to bg become transparent. */
-export function defringe(rgba, w, h, bg, { tol = 48, passes = 2 } = {}) {
+export function defringe(rgba, w, h, bg, { tol = 48, passes = 8 } = {}) {
   for (let pass = 0; pass < passes; pass++) {
     const kill = [];
     for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
@@ -155,13 +183,15 @@ export function defringe(rgba, w, h, bg, { tol = 48, passes = 2 } = {}) {
 export function extractRGBA(sheet, fg, box, bg, defringeOpts) {
   const { data, W } = sheet;
   const pad = 0;
+  let own = null;
+  if (box.pixels) { own = new Uint8Array(sheet.W * sheet.H); for (const p of box.pixels) own[p] = 1; }
   const w = box.w + pad * 2, h = box.h + pad * 2;
   const rgba = Buffer.alloc(w * h * 4);
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     const sx = box.x + x, sy = box.y + y; const sp = sy * W + sx;
     if (!fg[sp]) continue;
-    // belongs to this sprite only when the owning label matches (prevents neighbour bleed)
-    if (box.owner && !box.owner(sp)) continue;
+    // only pixels owned by this component (prevents bleed from neighbours inside the bbox)
+    if (own && !own[sp]) continue;
     const o = (y * w + x) * 4;
     rgba[o] = data[sp * 4]; rgba[o + 1] = data[sp * 4 + 1]; rgba[o + 2] = data[sp * 4 + 2]; rgba[o + 3] = 255;
   }

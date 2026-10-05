@@ -1,0 +1,1142 @@
+{
+ "bank_front": {
+  "x": 1035,
+  "y": 30,
+  "w": 181,
+  "h": 231,
+  "category": "building_front",
+  "sheet": "town",
+  "file": "assets/buildings/bank_front.png",
+  "atlas": "town_atlas"
+ },
+ "bar_counter": {
+  "x": 493,
+  "y": 726,
+  "w": 235,
+  "h": 136,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/bar_counter.png",
+  "atlas": "town_atlas"
+ },
+ "barrel_a": {
+  "x": 170,
+  "y": 640,
+  "w": 45,
+  "h": 58,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/barrel_a.png",
+  "atlas": "town_atlas"
+ },
+ "barrel_b": {
+  "x": 227,
+  "y": 640,
+  "w": 45,
+  "h": 58,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/barrel_b.png",
+  "atlas": "town_atlas"
+ },
+ "barrel_interior_a": {
+  "x": 934,
+  "y": 875,
+  "w": 39,
+  "h": 56,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/barrel_interior_a.png",
+  "atlas": "town_atlas"
+ },
+ "barrel_interior_b": {
+  "x": 871,
+  "y": 882,
+  "w": 46,
+  "h": 60,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/barrel_interior_b.png",
+  "atlas": "town_atlas"
+ },
+ "bed": {
+  "x": 868,
+  "y": 962,
+  "w": 131,
+  "h": 78,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/bed.png",
+  "atlas": "town_atlas"
+ },
+ "bench": {
+  "x": 96,
+  "y": 802,
+  "w": 81,
+  "h": 71,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/bench.png",
+  "atlas": "town_atlas"
+ },
+ "bookshelf_bottles": {
+  "x": 644,
+  "y": 953,
+  "w": 107,
+  "h": 87,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/bookshelf_bottles.png",
+  "atlas": "town_atlas"
+ },
+ "bottles_a": {
+  "x": 350,
+  "y": 947,
+  "w": 54,
+  "h": 52,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/bottles_a.png",
+  "atlas": "town_atlas"
+ },
+ "cactus_potted": {
+  "x": 989,
+  "y": 851,
+  "w": 35,
+  "h": 69,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/cactus_potted.png",
+  "atlas": "town_atlas"
+ },
+ "cactus_tall": {
+  "x": 26,
+  "y": 697,
+  "w": 48,
+  "h": 93,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/cactus_tall.png",
+  "atlas": "town_atlas"
+ },
+ "candelabra": {
+  "x": 1040,
+  "y": 871,
+  "w": 72,
+  "h": 72,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/candelabra.png",
+  "atlas": "town_atlas"
+ },
+ "chair_red": {
+  "x": 742,
+  "y": 816,
+  "w": 37,
+  "h": 59,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/chair_red.png",
+  "atlas": "town_atlas"
+ },
+ "chair_wood": {
+  "x": 747,
+  "y": 748,
+  "w": 38,
+  "h": 59,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/chair_wood.png",
+  "atlas": "town_atlas"
+ },
+ "chimney_stone": {
+  "x": 1144,
+  "y": 301,
+  "w": 26,
+  "h": 85,
+  "category": "rooftop",
+  "sheet": "town",
+  "file": "assets/buildings/chimney_stone.png",
+  "atlas": "town_atlas"
+ },
+ "clock_sign": {
+  "x": 1191,
+  "y": 450,
+  "w": 60,
+  "h": 56,
+  "category": "sign_decor",
+  "sheet": "town",
+  "file": "assets/props/clock_sign.png",
+  "atlas": "town_atlas"
+ },
+ "cow_skull": {
+  "x": 204,
+  "y": 939,
+  "w": 58,
+  "h": 58,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/cow_skull.png",
+  "atlas": "town_atlas"
+ },
+ "crate_small": {
+  "x": 25,
+  "y": 627,
+  "w": 39,
+  "h": 55,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/crate_small.png",
+  "atlas": "town_atlas"
+ },
+ "crate_stack": {
+  "x": 76,
+  "y": 629,
+  "w": 77,
+  "h": 66,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/crate_stack.png",
+  "atlas": "town_atlas"
+ },
+ "crate_stack_b": {
+  "x": 1025,
+  "y": 975,
+  "w": 62,
+  "h": 65,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/crate_stack_b.png",
+  "atlas": "town_atlas"
+ },
+ "dirt_patch": {
+  "x": 375,
+  "y": 827,
+  "w": 74,
+  "h": 51,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/dirt_patch.png",
+  "atlas": "town_atlas"
+ },
+ "door_dark": {
+  "x": 597,
+  "y": 308,
+  "w": 48,
+  "h": 85,
+  "category": "door_window",
+  "sheet": "town",
+  "file": "assets/buildings/door_dark.png",
+  "atlas": "town_atlas"
+ },
+ "door_glass": {
+  "x": 720,
+  "y": 308,
+  "w": 46,
+  "h": 85,
+  "category": "door_window",
+  "sheet": "town",
+  "file": "assets/buildings/door_glass.png",
+  "atlas": "town_atlas"
+ },
+ "door_jail": {
+  "x": 657,
+  "y": 308,
+  "w": 51,
+  "h": 85,
+  "category": "door_window",
+  "sheet": "town",
+  "file": "assets/buildings/door_jail.png",
+  "atlas": "town_atlas"
+ },
+ "door_saloon_swing": {
+  "x": 780,
+  "y": 315,
+  "w": 72,
+  "h": 73,
+  "category": "door_window",
+  "sheet": "town",
+  "file": "assets/buildings/door_saloon_swing.png",
+  "atlas": "town_atlas"
+ },
+ "door_wood": {
+  "x": 531,
+  "y": 308,
+  "w": 54,
+  "h": 85,
+  "category": "door_window",
+  "sheet": "town",
+  "file": "assets/buildings/door_wood.png",
+  "atlas": "town_atlas"
+ },
+ "fence_gate_cross": {
+  "x": 227,
+  "y": 565,
+  "w": 100,
+  "h": 55,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/fence_gate_cross.png",
+  "atlas": "town_atlas"
+ },
+ "fence_post": {
+  "x": 204,
+  "y": 565,
+  "w": 14,
+  "h": 55,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/fence_post.png",
+  "atlas": "town_atlas"
+ },
+ "fence_rail": {
+  "x": 26,
+  "y": 565,
+  "w": 171,
+  "h": 53,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/fence_rail.png",
+  "atlas": "town_atlas"
+ },
+ "general_store_front": {
+  "x": 608,
+  "y": 53,
+  "w": 198,
+  "h": 208,
+  "category": "building_front",
+  "sheet": "town",
+  "file": "assets/buildings/general_store_front.png",
+  "atlas": "town_atlas"
+ },
+ "hay_bale": {
+  "x": 288,
+  "y": 637,
+  "w": 37,
+  "h": 58,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/hay_bale.png",
+  "atlas": "town_atlas"
+ },
+ "hay_patch_a": {
+  "x": 348,
+  "y": 715,
+  "w": 55,
+  "h": 32,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/hay_patch_a.png",
+  "atlas": "town_atlas"
+ },
+ "hay_patch_b": {
+  "x": 413,
+  "y": 715,
+  "w": 54,
+  "h": 31,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/hay_patch_b.png",
+  "atlas": "town_atlas"
+ },
+ "hay_pile": {
+  "x": 376,
+  "y": 758,
+  "w": 67,
+  "h": 56,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/hay_pile.png",
+  "atlas": "town_atlas"
+ },
+ "hitching_post": {
+  "x": 95,
+  "y": 712,
+  "w": 73,
+  "h": 73,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/hitching_post.png",
+  "atlas": "town_atlas"
+ },
+ "hitching_rail": {
+  "x": 258,
+  "y": 806,
+  "w": 100,
+  "h": 73,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/hitching_rail.png",
+  "atlas": "town_atlas"
+ },
+ "jail_front": {
+  "x": 428,
+  "y": 35,
+  "w": 171,
+  "h": 223,
+  "category": "building_front",
+  "sheet": "town",
+  "file": "assets/buildings/jail_front.png",
+  "atlas": "town_atlas"
+ },
+ "lamp_post": {
+  "x": 428,
+  "y": 535,
+  "w": 31,
+  "h": 165,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/lamp_post.png",
+  "atlas": "town_atlas"
+ },
+ "lantern_hanging": {
+  "x": 1261,
+  "y": 449,
+  "w": 39,
+  "h": 64,
+  "category": "sign_decor",
+  "sheet": "town",
+  "file": "assets/props/lantern_hanging.png",
+  "atlas": "town_atlas"
+ },
+ "lasso": {
+  "x": 492,
+  "y": 965,
+  "w": 43,
+  "h": 56,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/lasso.png",
+  "atlas": "town_atlas"
+ },
+ "painting_framed": {
+  "x": 270,
+  "y": 954,
+  "w": 63,
+  "h": 65,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/painting_framed.png",
+  "atlas": "town_atlas"
+ },
+ "piano": {
+  "x": 895,
+  "y": 725,
+  "w": 161,
+  "h": 139,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/piano.png",
+  "atlas": "town_atlas"
+ },
+ "pillar_a": {
+  "x": 1352,
+  "y": 558,
+  "w": 32,
+  "h": 111,
+  "category": "interior_trim",
+  "sheet": "town",
+  "file": "assets/tiles/pillar_a.png",
+  "atlas": "town_atlas"
+ },
+ "pillar_b": {
+  "x": 1395,
+  "y": 559,
+  "w": 27,
+  "h": 110,
+  "category": "interior_trim",
+  "sheet": "town",
+  "file": "assets/tiles/pillar_b.png",
+  "atlas": "town_atlas"
+ },
+ "porch_awning": {
+  "x": 289,
+  "y": 437,
+  "w": 110,
+  "h": 76,
+  "category": "building_section",
+  "sheet": "town",
+  "file": "assets/buildings/porch_awning.png",
+  "atlas": "town_atlas"
+ },
+ "porch_frame": {
+  "x": 200,
+  "y": 437,
+  "w": 74,
+  "h": 76,
+  "category": "building_section",
+  "sheet": "town",
+  "file": "assets/buildings/porch_frame.png",
+  "atlas": "town_atlas"
+ },
+ "porch_shed": {
+  "x": 411,
+  "y": 437,
+  "w": 88,
+  "h": 73,
+  "category": "building_section",
+  "sheet": "town",
+  "file": "assets/buildings/porch_shed.png",
+  "atlas": "town_atlas"
+ },
+ "rail_wood": {
+  "x": 372,
+  "y": 1009,
+  "w": 89,
+  "h": 30,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/rail_wood.png",
+  "atlas": "town_atlas"
+ },
+ "railing_balcony": {
+  "x": 1296,
+  "y": 932,
+  "w": 126,
+  "h": 65,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/railing_balcony.png",
+  "atlas": "town_atlas"
+ },
+ "rocking_chair": {
+  "x": 40,
+  "y": 945,
+  "w": 90,
+  "h": 101,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/rocking_chair.png",
+  "atlas": "town_atlas"
+ },
+ "rocks_small": {
+  "x": 27,
+  "y": 853,
+  "w": 48,
+  "h": 26,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/rocks_small.png",
+  "atlas": "town_atlas"
+ },
+ "roof_gray_slate": {
+  "x": 1058,
+  "y": 312,
+  "w": 68,
+  "h": 74,
+  "category": "rooftop",
+  "sheet": "town",
+  "file": "assets/buildings/roof_gray_slate.png",
+  "atlas": "town_atlas"
+ },
+ "roof_green_shingles": {
+  "x": 881,
+  "y": 407,
+  "w": 83,
+  "h": 76,
+  "category": "rooftop",
+  "sheet": "town",
+  "file": "assets/buildings/roof_green_shingles.png",
+  "atlas": "town_atlas"
+ },
+ "roof_parapet_stone": {
+  "x": 1068,
+  "y": 400,
+  "w": 101,
+  "h": 82,
+  "category": "rooftop",
+  "sheet": "town",
+  "file": "assets/buildings/roof_parapet_stone.png",
+  "atlas": "town_atlas"
+ },
+ "roof_red_tiles": {
+  "x": 971,
+  "y": 312,
+  "w": 80,
+  "h": 74,
+  "category": "rooftop",
+  "sheet": "town",
+  "file": "assets/buildings/roof_red_tiles.png",
+  "atlas": "town_atlas"
+ },
+ "roof_wood_dark": {
+  "x": 971,
+  "y": 405,
+  "w": 87,
+  "h": 78,
+  "category": "rooftop",
+  "sheet": "town",
+  "file": "assets/buildings/roof_wood_dark.png",
+  "atlas": "town_atlas"
+ },
+ "roof_wood_planks": {
+  "x": 881,
+  "y": 312,
+  "w": 82,
+  "h": 77,
+  "category": "rooftop",
+  "sheet": "town",
+  "file": "assets/buildings/roof_wood_planks.png",
+  "atlas": "town_atlas"
+ },
+ "rug_red": {
+  "x": 492,
+  "y": 875,
+  "w": 246,
+  "h": 61,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/rug_red.png",
+  "atlas": "town_atlas"
+ },
+ "saddle": {
+  "x": 552,
+  "y": 956,
+  "w": 68,
+  "h": 89,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/saddle.png",
+  "atlas": "town_atlas"
+ },
+ "safe": {
+  "x": 776,
+  "y": 962,
+  "w": 63,
+  "h": 78,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/safe.png",
+  "atlas": "town_atlas"
+ },
+ "saloon_front": {
+  "x": 21,
+  "y": 37,
+  "w": 207,
+  "h": 223,
+  "category": "building_front",
+  "sheet": "town",
+  "file": "assets/buildings/saloon_front.png",
+  "atlas": "town_atlas"
+ },
+ "section_door_glass": {
+  "x": 25,
+  "y": 429,
+  "w": 64,
+  "h": 86,
+  "category": "building_section",
+  "sheet": "town",
+  "file": "assets/buildings/section_door_glass.png",
+  "atlas": "town_atlas"
+ },
+ "section_general_store": {
+  "x": 299,
+  "y": 308,
+  "w": 95,
+  "h": 120,
+  "category": "building_section",
+  "sheet": "town",
+  "file": "assets/buildings/section_general_store.png",
+  "atlas": "town_atlas"
+ },
+ "section_jail": {
+  "x": 206,
+  "y": 308,
+  "w": 86,
+  "h": 120,
+  "category": "building_section",
+  "sheet": "town",
+  "file": "assets/buildings/section_jail.png",
+  "atlas": "town_atlas"
+ },
+ "section_saloon": {
+  "x": 21,
+  "y": 308,
+  "w": 79,
+  "h": 113,
+  "category": "building_section",
+  "sheet": "town",
+  "file": "assets/buildings/section_saloon.png",
+  "atlas": "town_atlas"
+ },
+ "section_sheriff": {
+  "x": 107,
+  "y": 308,
+  "w": 91,
+  "h": 113,
+  "category": "building_section",
+  "sheet": "town",
+  "file": "assets/buildings/section_sheriff.png",
+  "atlas": "town_atlas"
+ },
+ "section_station": {
+  "x": 401,
+  "y": 308,
+  "w": 100,
+  "h": 115,
+  "category": "building_section",
+  "sheet": "town",
+  "file": "assets/buildings/section_station.png",
+  "atlas": "town_atlas"
+ },
+ "section_window_glass": {
+  "x": 108,
+  "y": 430,
+  "w": 71,
+  "h": 86,
+  "category": "building_section",
+  "sheet": "town",
+  "file": "assets/buildings/section_window_glass.png",
+  "atlas": "town_atlas"
+ },
+ "sheriff_front": {
+  "x": 241,
+  "y": 53,
+  "w": 177,
+  "h": 206,
+  "category": "building_front",
+  "sheet": "town",
+  "file": "assets/buildings/sheriff_front.png",
+  "atlas": "town_atlas"
+ },
+ "shrub_green_a": {
+  "x": 30,
+  "y": 803,
+  "w": 47,
+  "h": 38,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/shrub_green_a.png",
+  "atlas": "town_atlas"
+ },
+ "shrub_green_b": {
+  "x": 197,
+  "y": 825,
+  "w": 52,
+  "h": 41,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/shrub_green_b.png",
+  "atlas": "town_atlas"
+ },
+ "side_table_lantern": {
+  "x": 140,
+  "y": 940,
+  "w": 62,
+  "h": 89,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/side_table_lantern.png",
+  "atlas": "town_atlas"
+ },
+ "sign_bank": {
+  "x": 1360,
+  "y": 380,
+  "w": 63,
+  "h": 54,
+  "category": "sign",
+  "sheet": "town",
+  "file": "assets/props/sign_bank.png",
+  "atlas": "town_atlas"
+ },
+ "sign_jail": {
+  "x": 1360,
+  "y": 311,
+  "w": 63,
+  "h": 59,
+  "category": "sign",
+  "sheet": "town",
+  "file": "assets/props/sign_jail.png",
+  "atlas": "town_atlas"
+ },
+ "sign_saloon": {
+  "x": 1191,
+  "y": 312,
+  "w": 72,
+  "h": 58,
+  "category": "sign",
+  "sheet": "town",
+  "file": "assets/props/sign_saloon.png",
+  "atlas": "town_atlas"
+ },
+ "sign_sheriff": {
+  "x": 1273,
+  "y": 312,
+  "w": 78,
+  "h": 62,
+  "category": "sign",
+  "sheet": "town",
+  "file": "assets/props/sign_sheriff.png",
+  "atlas": "town_atlas"
+ },
+ "sign_stable": {
+  "x": 1272,
+  "y": 382,
+  "w": 78,
+  "h": 49,
+  "category": "sign",
+  "sheet": "town",
+  "file": "assets/props/sign_stable.png",
+  "atlas": "town_atlas"
+ },
+ "sign_store": {
+  "x": 1191,
+  "y": 380,
+  "w": 72,
+  "h": 54,
+  "category": "sign",
+  "sheet": "town",
+  "file": "assets/props/sign_store.png",
+  "atlas": "town_atlas"
+ },
+ "signpost_arm": {
+  "x": 1311,
+  "y": 450,
+  "w": 37,
+  "h": 64,
+  "category": "sign_decor",
+  "sheet": "town",
+  "file": "assets/props/signpost_arm.png",
+  "atlas": "town_atlas"
+ },
+ "signpost_directions": {
+  "x": 1362,
+  "y": 448,
+  "w": 68,
+  "h": 78,
+  "category": "sign_decor",
+  "sheet": "town",
+  "file": "assets/props/signpost_directions.png",
+  "atlas": "town_atlas"
+ },
+ "signpost_wood": {
+  "x": 354,
+  "y": 543,
+  "w": 56,
+  "h": 103,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/signpost_wood.png",
+  "atlas": "town_atlas"
+ },
+ "stable_front": {
+  "x": 812,
+  "y": 60,
+  "w": 212,
+  "h": 201,
+  "category": "building_front",
+  "sheet": "town",
+  "file": "assets/buildings/stable_front.png",
+  "atlas": "town_atlas"
+ },
+ "staircase": {
+  "x": 1121,
+  "y": 883,
+  "w": 165,
+  "h": 165,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/staircase.png",
+  "atlas": "town_atlas"
+ },
+ "station_front": {
+  "x": 1222,
+  "y": 27,
+  "w": 208,
+  "h": 232,
+  "category": "building_front",
+  "sheet": "town",
+  "file": "assets/buildings/station_front.png",
+  "atlas": "town_atlas"
+ },
+ "stool_red_a": {
+  "x": 755,
+  "y": 891,
+  "w": 31,
+  "h": 47,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/stool_red_a.png",
+  "atlas": "town_atlas"
+ },
+ "stool_red_b": {
+  "x": 809,
+  "y": 900,
+  "w": 36,
+  "h": 38,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/stool_red_b.png",
+  "atlas": "town_atlas"
+ },
+ "table_round": {
+  "x": 789,
+  "y": 827,
+  "w": 85,
+  "h": 60,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/table_round.png",
+  "atlas": "town_atlas"
+ },
+ "table_round_bottle": {
+  "x": 796,
+  "y": 732,
+  "w": 82,
+  "h": 79,
+  "category": "interior_furniture",
+  "sheet": "town",
+  "file": "assets/props/table_round_bottle.png",
+  "atlas": "town_atlas"
+ },
+ "tile_carpet_red": {
+  "x": 1243,
+  "y": 559,
+  "w": 103,
+  "h": 110,
+  "category": "interior_tile",
+  "sheet": "town",
+  "file": "assets/tiles/tile_carpet_red.png",
+  "atlas": "town_atlas"
+ },
+ "tile_carpet_runner": {
+  "x": 1180,
+  "y": 675,
+  "w": 75,
+  "h": 107,
+  "category": "interior_tile",
+  "sheet": "town",
+  "file": "assets/tiles/tile_carpet_runner.png",
+  "atlas": "town_atlas"
+ },
+ "tile_floor_planks": {
+  "x": 1100,
+  "y": 558,
+  "w": 137,
+  "h": 111,
+  "category": "interior_tile",
+  "sheet": "town",
+  "file": "assets/tiles/tile_floor_planks.png",
+  "atlas": "town_atlas"
+ },
+ "tile_sand_a": {
+  "x": 1100,
+  "y": 675,
+  "w": 74,
+  "h": 107,
+  "category": "interior_tile",
+  "sheet": "town",
+  "file": "assets/tiles/tile_sand_a.png",
+  "atlas": "town_atlas"
+ },
+ "tile_sand_wainscot": {
+  "x": 1344,
+  "y": 675,
+  "w": 78,
+  "h": 107,
+  "category": "interior_tile",
+  "sheet": "town",
+  "file": "assets/tiles/tile_sand_wainscot.png",
+  "atlas": "town_atlas"
+ },
+ "tile_stone_wall": {
+  "x": 1262,
+  "y": 675,
+  "w": 76,
+  "h": 107,
+  "category": "interior_tile",
+  "sheet": "town",
+  "file": "assets/tiles/tile_stone_wall.png",
+  "atlas": "town_atlas"
+ },
+ "trim_post_short": {
+  "x": 1309,
+  "y": 811,
+  "w": 24,
+  "h": 73,
+  "category": "interior_trim",
+  "sheet": "town",
+  "file": "assets/tiles/trim_post_short.png",
+  "atlas": "town_atlas"
+ },
+ "trim_post_tall_a": {
+  "x": 1353,
+  "y": 811,
+  "w": 19,
+  "h": 96,
+  "category": "interior_trim",
+  "sheet": "town",
+  "file": "assets/tiles/trim_post_tall_a.png",
+  "atlas": "town_atlas"
+ },
+ "trim_post_tall_b": {
+  "x": 1392,
+  "y": 811,
+  "w": 26,
+  "h": 97,
+  "category": "interior_trim",
+  "sheet": "town",
+  "file": "assets/tiles/trim_post_tall_b.png",
+  "atlas": "town_atlas"
+ },
+ "trim_rail_long": {
+  "x": 1100,
+  "y": 820,
+  "w": 191,
+  "h": 18,
+  "category": "interior_trim",
+  "sheet": "town",
+  "file": "assets/tiles/trim_rail_long.png",
+  "atlas": "town_atlas"
+ },
+ "trim_rail_medium": {
+  "x": 1103,
+  "y": 846,
+  "w": 118,
+  "h": 16,
+  "category": "interior_trim",
+  "sheet": "town",
+  "file": "assets/tiles/trim_rail_medium.png",
+  "atlas": "town_atlas"
+ },
+ "trim_rail_short": {
+  "x": 1243,
+  "y": 841,
+  "w": 45,
+  "h": 24,
+  "category": "interior_trim",
+  "sheet": "town",
+  "file": "assets/tiles/trim_rail_short.png",
+  "atlas": "town_atlas"
+ },
+ "wagon": {
+  "x": 196,
+  "y": 714,
+  "w": 162,
+  "h": 82,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/wagon.png",
+  "atlas": "town_atlas"
+ },
+ "wall_pegs": {
+  "x": 418,
+  "y": 958,
+  "w": 61,
+  "h": 34,
+  "category": "misc",
+  "sheet": "town",
+  "file": "assets/props/wall_pegs.png",
+  "atlas": "town_atlas"
+ },
+ "wall_saloon_lantern": {
+  "x": 584,
+  "y": 559,
+  "w": 95,
+  "h": 127,
+  "category": "interior_wall",
+  "sheet": "town",
+  "file": "assets/tiles/wall_saloon_lantern.png",
+  "atlas": "town_atlas"
+ },
+ "wall_saloon_painting": {
+  "x": 822,
+  "y": 559,
+  "w": 126,
+  "h": 126,
+  "category": "interior_wall",
+  "sheet": "town",
+  "file": "assets/tiles/wall_saloon_painting.png",
+  "atlas": "town_atlas"
+ },
+ "wall_saloon_plain": {
+  "x": 492,
+  "y": 559,
+  "w": 85,
+  "h": 127,
+  "category": "interior_wall",
+  "sheet": "town",
+  "file": "assets/tiles/wall_saloon_plain.png",
+  "atlas": "town_atlas"
+ },
+ "wall_saloon_shelf": {
+  "x": 685,
+  "y": 559,
+  "w": 131,
+  "h": 127,
+  "category": "interior_wall",
+  "sheet": "town",
+  "file": "assets/tiles/wall_saloon_shelf.png",
+  "atlas": "town_atlas"
+ },
+ "wall_saloon_wanted_skull": {
+  "x": 954,
+  "y": 559,
+  "w": 119,
+  "h": 126,
+  "category": "interior_wall",
+  "sheet": "town",
+  "file": "assets/tiles/wall_saloon_wanted_skull.png",
+  "atlas": "town_atlas"
+ },
+ "water_trough": {
+  "x": 344,
+  "y": 661,
+  "w": 68,
+  "h": 38,
+  "category": "town_prop",
+  "sheet": "town",
+  "file": "assets/props/water_trough.png",
+  "atlas": "town_atlas"
+ },
+ "window_dark_a": {
+  "x": 724,
+  "y": 414,
+  "w": 61,
+  "h": 61,
+  "category": "door_window",
+  "sheet": "town",
+  "file": "assets/buildings/window_dark_a.png",
+  "atlas": "town_atlas"
+ },
+ "window_dark_b": {
+  "x": 798,
+  "y": 414,
+  "w": 54,
+  "h": 61,
+  "category": "door_window",
+  "sheet": "town",
+  "file": "assets/buildings/window_dark_b.png",
+  "atlas": "town_atlas"
+ },
+ "window_jail": {
+  "x": 657,
+  "y": 412,
+  "w": 53,
+  "h": 63,
+  "category": "door_window",
+  "sheet": "town",
+  "file": "assets/buildings/window_jail.png",
+  "atlas": "town_atlas"
+ },
+ "window_wood_small": {
+  "x": 534,
+  "y": 411,
+  "w": 50,
+  "h": 66,
+  "category": "door_window",
+  "sheet": "town",
+  "file": "assets/buildings/window_wood_small.png",
+  "atlas": "town_atlas"
+ },
+ "window_wood_tall": {
+  "x": 597,
+  "y": 406,
+  "w": 48,
+  "h": 69,
+  "category": "door_window",
+  "sheet": "town",
+  "file": "assets/buildings/window_wood_tall.png",
+  "atlas": "town_atlas"
+ }
+}
