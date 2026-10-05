@@ -8,7 +8,7 @@ var tabs: Dictionary = {}
 func _ready() -> void:
 	music = "menu"
 	super._ready()
-	UI.paper_bg(self)
+	UI.paper_bg(self, "blue")
 	add_topbar(true, "CODEX")
 	var vp := vsize()
 	var y := Game.safe_top + 120.0

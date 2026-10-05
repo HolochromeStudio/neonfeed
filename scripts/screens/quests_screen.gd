@@ -8,7 +8,7 @@ var tabs: Dictionary = {}
 func _ready() -> void:
 	music = "menu"
 	super._ready()
-	UI.paper_bg(self)
+	UI.paper_bg(self, "green")
 	add_topbar(true, "QUESTS")
 	Save.refresh_quests()
 	var vp := vsize()

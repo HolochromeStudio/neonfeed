@@ -19,9 +19,10 @@ func _ready() -> void:
 	var sk := Atlas.rect("biome_" + _biome(), vp.x, 560)
 	sk.stretch_mode = TextureRect.STRETCH_SCALE
 	sk.position = Vector2(0, 120)
+	sk.modulate = Color(1.18, 1.16, 1.1)
 	add_child(sk)
-	var cover := ColorRect.new()
-	cover.color = Color("4a4540")
+	var cover := Control.new()
+	cover.clip_contents = true
 	cover.position = Vector2(0, vp.y * 0.60)
 	cover.size = Vector2(vp.x, vp.y * 0.4)
 	add_child(cover)
@@ -31,7 +32,9 @@ func _ready() -> void:
 	_road.setup(_biome(), vp.y * 0.30 + 220, 250)
 	_road.car_ids = Save.data["units"].keys()
 	_road.speed = 60.0
-	UI.paper_bg(cover, Color(0, 0, 0, 0), true)
+	var cbg := UI.paper_bg(cover, "sun")
+	cbg.position = Vector2(0, -vp.y * 0.60)
+	cbg.size = vp
 	# doll
 	_doll = Doll.new()
 	_doll.scale = Vector2(1.25, 1.25)
@@ -51,7 +54,7 @@ func _ready() -> void:
 	_build_play()
 	Save.refresh_quests()
 	_update_badges()
-	if Save.daily_reward_available():
+	if Save.daily_reward_available() and not OS.has_environment("TJ_NODAILY"):
 		var t := create_tween()
 		t.tween_interval(0.6)
 		t.tween_callback(_show_daily)
@@ -99,7 +102,7 @@ func _build_top() -> void:
 
 func _build_play() -> void:
 	var vp := vsize()
-	var play := UI.btn("PLAY", "teal", Vector2(760, 170), func(): Game.go("modes"), 96)
+	var play := UI.btn("PLAY", "green", Vector2(760, 170), func(): Game.go("modes"), 96)
 	play.position = Vector2((vp.x - 760) * 0.5, vp.y * 0.60 + 10)
 	add_child(play)
 	UI.pop_in(play, 0.2)
@@ -156,7 +159,7 @@ func _update_badges() -> void:
 	var sb: PaperButton = _buttons["shop"]
 	if Save.coins() >= 300:
 		sb.add_badge("!")
-	if Save.daily_reward_available():
+	if Save.daily_reward_available() and not OS.has_environment("TJ_NODAILY"):
 		(_buttons["daily"] as PaperButton).add_badge("!")
 
 func _process(dt: float) -> void:

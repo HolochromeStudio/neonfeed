@@ -185,34 +185,32 @@ static func stamp(node: Control, delay: float = 0.0) -> void:
 	tw.chain().tween_callback(func(): Audio.sfx("stamp"))
 
 # ------------------------------------------------------------------ background
-static func paper_bg(parent: Control, base: Color = Color("57524d"), halftone: bool = true) -> ColorRect:
-	var bg := ColorRect.new()
-	bg.color = base
+static func paper_bg(parent: Control, base: Variant = "teal", halftone: bool = true) -> Control:
+	var bg := Control.new()
 	set_full_rect(bg)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(bg)
+	if base is Color:
+		var cr := ColorRect.new()
+		cr.color = base
+		set_full_rect(cr)
+		cr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		bg.add_child(cr)
+	else:
+		var t := TextureRect.new()
+		t.texture = load("res://assets/runtime/tex/bg_%s.png" % str(base)) as Texture2D
+		t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		t.stretch_mode = TextureRect.STRETCH_SCALE
+		set_full_rect(t)
+		t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		bg.add_child(t)
 	var g := TextureRect.new()
 	g.texture = Atlas.tile("ui_grain_tile")
 	g.stretch_mode = TextureRect.STRETCH_TILE
-	g.modulate = Color(1, 1, 1, 0.16)
+	g.modulate = Color(1, 1, 1, 0.10)
 	set_full_rect(g)
 	g.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bg.add_child(g)
-	if halftone:
-		var h := TextureRect.new()
-		h.texture = Atlas.tile("ui_halftone_tile")
-		h.stretch_mode = TextureRect.STRETCH_TILE
-		h.modulate = Color(1, 1, 1, 0.2)
-		set_full_rect(h)
-		h.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		bg.add_child(h)
-	var v := TextureRect.new()
-	v.texture = Atlas.tex("ui_vignette")
-	v.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	v.stretch_mode = TextureRect.STRETCH_SCALE
-	set_full_rect(v)
-	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	bg.add_child(v)
 	return bg
 
 # ------------------------------------------------------------------ unit card
@@ -251,7 +249,7 @@ static func unit_card(id: String, size: Vector2 = Vector2(200, 270), show_level:
 		lv.size = Vector2(size.x * 0.4, size.y * 0.1)
 		root.add_child(lv)
 	if dim:
-		root.modulate = Color(0.45, 0.45, 0.45, 0.9)
+		root.modulate = Color(0.74, 0.74, 0.8, 0.95)
 	return root
 
 static func resource_pill(kind: String, width: float = 220.0) -> Control:

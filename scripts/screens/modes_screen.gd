@@ -4,7 +4,7 @@ extends Screen
 func _ready() -> void:
 	music = "menu"
 	super._ready()
-	UI.paper_bg(self)
+	UI.paper_bg(self, "teal")
 	add_topbar(true, "PLAY")
 	var vp := vsize()
 	var cw := (vp.x - 100) * 0.5

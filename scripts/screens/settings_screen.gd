@@ -4,7 +4,7 @@ extends Screen
 func _ready() -> void:
 	music = "menu"
 	super._ready()
-	UI.paper_bg(self)
+	UI.paper_bg(self, "blue")
 	add_topbar(true, "SETTINGS")
 	var vp := vsize()
 	var sc := ScrollContainer.new()

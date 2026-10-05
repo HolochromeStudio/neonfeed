@@ -11,7 +11,7 @@ var _prog: float = 0.0
 func _ready() -> void:
 	music = ""
 	super._ready()
-	UI.paper_bg(self)
+	UI.paper_bg(self, "teal")
 	var vp := vsize()
 	var logo := Atlas.rect("logo_title_block", 800, 560)
 	logo.position = Vector2((vp.x - 800) * 0.5, vp.y * 0.18)

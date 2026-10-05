@@ -18,7 +18,7 @@ func init(a: Dictionary) -> void:
 func _ready() -> void:
 	music = "menu"
 	super._ready()
-	UI.paper_bg(self)
+	UI.paper_bg(self, "green")
 	add_topbar(true, "CAMPAIGN")
 	_build()
 

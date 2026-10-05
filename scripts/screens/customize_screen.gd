@@ -23,10 +23,16 @@ func init(a: Dictionary) -> void:
 	args = a
 	create_mode = bool(a.get("create", false))
 
+static func _ngon(c: Vector2, r: float, n: int) -> PackedVector2Array:
+	var p := PackedVector2Array()
+	for i in n:
+		p.append(c + Vector2(cos(TAU * i / n), sin(TAU * i / n)) * r)
+	return p
+
 func _ready() -> void:
 	music = "menu"
 	super._ready()
-	UI.paper_bg(self)
+	UI.paper_bg(self, "grape")
 	var vp := vsize()
 	if not create_mode:
 		add_topbar(true, "CUSTOMIZE")
@@ -53,22 +59,28 @@ func _ready() -> void:
 		y += 110
 	# stage: paper spotlight + road strip
 	var stage := Atlas.nine("ui_panel_cream", 44)
-	stage.size = Vector2(vp.x - 80, 560)
+	stage.size = Vector2(vp.x - 80, 860)
 	stage.position = Vector2(40, y)
 	add_child(stage)
-	var floor_strip := ColorRect.new()
-	floor_strip.color = Color("6b6660")
-	floor_strip.position = Vector2(56, 425); floor_strip.size = Vector2(stage.size.x - 112, 100)
-	stage.add_child(floor_strip)
-	var dash := TextureRect.new()
-	dash.texture = Atlas.tile("tile_road_dashed_yellow_h")
-	dash.stretch_mode = TextureRect.STRETCH_TILE
-	dash.position = Vector2(56, 455); dash.size = Vector2(stage.size.x - 112, 40)
-	dash.modulate = Color(1, 1, 1, 0.8)
-	stage.add_child(dash)
+	var sun := Polygon2D.new()
+	sun.color = Color("ffd978")
+	sun.polygon = _ngon(Vector2(stage.size.x * 0.5, 420), 330.0, 48)
+	stage.add_child(sun)
+	var sun2 := Polygon2D.new()
+	sun2.color = Color("fff0b8")
+	sun2.polygon = _ngon(Vector2(stage.size.x * 0.5, 420), 230.0, 48)
+	stage.add_child(sun2)
+	var shadow := Polygon2D.new()
+	shadow.color = Color(0.2, 0.15, 0.1, 0.28)
+	var sp := PackedVector2Array()
+	for i in 40:
+		var a := TAU * i / 40.0
+		sp.append(Vector2(stage.size.x * 0.5 + cos(a) * 200.0, 760 + sin(a) * 36.0))
+	shadow.polygon = sp
+	stage.add_child(shadow)
 	doll = Doll.new()
-	doll.scale = Vector2(1.7, 1.7)
-	doll.position = Vector2(stage.size.x * 0.5, 470)
+	doll.scale = Vector2(2.6, 2.6)
+	doll.position = Vector2(stage.size.x * 0.5, 750)
 	stage.add_child(doll)
 	# pose / random buttons
 	var pose := UI.btn("POSE", "blue", Vector2(170, 76), func(): _next_pose(), 32)
@@ -77,7 +89,7 @@ func _ready() -> void:
 	var rnd := UI.btn("RANDOM", "lavender", Vector2(210, 76), func(): _randomize(), 32)
 	rnd.position = Vector2(20, 20)
 	stage.add_child(rnd)
-	y += 580
+	y += 880
 	if create_mode:
 		var pl := UI.label("Pick a starting look:", 36, UI.WHITE, true, HORIZONTAL_ALIGNMENT_CENTER, 7)
 		pl.position = Vector2(0, y); pl.size = Vector2(vp.x, 44)

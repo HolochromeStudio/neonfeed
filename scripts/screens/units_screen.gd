@@ -14,7 +14,7 @@ var scroll: ScrollContainer
 func _ready() -> void:
 	music = "menu"
 	super._ready()
-	UI.paper_bg(self)
+	UI.paper_bg(self, "blue")
 	add_topbar(true, "UNITS")
 	deck_idx = int(Save.data["active_deck"])
 	var vp := vsize()

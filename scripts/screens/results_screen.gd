@@ -20,7 +20,7 @@ func _ready() -> void:
 	var win: bool = summary["result"] == "victory"
 	var mode: String = cfg["mode"]
 	var vp := vsize()
-	UI.paper_bg(self, Color("57524d") if win else Color("4a403d"))
+	UI.paper_bg(self, "sun" if win else "blue")
 	var road := RoadScene.new()
 	road.size = Vector2(vp.x, 260)
 	road.position = Vector2(0, vp.y - 360)

@@ -16,7 +16,7 @@ const GOODS := [
 func _ready() -> void:
 	music = "menu"
 	super._ready()
-	UI.paper_bg(self)
+	UI.paper_bg(self, "sun")
 	add_topbar(true, "SHOP")
 	var vp := vsize()
 	var sc := ScrollContainer.new()

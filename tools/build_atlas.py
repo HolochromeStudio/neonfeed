@@ -126,13 +126,14 @@ def ground(name, base, var, seed, speck=None):
                 for dy in range(0, 3):
                     img[(y + dy) % 256, (x + dx) % 256] = col
     Image.fromarray(np.clip(img, 0, 255).astype(np.uint8), "RGB").convert("RGBA").save(os.path.join(TEXDIR, name + ".png"))
-ground("ground_grass", (92, 128, 74), 46, 11, (70, 104, 58))
-ground("ground_grass_flowers", (96, 132, 76), 44, 12, (232, 200, 90))
-ground("ground_concrete", (150, 146, 138), 34, 13, (118, 114, 108))
-ground("ground_sand", (214, 186, 130), 34, 14, (190, 160, 108))
-ground("ground_snow", (226, 232, 238), 22, 15, (200, 210, 224))
-ground("ground_dark", (74, 70, 68), 26, 16, (58, 54, 52))
-ground("ground_dry", (156, 142, 92), 40, 17, (128, 112, 70))
+ground("ground_grass", (122, 176, 84), 40, 11, (92, 146, 64))
+ground("ground_grass_flowers", (126, 180, 88), 38, 12, (250, 214, 96))
+ground("ground_concrete", (186, 180, 168), 26, 13, (150, 144, 134))
+ground("ground_sand", (232, 204, 146), 28, 14, (206, 176, 120))
+ground("ground_snow", (240, 246, 252), 18, 15, (206, 220, 238))
+ground("ground_dark", (84, 82, 100), 24, 16, (64, 62, 80))
+ground("ground_dry", (186, 170, 108), 34, 17, (150, 134, 84))
+ground("ground_asphalt", (92, 94, 108), 20, 18, (116, 118, 132))
 
 manifest = {"pages": [], "entries": {}}
 groups = {}
@@ -150,3 +151,4 @@ for g, its in sorted(groups.items()):
 with open(os.path.join(OUT, "atlas.json"), "w") as f:
     json.dump(manifest, f, indent=0, sort_keys=True)
 print("packed", len(items), "sprites into", len(manifest["pages"]), "pages:", manifest["pages"])
+import subprocess, sys; subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "make_bg.py")], check=True)

@@ -3,10 +3,10 @@ extends Control
 ## Animated paper-collage street used on title / home / menus: scrolling asphalt, props, and traffic with wheel bob.
 
 const BIOME_LOOK := {
-	"city_center": {"ground": "ground_concrete", "tint": Color(0.82, 0.82, 0.86), "sky": Color("7fa6c8")},
+	"city_center": {"ground": "ground_grass", "tint": Color(1, 1, 1), "sky": Color("7fc0e8")},
 	"suburbs": {"ground": "ground_grass_flowers", "tint": Color(1, 1, 1), "sky": Color("93bcd8")},
 	"highway": {"ground": "ground_dry", "tint": Color(1, 0.95, 0.85), "sky": Color("9bb5c6")},
-	"industrial": {"ground": "ground_concrete", "tint": Color(0.75, 0.72, 0.68), "sky": Color("a8a39a")},
+	"industrial": {"ground": "ground_concrete", "tint": Color(0.95, 0.92, 0.88), "sky": Color("a8a39a")},
 	"desert": {"ground": "ground_sand", "tint": Color(1.1, 0.95, 0.8), "sky": Color("e9a96a")},
 	"snow_town": {"ground": "ground_snow", "tint": Color(1, 1, 1), "sky": Color("b7cde0")},
 	"beach_road": {"ground": "ground_sand", "tint": Color(1.1, 1.05, 0.95), "sky": Color("7dc0e0")},
@@ -55,7 +55,7 @@ func build() -> void:
 	add_child(ground)
 	# road
 	var road := TextureRect.new()
-	road.texture = Atlas.tile("tile_asphalt_plain")
+	road.texture = Atlas.tile("ground_asphalt")
 	road.stretch_mode = TextureRect.STRETCH_TILE
 	road.position = Vector2(0, _road_y)
 	road.size = Vector2(w, _road_h)

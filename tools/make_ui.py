@@ -11,6 +11,12 @@ PAL = {  # sampled from the sheet's buttons + cards
   "yellow": (233, 171, 75), "lavender": (140, 143, 184), "mint": (141, 176, 162), "gray": (150, 148, 140),
   "green": (110, 160, 98), "pink": (214, 140, 160), "dark": (62, 58, 56), "cream": (232, 216, 184),
 }
+import colorsys
+def _vivid(c, sat=1.32, val=1.06):
+    h, l, v = colorsys.rgb_to_hsv(*(x / 255 for x in c))
+    r, g, b = colorsys.hsv_to_rgb(h, min(1, l * sat), min(1, v * val))
+    return (int(r * 255), int(g * 255), int(b * 255))
+PAL = {k: (_vivid(v) if k not in ("gray", "dark", "cream") else v) for k, v in PAL.items()}
 RAR = {"common": (150, 150, 146), "uncommon": (120, 168, 120), "rare": (116, 150, 205), "epic": (170, 120, 190), "legendary": (232, 150, 92), "mythic": (220, 108, 130)}
 n = 0
 def put(img, rel):

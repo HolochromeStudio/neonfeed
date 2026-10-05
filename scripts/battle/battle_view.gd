@@ -106,10 +106,10 @@ func _build_background() -> void:
 	var road := Line2D.new()
 	road.points = sim.path_pts
 	road.width = 150.0
-	road.texture = Atlas.tile("tile_asphalt_plain")
+	road.texture = Atlas.tile("ground_asphalt")
 	road.texture_mode = Line2D.LINE_TEXTURE_TILE
 	road.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-	road.default_color = Color(0.82, 0.82, 0.9) if not night else Color(0.45, 0.45, 0.62)
+	road.default_color = Color(1, 1, 1) if not night else Color(0.55, 0.55, 0.75)
 	road.joint_mode = Line2D.LINE_JOINT_ROUND
 	bg_layer.add_child(road)
 	var dash_pts := PackedVector2Array()
