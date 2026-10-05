@@ -5,7 +5,7 @@ signal changed
 signal leveled_up(new_level: int)
 signal unlocked(kind: String, id: String)
 
-const PATH := "user://traffic_jam_save.json"
+static var PATH: String = "user://traffic_jam_save.json"
 const VERSION := 3
 
 var data: Dictionary = {}

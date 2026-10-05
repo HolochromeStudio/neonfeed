@@ -2,7 +2,7 @@ extends Node
 ## Developer tools: command-line automation + in-game dev menu.
 ##   --shot=PATH       save a screenshot then quit (use with --frames=N, default 30)
 ##   --goto=SCREEN     jump to a screen after boot (home, map, units, battle ...)
-##   --args=k:v,k:v    screen args for --goto
+##   --args=k:v,k:v  (deck uses + as separator)    screen args for --goto
 ##   --dev             open dev menu enabled (backtick or 4-finger tap)
 ## All of these are no-ops in normal play.
 
@@ -32,6 +32,9 @@ func _ready() -> void:
 				var p := kv.split(":")
 				if p.size() == 2:
 					goto_args[p[0]] = p[1]
+		elif a.begins_with("--save="):
+			Save.PATH = "user://" + a.substr(7)
+			Save.load_game()
 		elif a == "--dev":
 			enabled = true
 		elif a == "--fresh":

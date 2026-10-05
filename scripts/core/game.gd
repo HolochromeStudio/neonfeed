@@ -357,6 +357,12 @@ func dev_goto() -> void:
 		var cfg := build_cfg(m, {"chapter": int(a.get("ch", 1)), "level": int(a.get("lv", 1))})
 		if a.has("seed"):
 			cfg["seed"] = int(a["seed"])
+		if a.has("deck"):
+			cfg["deck"] = String(a["deck"]).split("+")
+		if a.has("sp"):
+			cfg["start_sp"] = int(a["sp"])
+		if a.has("hp"):
+			cfg["city_hp"] = int(a["hp"])
 		last_cfg = cfg
 		go("battle", {"cfg": cfg}, false, false)
 	else:

@@ -121,15 +121,17 @@ func _build_background() -> void:
 		l.antialiased = true
 		bg_layer.add_child(l)
 		d += 76.0
-	# direction arrows on the road
-	for dd in [260.0, 1500.0, 2650.0]:
+	# direction chevrons on the road
+	for dd in [300.0, 900.0, 1560.0, 2100.0, 2700.0]:
 		var p := sim.path_pos(dd)
-		var ar := Atlas.sprite("tile_road_arrow_right")
-		ar.scale = Vector2(0.55, 0.55)
-		ar.position = p + Vector2(0, 0)
-		ar.rotation = sim.path_dir(dd).angle()
-		ar.modulate = Color(1, 1, 1, 0.6)
-		bg_layer.add_child(ar)
+		var ang := sim.path_dir(dd).angle()
+		var ch := Line2D.new()
+		ch.width = 8
+		ch.default_color = Color(1, 1, 1, 0.55)
+		ch.points = PackedVector2Array([Vector2(-14, -16), Vector2(8, 0), Vector2(-14, 16)])
+		ch.position = p + Vector2(0, 40).rotated(ang)
+		ch.rotation = ang
+		bg_layer.add_child(ch)
 	# spawn / goal markers
 	var start_sign := Atlas.sprite("prop_stop_sign", true) if false else Atlas.sprite("prop_barricade_a", true)
 	start_sign.position = Vector2(30, 330 - 78); start_sign.scale = Vector2(0.9, 0.9)
@@ -191,6 +193,14 @@ func _build_grid() -> void:
 		slot_sprites.append(sp)
 		if sim.coop and sim.slot_owner(i) == 1:
 			sp.modulate = Color(0.75, 0.85, 1.0)
+
+func add_coop_labels() -> void:
+	var mid := sim.grid_origin.y + sim.rows * 0.5 * sim.cell.y
+	for tp in [["PARTNER", sim.grid_origin.y - 30.0, Color("9ec8ff")], ["YOU", sim.grid_origin.y + sim.rows * sim.cell.y + 30.0, Color("ffe08a")]]:
+		var l := UI.label(tp[0], 32, tp[2], true, HORIZONTAL_ALIGNMENT_CENTER, 7)
+		l.position = Vector2(FIELD_W * 0.5 - 150, tp[1] - 20)
+		l.size = Vector2(300, 40)
+		grid_layer.add_child(l)
 
 func set_slot_state(i: int, st: String) -> void:
 	if i < 0 or i >= slot_sprites.size():

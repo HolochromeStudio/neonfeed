@@ -17,23 +17,20 @@ func _draw() -> void:
 	if sim == null:
 		return
 	draw_style_box(_box(), Rect2(Vector2.ZERO, size))
-	var k := (size.x - 24.0) / 1080.0
-	var off := Vector2(12, 40)
-	# road
-	var pts := PackedVector2Array()
-	for p in sim.path_pts:
-		pts.append(off + p * k)
-	draw_polyline(pts, Color("57534f"), 14.0)
+	var f := UI.font_title
+	var alive := 0
 	for e in sim.enemies:
 		if e.alive:
-			draw_circle(off + e.pos * k, 5.0 if not e.boss else 9.0, Color("e9ab4b") if not e.elite else Color("ff6a5a"))
-	# units occupancy
-	for u in sim.units:
-		var p2 := off + Vector2(u.pos.x * k, 200.0 + (u.pos.y - 960.0) * k * 0.5)
-		draw_circle(p2, 5.0, Data.rarity_color(u.def["rarity"]))
-	var f := UI.font_title
-	draw_string(f, Vector2(10, 28), String(opp.get("name", "Rival")), HORIZONTAL_ALIGNMENT_LEFT, 180, 22, Color.WHITE)
-	draw_string(f, Vector2(size.x - 120, 28), "HP %d  W%d" % [maxi(0, sim.city_hp), sim.wave], HORIZONTAL_ALIGNMENT_RIGHT, 110, 22, Color("ffe08a"))
+			alive += 1
+	draw_string(f, Vector2(18, 42), "RIVAL: %s" % String(opp.get("name", "Rival")), HORIZONTAL_ALIGNMENT_LEFT, 360, 30, Color.WHITE)
+	draw_string(f, Vector2(size.x - 560, 42), "HP %d   WAVE %d   VEHICLES %d   ON ROAD %d" % [maxi(0, sim.city_hp), sim.wave, sim.units.size(), alive], HORIZONTAL_ALIGNMENT_RIGHT, 540, 28, Color("ffe08a"))
+	# tiny progress track of the opponent's lead enemy
+	var lead := 0.0
+	for e in sim.enemies:
+		if e.alive:
+			lead = maxf(lead, e.progress / sim.path_len)
+	draw_rect(Rect2(18, 54, size.x - 36, 6), Color(0, 0, 0, 0.5))
+	draw_rect(Rect2(18, 54, (size.x - 36) * lead, 6), Color("ff6a5a"))
 
 func _box() -> StyleBox:
 	var sb := StyleBoxFlat.new()

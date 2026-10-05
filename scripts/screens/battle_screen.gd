@@ -83,10 +83,16 @@ func _ready() -> void:
 	_build_hud()
 	if mode == "pvp":
 		_setup_pvp()
+	if mode == "coop":
+		view.add_coop_labels()
 	if cfg.get("tutorial", false):
 		_tutorial_begin()
 	if Dev.goto_args.has("bot"):
 		bot = BotAI.new(0, 0.9, true)
+	if Dev.goto_args.has("speed"):
+		speed = float(Dev.goto_args["speed"])
+	if Dev.goto_args.has("wave"):
+		sim.wave = int(Dev.goto_args["wave"]); sim.wave_timer = 1.0; sim.next_offer_wave = sim.wave + 3
 	if mode == "survival":
 		Game.play_dialogue("survival_intro") if not Save.data["flags"]["tips"].has("survival_intro") else null
 		Save.data["flags"]["tips"]["survival_intro"] = true
@@ -255,17 +261,22 @@ func _process(dt: float) -> void:
 			_finish()
 		return
 	if not paused and sim.state != "ended":
-		var step := dt * speed
+		var remaining := dt * speed
 		if Dev.god_mode:
 			sim.city_hp = sim.city_max
-		if bot != null:
-			bot.step(sim, step)
-		sim.tick(step)
-		if opp_sim:
-			opp_bot.step(opp_sim, step)
-			opp_sim.tick(step)
-			opp_sim.events.clear()
-			_pvp_check()
+		while remaining > 0.0 and sim.state != "ended":
+			var step := minf(remaining, 0.05)
+			remaining -= step
+			if bot != null:
+				bot.step(sim, step)
+			sim.tick(step)
+			if opp_sim:
+				opp_bot.step(opp_sim, step)
+				opp_sim.tick(step)
+				opp_sim.events.clear()
+				_pvp_check()
+			if sim.state == "offer":
+				break
 		_poll_events()
 	_update_hud(dt)
 	if cfg.get("tutorial", false):
@@ -275,7 +286,10 @@ func _process(dt: float) -> void:
 func _poll_events() -> void:
 	# the view drains sim.events in its own _process; peek via a side channel by scanning state transitions
 	if sim.state == "offer" and offer_layer == null:
-		_show_offer()
+		if bot != null:
+			bot.step(sim, 0.0)
+		else:
+			_show_offer()
 	if sim.wave != _last_wave:
 		_last_wave = sim.wave
 		var boss: bool = sim.is_boss_wave(sim.wave)
@@ -770,8 +784,8 @@ func _setup_pvp() -> void:
 	opp_sim.kill_hook = func(e): _pvp_kill(opp_sim, sim, e)
 	mini = PvpMini.new()
 	mini.setup(opp_sim, opp)
-	mini.position = Vector2(vsize().x - 330, Game.safe_top + 290)
-	mini.size = Vector2(310, 230)
+	mini.position = Vector2(20, Game.safe_top + 186)
+	mini.size = Vector2(vsize().x - 40, 64)
 	hud.add_child(mini)
 
 func _pvp_kill(from: BattleSim, to: BattleSim, e: BattleSim.SimEnemy) -> void:
