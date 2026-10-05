@@ -6,7 +6,8 @@ import type { DuelOutcome } from '../../src/systems/DuelSystem';
 import { LEGAL, VALID_PHASES, cfgWith, quietAudio, randomLog, randomOpponent, record } from './helpers';
 import type { Recorder } from './helpers';
 
-const RUNS = 5000;
+const envRuns = Number((globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env?.QA_FUZZ_RUNS);
+const RUNS = envRuns > 0 ? envRuns : 5000; // QA_FUZZ_RUNS=50000 for a soak run
 
 function must(c: boolean, msg: string): void {
   if (!c) throw new Error(`invariant violated: ${msg}`);
@@ -35,6 +36,15 @@ function checkRecorder(rec: Recorder) {
   for (const t of rec.times) must(!Number.isNaN(t), 'NaN event time');
   for (let i = 1; i < rec.times.length; i++) must(rec.times[i] >= rec.times[i - 1], `event time backwards ${rec.times[i - 1]} -> ${rec.times[i]}`);
   for (const p of rec.phases) must(LEGAL[p.prev].includes(p.phase), `illegal transition ${p.prev}->${p.phase}`);
+  // stricter than LEGAL: WAIT->WAIT is only the single start-of-attempt announcement, never repeated within an attempt
+  for (let i = 1; i < rec.phases.length; i++) {
+    const a = rec.phases[i - 1], b = rec.phases[i];
+    must(!(a.prev === 'WAIT' && a.phase === 'WAIT' && b.prev === 'WAIT' && b.phase === 'WAIT'), 'WAIT announced twice in a row');
+  }
+  // every retry restart is announced: RESOLVE/RETRY may only be followed by RETRY or WAIT
+  for (let i = 1; i < rec.phases.length; i++) {
+    if (rec.phases[i].prev === 'RETRY' || rec.phases[i].prev === 'RESOLVE') must(rec.phases[i].phase === 'WAIT' || rec.phases[i].phase === 'RETRY', 'restart not announced as WAIT');
+  }
   for (const ms of rec.enemyShotFromCue) must(ms >= DUEL_CONFIG.fairness.minLethalMs, `F1: enemy shot ${ms} ms after cue`);
   for (const r of rec.resolves) must(r <= 1, 'double resolve');
   for (const p of rec.plans) expect(p).toEqual(rec.plans[0]); // F5

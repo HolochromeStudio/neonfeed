@@ -1,7 +1,7 @@
 # QA Report: Gate B (duel logic)
 
 Owner: A17 QA. Scope: `DuelSystem`, `DrawSystem`, `DamageSystem`, `TargetSystem`, `InputSystem`, with `src/data/duelConfig.ts`.
-Method: adversarial and property tests in `tests/qa/**`. No `src/` file was modified. Known bugs are pinned with `it.fails`, so they show up green now and flip red the moment someone fixes the bug. When that happens, remove the `.fails`.
+Method: adversarial and property tests in `tests/qa/**`. No `src/` file was modified. Known bugs were pinned with `it.fails`; all have since been fixed and the pins converted (see Gate B re-check). The "Bugs found" section below is the original (pre-fix) record.
 
 Run result (`npm test`, whole repo): 16 files, 307 tests, 0 failing. 8 of those are `it.fails` known-bug pins (listed below). `tsc --noEmit` is clean for `tests/qa`.
 
@@ -83,16 +83,41 @@ With the reticle parked on the limb zone, auto-fire re-hits it every follow-up (
 - No save, economy, or run-system coverage (out of scope for this gate).
 - `describeLoss` text is not checked against F4 for every cause.
 
-## Gate B recommendation: CONDITIONAL PASS
+## Gate B re-check (after A02 fixes, commit ec7828f)
 
-All core invariants hold across about 40k fuzzed duels: no crash, no negative or NaN hp, a single resolution, monotonic time, deterministic replay, F1 and F5, and exact-ms boundaries. There is no blocker in normal play. No finding is High severity.
+### 1. Review of A02's edits to `tests/qa`
+| Edit | Verdict |
+|---|---|
+| `.fails` removed on QA-01, 01b, 03 (enemyHp 0, heroHp 0), 04, 07 | Legitimate: the bugs are fixed and the assertions are unchanged. |
+| `helpers.ts` LEGAL table gains `WAIT->WAIT`, `RESOLVE->WAIT`, `RETRY->WAIT`; fuzz coverage now requires WAIT | Legitimate contract change (QA-06: onPhase now announces WAIT). It did loosen the transition check, so I added two stricter fuzz invariants: WAIT->WAIT is never announced twice in a row, and anything after RESOLVE/RETRY must be WAIT or RETRY. |
+| `duelEdge` QA-08 test: NaN shot point becomes `isFinite` | Legitimate (QA-08 fixed, pinned by `tests/duelHardening.test.ts`). |
+| `duelEdge` limb-disarm OBSERVATION test now sets `maxDisarms: Infinity` | Legitimate, not weakened: it keeps documenting the raw mechanic. The new default cap (QA-09) is tested in `tests/duelHardening.test.ts` "disarm limit". |
+| `inputEdge` QA-07 | Legitimate (assertion unchanged). |
 
-Conditions before the vertical slice is declared stable:
-1. Fix QA-01 and QA-01b (a one-line non-finite guard in `advanceTo`/`input`). Medium, trivial, and it removes an immortal-enemy hazard.
-2. A02 confirms that `DuelScene` tracks only a single pointer id (QA-07b), or `SwipeTracker` gains id support.
-3. QA-03, QA-04, QA-06 and QA-08 are scheduled but are not blockers. QA-09 goes to A18 as a balance item.
+No weakened assertion found. Only change: tightened LEGAL usage as above.
 
-If the lead requires zero open Medium findings, treat this as FAIL until items 1 and 2 land.
+### 2. Soak run
+`QA_FUZZ_RUNS=40000 npx vitest run tests/qa` (new env override, default stays 5000): 3 x 40000 duels plus extreme configs, 129 tests, 0 failures, about 12 s. No regression from the fixes (disarm cap, clamps, WAIT announcement, hp clamping).
+
+### 3. Flick distance and QA-07b
+- Flick distance: keep **28 px** for now. The tests pin 28 literally (`inputEdge`: 28 registers, 27.99 does not). A03's gain is about 10 ms for a fast flick, within noise next to the 550 ms draw window, and UX_FLOW calls 28 deliberate; going to 24 is a one-line `minDistancePx` change plus two literals in `inputEdge.test.ts`. Only change if playtests show missed flicks. Decision belongs to A03/A01.
+- QA-07b: the `it.fails` pin is **converted into real tests** of the pointer-id API (`SwipeTracker.begin(x,y,t,id)`, `ownerId`, id-filtered `move`/`end`, `cancel`, `reanchor`, re-own on a new `begin`). Ids stay opt-in (null = legacy behaviour), also tested.
+
+### 4. Scene-level coverage (no Phaser, `src/` untouched)
+Not testable as is, because all of it is private methods on the Phaser scene. Extract these to pure modules (suggested `src/systems/SceneClock.ts` and `src/systems/PointerOwner.ts`), then I will add tests:
+1. `nowMs()` (DuelScene.ts ~L226): pure `class FrameClock { constructor(maxFrameMs); now(real: number): number; pause/resume(real) }` holding `lastReal`, `skew`. Tests: gap > 100 ms is compressed to exactly 100, monotonic, hidden tab then resume adds no time (see `visibilityChanged`, ~L252 `skew += real - lastReal`), `reset` zeroes skew.
+2. `eventMs()` (~L236): pure `eventTime(now, rawTimeStamp, t0, skew)`: non-number/NaN/Infinity falls back to `now`, never later than `now`.
+3. Pointer ownership in `bindInput` (~L503-576): pure `class PointerOwner { down(id, isActiveStillDown): boolean; owns(id); up(id); retryId }` encapsulating `activeId`/`retryId`: a second finger is ignored while the first is down, a lost `up` cannot wedge it (stale id replaced when the old pointer is no longer down), the retry-press finger never flinches on lift, `up` of a non-owner is a no-op.
+4. `pointerById`/`trackedPointer` take the Phaser pointer list; pass `isDown` as a callback so the owner class stays Phaser-free.
+With those three extractions the remaining scene code is wiring only.
+
+## Gate B final recommendation: PASS
+
+- QA-01, 01b, 03, 04, 06, 07, 07b, 08, 09 are fixed and covered by green tests (the former `it.fails` pins are now regular assertions; `tests/duelHardening.test.ts` adds A02's own coverage).
+- No open High or Medium finding. The single-pointer guard is present in `DuelScene` (reviewed by reading, `activeId` gating at pointerdown/move/up) and `SwipeTracker` has id support with tests. The offscreen-tab concern is addressed by the frame clock cap (`maxFrameMs` 100) and `visibilitychange` handling in the scene.
+- Residual risk (not blocking): scene pointer logic and the frame clock are verified by code reading only, until the extraction in section 4 lands. OpponentController returning NaN is still unsanitised (Low).
+
+Run result: `npm test` 17 files, 324 tests, 0 failing, 0 `it.fails` left in `tests/qa`; `npm run typecheck` clean.
 
 ## How to run
-`npx vitest run tests/qa` (about 5 s). To re-find a failing fuzz seed, the error message contains the seed. The helpers in `tests/qa/helpers.ts` (`randomLog`, `randomOpponent`) regenerate its log from that seed.
+`npx vitest run tests/qa` (about 5 s). Soak: `QA_FUZZ_RUNS=40000 npx vitest run tests/qa`. To re-find a failing fuzz seed, the error message contains the seed. The helpers in `tests/qa/helpers.ts` (`randomLog`, `randomOpponent`) regenerate its log from that seed.

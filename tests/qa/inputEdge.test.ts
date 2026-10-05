@@ -117,12 +117,37 @@ describe('SwipeTracker', () => {
     t.begin(200, 500, 15);
     expect(t.startedAt).toEqual({ x: 200, y: 500, t: 15 });
   });
-  it.fails('multi-touch: two stationary fingers interleaved must not read as one swipe (QA-07b)', () => {
-    // SwipeTracker has no pointer id, so finger B resting 200 px above finger A looks like a 200 px flick
+  it('multi-touch (QA-07b, pointer-id API): a second finger cannot feed finger A\'s gesture', () => {
     const t = new SwipeTracker();
-    t.begin(100, 500, 0); // finger A down
-    const sw = t.move(100, 300, 8); // finger B's move event (stationary, different pointer)
-    expect(sw).toBeNull();
+    t.begin(100, 500, 0, 1); // finger A (id 1) down
+    expect(t.ownerId).toBe(1);
+    expect(t.move(100, 300, 8, 2)).toBeNull(); // finger B's stationary move, 200 px away
+    expect(t.swiped).toBe(false);
+    expect(t.end(100, 300, 10, 2)).toEqual({ swiped: false, wasTap: false }); // B lifting does not end A's touch
+    expect(t.isActive).toBe(true);
+    expect(t.move(100, 460, 40, 1)).not.toBeNull(); // A's own real flick still registers
+  });
+  it('multi-touch: legacy callers without ids keep the old (unfiltered) behaviour, ids are opt-in', () => {
+    const t = new SwipeTracker();
+    t.begin(100, 500, 0);
+    expect(t.ownerId).toBeNull();
+    expect(t.move(100, 300, 8)).not.toBeNull();
+  });
+  it('multi-touch: cancel() clears ownership; reanchor keeps it', () => {
+    const t = new SwipeTracker();
+    t.begin(0, 0, 0, 7);
+    t.reanchor(5, 5, 100);
+    expect(t.ownerId).toBe(7);
+    expect(t.move(5, -100, 110, 8)).toBeNull();
+    t.cancel();
+    expect(t.ownerId).toBeNull();
+  });
+  it('multi-touch: a new begin() with another id re-owns the gesture', () => {
+    const t = new SwipeTracker();
+    t.begin(0, 0, 0, 1);
+    t.begin(50, 50, 20, 2);
+    expect(t.move(50, 50, 25, 1)).toBeNull();
+    expect(t.move(50, 0, 40, 2)).not.toBeNull();
   });
 });
 
