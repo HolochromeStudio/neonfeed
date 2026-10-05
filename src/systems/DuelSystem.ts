@@ -133,6 +133,10 @@ export interface DuelEvents {
   onRetry: { t: number; attempt: number };
 }
 
+export const DUEL_EVENT_NAMES: readonly (keyof DuelEvents)[] = [
+  'onPhase', 'onWait', 'onFlinch', 'onCue', 'onDraw', 'onPerfectDraw', 'onAimStart', 'onShot', 'onHit', 'onMiss', 'onResolve', 'onRetry',
+];
+
 type Listener<T> = (payload: T) => void;
 
 /** Small typed emitter so A03 Game Feel can attach juice. A throwing listener never breaks gameplay. */

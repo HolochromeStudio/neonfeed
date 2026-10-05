@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { DuelScene } from './scenes/DuelScene';
 
 export const GAME_WIDTH = 360;
 export const GAME_HEIGHT = 640;
@@ -11,5 +12,5 @@ new Phaser.Game({
   backgroundColor: '#1a0f08',
   pixelArt: true,
   scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-  scene: [],
+  scene: [DuelScene],
 });
