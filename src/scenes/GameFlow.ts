@@ -429,6 +429,7 @@ export class GameFlow {
     const data: DuelSceneData = {
       mode: 'run', seed: enc.seed, arenaId: enc.arenaId, enemyId: enc.enemyId, difficulty: enc.difficulty,
       heroHp: enc.heroHp, heroMaxHp: run.maxHp(), config: enc.config, modifiers: enc.modifiers, bossId: enc.bossId,
+      kind: enc.boss ? 'boss' : enc.elite ? 'elite' : 'normal', // D14: elites and bosses hit for 2
       enemyHpBonus: enc.enemyHpBonus, enemyName,
       finishLabel: () => 'CONTINUE',
       onFinish: (res) => this.onDuelDone(res),
@@ -456,7 +457,7 @@ export class GameFlow {
     const run = this.r;
     const enc = this.enc ?? run.getDuel();
     const rd: RunDuelResult = {
-      outcome: res.outcome, heroHp: res.heroHp, tier: res.tier, reactionMs: res.reactionMs, headshots: res.headshots,
+      outcome: res.outcome, heroHp: res.heroHp, tier: res.tier, reactionMs: res.reactionMs, headshots: res.headshots, dodges: res.dodges,
       consumedPerks: this.consumedPerks(res),
     };
     let out: ReturnType<RunSystem['completeDuel']>;

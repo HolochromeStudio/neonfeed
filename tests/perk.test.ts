@@ -181,10 +181,11 @@ describe('composition', () => {
     expect(c.disabled).toContain('tin_star');
     expect(c.duel.ignoreFirstHits).toBe(0);
     expect(c.duel.perfectStaggers).toBe(true);
-    const bb = composePerks(['bullet_belt', 'tin_star', 'hex']);
+    const bb = composePerks(['bullet_belt', 'tin_star', 'hex'], { elite: true }); // Tin Star only shields elites and bosses (D15)
     expect(bb.hexTag).toBe('LIFE');
     expect(bb.duel.heroHpDelta).toBe(2);
     expect(bb.duel.ignoreFirstHits).toBe(2);
+    expect(composePerks(['bullet_belt', 'tin_star', 'hex']).duel.ignoreFirstHits).toBe(0);
   });
   it('buffs compose and unknown buffs throw', () => {
     expect(composePerks([], { buffs: { focus: 1 } }).duel.perfectWindowMult).toBeCloseTo(1.3);
@@ -194,11 +195,15 @@ describe('composition', () => {
   it('duelConfigFor patches DuelConfig without mutating the base', () => {
     const before = JSON.stringify(DUEL_CONFIG);
     const cfg = duelConfigFor(composePerks(['quickdraw_scar', 'reflex_tonic', 'bullet_belt', 'disarmer', 'mad_dogs_collar']).duel);
-    expect(cfg.draw.perfectMs).toBe(440);
+    // Quickdraw Scar x2 window / x0.75 budget, Bullet Belt (D15) x0.75 window / x0.9 budget
+    expect(cfg.draw.perfectMs).toBe(Math.round(DUEL_CONFIG.draw.perfectMs * 2 * 0.75));
     expect(cfg.draw.flinchPenaltyMs).toBe(0);
-    expect(cfg.aim.budgetMs).toBe(450);
-    expect(cfg.damage.heroHp).toBe(4);
-    expect(cfg.damage.enemyDamage).toBe(2);
+    expect(cfg.aim.budgetMs).toBe(Math.round(DUEL_CONFIG.aim.budgetMs * 0.75 * 0.9));
+    expect(cfg.damage.heroHp).toBe(DUEL_CONFIG.damage.heroHp + 1);
+    expect(cfg.damage.enemyDamage).toBe(DUEL_CONFIG.damage.enemyDamage * 2); // Mad Dog's Collar
+    expect(cfg.damage.eliteDamage).toBe(DUEL_CONFIG.damage.eliteDamage * 2);
+    expect(cfg.damage.bossDamage).toBe(DUEL_CONFIG.damage.bossDamage * 2);
+    expect(cfg.damage.critMultiplier).toBe(DUEL_CONFIG.damage.critMultiplier * 4);
     expect(cfg.fairness.maxDisarms).toBe(DUEL_CONFIG.fairness.maxDisarms + 1);
     expect(JSON.stringify(DUEL_CONFIG)).toBe(before);
     const g = composePerks(['glass_cannon']).duel;

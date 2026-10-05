@@ -15,7 +15,7 @@ import { Duelist, Hero } from '../entities/Hero';
 import { Projectile } from '../entities/Projectile';
 import { TIER_LABEL } from '../systems/DrawSystem';
 import { DUEL_EVENT_NAMES, DuelSystem, TypedEmitter, describeLoss } from '../systems/DuelSystem';
-import type { DuelEvents, DuelResult, OpponentController } from '../systems/DuelSystem';
+import type { DuelEvents, DuelResult, EncounterKind, OpponentController } from '../systems/DuelSystem';
 import { createBossEncounter } from '../systems/BossSystem';
 import type { BossOpponent, BossSystem } from '../systems/BossSystem';
 import { attachBossToDuel } from '../systems/BossBridge';
@@ -56,6 +56,8 @@ export interface DuelSceneData {
   config?: DuelConfig;
   /** Perk modifiers (DuelEncounter.modifiers): staggers, crit rules, hit-ignore, revive... */
   modifiers?: Partial<DuelModifiers>;
+  /** Encounter kind for the damage of an enemy hit (D14: elites and bosses hit for 2). Default 'normal'. */
+  kind?: EncounterKind;
   /** Boss id from src/data/bosses.ts: runs the boss controller, phases, banners and environment payoffs. Unknown ids fall back to `enemyId`. */
   bossId?: string | null;
   /**
@@ -119,6 +121,8 @@ export class DuelScene extends Phaser.Scene {
   private enemyDef!: EnemyDef;
   private opponentCtl!: OpponentController;
   private tracker = new SwipeTracker('up', DUEL_CONFIG.input);
+  /** Horizontal dodge flick (D18); runs next to the draw tracker on the same touch. */
+  private dodgeTracker = new SwipeTracker('horizontal', DUEL_CONFIG.dodge.input);
 
   // clock: real time minus compressed gaps (a long frame or a hidden tab never replays a duel), see core/FrameClock
   private clock = new FrameClock(SCENE_TUNING.maxFrameMs);
@@ -145,6 +149,8 @@ export class DuelScene extends Phaser.Scene {
   private retryBtn!: Phaser.GameObjects.Container;
   private retryLabel!: Phaser.GameObjects.Text;
   private bannerText!: Phaser.GameObjects.Text;
+  private dodgeHint!: Phaser.GameObjects.Text;
+  private dustCloud: Phaser.GameObjects.GameObject | null = null;
   private glowGfx!: Phaser.GameObjects.Graphics;
   private boss: BossSystem | null = null;
   private bossOffs: (() => void)[] = [];
@@ -184,6 +190,7 @@ export class DuelScene extends Phaser.Scene {
     this.bossTellShot = -1;
     this.owner = new PointerOwner();
     this.aimTouch = false;
+    this.dustCloud = null;
     this.hidden = false;
     this.finished = false;
     this.zoneTextToken = 0;
@@ -222,6 +229,7 @@ export class DuelScene extends Phaser.Scene {
       },
     };
     this.tracker = new SwipeTracker('up', this.cfg.input);
+    this.dodgeTracker = new SwipeTracker('horizontal', this.cfg.dodge.input);
     this.glowGfx = this.add.graphics().setDepth(4);
 
     this.hero = new Hero(this, hp.x, hp.y);
@@ -248,6 +256,7 @@ export class DuelScene extends Phaser.Scene {
     const h = this.cfg.arena.holster;
     this.add.rectangle(h.x + h.w / 2, h.y + h.h / 2, h.w, h.h, COL.ink, 0.35).setStrokeStyle(3, COL.brass).setDepth(HUD_DEPTH);
     this.holsterText = this.add.text(h.x + h.w / 2, h.y + h.h / 2, 'HOLD', { fontFamily: FONT, fontSize: '24px', color: '#e0b040', fontStyle: 'bold' }).setOrigin(0.5).setDepth(HUD_DEPTH);
+    this.dodgeHint = this.add.text(180, 504, '', { fontFamily: FONT, fontSize: '14px', color: '#fff3c4', fontStyle: 'bold', stroke: '#1a0f08', strokeThickness: 3 }).setOrigin(0.5).setDepth(HUD_DEPTH + 1).setVisible(false);
     this.bannerText = this.add.text(180, 100, '', { fontFamily: FONT, fontSize: '18px', color: '#fff3c4', fontStyle: 'bold', align: 'center', stroke: '#1a0f08', strokeThickness: 4, wordWrap: { width: 330 }, lineSpacing: 4 }).setOrigin(0.5, 0).setDepth(32).setAlpha(0);
     this.buildRetryButton();
     this.buildExitButton();
@@ -290,6 +299,7 @@ export class DuelScene extends Phaser.Scene {
       this.hidden = true;
       this.clock.pause();
       this.tracker.cancel();
+      this.dodgeTracker.cancel();
       this.owner.cancel();
       this.aimTouch = false;
     } else {
@@ -322,6 +332,7 @@ export class DuelScene extends Phaser.Scene {
       opponent: this.opponentCtl,
       heroHp: this.data0.heroHp,
       heroMaxHp: this.data0.heroMaxHp,
+      kind: this.data0.kind,
       enemyHp: this.data0.enemyHp ?? enemyHp,
       startT: 0,
       modifiers: this.mods,
@@ -414,6 +425,9 @@ export class DuelScene extends Phaser.Scene {
     this.enemyDrawn = false;
     this.fakePlayed = false;
     this.glintShot = -1;
+    this.clearDust();
+    this.dodgeHint.setVisible(false);
+    this.hero.display.setAngle(0).setX(this.cfg.arena.hero.x).setAlpha(1);
     this.fakeWindow = null;
     this.waitStartedAt = this.system.snapshot().now;
     this.bossTellShot = -1;
@@ -489,6 +503,67 @@ export class DuelScene extends Phaser.Scene {
     }
   }
 
+  // ---- dodge visuals (D18): small, placeholder frames + the dust_puff fx ---------
+
+  private puff(x: number, y: number, scale: number): Phaser.GameObjects.GameObject {
+    const ok = this.textures.exists('placeholder') && this.textures.get('placeholder').has('dust_puff_0');
+    let o: Phaser.GameObjects.Sprite | Phaser.GameObjects.Ellipse;
+    if (ok) {
+      o = this.add.sprite(x, y, 'placeholder', 'dust_puff_0').setOrigin(0.5, 1).setScale(scale).setDepth(3);
+      if (this.anims.exists('fx_dust_puff')) o.play('fx_dust_puff');
+    } else {
+      o = this.add.ellipse(x, y, 30 * scale, 14 * scale, 0xd8c39a, 0.7).setDepth(3);
+    }
+    this.fxObjs.push(o);
+    return o;
+  }
+
+  private clearDust(): void {
+    this.dustCloud?.destroy();
+    this.dustCloud = null;
+  }
+
+  private playDodge(e: DuelEvents['onDodge']): void {
+    const A = this.cfg.arena;
+    const d = this.hero.display;
+    const sign = e.dir === 'left' ? -1 : 1;
+    this.tweens.killTweensOf(d);
+    if (e.success) {
+      this.cueText.setVisible(false);
+      this.holsterText.setText('DODGE');
+      this.phaseText.setText('DODGE!');
+      this.flashZone(e.result === 'perfect' ? 'PERFECT DODGE!' : 'DODGE!');
+      const hold = Phaser.Math.Clamp((e.etaMs ?? 150) + 60, 120, 700);
+      d.setAngle(0).setX(A.hero.x);
+      this.tweens.add({ targets: d, x: A.hero.x + sign * 30, angle: sign * 10, duration: 90, ease: 'Quad.easeOut', hold, yoyo: true, onComplete: () => d.setAngle(0).setX(A.hero.x) });
+      this.puff(A.hero.x, A.hero.y, 1);
+      if (e.cloud) {
+        this.clearDust();
+        this.dustCloud = this.puff(A.hero.x, A.hero.y - 4, 1.6);
+        (this.dustCloud as Phaser.GameObjects.Sprite).setAlpha(0.8);
+      }
+    } else {
+      this.flashZone(e.result === 'early' ? 'TOO EARLY +300ms' : 'TOO LATE +300ms', SCENE_TUNING.flashFlinchMs);
+      // the stumble: a short wobble, no side-step
+      d.setAngle(0).setX(A.hero.x);
+      this.tweens.add({ targets: d, x: A.hero.x + sign * 6, duration: 55, yoyo: true, repeat: 3, onComplete: () => d.setX(A.hero.x) });
+    }
+  }
+
+  /** The dodge prompt (UX_FLOW: second tell icon plus arrows): visible in CUE and whenever a dodge is possible. */
+  private updateDodgeHint(s: ReturnType<DuelSystem['snapshot']>): void {
+    const dd = s.dodge;
+    const show = (s.phase === 'CUE' || dd.available) && s.phase !== 'RESOLVE' && s.phase !== 'RETRY' && !dd.committed && s.cueAt !== null;
+    if (!show) {
+      this.dodgeHint.setVisible(false);
+      return;
+    }
+    this.dodgeHint.setVisible(true);
+    if (dd.stumbleMs > 0) this.dodgeHint.setText('STUMBLING').setColor('#ffd0c8');
+    else if (dd.open) this.dodgeHint.setText('<<  DODGE NOW  >>').setColor('#ffe08a').setFontSize(18);
+    else this.dodgeHint.setText('< flick sideways to dodge >').setColor('#c9b98e').setFontSize(12);
+  }
+
   // ---- visuals wired to duel events --------------------------------------
 
   private wireVisuals(): void {
@@ -504,6 +579,7 @@ export class DuelScene extends Phaser.Scene {
       // FEEL_REVIEW 1: the WAIT hold can be 3 s old; "flick within 600 ms" must mean "of the cue"
       const p = this.trackedPointer();
       if (p && p.isDown && this.tracker.isActive) this.tracker.reanchor(p.x, p.y, this.nowMs());
+      if (p && p.isDown && this.dodgeTracker.isActive) this.dodgeTracker.reanchor(p.x, p.y, this.nowMs());
     });
     ev.on('onFlinch', (e) => {
       const fell = this.fakeWindow !== null && e.t >= this.fakeWindow.from && e.t <= this.fakeWindow.to;
@@ -547,7 +623,11 @@ export class DuelScene extends Phaser.Scene {
     });
     ev.on('onMiss', (e) => {
       if (e.shooter === 'player') this.flashZone('MISS');
+      else if (e.evaded === 'dodge') this.flashZone('DODGED!');
+      else if (e.evaded === 'dust') this.flashZone('DUST BLOCKS IT!');
+      if (e.shooter === 'enemy') this.clearDust();
     });
+    ev.on('onDodge', (e) => this.playDodge(e));
     ev.on('onStagger', (e) => {
       this.flashZone('STAGGER!');
       const d = this.enemy.display;
@@ -556,6 +636,8 @@ export class DuelScene extends Phaser.Scene {
     ev.on('onPhase', (e) => {
       this.setTint(e.phase === 'AIM' ? 0.2 : 0);
       if (e.phase === 'AIM' && e.prev === 'SHOT' && this.hero.state === 'shoot') this.hero.setState('aim');
+      if (e.phase === 'DRAW' && e.prev === 'CUE') this.hero.setState('draw'); // counter draw after a dodge (no onDraw)
+      if (e.phase === 'DRAW' && e.prev === 'CUE') this.cueText.setVisible(false);
       if (e.phase === 'RETRY') {
         const r = this.system.lastResult;
         if (this.runMode && r) this.retryLabel.setText(this.data0.finishLabel?.(r) ?? 'CONTINUE');
@@ -609,6 +691,7 @@ export class DuelScene extends Phaser.Scene {
           // a finger that was still down from the duel is dead until it lifts
           this.owner.pressRetry(p.id);
           this.tracker.cancel();
+          this.dodgeTracker.cancel();
           this.aimTouch = false;
           if (this.runMode) {
             this.finish();
@@ -626,12 +709,14 @@ export class DuelScene extends Phaser.Scene {
         // FEEL_REVIEW 3: after the draw any touch aims; a tap or slow drag is enough for a follow-up shot
         this.aimTouch = true;
         this.tracker.cancel();
+        this.dodgeTracker.begin(p.x, p.y, t, p.id); // Tumble / Phantom Step / recoil dodges are flicks during an aim touch
         const r = reticleFromTouch(p.x, p.y, this.cfg.aim.reticleOffsetY);
         this.system.input({ type: 'aim', t, x: r.x, y: r.y });
         return;
       }
       this.aimTouch = false;
       this.tracker.begin(p.x, p.y, t, p.id);
+      this.dodgeTracker.begin(p.x, p.y, t, p.id);
       this.system.input({ type: 'hold', t });
     });
     this.input.on('pointermove', (p: Phaser.Input.Pointer) => {
@@ -640,11 +725,33 @@ export class DuelScene extends Phaser.Scene {
       if (this.aimTouch) {
         const r = reticleFromTouch(p.x, p.y, this.cfg.aim.reticleOffsetY);
         this.system.input({ type: 'aim', t, x: r.x, y: r.y });
+        // a fast sideways flick while aiming is a dodge, but only when one would succeed: a reticle drag must never cost anything
+        const df = this.dodgeTracker.isActive ? this.dodgeTracker.move(p.x, p.y, t, p.id) : null;
+        if (df) {
+          if (this.system.snapshot().dodge.open) this.system.input({ type: 'dodge', t: df.t, dir: df.dir as 'left' | 'right' });
+          this.dodgeTracker.reanchor(p.x, p.y, t);
+        }
         return;
       }
       if (!this.tracker.isActive) return;
       const swipe = this.tracker.move(p.x, p.y, t, p.id);
-      if (swipe) this.system.input({ type: 'draw', t: swipe.t });
+      if (swipe) {
+        this.dodgeTracker.cancel();
+        this.system.input({ type: 'draw', t: swipe.t });
+      } else if (this.dodgeTracker.isActive && !this.tracker.swiped) {
+        const df = this.dodgeTracker.move(p.x, p.y, t, p.id);
+        if (df) {
+          if (this.system.currentPhase === 'CUE') {
+            // dodge INSTEAD of drawing: the touch turns into an aim touch for the counter shot
+            this.system.input({ type: 'dodge', t: df.t, dir: df.dir as 'left' | 'right' });
+            this.tracker.cancel();
+            this.aimTouch = true;
+            this.dodgeTracker.reanchor(p.x, p.y, t);
+            return;
+          }
+          this.dodgeTracker.reanchor(p.x, p.y, t); // WAIT: nothing to dodge yet, keep listening
+        }
+      }
       if (this.tracker.swiped) {
         const r = reticleFromTouch(p.x, p.y, this.cfg.aim.reticleOffsetY);
         this.system.input({ type: 'aim', t, x: r.x, y: r.y });
@@ -655,9 +762,10 @@ export class DuelScene extends Phaser.Scene {
       if (this.owner.up(p.id) !== 'owner') return;
       const t = this.eventMs(p);
       const phase = this.system.currentPhase;
+      this.dodgeTracker.cancel();
       if (this.aimTouch) {
         this.aimTouch = false;
-        if (POST_DRAW.includes(phase)) {
+        if (POST_DRAW.includes(phase) || this.system.snapshot().dodge.committed) {
           const r = reticleFromTouch(p.x, p.y, this.cfg.aim.reticleOffsetY);
           this.system.input({ type: 'fire', t, x: r.x, y: r.y });
         }
@@ -755,8 +863,8 @@ export class DuelScene extends Phaser.Scene {
         });
       }
     }
-    // multi-shot: telegraph each follow-up shot `dodgeWindowMs` ahead
-    if (s.enemyShotIndex > 0 && s.enemyShotEtaMs !== null && s.enemyShotIndex !== this.glintShot && s.enemyShotEtaMs <= (op.dodgeWindowMs ?? 250)) {
+    // muzzle raise: every enemy shot (index 0 too) is telegraphed when its dodge window opens (RULE F2, D18)
+    if (s.enemyShotEtaMs !== null && s.enemyShotIndex !== this.glintShot && s.enemyShotEtaMs <= s.dodge.windowMs && s.phase !== 'RESOLVE' && s.phase !== 'RETRY') {
       this.glintShot = s.enemyShotIndex;
       this.playShotGlint();
     }
@@ -788,6 +896,7 @@ export class DuelScene extends Phaser.Scene {
     const s = this.system.snapshot();
     this.updateEnemyPlayback(s);
     this.updatePerkOverlays(s);
+    this.updateDodgeHint(s);
     this.reticleGfx.clear();
     if (s.reticle && (s.phase === 'DRAW' || s.phase === 'AIM' || s.phase === 'SHOT')) {
       const { x, y } = s.reticle;

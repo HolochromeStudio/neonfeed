@@ -131,7 +131,7 @@ try {
   await tap(page, card.x + card.w / 2, card.y + card.h / 2);
   await sleep(250);
   await shot(page, '4b_reward_selected');
-  const take = (await hits(page)).hits.find((h) => /take|pick|confirm/i.test(h.label));
+  const take = (await hits(page)).hits.find((h) => /^(take|confirm)/i.test(h.label));
   if (take) { log('confirm plank:', take.label); await tap(page, take.x + take.w / 2, take.y + take.h / 2); }
   await waitScene(page, 'RunMap');
   await sleep(300);

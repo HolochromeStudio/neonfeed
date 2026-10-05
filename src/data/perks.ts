@@ -221,6 +221,8 @@ export interface PerkDef {
   support: PerkSupport;
   /** What is missing when support is pending, or for a ready perk's secondary effect. */
   needs?: string;
+  /** `pending` perks whose keys ARE read somewhere but not reachable in play yet (caller wiring); names who must wire it. */
+  blockedBy?: string;
   /** `ready` perks only: keys in the data that are known to have no consumer yet (a tier-2 or secondary half). */
   unwired?: readonly (keyof DuelModifiers | keyof RunRules)[];
 }
@@ -257,7 +259,7 @@ export const PERKS: readonly PerkDef[] = [
     duel: { tellCueLeadMs: 80 }, when: (c, t) => !!c.firstDuelOfRegion || (t === 2 && !!c.elite), owner: 'a02', support: 'ready' },
   { id: 'bluff', name: 'Bluff', rarity: 'rare', tags: ['DRAW', 'DODGE'], synergy: ['feint', 'dodge_counter'],
     description: 'A deliberate flinch makes the enemy shoot first and miss. Risky: they only miss once.', upgrade: 'After a bluffed miss your draw is auto-Good.',
-    duel: { bluffFeint: true }, owner: 'a06', support: 'pending', needs: 'EnemyAI: react to flinch; DuelSystem: guaranteed miss beat' },
+    duel: { bluffFeint: true }, owner: 'a06', support: 'pending', blockedBy: 'DuelScene must pass opponentOptionsFromModifiers(mods) to createOpponent (A06 hook exists)', needs: 'EnemyAI: react to flinch; DuelSystem: guaranteed miss beat' },
   { id: 'second_wind', name: 'Second Wind', rarity: 'rare', tags: ['DRAW', 'LIFE'], synergy: ['perfect_chain', 'comeback'],
     description: 'After you take a hit, your next draw is automatically Perfect.', upgrade: 'It carries into the next duel if you were hit last shot.',
     duel: { afterHitAutoPerfect: true }, owner: 'a02', support: 'ready' },
@@ -304,28 +306,28 @@ export const PERKS: readonly PerkDef[] = [
   // ---------------- DODGE ----------------
   { id: 'counter_roll', name: 'Counter Roll', rarity: 'rare', tags: ['DODGE'], synergy: ['dodge_counter', 'crit'],
     description: 'A successful dodge guarantees your next shot is a crit.', upgrade: 'Also grants a free Perfect-tier counter draw.',
-    duel: { dodgeGuaranteesCrit: true }, owner: 'a02', support: 'pending', needs: 'DuelSystem: dodge action + crit grant' },
+    duel: { dodgeGuaranteesCrit: true }, owner: 'a02', support: 'ready' },
   { id: 'dust_kick', name: 'Dust Kick', rarity: 'common', tags: ['DODGE'], synergy: ['dodge_counter'],
     description: 'Your dodge leaves a dust cloud that blocks the next enemy shot.', upgrade: 'The cloud also blocks the enemy tell for the next beat.',
-    duel: { dodgeCloudBlocksShot: true }, owner: 'a02', support: 'pending', needs: 'DuelSystem: dodge action' },
+    duel: { dodgeCloudBlocksShot: true }, owner: 'a02', support: 'ready' },
   { id: 'matador', name: 'Matador', rarity: 'common', tags: ['DODGE'], synergy: ['dodge_counter', 'specialist'],
     description: 'Your dodge window doubles against Knife Throwers and Horse Riders only.', upgrade: 'A dodged Knife Thrower throws only one knife.',
-    duel: { dodgeWindowMult: 2 }, when: (c) => !!c.enemyId && KNIFE_HORSE.includes(c.enemyId), owner: 'a02', support: 'pending', needs: 'DuelSystem: dodge window multiplier' },
+    duel: { dodgeWindowMult: 2 }, when: (c) => !!c.enemyId && KNIFE_HORSE.includes(c.enemyId), owner: 'a02', support: 'ready' },
   { id: 'slip_away', name: 'Slip Away', rarity: 'common', tags: ['DODGE', 'COIN'], synergy: ['dodge_counter', 'economy'],
     description: 'Each successful dodge pays 3 coins.', upgrade: 'A dodged shot from an elite pays 10.', duel: { coinPerDodge: 3 },
-    owner: 'a02', support: 'pending', needs: 'DuelResult.dodges count (RunSystem already pays it when reported)' },
+    owner: 'a02', support: 'pending', blockedBy: 'GameFlow must pass DuelResult.dodges into RunDuelResult.dodges', needs: 'DuelResult.dodges count (RunSystem already pays it when reported)' },
   { id: 'tumble', name: 'Tumble', rarity: 'rare', tags: ['DODGE', 'AIM'], synergy: ['dodge_counter', 'risk'],
     description: 'You may dodge while aiming, at the cost of 40% of your aim budget.', upgrade: 'The tumble costs 25% instead.',
-    duel: { dodgeWhileAiming: true, tumbleBudgetCost: 0.4 }, owner: 'a02', support: 'pending', needs: 'InputSystem: dodge during AIM' },
+    duel: { dodgeWhileAiming: true, tumbleBudgetCost: 0.4 }, owner: 'a02', support: 'ready' },
   { id: 'bait', name: 'Bait', rarity: 'rare', tags: ['DODGE'], synergy: ['info', 'feint'],
     description: 'Standing still on purpose makes the enemy fire early, breaking Coward fake tells.', upgrade: 'Bait also works on Drunks.',
-    duel: { baitEnabled: true }, owner: 'a06', support: 'pending', needs: 'EnemyAI: react to a held input' },
+    duel: { baitEnabled: true }, owner: 'a06', support: 'pending', blockedBy: 'DuelScene must pass opponentOptionsFromModifiers(mods) to createOpponent (A06 hook exists)', needs: 'EnemyAI: react to a held input' },
   { id: 'body_shield', name: 'Body Shield', rarity: 'common', tags: ['DODGE', 'LIFE'], synergy: ['events'],
     description: 'Dodge into a prop or bystander to take the hit instead; on the trail, the first hp you would lose in each event is negated.',
     upgrade: 'Negates the first two.', run: { eventHpLossBlock: 1 }, run2: { eventHpLossBlock: 1 }, owner: 'today', support: 'ready', needs: 'Event half works today; prop-dodge half needs DuelSystem (a02)' },
   { id: 'phantom_step', name: 'Phantom Step', rarity: 'legend', tags: ['DODGE'], synergy: ['dodge_counter'],
     description: 'After an enemy misses you, dodge through the rest of their shot window.', duel: { phantomStep: true },
-    owner: 'a02', support: 'pending', needs: 'DuelSystem: shot window state after miss' },
+    owner: 'a02', support: 'ready' },
 
   // ---------------- COIN ----------------
   { id: 'bounty_hunter_creed', name: 'Bounty Hunter', rarity: 'rare', tags: ['COIN'], synergy: ['economy', 'risk'],
@@ -376,12 +378,12 @@ export const PERKS: readonly PerkDef[] = [
 
   // ---------------- LIFE ----------------
   { id: 'tin_star', name: 'Tin Star', rarity: 'rare', tags: ['LIFE'], synergy: ['comeback'],
-    description: 'The badge turns the first hit you take in each region. It is spent once, so spend it on the fight that matters.',
+    description: 'The badge turns the first hit an elite or boss lands on you in each region. One shield per region: whichever heavy hitter comes first spends it.',
     upgrade: 'Every boss fight gets its own shield, even after the region\'s badge is spent.',
-    duel: { ignoreFirstHits: 1 }, when: (c, t) => c.regionShield !== false || (t === 2 && !!c.boss),
+    duel: { ignoreFirstHits: 1 }, when: (c, t) => (c.regionShield !== false && (!!c.elite || !!c.boss)) || (t === 2 && !!c.boss),
     excludes: ['glass_cannon'], owner: 'a02', support: 'ready',
     needs: 'D15: once per region, tracked by RunSystem (consumed key tin_star@<region>); GameFlow should pass DuelResult.hitsIgnored in RunDuelResult' },
-  { id: 'bullet_belt', name: 'Bullet Belt', rarity: 'rare', tags: ['LIFE', 'AIM'], synergy: ['risk', 'comeback'],
+  { id: 'bullet_belt', name: 'Bullet Belt', rarity: 'legend', tags: ['LIFE', 'AIM'], synergy: ['risk', 'comeback'],
     description: 'Carry one extra life, but the weight slows you: Perfect window -25%, aim budget -10%. Cannot be combined with Revive Flask.',
     upgrade: 'Cinched tighter: the Perfect window penalty drops to -10% and the aim budget penalty is gone.',
     duel: { heroHpDelta: 1, perfectWindowMult: 0.75, aimBudgetMult: 0.9 }, duel2: { perfectWindowMult: 1.2, aimBudgetMult: 1 / 0.9 },
@@ -402,10 +404,10 @@ export const PERKS: readonly PerkDef[] = [
   // ---------------- CURSE ----------------
   { id: 'devils_deal', name: "Devil's Deal", rarity: 'cursed', tags: ['CURSE', 'DRAW'], synergy: ['risk', 'perfect_chain', 'info'],
     description: 'Perfect window triples, but every enemy gets a fake tell in every duel.', duel: { perfectWindowMult: 3, fakeTellEveryDuel: true },
-    excludes: ['quickdraw_scar'], owner: 'a06', support: 'pending', needs: 'EnemyAI: force fake tell (window part works today)' },
+    excludes: ['quickdraw_scar'], owner: 'a06', support: 'pending', blockedBy: 'DuelScene must pass opponentOptionsFromModifiers(mods) to createOpponent (A06 hook exists)', needs: 'EnemyAI: force fake tell (window part works today)' },
   { id: 'mad_dogs_collar', name: "Mad Dog's Collar", rarity: 'cursed', tags: ['CURSE', 'AIM'], synergy: ['risk', 'crit'],
-    description: 'All your shots crit and crits hit twice as hard (most foes drop in one shot); you take 50% more damage.',
-    duel: { alwaysCrit: true, critDamageMult: 2, enemyDamageMult: 1.5 }, owner: 'a02', support: 'ready' },
+    description: 'All your shots crit and crits hit four times as hard: anything drops in one shot. You take double damage, so every hit costs two lives.',
+    duel: { alwaysCrit: true, critDamageMult: 4, enemyDamageMult: 2 }, owner: 'a02', support: 'ready' },
   { id: 'blood_money', name: 'Blood Money', rarity: 'cursed', tags: ['CURSE', 'COIN'], synergy: ['economy', 'risk'],
     description: 'Coins from duels, elites and bosses are doubled; shops charge double.', duel: { coinMultDuel: 2, coinMultElite: 2, coinMultBoss: 2 }, run: { shopPriceMult: 2 },
     excludes: ['gamblers_fallacy'], owner: 'today', support: 'ready' },

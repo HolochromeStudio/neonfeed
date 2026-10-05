@@ -557,8 +557,11 @@ export class RunSystem {
     const nd = this.currentNode() as MapNode;
     need(!s.lost, 'duel already lost; retry or abandon');
     for (const c of res.consumedPerks ?? []) if (!this.st.consumed.includes(c)) this.st.consumed.push(c);
+    // Tin Star: the shield is spent by the first duel that was armed with it (the encounter's `ignoreFirstHits`)
     const shieldKey = `tin_star@${nd.region}`;
-    if (hasPerk(this.perks, 'tin_star') && !this.st.consumed.includes(shieldKey) && (res.hitsIgnored === undefined || res.hitsIgnored > 0)) {
+    if (hasPerk(this.perks, 'tin_star') && !this.st.consumed.includes(shieldKey)
+      && this.compose({ enemyId: s.enemyId, elite: nd.type === 'elite', boss: nd.type === 'boss', firstDuelOfRegion: this.st.regionDuels === 0 && nd.type === 'duel' }).duel.ignoreFirstHits > 0
+      && (res.hitsIgnored === undefined || res.hitsIgnored > 0)) {
       this.st.consumed.push(shieldKey);
     }
 

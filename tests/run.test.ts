@@ -7,6 +7,10 @@ import { BOSS_IDS } from '../src/data/dialogue';
 import { ARENAS } from '../src/data/arenas';
 import { PERK_BY_ID } from '../src/data/perks';
 import { generateMap, restoreRun, startRun, RunSystem, type MapNode, type RunDuelResult } from '../src/systems/RunSystem';
+import { DUEL_CONFIG } from '../src/data/duelConfig';
+
+/** D14: base lives come from config so a human playtest can revert them. */
+const BASE_HP = DUEL_CONFIG.damage.heroHp;
 
 const win = (hp: number, extra: Partial<RunDuelResult> = {}): RunDuelResult => ({ outcome: 'WIN', heroHp: hp, tier: 'good', ...extra });
 

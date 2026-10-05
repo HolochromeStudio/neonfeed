@@ -906,6 +906,11 @@ export class DuelSystem {
     return Math.min(D.maxWindowMs, Math.max(D.minWindowMs, base * m));
   }
 
+  /** Phantom Step is armed: the perk is held and the last enemy shot missed. */
+  private phantomOpen(): boolean {
+    return this.mods.phantomStep && this.phantom;
+  }
+
   private stumbleMs(): number {
     return Math.max(0, this.dodgeLockUntil - this.now);
   }
@@ -916,7 +921,7 @@ export class DuelSystem {
       case 'SHOT':
         return true;
       case 'AIM':
-        return this.mods.dodgeWhileAiming || this.phantom;
+        return this.mods.dodgeWhileAiming || this.phantomOpen();
       default:
         return false;
     }
@@ -949,7 +954,7 @@ export class DuelSystem {
       result = 'early';
     }
     const success = result === 'perfect' || result === 'ok';
-    if (fromAim && !this.phantom) this.tumbleCost(); // Tumble: the attempt costs aim budget, hit or miss
+    if (fromAim && !this.phantomOpen()) this.tumbleCost(); // Tumble: the attempt costs aim budget, hit or miss
     if (success) {
       this.dodgeCommit = { shotIndex: this.enemyShotIndex, perfect: result === 'perfect' };
       this.sfx({ type: 'dodge' });
