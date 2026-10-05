@@ -14,6 +14,8 @@ import {
   FAIRNESS_FLOOR_MS,
   MIN_SHOT_GAP_MS,
   getEnemyDef,
+  maxDisarmsFor,
+  type DodgeTellKind,
   type EnemyDef,
   type FakeTellDef,
   type Range,
@@ -27,6 +29,54 @@ export interface FakeTellPlan {
   durationMs: number;
   /** The real cue lands this long after the fake ends. Always >= 400. */
   recoverMs: number;
+}
+
+/** Perk-driven controller options (all optional, default off). See docs/ENEMY_AI.md "Perk hooks". */
+export interface OpponentOptions {
+  /** devils_deal (`fakeTellEveryDuel`): every duel plans a fake tell, a generic one for enemies without their own. */
+  forceFakeTell?: boolean;
+  /** bluff (`bluffFeint`): the first player flinch makes the enemy fire a guaranteed miss. */
+  bluff?: boolean;
+  /** bait (`baitEnabled`): holding still brings the real cue forward and cancels the fake. */
+  bait?: boolean;
+  /** bait upgrade: also works on the Drunk (no fake tell). */
+  baitDrunk?: boolean;
+  /** disarmer (`disarmDropsGun`): a limb disarm costs the enemy a pick-up beat. */
+  disarmDropsGun?: boolean;
+  /** disarmer upgrade: pick-up never faster than 2 beats on bosses. */
+  disarmBossFloor?: boolean;
+}
+
+/** Maps DuelModifiers fields (src/data/perks.ts) to controller options. */
+export function opponentOptionsFromModifiers(
+  m: Partial<{ fakeTellEveryDuel: boolean; bluffFeint: boolean; baitEnabled: boolean; disarmDropsGun: boolean }>,
+): OpponentOptions {
+  return {
+    forceFakeTell: !!m.fakeTellEveryDuel,
+    bluff: !!m.bluffFeint,
+    bait: !!m.baitEnabled,
+    disarmDropsGun: !!m.disarmDropsGun,
+  };
+}
+
+/** One beat of the disarm drop (a pick-up takes 1 beat, bosses at least 2 with the upgrade). */
+export const DISARM_BEAT_MS = 300;
+/** Bait needs the player to hold still this long (no input) before the enemy cracks. */
+export const BAIT_HOLD_MS = 700;
+/** Miss distance of a bluffed shot: well past enemyHitTolerancePx (24). */
+export const BLUFF_MISS_PX = 64;
+/** Generic fake used by devils_deal for enemies with no fake tell of their own. */
+export const GENERIC_FAKE: FakeTellDef = { kind: 'generic_feint', chance: [1, 1], durationMs: 300, recoverMs: 450 };
+
+export interface BluffReaction {
+  /** Enemy fires this long after the flinch (its own reaction time). */
+  fireAfterMs: number;
+  /** Aim error of that shot: a guaranteed miss. */
+  aimErrorPx: number;
+}
+export interface BaitReaction {
+  /** New WAIT length in ms: the real cue moves here, earlier than the planned cue. */
+  cueAtMs: number;
 }
 
 /** Optional extensions to OpponentController (see docs/ENEMY_AI.md). DuelSystem may ignore them. */
@@ -43,6 +93,16 @@ export interface OpponentExtras {
   readonly variantId: string | null;
   /** Dodge window of the enemy shot in ms (default 250). */
   readonly dodgeWindowMs: number;
+  /** What the player reads to time a dodge. */
+  readonly dodgeTellKind: DodgeTellKind;
+  /** Limb disarms allowed per attempt for this enemy (D19). Feed `fairness.maxDisarms` per duel. */
+  readonly maxDisarms: number;
+  /** bluff: reaction to a player flinch (null when disabled or already used). One use per duel; rng-free. */
+  reactToFlinch(): BluffReaction | null;
+  /** bait: reaction to the player holding still for `heldMs` during WAIT (null when n/a). rng-free. */
+  reactToHold(heldMs: number): BaitReaction | null;
+  /** disarmer: extra ms added to the re-planned shot after a disarm; 0 when off. rng-free. */
+  disarmPickupMs(disarmIndex: number, boss?: boolean): number;
   /** Whether the enemy sidesteps a player shot (coward); consumes rng only when called. */
   evades(rng: Rng, playerShotIndex: number): boolean;
 }
@@ -89,8 +149,12 @@ class ConfiguredOpponent implements EnemyOpponent {
   private reactionMs = 0;
   private drawMsValue = 0;
   private readonly prof: ReturnType<typeof difficultyProfile>;
+  private extendedWaitMs = 0;
+  private bluffUsed = false;
+  private readonly opts: OpponentOptions;
 
-  constructor(def: EnemyDef, difficulty: number) {
+  constructor(def: EnemyDef, difficulty: number, opts: OpponentOptions = {}) {
+    this.opts = opts;
     this.id = def.id;
     this.def = def;
     this.difficulty = clamp01(difficulty);
@@ -108,7 +172,37 @@ class ConfiguredOpponent implements EnemyOpponent {
     return this.def.dodgeWindowMs ?? 250;
   }
 
+  get dodgeTellKind(): DodgeTellKind {
+    return this.def.dodgeTell ?? 'muzzle_raise';
+  }
+
+  get maxDisarms(): number {
+    return maxDisarmsFor(this.def, this.difficulty);
+  }
+
+  reactToFlinch(): BluffReaction | null {
+    if (!this.opts.bluff || this.bluffUsed) return null;
+    this.bluffUsed = true;
+    return { fireAfterMs: this.def.reactionMs[0] + 150, aimErrorPx: BLUFF_MISS_PX };
+  }
+
+  reactToHold(heldMs: number): BaitReaction | null {
+    if (!this.opts.bait || heldMs < BAIT_HOLD_MS) return null;
+    const fake = this.fakeTell;
+    if (!fake && !(this.opts.baitDrunk && this.def.id === 'drunk')) return null;
+    let cueAtMs = Math.max(900, heldMs + 250);
+    // a fake that already played still leaves the 400 ms recovery before the real cue
+    if (fake && fake.startMs < heldMs) cueAtMs = Math.max(cueAtMs, fake.startMs + fake.durationMs + 400);
+    return cueAtMs < this.extendedWaitMs ? { cueAtMs } : null;
+  }
+
+  disarmPickupMs(_disarmIndex: number, boss = false): number {
+    if (!this.opts.disarmDropsGun) return 0;
+    return (boss && this.opts.disarmBossFloor ? 2 : 1) * DISARM_BEAT_MS;
+  }
+
   waitMs(rng: Rng): number {
+    this.bluffUsed = false;
     // fixed draw order: [variant], wait, fake decision, fake start, reaction. Always the same count.
     if (this.def.variants?.length) {
       const v = rng.pick(this.def.variants);
@@ -128,12 +222,14 @@ class ConfiguredOpponent implements EnemyOpponent {
     const startRoll = rng.next();
     this.reactionMs = rng.int(this.def.reactionMs[0], this.def.reactionMs[1]);
     this.fakeTell = null;
-    const f = this.fake;
-    if (f && roll < this.prof.fakeChance(f)) {
+    const f = this.fake ?? (this.opts.forceFakeTell ? GENERIC_FAKE : undefined);
+    this.extendedWaitMs = base;
+    if (f && (this.opts.forceFakeTell || roll < this.prof.fakeChance(f))) {
       const recover = Math.max(MIN_FAKE_RECOVER_MS, f.recoverMs);
       const startMs = Math.round(300 + startRoll * Math.max(0, base * 0.5 - 300));
       this.fakeTell = { kind: f.kind, startMs, durationMs: f.durationMs, recoverMs: recover };
-      return Math.max(base, startMs + f.durationMs + recover);
+      this.extendedWaitMs = Math.max(base, startMs + f.durationMs + recover);
+      return this.extendedWaitMs;
     }
     return base;
   }
@@ -170,6 +266,6 @@ class ConfiguredOpponent implements EnemyOpponent {
 }
 
 /** Build the controller for an enemy id. `difficulty` is 0..1 (region depth / elite). */
-export function createOpponent(enemyId: string, _rng: Rng, difficulty = 0): EnemyOpponent {
-  return new ConfiguredOpponent(getEnemyDef(enemyId), difficulty);
+export function createOpponent(enemyId: string, _rng: Rng, difficulty = 0, options: OpponentOptions = {}): EnemyOpponent {
+  return new ConfiguredOpponent(getEnemyDef(enemyId), difficulty, options);
 }

@@ -1,9 +1,25 @@
 import { describe, expect, it } from 'vitest';
 import { Rng } from '../src/core/rng';
 import { ENEMY_IDS } from '../src/data/dialogue';
-import { ENEMIES, FAIRNESS_FLOOR_MS, MIN_SHOT_GAP_MS, enemyHpFor, resolveSpritePrefix } from '../src/data/enemies';
+import {
+  DODGE_MIN_OPEN_AFTER_CUE_MS,
+  DODGE_MIN_WINDOW_MS,
+  ENEMIES,
+  FAIRNESS_FLOOR_MS,
+  MIN_SHOT_GAP_MS,
+  enemyHpFor,
+  maxDisarmsFor,
+  resolveSpritePrefix,
+} from '../src/data/enemies';
 import { DUEL_CONFIG } from '../src/data/duelConfig';
-import { createOpponent, type EnemyOpponent } from '../src/systems/EnemyAISystem';
+import {
+  BAIT_HOLD_MS,
+  BLUFF_MISS_PX,
+  DISARM_BEAT_MS,
+  createOpponent,
+  opponentOptionsFromModifiers,
+  type EnemyOpponent,
+} from '../src/systems/EnemyAISystem';
 import { DuelSystem } from '../src/systems/DuelSystem';
 import { Enemy } from '../src/entities/Enemy';
 
@@ -142,11 +158,11 @@ describe('difficulty axes are monotonic, reaction window is not the lever', () =
     expect(s[4].waitSd).toBeGreaterThan(s[0].waitSd);
     expect(s[4].minShot0).toBe(s[0].minShot0);
   });
-  it('bandit baseline is readable: no fake at d=0, tell-to-shot 620-760 ms with slight variance', () => {
+  it('bandit baseline is readable: no fake at d=0, tell-to-shot 740-880 ms with slight variance', () => {
     const ps = Array.from({ length: N }, (_, i) => plan('bandit', i + 1, 0));
     const sh = ps.map((p) => p.shots[0]);
-    expect(Math.min(...sh)).toBeGreaterThanOrEqual(620);
-    expect(Math.max(...sh)).toBeLessThanOrEqual(760);
+    expect(Math.min(...sh)).toBeGreaterThanOrEqual(740);
+    expect(Math.max(...sh)).toBeLessThanOrEqual(880);
   });
   it('every enemy: no axis gets easier with depth', () => {
     for (const id of ENEMY_IDS) {
@@ -211,6 +227,169 @@ describe('integration with DuelSystem', () => {
         expect({ id, seed, over: duel.isOver, ph: duel.currentPhase }).toEqual({ id, seed, over: true, ph: duel.currentPhase });
         expect(duel.lastResult?.enemyShotMs).toBeGreaterThanOrEqual(FAIRNESS_FLOOR_MS);
       }
+    }
+  });
+});
+
+describe('early ladder (A18 s.6 rank 6)', () => {
+  it('rookie lead 750 aim [4,40]; bandit lead 740', () => {
+    expect(ENEMIES.rookie.tell.leadMs).toBe(750);
+    expect(ENEMIES.rookie.aimErrorPx).toEqual([4, 40]);
+    expect(ENEMIES.bandit.tell.leadMs).toBe(740);
+  });
+});
+
+describe('dodge contract', () => {
+  it('every enemy has a window >= the fair minimum and a dodge tell', () => {
+    for (const id of ENEMY_IDS) {
+      const d = ENEMIES[id];
+      expect(d.dodgeWindowMs, id).toBeGreaterThanOrEqual(DODGE_MIN_WINDOW_MS);
+      expect(d.dodgeTell, id).toBeDefined();
+      expect(createOpponent(id, new Rng(1)).dodgeWindowMs).toBe(d.dodgeWindowMs);
+    }
+    // beginners can dodge by reaction (novice median 380 ms)
+    expect(ENEMIES.rookie.dodgeWindowMs).toBeGreaterThanOrEqual(380);
+    expect(ENEMIES.bandit.dodgeWindowMs).toBeGreaterThanOrEqual(380);
+  });
+  it('the first shot is always dodgeable: window opens >= 250 ms after the cue and after the draw reaction', () => {
+    for (const id of ENEMY_IDS) {
+      const defs = [ENEMIES[id], ...(ENEMIES[id].variants ?? []).map((v) => ({ ...ENEMIES[id], tell: { ...ENEMIES[id].tell, leadMs: v.leadMs } }))];
+      for (const d of defs) expect(d.tell.leadMs - (d.dodgeWindowMs ?? 0), id).toBeGreaterThanOrEqual(DODGE_MIN_OPEN_AFTER_CUE_MS);
+      for (const diff of [0, 1]) {
+        for (let seed = 1; seed <= 300; seed++) {
+          const p = plan(id, seed, diff);
+          expect(p.shots[0] - p.opp.dodgeWindowMs, `${id}#${seed}`).toBeGreaterThanOrEqual(DODGE_MIN_OPEN_AFTER_CUE_MS);
+        }
+      }
+    }
+  });
+  it('windows of consecutive shots never overlap (gap >= window at every difficulty)', () => {
+    for (const id of ENEMY_IDS) {
+      for (const diff of [0, 1]) {
+        for (let seed = 1; seed <= 300; seed++) {
+          const p = plan(id, seed, diff, 3);
+          for (let i = 1; i < p.opp.shots; i++) expect(p.shots[i], `${id}#${seed}`).toBeGreaterThanOrEqual(p.opp.dodgeWindowMs);
+        }
+      }
+    }
+  });
+  it('dodge tell kinds match the brief', () => {
+    expect(ENEMIES.dual_wielder.dodgeTell).toBe('double_raise');
+    expect(ENEMIES.sniper.dodgeTell).toBe('glint_late');
+    expect(ENEMIES.knife_thrower.dodgeTell).toBe('projectile');
+    expect(ENEMIES.horse_rider.dodgeTell).toBe('motion');
+    expect(ENEMIES.train_guard.dodgeTell).toBe('motion');
+    expect(ENEMIES.gunslinger.dodgeTell).toBe('muzzle_raise');
+    // sniper's window opens late in a long telegraph
+    expect(ENEMIES.sniper.tell.leadMs - (ENEMIES.sniper.dodgeWindowMs ?? 0)).toBeGreaterThanOrEqual(600);
+  });
+});
+
+describe('maxDisarms', () => {
+  it('data field: 1 for hp >= 4, 2 otherwise; effective hp at depth also caps at 1', () => {
+    for (const id of ENEMY_IDS) expect(ENEMIES[id].maxDisarms).toBe(ENEMIES[id].hp >= 4 ? 1 : 2);
+    expect(maxDisarmsFor(ENEMIES.gunslinger, 0)).toBe(2);
+    expect(maxDisarmsFor(ENEMIES.gunslinger, 1)).toBe(2); // hp 2 -> 3 only, still 2
+  });
+  it('controller exposes it', () => {
+    expect(createOpponent('bounty_hunter', new Rng(1), 0).maxDisarms).toBe(1);
+    expect(createOpponent('bandit', new Rng(1), 0).maxDisarms).toBe(2);
+    expect(createOpponent('sheriff', new Rng(1), 1).maxDisarms).toBe(1); // hp 3 + 1 at depth
+  });
+});
+
+describe('perk hooks (optional, default off)', () => {
+  it('defaults change nothing: plan equals the no-options plan', () => {
+    for (const id of ENEMY_IDS) {
+      const r1 = new Rng(11), r2 = new Rng(11);
+      const a = createOpponent(id, r1, 0.5), b = createOpponent(id, r2, 0.5, {});
+      expect([a.waitMs(r1), a.drawMs(r1), a.shotDelayMs(r1, 0)]).toEqual([b.waitMs(r2), b.drawMs(r2), b.shotDelayMs(r2, 0)]);
+      expect(a.reactToFlinch()).toBeNull();
+      expect(a.reactToHold(5000)).toBeNull();
+      expect(a.disarmPickupMs(0)).toBe(0);
+    }
+  });
+  it('devils_deal: every duel of every enemy has a fake tell, rng stream stays aligned, F1 and the 400 ms recovery hold', () => {
+    for (const id of ENEMY_IDS) {
+      for (let seed = 1; seed <= 200; seed++) {
+        const r1 = new Rng(seed), r2 = new Rng(seed);
+        const base = createOpponent(id, r1, 0), forced = createOpponent(id, r2, 0, { forceFakeTell: true });
+        base.waitMs(r1);
+        const wait = forced.waitMs(r2);
+        expect(forced.fakeTell, `${id}#${seed}`).not.toBeNull();
+        expect(wait - (forced.fakeTell!.startMs + forced.fakeTell!.durationMs)).toBeGreaterThanOrEqual(400);
+        expect(forced.fakeTell!.kind).not.toBe(forced.tellKind);
+        // identical draw count: later draws match
+        expect(forced.drawMs(r2)).toBe(base.drawMs(r1));
+        expect(forced.shotDelayMs(r2, 0)).toBeGreaterThanOrEqual(FAIRNESS_FLOOR_MS);
+      }
+    }
+  });
+  it('bluff: first flinch gives one guaranteed miss, then nothing; resets on a new plan', () => {
+    const rng = new Rng(3);
+    const o = createOpponent('gunslinger', rng, 0.5, { bluff: true });
+    o.waitMs(rng);
+    const b = o.reactToFlinch();
+    expect(b).not.toBeNull();
+    expect(b!.aimErrorPx).toBe(BLUFF_MISS_PX);
+    expect(b!.aimErrorPx).toBeGreaterThan(DUEL_CONFIG.fairness.enemyHitTolerancePx);
+    expect(b!.fireAfterMs).toBeGreaterThan(0);
+    expect(o.reactToFlinch()).toBeNull();
+    o.waitMs(rng);
+    expect(o.reactToFlinch()).not.toBeNull();
+  });
+  it('bait: holding still pulls the cue forward on a faked duel; breaks only when it helps', () => {
+    let used = 0;
+    for (let seed = 1; seed <= 300; seed++) {
+      const rng = new Rng(seed);
+      const o = createOpponent('coward', rng, 1, { bait: true });
+      const wait = o.waitMs(rng);
+      expect(o.reactToHold(BAIT_HOLD_MS - 1)).toBeNull();
+      const r = o.reactToHold(BAIT_HOLD_MS);
+      if (!o.fakeTell) { expect(r).toBeNull(); continue; }
+      if (r) {
+        used++;
+        expect(r.cueAtMs).toBeLessThan(wait);
+        expect(r.cueAtMs).toBeGreaterThanOrEqual(900);
+        expect(r.cueAtMs).toBeGreaterThanOrEqual(BAIT_HOLD_MS + 250);
+        if (o.fakeTell.startMs < BAIT_HOLD_MS) expect(r.cueAtMs - (o.fakeTell.startMs + o.fakeTell.durationMs)).toBeGreaterThanOrEqual(400);
+      }
+    }
+    expect(used).toBeGreaterThan(20);
+  });
+  it('bait upgrade works on the drunk only', () => {
+    const rng = new Rng(2);
+    const d = createOpponent('drunk', rng, 0, { bait: true });
+    for (let s = 0; s < 50; s++) d.waitMs(new Rng(s));
+    expect(d.reactToHold(1000)).toBeNull();
+    const dd = createOpponent('drunk', rng, 0, { bait: true, baitDrunk: true });
+    let hit = 0;
+    for (let s = 1; s <= 50; s++) { const wait = dd.waitMs(new Rng(s)); const r = dd.reactToHold(1000); if (r) { hit++; expect(r.cueAtMs).toBeLessThan(wait); } }
+    expect(hit).toBeGreaterThan(5);
+    const b = createOpponent('bandit', rng, 0, { bait: true, baitDrunk: true });
+    b.waitMs(new Rng(1));
+    expect(b.reactToHold(1000)).toBeNull();
+  });
+  it('disarmer drop beat: 1 beat, 2 on bosses with the upgrade', () => {
+    const o = createOpponent('bandit', new Rng(1), 0, { disarmDropsGun: true, disarmBossFloor: true });
+    expect(o.disarmPickupMs(0)).toBe(DISARM_BEAT_MS);
+    expect(o.disarmPickupMs(1, true)).toBe(2 * DISARM_BEAT_MS);
+    expect(createOpponent('bandit', new Rng(1), 0, { disarmDropsGun: true }).disarmPickupMs(0, true)).toBe(DISARM_BEAT_MS);
+  });
+  it('opponentOptionsFromModifiers maps perk modifiers', () => {
+    expect(opponentOptionsFromModifiers({ fakeTellEveryDuel: true, bluffFeint: true, baitEnabled: true, disarmDropsGun: true })).toEqual({
+      forceFakeTell: true, bluff: true, bait: true, disarmDropsGun: true,
+    });
+    expect(opponentOptionsFromModifiers({}).forceFakeTell).toBe(false);
+  });
+  it('a duel with options on still resolves', () => {
+    for (const id of ENEMY_IDS) {
+      const rng = new Rng(4);
+      const opponent = createOpponent(id, rng, 0.5, { forceFakeTell: true, bluff: true, bait: true, disarmDropsGun: true });
+      const duel = new DuelSystem({ seed: 4, opponent, enemyHp: ENEMIES[id].hp });
+      let t = 0;
+      while (!duel.isOver && t < 600000) { t += 100; duel.advanceTo(t); }
+      expect(duel.isOver).toBe(true);
     }
   });
 });
