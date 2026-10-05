@@ -1,0 +1,169 @@
+{
+ "id": "briarfield_barn",
+ "name": "OLD BARN",
+ "w": 11,
+ "h": 8,
+ "base": "dirt",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "O": "statue",
+    "H": "hole",
+    "#": "cave_wall",
+    "r": "cave_rock",
+    "p": "pipe_h",
+    "v": "pipe_v",
+    "S": "shelf",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "Y": "plant",
+    "h": "hay",
+    "u": "vault",
+    "L": "lab_machine",
+    "q": "table",
+    "g": "valve",
+    "e": "channel",
+    "y": "channel_dry",
+    "j": "pipe_v",
+    "k": "pipe_c"
+   },
+   "rows": [
+    "WWWWWWWWWWW",
+    "h.........h",
+    "hhhh.Ghhhhh",
+    "...........",
+    "h........h.",
+    "...........",
+    "....h......"
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     5,
+     7
+    ]
+   ]
+  },
+  {
+   "op": "clear",
+   "x": 5,
+   "y": 2,
+   "w": 1,
+   "h": 1,
+   "when": "briar_pulse1"
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "gate_open",
+   "pts": [
+    [
+     5,
+     2
+    ]
+   ],
+   "when": "briar_pulse1"
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "beacon",
+   "pts": [
+    [
+     9,
+     5
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 5,
+   "y": 7,
+   "to": "briarfield",
+   "tx": 11,
+   "ty": 22,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "barn_cat",
+   "x": 3,
+   "y": 4,
+   "look": "kid2",
+   "dir": "down",
+   "move": "wander",
+   "r": 2,
+   "name": "STABLE HAND",
+   "text": "A Cropclone was hiding in here earlier. It copied itself every time I looked away. I have eleven now. Take one? ...No. They are not for taking."
+  }
+ ],
+ "objects": [
+  {
+   "type": "pulse",
+   "x": 9,
+   "y": 5,
+   "flag": "briar_pulse1",
+   "blind": "A dormant Signal switch, half-buried in hay. It does not respond. You'll need a way to send a PULSE.",
+   "script": "barn_pulse"
+  },
+  {
+   "type": "item",
+   "x": 4,
+   "y": 1,
+   "item": "contain_module",
+   "n": 2
+  },
+  {
+   "type": "item",
+   "x": 6,
+   "y": 1,
+   "item": "full_patch",
+   "n": 1
+  },
+  {
+   "type": "item",
+   "x": 5,
+   "y": 1,
+   "item": "restore_chip",
+   "n": 1
+  },
+  {
+   "type": "sign",
+   "x": 3,
+   "y": 3,
+   "text": "A wooden gate has been bolted behind the hay. It has a Signal lock instead of a latch. Whatever is behind it is meant for later."
+  }
+ ]
+}

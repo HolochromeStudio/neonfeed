@@ -1,0 +1,99 @@
+{
+ "id": "player_house_2f",
+ "name": "YOUR ROOM",
+ "w": 9,
+ "h": 7,
+ "base": "wood",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "carpet_b",
+   "x": 3,
+   "y": 3,
+   "w": 4,
+   "h": 3
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "D": "door_in",
+    "b": "bed_top",
+    "B": "bed_bot",
+    "S": "shelf",
+    "V": "tv",
+    "P": "plant",
+    "T": "table2",
+    "C": "chair",
+    "F": "fridge",
+    "K": "stove",
+    "N": "counter",
+    "G": "globe",
+    "M": "lab_machine",
+    "Z": "workbench",
+    "X": "crate",
+    "R": "terminal",
+    "Q": "table"
+   },
+   "rows": [
+    "WWwWWWwDW",
+    ".b.S.V..P",
+    ".B.......",
+    ".........",
+    ".....CT.."
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 7,
+   "y": 0,
+   "to": "player_house_1f",
+   "tx": 7,
+   "ty": 1,
+   "dir": "down"
+  }
+ ],
+ "objects": [
+  {
+   "type": "script",
+   "x": 1,
+   "y": 1,
+   "script": "home_bed",
+   "id": "bed1"
+  },
+  {
+   "type": "script",
+   "x": 1,
+   "y": 2,
+   "script": "home_bed",
+   "id": "bed2"
+  },
+  {
+   "type": "sign",
+   "x": 5,
+   "y": 1,
+   "text": "Your TV. It is showing a channel that does not exist. You change it. It changes back."
+  },
+  {
+   "type": "sign",
+   "x": 3,
+   "y": 1,
+   "text": "Shelves of textbooks: 'SIGNAL ECOLOGY, VOL. 1' by E. Vale. You have never finished chapter two."
+  },
+  {
+   "type": "sign",
+   "x": 6,
+   "y": 4,
+   "text": "Your desk. A half-finished drawing of the Signal Tower on the hill, with an extra antenna you added from memory."
+  }
+ ]
+}

@@ -1,0 +1,128 @@
+{
+ "id": "briar_house",
+ "name": "HALLOW FARMHOUSE",
+ "w": 7,
+ "h": 6,
+ "base": "wood",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "carpet_r",
+   "x": 2,
+   "y": 2,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "O": "statue",
+    "H": "hole",
+    "#": "cave_wall",
+    "r": "cave_rock",
+    "p": "pipe_h",
+    "v": "pipe_v",
+    "S": "shelf",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "Y": "plant",
+    "h": "hay",
+    "u": "vault",
+    "L": "lab_machine",
+    "q": "table",
+    "g": "valve",
+    "e": "channel",
+    "y": "channel_dry",
+    "j": "pipe_v",
+    "k": "pipe_c"
+   },
+   "rows": [
+    "WWwWWWW",
+    ".FKn.SY",
+    ".......",
+    "....tt.",
+    "....cc."
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     3,
+     5
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 3,
+   "y": 5,
+   "to": "briarfield",
+   "tx": 5,
+   "ty": 16,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "hallow_dad",
+   "x": 1,
+   "y": 3,
+   "look": "farmer",
+   "dir": "right",
+   "name": "MR. HALLOW",
+   "scripts": [
+    {
+     "when": "node_1_complete",
+     "run": "hallow_after"
+    },
+    {
+     "run": "hallow_before"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "sign",
+   "x": 2,
+   "y": 1,
+   "text": "The fridge is full of identical jars. Each jar is labelled 'JAM'. Each jar is labelled 'JAM'."
+  },
+  {
+   "type": "sign",
+   "x": 5,
+   "y": 1,
+   "text": "Shelves of seed packets. Each packet says 'DO NOT PLANT TWICE'."
+  }
+ ]
+}

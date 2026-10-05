@@ -1,0 +1,14 @@
+{
+  "AUTO_SAVE":       { "name": "AUTO-SAVE", "desc": "Recovers 1/16 HP every turn." },
+  "RETRY":           { "name": "RETRY", "desc": "Survives one lethal hit per battle at 1 HP." },
+  "MEMORY_LEAK":     { "name": "MEMORY LEAK", "desc": "Drains 1/16 of the foe's HP each turn." },
+  "GHOST_PROCESS":   { "name": "GHOST PROCESS", "desc": "Takes half damage from the first hit it receives." },
+  "QUICK_BOOT":      { "name": "QUICK BOOT", "desc": "Moves first on its first turn out." },
+  "OVERCLOCK":       { "name": "OVERCLOCK", "desc": "SPD x1.3 but DEF x0.9." },
+  "BACKGROUND_TASK": { "name": "BACKGROUND TASK", "desc": "Heals 1/16 HP each turn while waiting in the party." },
+  "PACKET_LOSS":     { "name": "PACKET LOSS", "desc": "Foe's moves miss more often (x0.85 accuracy)." },
+  "FAILSAFE":        { "name": "FAILSAFE", "desc": "Immune to status above 50% HP." },
+  "DEEP_CACHE":      { "name": "DEEP CACHE", "desc": "Takes 40% less damage at full HP." },
+  "STATIC_SKIN":     { "name": "STATIC SKIN", "desc": "30% chance to OVERLOAD attackers that hit it." },
+  "ROOT_ACCESS":     { "name": "ROOT ACCESS", "desc": "Own moves ignore the foe's stat boosts." }
+}

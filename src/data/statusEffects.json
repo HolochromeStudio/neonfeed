@@ -1,0 +1,10 @@
+{
+  "CORRUPTED":  { "short": "COR", "color": "#b43cd8", "desc": "Loses 1/8 HP each turn.", "verb": "was corrupted!", "cure": "Data corruption fades.", "tick": "is losing data!" },
+  "DESYNCED":   { "short": "DSY", "color": "#38a8e8", "desc": "May act out of order or miss (1 in 3).", "verb": "fell out of sync!", "cure": "resynced.", "tick": "is out of sync!" },
+  "FROZEN":     { "short": "FRZ", "color": "#a8e8f8", "desc": "Cannot act. 25% thaw each turn.", "verb": "froze solid!", "cure": "thawed out.", "tick": "is frozen solid!" },
+  "LOOPED":     { "short": "LUP", "color": "#48b868", "desc": "Repeats its last move for 3 turns.", "verb": "got stuck in a loop!", "cure": "broke the loop.", "tick": "repeats itself!" },
+  "MUTED":      { "short": "MUT", "color": "#8a8aa8", "desc": "Cannot use status moves for 4 turns.", "verb": "was muted!", "cure": "can speak again.", "tick": "is muted!" },
+  "OVERLOADED": { "short": "OVL", "color": "#e8a838", "desc": "ATK halved. Loses 1/16 HP each turn.", "verb": "is overloaded!", "cure": "cooled down.", "tick": "is overheating!" },
+  "CACHED":     { "short": "CCH", "color": "#e88838", "desc": "Stuck loading for 1-3 turns.", "verb": "went into cache!", "cure": "finished loading.", "tick": "is still loading..." },
+  "FRAGMENTED": { "short": "FRG", "color": "#e04848", "desc": "DEF down 25%. Takes extra Stability damage.", "verb": "fragmented!", "cure": "defragmented.", "tick": "is falling apart!" }
+}

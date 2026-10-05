@@ -1,0 +1,104 @@
+{
+ "woman_before": [
+  {
+   "say": "Signal's terrible today. My radio keeps announcing the weather for a town I've never heard of.",
+   "who": "RESIDENT"
+  }
+ ],
+ "woman_after": [
+  {
+   "say": "My radio just said my name. I unplugged it. It said it again.",
+   "who": "RESIDENT"
+  },
+  {
+   "say": "I don't remember plugging it back in.",
+   "who": "RESIDENT"
+  }
+ ],
+ "oldtimer_before": [
+  {
+   "say": "Vale hasn't left that workshop in weeks. Used to be a hell of a Debugger. Before the... well. Before.",
+   "who": "OLD TIMER"
+  }
+ ],
+ "oldtimer_after": [
+  {
+   "say": "Did the power come back on? It never really went off. It just... stopped being sure.",
+   "who": "OLD TIMER"
+  }
+ ],
+ "angler_before": [
+  {
+   "say": "Caught nothing. Again. But I caught the same nothing three times, which is progress.",
+   "who": "ANGLER"
+  }
+ ],
+ "angler_after": [
+  {
+   "say": "The canal's reflection is a second behind now. When I wave, the fish waves back late.",
+   "who": "ANGLER"
+  }
+ ],
+ "farmer_a_before": [
+  {
+   "say": "My crops grow so fast lately. Too fast. Yesterday's weeds are today's hedge.",
+   "who": "FARMER"
+  }
+ ],
+ "farmer_a_after": [
+  {
+   "say": "The Node's fixed! The sprouts stopped blinking. I miss it, a bit.",
+   "who": "FARMER"
+  }
+ ],
+ "farmer_b_before": [
+  {
+   "say": "The irrigation channel runs backwards on Tuesdays. It's Thursday.",
+   "who": "FARMER"
+  }
+ ],
+ "farmer_b_after": [
+  {
+   "say": "Clean State told me my crops are 'within tolerance'. They said it as if I should be grateful.",
+   "who": "FARMER"
+  }
+ ],
+ "granny_before": [
+  {
+   "say": "The Hub's vending machine gives free drinks when it's raining. Don't tell the Hub.",
+   "who": "GRANNY"
+  }
+ ],
+ "granny_after": [
+  {
+   "say": "The new people in white coats keep correcting my knitting. 'There's a deviation in row nine', they say.",
+   "who": "GRANNY"
+  },
+  {
+   "say": "I said: 'It's called a design.'",
+   "who": "GRANNY"
+  }
+ ],
+ "hallow_before": [
+  {
+   "say": "I've been counting my crops for six months. It's never come out the same. I think the number is having a bad time.",
+   "who": "MR. HALLOW"
+  }
+ ],
+ "hallow_after": [
+  {
+   "say": "Everything's quieter. Cleaner. I'd call it a relief, but my wife says I'm lying.",
+   "who": "MR. HALLOW"
+  }
+ ],
+ "oldman_b": [
+  {
+   "say": "Have we met?",
+   "who": "OLD MAN"
+  },
+  {
+   "say": "No... no, that was Route 01. Wasn't it? Odd. I feel like I'm in two places at once.",
+   "who": "OLD MAN"
+  }
+ ]
+}

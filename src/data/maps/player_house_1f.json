@@ -1,0 +1,122 @@
+{
+ "id": "player_house_1f",
+ "name": "YOUR HOUSE",
+ "w": 9,
+ "h": 7,
+ "base": "wood",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "D": "door_in",
+    "b": "bed_top",
+    "B": "bed_bot",
+    "S": "shelf",
+    "V": "tv",
+    "P": "plant",
+    "T": "table2",
+    "C": "chair",
+    "F": "fridge",
+    "K": "stove",
+    "N": "counter",
+    "G": "globe",
+    "M": "lab_machine",
+    "Z": "workbench",
+    "X": "crate",
+    "R": "terminal",
+    "Q": "table"
+   },
+   "rows": [
+    "WWwWWWwDW",
+    ".FKN.S...",
+    ".........",
+    "....TT.V.",
+    "....CC..."
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     4,
+     6
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 7,
+   "y": 0,
+   "to": "player_house_2f",
+   "tx": 7,
+   "ty": 1,
+   "dir": "down"
+  },
+  {
+   "x": 4,
+   "y": 6,
+   "to": "rivermoor",
+   "tx": 5,
+   "ty": 7,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "mom",
+   "x": 3,
+   "y": 3,
+   "look": "mom",
+   "dir": "down",
+   "name": "MOM",
+   "scripts": [
+    {
+     "when": {
+      "flag": "relay_done"
+     },
+     "run": "mom_after"
+    },
+    {
+     "when": {
+      "flag": "met_mira"
+     },
+     "run": "mom_met_mira"
+    },
+    {
+     "run": "mom_morning"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "sign",
+   "x": 7,
+   "y": 3,
+   "text": "The TV is showing the weather for a town called 'Rivermoor'. It says: SIGNAL: CLEAR."
+  },
+  {
+   "type": "sign",
+   "x": 2,
+   "y": 1,
+   "text": "Mom's stove is off. A note: 'Eat something before you go anywhere strange.'"
+  },
+  {
+   "type": "sign",
+   "x": 5,
+   "y": 1,
+   "text": "Photos of you and Mira at the playground. Mira is making a face in all of them."
+  }
+ ]
+}

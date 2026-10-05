@@ -1,0 +1,8 @@
+{
+  "mara": {
+    "title": "NODE 1 - BRIARFIELD",
+    "intro": "MARA's Bytekin share a CACHE LINK. Every 2 turns they recover 12% HP - unless LINK Stability drops below 50%.",
+    "rules": [ { "t": "cacheLink", "everyTurns": 2, "pct": 12, "breakBelow": 50 } ],
+    "startStability": 100
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "bugbyte",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "BUGBYTE - a GBA-style creature-collecting RPG (Phaser 3 + Vite + TypeScript)",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "validate": "vitest run tests/content.test.ts",
+    "sim": "vitest run tests/sim.test.ts --reporter=verbose",
+    "playtest": "node .scratch/e2.mjs",
+    "cap:sync": "npm run build && npx cap sync"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "playwright-core": "^1.63.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
+  }
+}

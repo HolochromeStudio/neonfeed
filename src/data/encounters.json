@@ -1,0 +1,187 @@
+{
+ "old_relay": {
+  "rate": 8,
+  "grass": false,
+  "table": [
+   {
+    "s": "rustbot",
+    "min": 3,
+    "max": 5,
+    "w": 35
+   },
+   {
+    "s": "pingmoth",
+    "min": 3,
+    "max": 5,
+    "w": 30
+   },
+   {
+    "s": "gnatpkt",
+    "min": 3,
+    "max": 5,
+    "w": 25
+   },
+   {
+    "s": "glitchling",
+    "min": 4,
+    "max": 5,
+    "w": 4,
+    "rare": true
+   }
+  ]
+ },
+ "route_01": {
+  "rate": 10,
+  "table": [
+   {
+    "s": "cachemouse",
+    "min": 4,
+    "max": 7,
+    "w": 30
+   },
+   {
+    "s": "pingmoth",
+    "min": 4,
+    "max": 7,
+    "w": 20,
+    "time": [
+     "morning",
+     "day",
+     "evening"
+    ]
+   },
+   {
+    "s": "gnatpkt",
+    "min": 4,
+    "max": 7,
+    "w": 20
+   },
+   {
+    "s": "looplet",
+    "min": 5,
+    "max": 8,
+    "w": 15
+   },
+   {
+    "s": "lampwisp",
+    "min": 5,
+    "max": 7,
+    "w": 15,
+    "time": [
+     "evening",
+     "night"
+    ]
+   },
+   {
+    "s": "bitbird",
+    "min": 5,
+    "max": 7,
+    "w": 6,
+    "rare": true
+   },
+   {
+    "s": "staticfrog",
+    "min": 5,
+    "max": 8,
+    "w": 20,
+    "weather": [
+     "rain"
+    ]
+   },
+   {
+    "s": "vectorfox",
+    "min": 7,
+    "max": 9,
+    "w": 4,
+    "rare": true
+   }
+  ]
+ },
+ "drainage_pipe": {
+  "rate": 16,
+  "grass": false,
+  "table": [
+   {
+    "s": "mudbyte",
+    "min": 6,
+    "max": 9,
+    "w": 40
+   },
+   {
+    "s": "staticfrog",
+    "min": 6,
+    "max": 9,
+    "w": 30
+   },
+   {
+    "s": "rustbot",
+    "min": 7,
+    "max": 9,
+    "w": 20
+   },
+   {
+    "s": "crypmole",
+    "min": 7,
+    "max": 9,
+    "w": 5,
+    "rare": true
+   }
+  ]
+ },
+ "briarfield_fields": {
+  "rate": 10,
+  "table": [
+   {
+    "s": "cropclone",
+    "min": 8,
+    "max": 11,
+    "w": 35
+   },
+   {
+    "s": "dripulse",
+    "min": 8,
+    "max": 11,
+    "w": 30
+   },
+   {
+    "s": "cachemouse",
+    "min": 8,
+    "max": 10,
+    "w": 20
+   },
+   {
+    "s": "looplet",
+    "min": 8,
+    "max": 10,
+    "w": 15
+   },
+   {
+    "s": "vectorfox",
+    "min": 9,
+    "max": 11,
+    "w": 5,
+    "rare": true
+   },
+   {
+    "s": "lampwisp",
+    "min": 8,
+    "max": 10,
+    "w": 15,
+    "time": [
+     "night"
+    ]
+   }
+  ]
+ },
+ "savelet_spot": {
+  "rate": 0,
+  "table": [
+   {
+    "s": "savelet",
+    "min": 7,
+    "max": 7,
+    "w": 1
+   }
+  ]
+ }
+}

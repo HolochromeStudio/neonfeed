@@ -1,0 +1,2305 @@
+{
+ "nullcat": {
+  "name": "Nullcat",
+  "dex": 1,
+  "types": [
+   "NULL"
+  ],
+  "base": {
+   "hp": 42,
+   "atk": 46,
+   "def": 36,
+   "sys": 42,
+   "spd": 58
+  },
+  "growth": "medium",
+  "exp": 62,
+  "abilities": [
+   "GHOST_PROCESS"
+  ],
+  "hidden": "QUICK_BOOT",
+  "contain": 45,
+  "stab": "normal",
+  "rarity": "starter",
+  "ai": "basic",
+  "learnset": [
+   [
+    1,
+    "packet_drop"
+   ],
+   [
+    1,
+    "phase_shift"
+   ],
+   [
+    5,
+    "null_claw"
+   ],
+   [
+    7,
+    "scan"
+   ],
+   [
+    9,
+    "bit_crush"
+   ],
+   [
+    13,
+    "void_pounce"
+   ],
+   [
+    20,
+    "null_field"
+   ],
+   [
+    26,
+    "bit_rot"
+   ],
+   [
+    32,
+    "overwrite"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "voidlynx",
+    "lv": 16
+   },
+   {
+    "to": "faultlynx",
+    "lv": 16,
+    "lowStab": 5
+   }
+  ],
+  "desc": "A small black cat with pixels missing around its tail. It naps where the signal is thin and never lands where you looked.",
+  "sprite": {
+   "t": "quad",
+   "c": [
+    "#2c2c42",
+    "#6a3c98",
+    "#38e0e8"
+   ],
+   "s": 0,
+   "g": 0.55,
+   "f": [
+    "tail"
+   ]
+  },
+  "cry": {
+   "f": 520,
+   "w": "square",
+   "s": 1.5,
+   "d": 0.22
+  }
+ },
+ "voidlynx": {
+  "name": "Voidlynx",
+  "dex": 2,
+  "types": [
+   "NULL"
+  ],
+  "base": {
+   "hp": 62,
+   "atk": 70,
+   "def": 52,
+   "sys": 60,
+   "spd": 82
+  },
+  "growth": "medium",
+  "exp": 142,
+  "abilities": [
+   "GHOST_PROCESS"
+  ],
+  "hidden": "QUICK_BOOT",
+  "contain": 45,
+  "stab": "normal",
+  "rarity": "starter",
+  "ai": "smart",
+  "learnset": [
+   [
+    1,
+    "packet_drop"
+   ],
+   [
+    1,
+    "phase_shift"
+   ],
+   [
+    1,
+    "null_claw"
+   ],
+   [
+    16,
+    "void_pounce"
+   ],
+   [
+    20,
+    "null_field"
+   ],
+   [
+    24,
+    "slash_path"
+   ],
+   [
+    28,
+    "bit_rot"
+   ],
+   [
+    34,
+    "overwrite"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "schrodra",
+    "lv": 34
+   }
+  ],
+  "desc": "Tufted ears flicker between frames. Where it walks, footprints appear a second late.",
+  "sprite": {
+   "t": "quad",
+   "c": [
+    "#26263a",
+    "#b43cd8",
+    "#38e0e8"
+   ],
+   "s": 1,
+   "g": 0.6,
+   "f": [
+    "tail",
+    "horns"
+   ]
+  },
+  "cry": {
+   "f": 420,
+   "w": "square",
+   "s": 1.6,
+   "d": 0.3
+  }
+ },
+ "schrodra": {
+  "name": "Schrodra",
+  "dex": 3,
+  "types": [
+   "NULL",
+   "GLITCH"
+  ],
+  "base": {
+   "hp": 80,
+   "atk": 92,
+   "def": 68,
+   "sys": 84,
+   "spd": 104
+  },
+  "growth": "medium",
+  "exp": 230,
+  "abilities": [
+   "GHOST_PROCESS"
+  ],
+  "hidden": "ROOT_ACCESS",
+  "contain": 30,
+  "stab": "normal",
+  "rarity": "starter",
+  "ai": "smart",
+  "learnset": [
+   [
+    1,
+    "packet_drop"
+   ],
+   [
+    1,
+    "null_claw"
+   ],
+   [
+    1,
+    "void_pounce"
+   ],
+   [
+    34,
+    "glitch_burst"
+   ],
+   [
+    38,
+    "null_field"
+   ],
+   [
+    44,
+    "overwrite"
+   ]
+  ],
+  "evo": [],
+  "desc": "It exists in several places at once and is only ever hit in one of them. Observers disagree on its colour.",
+  "sprite": {
+   "t": "quad",
+   "c": [
+    "#1e1e32",
+    "#b43cd8",
+    "#38e0e8"
+   ],
+   "s": 2,
+   "g": 0.8,
+   "f": [
+    "tail2",
+    "horns",
+    "eye2"
+   ]
+  },
+  "cry": {
+   "f": 330,
+   "w": "square",
+   "s": 1.8,
+   "d": 0.4
+  }
+ },
+ "faultlynx": {
+  "name": "Faultlynx",
+  "dex": 4,
+  "types": [
+   "NULL",
+   "GLITCH"
+  ],
+  "base": {
+   "hp": 58,
+   "atk": 84,
+   "def": 44,
+   "sys": 66,
+   "spd": 90
+  },
+  "growth": "medium",
+  "exp": 150,
+  "abilities": [
+   "OVERCLOCK"
+  ],
+  "hidden": "QUICK_BOOT",
+  "contain": 30,
+  "stab": "frenzy",
+  "rarity": "special",
+  "ai": "basic",
+  "learnset": [
+   [
+    1,
+    "packet_drop"
+   ],
+   [
+    1,
+    "null_claw"
+   ],
+   [
+    16,
+    "glitch_burst"
+   ],
+   [
+    20,
+    "void_pounce"
+   ],
+   [
+    28,
+    "bit_rot"
+   ],
+   [
+    34,
+    "overwrite"
+   ]
+  ],
+  "evo": [],
+  "desc": "A Nullcat raised on instability. It grew sharp where it should have grown stable.",
+  "sprite": {
+   "t": "quad",
+   "c": [
+    "#3a1a4a",
+    "#e04848",
+    "#f0c828"
+   ],
+   "s": 1,
+   "g": 0.85,
+   "f": [
+    "tail",
+    "spikes",
+    "eye2"
+   ]
+  },
+  "cry": {
+   "f": 300,
+   "w": "saw",
+   "s": 0.6,
+   "d": 0.35
+  }
+ },
+ "segbyte": {
+  "name": "Segbyte",
+  "dex": 5,
+  "types": [
+   "LOOP"
+  ],
+  "base": {
+   "hp": 47,
+   "atk": 43,
+   "def": 43,
+   "sys": 40,
+   "spd": 40
+  },
+  "growth": "medium",
+  "exp": 62,
+  "abilities": [
+   "BACKGROUND_TASK"
+  ],
+  "hidden": "RETRY",
+  "contain": 45,
+  "stab": "normal",
+  "rarity": "starter",
+  "ai": "basic",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    1,
+    "coil"
+   ],
+   [
+    5,
+    "repeat"
+   ],
+   [
+    7,
+    "scan"
+   ],
+   [
+    9,
+    "chain_bite"
+   ],
+   [
+    14,
+    "infinite_loop"
+   ],
+   [
+    20,
+    "worm_bite"
+   ],
+   [
+    27,
+    "stack_overflow"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "chaincoil",
+    "lv": 16
+   }
+  ],
+  "desc": "A segmented worm whose segments do not quite connect. It still gets where it is going.",
+  "sprite": {
+   "t": "worm",
+   "c": [
+    "#2a2a48",
+    "#38a8c8",
+    "#b43cd8"
+   ],
+   "s": 0,
+   "g": 0.5,
+   "f": [
+    "gaps"
+   ]
+  },
+  "cry": {
+   "f": 220,
+   "w": "tri",
+   "s": 0.8,
+   "d": 0.3
+  }
+ },
+ "chaincoil": {
+  "name": "Chaincoil",
+  "dex": 6,
+  "types": [
+   "LOOP"
+  ],
+  "base": {
+   "hp": 68,
+   "atk": 64,
+   "def": 64,
+   "sys": 56,
+   "spd": 52
+  },
+  "growth": "medium",
+  "exp": 142,
+  "abilities": [
+   "BACKGROUND_TASK"
+  ],
+  "hidden": "RETRY",
+  "contain": 45,
+  "stab": "normal",
+  "rarity": "starter",
+  "ai": "smart",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    1,
+    "coil"
+   ],
+   [
+    1,
+    "repeat"
+   ],
+   [
+    1,
+    "chain_bite"
+   ],
+   [
+    20,
+    "worm_bite"
+   ],
+   [
+    24,
+    "infinite_loop"
+   ],
+   [
+    28,
+    "stack_overflow"
+   ],
+   [
+    34,
+    "hash_strike"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "recursnake",
+    "lv": 34
+   }
+  ],
+  "desc": "Its body is a chain of identical links. Counting them gives a different number every time.",
+  "sprite": {
+   "t": "worm",
+   "c": [
+    "#262648",
+    "#38c8c8",
+    "#b43cd8"
+   ],
+   "s": 1,
+   "g": 0.55,
+   "f": [
+    "gaps",
+    "horns"
+   ]
+  },
+  "cry": {
+   "f": 190,
+   "w": "tri",
+   "s": 0.7,
+   "d": 0.4
+  }
+ },
+ "recursnake": {
+  "name": "Recursnake",
+  "dex": 7,
+  "types": [
+   "LOOP",
+   "CORE"
+  ],
+  "base": {
+   "hp": 86,
+   "atk": 82,
+   "def": 84,
+   "sys": 72,
+   "spd": 66
+  },
+  "growth": "medium",
+  "exp": 230,
+  "abilities": [
+   "RETRY"
+  ],
+  "hidden": "DEEP_CACHE",
+  "contain": 30,
+  "stab": "normal",
+  "rarity": "starter",
+  "ai": "smart",
+  "learnset": [
+   [
+    1,
+    "chain_bite"
+   ],
+   [
+    1,
+    "repeat"
+   ],
+   [
+    1,
+    "infinite_loop"
+   ],
+   [
+    34,
+    "stack_overflow"
+   ],
+   [
+    38,
+    "core_dump"
+   ],
+   [
+    44,
+    "reboot"
+   ]
+  ],
+  "evo": [],
+  "desc": "Its tail is its own head. Its head is its own tail. Both argue about it.",
+  "sprite": {
+   "t": "worm",
+   "c": [
+    "#202044",
+    "#38e8c8",
+    "#b43cd8"
+   ],
+   "s": 2,
+   "g": 0.65,
+   "f": [
+    "gaps",
+    "horns"
+   ]
+  },
+  "cry": {
+   "f": 160,
+   "w": "tri",
+   "s": 0.7,
+   "d": 0.5
+  }
+ },
+ "bitbird": {
+  "name": "Bitbird",
+  "dex": 8,
+  "types": [
+   "SIGNAL"
+  ],
+  "base": {
+   "hp": 42,
+   "atk": 46,
+   "def": 36,
+   "sys": 54,
+   "spd": 64
+  },
+  "growth": "medium",
+  "exp": 62,
+  "abilities": [
+   "QUICK_BOOT"
+  ],
+  "hidden": "PACKET_LOSS",
+  "contain": 45,
+  "stab": "normal",
+  "rarity": "starter",
+  "ai": "basic",
+  "learnset": [
+   [
+    1,
+    "ping"
+   ],
+   [
+    1,
+    "signal_boost"
+   ],
+   [
+    5,
+    "wing_flicker"
+   ],
+   [
+    7,
+    "scan"
+   ],
+   [
+    9,
+    "desync"
+   ],
+   [
+    13,
+    "priority_mail"
+   ],
+   [
+    20,
+    "broadcast"
+   ],
+   [
+    26,
+    "echo_command"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "datwing",
+    "lv": 16
+   }
+  ],
+  "desc": "A small blue bird. Sometimes its wings show the wrong animation frame, and then it flies anyway.",
+  "sprite": {
+   "t": "bird",
+   "c": [
+    "#4a8ad8",
+    "#2a5aa8",
+    "#38e0e8"
+   ],
+   "s": 0,
+   "g": 0.35,
+   "f": [
+    "crest"
+   ]
+  },
+  "cry": {
+   "f": 900,
+   "w": "square",
+   "s": 1.4,
+   "d": 0.16,
+   "v": 14
+  }
+ },
+ "datwing": {
+  "name": "Datwing",
+  "dex": 9,
+  "types": [
+   "SIGNAL"
+  ],
+  "base": {
+   "hp": 58,
+   "atk": 60,
+   "def": 48,
+   "sys": 72,
+   "spd": 86
+  },
+  "growth": "medium",
+  "exp": 142,
+  "abilities": [
+   "QUICK_BOOT"
+  ],
+  "hidden": "PACKET_LOSS",
+  "contain": 45,
+  "stab": "normal",
+  "rarity": "starter",
+  "ai": "smart",
+  "learnset": [
+   [
+    1,
+    "ping"
+   ],
+   [
+    1,
+    "signal_boost"
+   ],
+   [
+    1,
+    "wing_flicker"
+   ],
+   [
+    1,
+    "desync"
+   ],
+   [
+    18,
+    "priority_mail"
+   ],
+   [
+    22,
+    "broadcast"
+   ],
+   [
+    28,
+    "echo_command"
+   ],
+   [
+    34,
+    "pulse_wave"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "broadcastor",
+    "lv": 34
+   }
+  ],
+  "desc": "Four wings, two of them always one frame behind. It arrives before it leaves.",
+  "sprite": {
+   "t": "bird",
+   "c": [
+    "#3a78e0",
+    "#2a4a98",
+    "#38e0e8"
+   ],
+   "s": 1,
+   "g": 0.4,
+   "f": [
+    "crest",
+    "wings2"
+   ]
+  },
+  "cry": {
+   "f": 760,
+   "w": "square",
+   "s": 1.4,
+   "d": 0.2,
+   "v": 18
+  }
+ },
+ "broadcastor": {
+  "name": "Broadcastor",
+  "dex": 10,
+  "types": [
+   "SIGNAL",
+   "PULSE"
+  ],
+  "base": {
+   "hp": 76,
+   "atk": 74,
+   "def": 62,
+   "sys": 96,
+   "spd": 108
+  },
+  "growth": "medium",
+  "exp": 230,
+  "abilities": [
+   "QUICK_BOOT"
+  ],
+  "hidden": "ROOT_ACCESS",
+  "contain": 30,
+  "stab": "normal",
+  "rarity": "starter",
+  "ai": "smart",
+  "learnset": [
+   [
+    1,
+    "ping"
+   ],
+   [
+    1,
+    "desync"
+   ],
+   [
+    1,
+    "broadcast"
+   ],
+   [
+    34,
+    "pulse_wave"
+   ],
+   [
+    38,
+    "feedback"
+   ],
+   [
+    44,
+    "overvolt"
+   ]
+  ],
+  "evo": [],
+  "desc": "Every channel it flies over briefly plays its song. Turn order bends around it.",
+  "sprite": {
+   "t": "bird",
+   "c": [
+    "#3a68f0",
+    "#e848b8",
+    "#d8ffff"
+   ],
+   "s": 2,
+   "g": 0.45,
+   "f": [
+    "crest",
+    "wings2"
+   ]
+  },
+  "cry": {
+   "f": 620,
+   "w": "square",
+   "s": 1.5,
+   "d": 0.3,
+   "v": 22
+  }
+ },
+ "cachemouse": {
+  "name": "Cachemouse",
+  "dex": 11,
+  "types": [
+   "CACHE"
+  ],
+  "base": {
+   "hp": 38,
+   "atk": 40,
+   "def": 38,
+   "sys": 34,
+   "spd": 50
+  },
+  "growth": "fast",
+  "exp": 52,
+  "abilities": [
+   "DEEP_CACHE"
+  ],
+  "hidden": "AUTO_SAVE",
+  "contain": 200,
+  "stab": "normal",
+  "rarity": "common",
+  "ai": "random",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    3,
+    "cache_hit"
+   ],
+   [
+    7,
+    "cache_load"
+   ],
+   [
+    11,
+    "copy_paste"
+   ],
+   [
+    15,
+    "memory_dump"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "hamcache",
+    "lv": 18
+   }
+  ],
+  "desc": "Hoards copies of everything. Most of what it hoards is already in your pocket.",
+  "sprite": {
+   "t": "quad",
+   "c": [
+    "#d8a868",
+    "#e8d8a8",
+    "#e8a838"
+   ],
+   "s": 0,
+   "g": 0.2,
+   "f": [
+    "stripe",
+    "tail"
+   ]
+  },
+  "cry": {
+   "f": 1000,
+   "w": "square",
+   "s": 1.2,
+   "d": 0.1
+  }
+ },
+ "hamcache": {
+  "name": "Hamcache",
+  "dex": 12,
+  "types": [
+   "CACHE"
+  ],
+  "base": {
+   "hp": 70,
+   "atk": 62,
+   "def": 66,
+   "sys": 50,
+   "spd": 58
+  },
+  "growth": "fast",
+  "exp": 130,
+  "abilities": [
+   "DEEP_CACHE"
+  ],
+  "hidden": "AUTO_SAVE",
+  "contain": 120,
+  "stab": "normal",
+  "rarity": "uncommon",
+  "ai": "basic",
+  "learnset": [
+   [
+    1,
+    "cache_hit"
+   ],
+   [
+    1,
+    "cache_load"
+   ],
+   [
+    1,
+    "copy_paste"
+   ],
+   [
+    18,
+    "memory_dump"
+   ],
+   [
+    24,
+    "hash_strike"
+   ],
+   [
+    30,
+    "reboot"
+   ]
+  ],
+  "evo": [],
+  "desc": "Its cheeks hold the last forty-one things it saw. It will not share.",
+  "sprite": {
+   "t": "quad",
+   "c": [
+    "#c89050",
+    "#f0e0b0",
+    "#e8a838"
+   ],
+   "s": 1,
+   "g": 0.25,
+   "f": [
+    "stripe",
+    "tail"
+   ]
+  },
+  "cry": {
+   "f": 700,
+   "w": "square",
+   "s": 1.2,
+   "d": 0.2
+  }
+ },
+ "pingmoth": {
+  "name": "Pingmoth",
+  "dex": 13,
+  "types": [
+   "SIGNAL"
+  ],
+  "base": {
+   "hp": 36,
+   "atk": 32,
+   "def": 32,
+   "sys": 48,
+   "spd": 56
+  },
+  "growth": "fast",
+  "exp": 52,
+  "abilities": [
+   "PACKET_LOSS"
+  ],
+  "hidden": "QUICK_BOOT",
+  "contain": 190,
+  "stab": "flee",
+  "rarity": "common",
+  "ai": "random",
+  "learnset": [
+   [
+    1,
+    "ping"
+   ],
+   [
+    4,
+    "scan"
+   ],
+   [
+    8,
+    "signal_boost"
+   ],
+   [
+    12,
+    "desync"
+   ],
+   [
+    17,
+    "broadcast"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "beaconmoth",
+    "item": "signal_crystal"
+   }
+  ],
+  "desc": "Drawn to lit screens. Each wingbeat sends a tiny ping that nobody answers.",
+  "sprite": {
+   "t": "moth",
+   "c": [
+    "#c8c8e8",
+    "#6a98e8",
+    "#38e0e8"
+   ],
+   "s": 0,
+   "g": 0.3
+  },
+  "cry": {
+   "f": 1300,
+   "w": "tri",
+   "s": 0.9,
+   "d": 0.15,
+   "v": 30
+  }
+ },
+ "beaconmoth": {
+  "name": "Beaconmoth",
+  "dex": 14,
+  "types": [
+   "SIGNAL",
+   "PULSE"
+  ],
+  "base": {
+   "hp": 62,
+   "atk": 44,
+   "def": 50,
+   "sys": 80,
+   "spd": 78
+  },
+  "growth": "fast",
+  "exp": 140,
+  "abilities": [
+   "PACKET_LOSS"
+  ],
+  "hidden": "QUICK_BOOT",
+  "contain": 90,
+  "stab": "flee",
+  "rarity": "uncommon",
+  "ai": "smart",
+  "learnset": [
+   [
+    1,
+    "ping"
+   ],
+   [
+    1,
+    "scan"
+   ],
+   [
+    1,
+    "desync"
+   ],
+   [
+    1,
+    "broadcast"
+   ],
+   [
+    24,
+    "pulse_wave"
+   ],
+   [
+    30,
+    "pulse_mend"
+   ]
+  ],
+  "evo": [],
+  "desc": "Ships use its glow as a lighthouse. It does not know this and would be upset.",
+  "sprite": {
+   "t": "moth",
+   "c": [
+    "#f0e8f8",
+    "#e848b8",
+    "#38e0e8"
+   ],
+   "s": 2,
+   "g": 0.35
+  },
+  "cry": {
+   "f": 1000,
+   "w": "tri",
+   "s": 0.9,
+   "d": 0.3,
+   "v": 34
+  }
+ },
+ "gnatpkt": {
+  "name": "Gnatpkt",
+  "dex": 15,
+  "types": [
+   "VIRAL"
+  ],
+  "base": {
+   "hp": 32,
+   "atk": 38,
+   "def": 30,
+   "sys": 46,
+   "spd": 60
+  },
+  "growth": "fast",
+  "exp": 50,
+  "abilities": [
+   "MEMORY_LEAK"
+  ],
+  "hidden": "STATIC_SKIN",
+  "contain": 200,
+  "stab": "regen",
+  "rarity": "common",
+  "ai": "random",
+  "learnset": [
+   [
+    1,
+    "infect"
+   ],
+   [
+    4,
+    "packet_drop"
+   ],
+   [
+    8,
+    "memory_leak"
+   ],
+   [
+    13,
+    "worm_bite"
+   ],
+   [
+    19,
+    "fragment"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "swarmware",
+    "lv": 20
+   }
+  ],
+  "desc": "Travels in packets of exactly one. Somehow still a swarm.",
+  "sprite": {
+   "t": "moth",
+   "c": [
+    "#6a8a28",
+    "#a8c828",
+    "#e04848"
+   ],
+   "s": 0,
+   "g": 0.5
+  },
+  "cry": {
+   "f": 1500,
+   "w": "saw",
+   "s": 0.8,
+   "d": 0.18,
+   "v": 40
+  }
+ },
+ "swarmware": {
+  "name": "Swarmware",
+  "dex": 16,
+  "types": [
+   "VIRAL"
+  ],
+  "base": {
+   "hp": 56,
+   "atk": 60,
+   "def": 50,
+   "sys": 72,
+   "spd": 84
+  },
+  "growth": "fast",
+  "exp": 128,
+  "abilities": [
+   "MEMORY_LEAK"
+  ],
+  "hidden": "STATIC_SKIN",
+  "contain": 100,
+  "stab": "regen",
+  "rarity": "uncommon",
+  "ai": "basic",
+  "learnset": [
+   [
+    1,
+    "infect"
+   ],
+   [
+    1,
+    "memory_leak"
+   ],
+   [
+    1,
+    "worm_bite"
+   ],
+   [
+    20,
+    "fragment"
+   ],
+   [
+    26,
+    "false_input"
+   ],
+   [
+    32,
+    "stack_overflow"
+   ]
+  ],
+  "evo": [],
+  "desc": "Looks like many gnats. Is one gnat. Is also, in some sense, the idea of a gnat.",
+  "sprite": {
+   "t": "moth",
+   "c": [
+    "#4a6a18",
+    "#a8e828",
+    "#e04848"
+   ],
+   "s": 2,
+   "g": 0.6
+  },
+  "cry": {
+   "f": 1100,
+   "w": "saw",
+   "s": 0.8,
+   "d": 0.3,
+   "v": 44
+  }
+ },
+ "staticfrog": {
+  "name": "Staticfrog",
+  "dex": 17,
+  "types": [
+   "STATIC"
+  ],
+  "base": {
+   "hp": 50,
+   "atk": 42,
+   "def": 44,
+   "sys": 50,
+   "spd": 36
+  },
+  "growth": "medium",
+  "exp": 58,
+  "abilities": [
+   "STATIC_SKIN"
+  ],
+  "hidden": "FAILSAFE",
+  "contain": 160,
+  "stab": "normal",
+  "rarity": "common",
+  "ai": "random",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    4,
+    "static_shock"
+   ],
+   [
+    9,
+    "white_noise"
+   ],
+   [
+    14,
+    "bit_crush"
+   ],
+   [
+    20,
+    "feedback"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "snaptoad",
+    "lv": 22
+   }
+  ],
+  "desc": "Croaks in pure white noise. Radios nearby change stations out of politeness.",
+  "sprite": {
+   "t": "frog",
+   "c": [
+    "#d8d048",
+    "#8a8a28",
+    "#ffffff"
+   ],
+   "s": 0,
+   "g": 0.3
+  },
+  "cry": {
+   "f": 180,
+   "w": "saw",
+   "s": 1.0,
+   "d": 0.25,
+   "v": 50
+  }
+ },
+ "snaptoad": {
+  "name": "Snaptoad",
+  "dex": 18,
+  "types": [
+   "STATIC"
+  ],
+  "base": {
+   "hp": 78,
+   "atk": 66,
+   "def": 68,
+   "sys": 74,
+   "spd": 48
+  },
+  "growth": "medium",
+  "exp": 140,
+  "abilities": [
+   "STATIC_SKIN"
+  ],
+  "hidden": "FAILSAFE",
+  "contain": 90,
+  "stab": "normal",
+  "rarity": "uncommon",
+  "ai": "basic",
+  "learnset": [
+   [
+    1,
+    "static_shock"
+   ],
+   [
+    1,
+    "white_noise"
+   ],
+   [
+    1,
+    "feedback"
+   ],
+   [
+    22,
+    "hash_strike"
+   ],
+   [
+    28,
+    "overvolt"
+   ]
+  ],
+  "evo": [],
+  "desc": "Its tongue is a loose wire. It is delighted by this.",
+  "sprite": {
+   "t": "frog",
+   "c": [
+    "#c8c038",
+    "#6a6a20",
+    "#ffffff"
+   ],
+   "s": 2,
+   "g": 0.35,
+   "f": [
+    "spikes"
+   ]
+  },
+  "cry": {
+   "f": 120,
+   "w": "saw",
+   "s": 1.0,
+   "d": 0.4,
+   "v": 50
+  }
+ },
+ "looplet": {
+  "name": "Looplet",
+  "dex": 19,
+  "types": [
+   "LOOP"
+  ],
+  "base": {
+   "hp": 44,
+   "atk": 46,
+   "def": 42,
+   "sys": 36,
+   "spd": 48
+  },
+  "growth": "medium",
+  "exp": 56,
+  "abilities": [
+   "RETRY"
+  ],
+  "hidden": "BACKGROUND_TASK",
+  "contain": 180,
+  "stab": "normal",
+  "rarity": "common",
+  "ai": "random",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    4,
+    "repeat"
+   ],
+   [
+    8,
+    "coil"
+   ],
+   [
+    13,
+    "chain_bite"
+   ],
+   [
+    19,
+    "infinite_loop"
+   ]
+  ],
+  "evo": [],
+  "desc": "Chases its own tail on the same patch of grass. It has been doing this since before the Signal failed.",
+  "sprite": {
+   "t": "quad",
+   "c": [
+    "#48b868",
+    "#2a7a48",
+    "#ffffff"
+   ],
+   "s": 0,
+   "g": 0.2,
+   "f": [
+    "stripe"
+   ]
+  },
+  "cry": {
+   "f": 600,
+   "w": "tri",
+   "s": 1.2,
+   "d": 0.2
+  }
+ },
+ "cropclone": {
+  "name": "Cropclone",
+  "dex": 20,
+  "types": [
+   "CACHE"
+  ],
+  "base": {
+   "hp": 46,
+   "atk": 36,
+   "def": 46,
+   "sys": 44,
+   "spd": 30
+  },
+  "growth": "medium",
+  "exp": 56,
+  "abilities": [
+   "AUTO_SAVE"
+  ],
+  "hidden": "DEEP_CACHE",
+  "contain": 190,
+  "stab": "regen",
+  "rarity": "common",
+  "ai": "random",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    4,
+    "cache_hit"
+   ],
+   [
+    9,
+    "copy_paste"
+   ],
+   [
+    14,
+    "cache_load"
+   ],
+   [
+    19,
+    "memory_dump"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "bulbclone",
+    "lv": 20
+   }
+  ],
+  "desc": "Appears overnight between rows of crops. The farmers call every one of them 'the new one'.",
+  "sprite": {
+   "t": "plant",
+   "c": [
+    "#58b83c",
+    "#a8683c",
+    "#f0c828"
+   ],
+   "s": 0,
+   "g": 0.3
+  },
+  "cry": {
+   "f": 400,
+   "w": "tri",
+   "s": 1.1,
+   "d": 0.2
+  }
+ },
+ "bulbclone": {
+  "name": "Bulbclone",
+  "dex": 21,
+  "types": [
+   "CACHE"
+  ],
+  "base": {
+   "hp": 72,
+   "atk": 50,
+   "def": 70,
+   "sys": 66,
+   "spd": 38
+  },
+  "growth": "medium",
+  "exp": 130,
+  "abilities": [
+   "AUTO_SAVE"
+  ],
+  "hidden": "DEEP_CACHE",
+  "contain": 100,
+  "stab": "regen",
+  "rarity": "uncommon",
+  "ai": "basic",
+  "learnset": [
+   [
+    1,
+    "cache_hit"
+   ],
+   [
+    1,
+    "copy_paste"
+   ],
+   [
+    1,
+    "cache_load"
+   ],
+   [
+    1,
+    "memory_dump"
+   ],
+   [
+    26,
+    "pulse_mend"
+   ]
+  ],
+  "evo": [],
+  "desc": "Its flower is a duplicate of last season's. Its seeds are duplicates of its flower.",
+  "sprite": {
+   "t": "plant",
+   "c": [
+    "#48a830",
+    "#8a4a2c",
+    "#e8e8f0"
+   ],
+   "s": 2,
+   "g": 0.3
+  },
+  "cry": {
+   "f": 300,
+   "w": "tri",
+   "s": 1.1,
+   "d": 0.3
+  }
+ },
+ "dripulse": {
+  "name": "Dripulse",
+  "dex": 22,
+  "types": [
+   "PULSE"
+  ],
+  "base": {
+   "hp": 52,
+   "atk": 38,
+   "def": 40,
+   "sys": 52,
+   "spd": 42
+  },
+  "growth": "medium",
+  "exp": 60,
+  "abilities": [
+   "FAILSAFE"
+  ],
+  "hidden": "AUTO_SAVE",
+  "contain": 170,
+  "stab": "normal",
+  "rarity": "common",
+  "ai": "random",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    4,
+    "pulse_wave"
+   ],
+   [
+    9,
+    "white_noise"
+   ],
+   [
+    14,
+    "pulse_mend"
+   ],
+   [
+    20,
+    "overvolt"
+   ]
+  ],
+  "evo": [
+   {
+    "to": "floodpulse",
+    "lv": 24
+   }
+  ],
+  "desc": "A pink drop of irrigation that took on a heartbeat. It ticks on the beat.",
+  "sprite": {
+   "t": "blob",
+   "c": [
+    "#e84878",
+    "#f8a0b8",
+    "#ffffff"
+   ],
+   "s": 0,
+   "g": 0.25
+  },
+  "cry": {
+   "f": 340,
+   "w": "square",
+   "s": 0.7,
+   "d": 0.25
+  }
+ },
+ "floodpulse": {
+  "name": "Floodpulse",
+  "dex": 23,
+  "types": [
+   "PULSE"
+  ],
+  "base": {
+   "hp": 84,
+   "atk": 60,
+   "def": 62,
+   "sys": 84,
+   "spd": 58
+  },
+  "growth": "medium",
+  "exp": 150,
+  "abilities": [
+   "FAILSAFE"
+  ],
+  "hidden": "AUTO_SAVE",
+  "contain": 90,
+  "stab": "normal",
+  "rarity": "uncommon",
+  "ai": "basic",
+  "learnset": [
+   [
+    1,
+    "pulse_wave"
+   ],
+   [
+    1,
+    "white_noise"
+   ],
+   [
+    1,
+    "pulse_mend"
+   ],
+   [
+    24,
+    "overvolt"
+   ],
+   [
+    30,
+    "broadcast"
+   ]
+  ],
+  "evo": [],
+  "desc": "Where it passes, ditches fill up and nobody can say from where.",
+  "sprite": {
+   "t": "blob",
+   "c": [
+    "#d83868",
+    "#f888a8",
+    "#ffffff"
+   ],
+   "s": 2,
+   "g": 0.3,
+   "f": [
+    "horns"
+   ]
+  },
+  "cry": {
+   "f": 240,
+   "w": "square",
+   "s": 0.7,
+   "d": 0.4
+  }
+ },
+ "savelet": {
+  "name": "Savelet",
+  "dex": 24,
+  "types": [
+   "ARCHIVE"
+  ],
+  "base": {
+   "hp": 44,
+   "atk": 30,
+   "def": 44,
+   "sys": 56,
+   "spd": 46
+  },
+  "growth": "slow",
+  "exp": 90,
+  "abilities": [
+   "RETRY"
+  ],
+  "hidden": "BACKGROUND_TASK",
+  "contain": 90,
+  "stab": "calm",
+  "rarity": "special",
+  "ai": "smart",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    1,
+    "backtrace"
+   ],
+   [
+    6,
+    "fragment"
+   ],
+   [
+    12,
+    "cache_load"
+   ],
+   [
+    18,
+    "archive_pull"
+   ]
+  ],
+  "evo": [],
+  "desc": "Only appears next to save terminals. It remembers every attempt, including the ones that did not end well.",
+  "sprite": {
+   "t": "ghost",
+   "c": [
+    "#d8e8f8",
+    "#38a8e8",
+    "#38e0e8"
+   ],
+   "s": 0,
+   "g": 0.3
+  },
+  "cry": {
+   "f": 800,
+   "w": "tri",
+   "s": 0.6,
+   "d": 0.4,
+   "v": 10
+  }
+ },
+ "echolet": {
+  "name": "Echolet",
+  "dex": 25,
+  "types": [
+   "SIGNAL",
+   "ARCHIVE"
+  ],
+  "base": {
+   "hp": 48,
+   "atk": 34,
+   "def": 40,
+   "sys": 64,
+   "spd": 70
+  },
+  "growth": "slow",
+  "exp": 120,
+  "abilities": [
+   "GHOST_PROCESS"
+  ],
+  "hidden": "PACKET_LOSS",
+  "contain": 40,
+  "stab": "flee",
+  "rarity": "rare",
+  "ai": "smart",
+  "learnset": [
+   [
+    1,
+    "ping"
+   ],
+   [
+    1,
+    "echo_command"
+   ],
+   [
+    8,
+    "backtrace"
+   ],
+   [
+    14,
+    "desync"
+   ],
+   [
+    22,
+    "broadcast"
+   ]
+  ],
+  "evo": [],
+  "desc": "Repeats the last thing it heard, a few seconds after you said it. Then it is gone.",
+  "sprite": {
+   "t": "ghost",
+   "c": [
+    "#a898d8",
+    "#6a4cc8",
+    "#ffffff"
+   ],
+   "s": 1,
+   "g": 0.7
+  },
+  "cry": {
+   "f": 500,
+   "w": "tri",
+   "s": 0.5,
+   "d": 0.5,
+   "v": 20
+  }
+ },
+ "rustbot": {
+  "name": "Rustbot",
+  "dex": 26,
+  "types": [
+   "STATIC",
+   "CORE"
+  ],
+  "base": {
+   "hp": 54,
+   "atk": 50,
+   "def": 58,
+   "sys": 34,
+   "spd": 26
+  },
+  "growth": "medium",
+  "exp": 64,
+  "abilities": [
+   "STATIC_SKIN"
+  ],
+  "hidden": "FAILSAFE",
+  "contain": 150,
+  "stab": "frenzy",
+  "rarity": "common",
+  "ai": "random",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    3,
+    "static_shock"
+   ],
+   [
+    7,
+    "cipher_wall"
+   ],
+   [
+    12,
+    "bit_crush"
+   ],
+   [
+    18,
+    "core_dump"
+   ]
+  ],
+  "evo": [],
+  "desc": "An old maintenance bot that kept working after everyone forgot it. Gets angrier as it comes apart.",
+  "sprite": {
+   "t": "mech",
+   "c": [
+    "#8a6a58",
+    "#e88838",
+    "#38e0e8"
+   ],
+   "s": 0,
+   "g": 0.4
+  },
+  "cry": {
+   "f": 140,
+   "w": "saw",
+   "s": 0.9,
+   "d": 0.3,
+   "v": 8
+  }
+ },
+ "mudbyte": {
+  "name": "Mudbyte",
+  "dex": 27,
+  "types": [
+   "VIRAL"
+  ],
+  "base": {
+   "hp": 58,
+   "atk": 44,
+   "def": 46,
+   "sys": 38,
+   "spd": 24
+  },
+  "growth": "medium",
+  "exp": 60,
+  "abilities": [
+   "MEMORY_LEAK"
+  ],
+  "hidden": "DEEP_CACHE",
+  "contain": 170,
+  "stab": "regen",
+  "rarity": "common",
+  "ai": "random",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    4,
+    "infect"
+   ],
+   [
+    8,
+    "memory_leak"
+   ],
+   [
+    13,
+    "worm_bite"
+   ],
+   [
+    18,
+    "bit_rot"
+   ]
+  ],
+  "evo": [],
+  "desc": "Lives in drainage pipes. Smells like a corrupted file would, if files had smells.",
+  "sprite": {
+   "t": "blob",
+   "c": [
+    "#6a5a28",
+    "#a8c828",
+    "#e04848"
+   ],
+   "s": 0,
+   "g": 0.3
+  },
+  "cry": {
+   "f": 150,
+   "w": "saw",
+   "s": 0.8,
+   "d": 0.3,
+   "v": 30
+  }
+ },
+ "crypmole": {
+  "name": "Crypmole",
+  "dex": 28,
+  "types": [
+   "CRYPT"
+  ],
+  "base": {
+   "hp": 50,
+   "atk": 52,
+   "def": 64,
+   "sys": 40,
+   "spd": 30
+  },
+  "growth": "slow",
+  "exp": 90,
+  "abilities": [
+   "DEEP_CACHE"
+  ],
+  "hidden": "FAILSAFE",
+  "contain": 55,
+  "stab": "calm",
+  "rarity": "rare",
+  "ai": "smart",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    1,
+    "cipher_wall"
+   ],
+   [
+    5,
+    "hash_strike"
+   ],
+   [
+    10,
+    "brute_force"
+   ],
+   [
+    16,
+    "stabilize"
+   ]
+  ],
+  "evo": [],
+  "desc": "Digs where the pipes are oldest. Everything it buries is encrypted, including its snacks.",
+  "sprite": {
+   "t": "quad",
+   "c": [
+    "#58487a",
+    "#7a48c8",
+    "#f0c828"
+   ],
+   "s": 0,
+   "g": 0.3,
+   "f": [
+    "horns"
+   ]
+  },
+  "cry": {
+   "f": 260,
+   "w": "tri",
+   "s": 0.7,
+   "d": 0.3
+  }
+ },
+ "lampwisp": {
+  "name": "Lampwisp",
+  "dex": 29,
+  "types": [
+   "PULSE"
+  ],
+  "base": {
+   "hp": 38,
+   "atk": 28,
+   "def": 34,
+   "sys": 62,
+   "spd": 54
+  },
+  "growth": "fast",
+  "exp": 70,
+  "abilities": [
+   "FAILSAFE"
+  ],
+  "hidden": "AUTO_SAVE",
+  "contain": 140,
+  "stab": "flee",
+  "rarity": "uncommon",
+  "ai": "random",
+  "learnset": [
+   [
+    1,
+    "pulse_wave"
+   ],
+   [
+    5,
+    "signal_boost"
+   ],
+   [
+    10,
+    "pulse_mend"
+   ],
+   [
+    16,
+    "overvolt"
+   ]
+  ],
+  "evo": [],
+  "desc": "A streetlight's flicker that learned to float. It follows people who walk home late.",
+  "sprite": {
+   "t": "ghost",
+   "c": [
+    "#f8e078",
+    "#e84878",
+    "#ffffff"
+   ],
+   "s": 0,
+   "g": 0.2
+  },
+  "cry": {
+   "f": 700,
+   "w": "tri",
+   "s": 1.3,
+   "d": 0.3,
+   "v": 16
+  }
+ },
+ "vectorfox": {
+  "name": "Vectorfox",
+  "dex": 30,
+  "types": [
+   "VECTOR"
+  ],
+  "base": {
+   "hp": 46,
+   "atk": 58,
+   "def": 38,
+   "sys": 40,
+   "spd": 70
+  },
+  "growth": "medium",
+  "exp": 80,
+  "abilities": [
+   "QUICK_BOOT"
+  ],
+  "hidden": "OVERCLOCK",
+  "contain": 70,
+  "stab": "flee",
+  "rarity": "uncommon",
+  "ai": "basic",
+  "learnset": [
+   [
+    1,
+    "tackle_sync"
+   ],
+   [
+    1,
+    "vector_dash"
+   ],
+   [
+    8,
+    "slash_path"
+   ],
+   [
+    14,
+    "phase_shift"
+   ],
+   [
+    20,
+    "hash_strike"
+   ]
+  ],
+  "evo": [],
+  "desc": "Only ever travels in straight lines, which makes it surprisingly hard to catch.",
+  "sprite": {
+   "t": "hound",
+   "c": [
+    "#e8704a",
+    "#f4e8d0",
+    "#ffffff"
+   ],
+   "s": 0,
+   "g": 0.2,
+   "f": [
+    "tail2"
+   ]
+  },
+  "cry": {
+   "f": 680,
+   "w": "saw",
+   "s": 1.3,
+   "d": 0.2
+  }
+ },
+ "loophound": {
+  "name": "Loophound",
+  "dex": 31,
+  "types": [
+   "LOOP",
+   "CORE"
+  ],
+  "base": {
+   "hp": 90,
+   "atk": 96,
+   "def": 76,
+   "sys": 60,
+   "spd": 80
+  },
+  "growth": "slow",
+  "exp": 220,
+  "abilities": [
+   "RETRY"
+  ],
+  "hidden": "OVERCLOCK",
+  "contain": 12,
+  "stab": "frenzy",
+  "rarity": "guardian",
+  "ai": "smart",
+  "learnset": [
+   [
+    1,
+    "chain_bite"
+   ],
+   [
+    1,
+    "repeat"
+   ],
+   [
+    1,
+    "overwrite"
+   ],
+   [
+    1,
+    "stack_overflow"
+   ]
+  ],
+  "evo": [],
+  "desc": "A guardian process that patrols the same corridor forever. It has forgotten what it is guarding.",
+  "sprite": {
+   "t": "hound",
+   "c": [
+    "#2a2a3a",
+    "#b43cd8",
+    "#38e0e8"
+   ],
+   "s": 2,
+   "g": 0.8,
+   "f": [
+    "tail2",
+    "horns",
+    "spikes",
+    "eye2"
+   ]
+  },
+  "cry": {
+   "f": 110,
+   "w": "saw",
+   "s": 1.4,
+   "d": 0.6
+  }
+ },
+ "glitchling": {
+  "name": "Glitchling",
+  "dex": 32,
+  "types": [
+   "GLITCH"
+  ],
+  "base": {
+   "hp": 40,
+   "atk": 46,
+   "def": 30,
+   "sys": 62,
+   "spd": 66
+  },
+  "growth": "slow",
+  "exp": 100,
+  "abilities": [
+   "PACKET_LOSS"
+  ],
+  "hidden": "ROOT_ACCESS",
+  "contain": 45,
+  "stab": "frenzy",
+  "rarity": "rare",
+  "ai": "basic",
+  "learnset": [
+   [
+    1,
+    "false_input"
+   ],
+   [
+    1,
+    "packet_drop"
+   ],
+   [
+    6,
+    "glitch_burst"
+   ],
+   [
+    12,
+    "bit_rot"
+   ],
+   [
+    18,
+    "overwrite"
+   ]
+  ],
+  "evo": [],
+  "desc": "A mistake that learned it could keep making itself. Never the same shape twice.",
+  "sprite": {
+   "t": "blob",
+   "c": [
+    "#2a1850",
+    "#b43cd8",
+    "#38e0e8"
+   ],
+   "s": 1,
+   "g": 1.0,
+   "f": [
+    "cube"
+   ]
+  },
+  "cry": {
+   "f": 420,
+   "w": "saw",
+   "s": 2.2,
+   "d": 0.3,
+   "v": 80
+  }
+ }
+}

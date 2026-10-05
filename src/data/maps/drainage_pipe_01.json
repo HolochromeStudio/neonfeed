@@ -1,0 +1,134 @@
+{
+ "id": "drainage_pipe_01",
+ "name": "DRAINAGE PIPE 01",
+ "w": 16,
+ "h": 14,
+ "base": "cave_floor",
+ "outdoor": false,
+ "bgm": "cave",
+ "area": "drainage_pipe",
+ "battleBg": "cave",
+ "tint": "#b8b0d8",
+ "ops": [
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "O": "statue",
+    "H": "hole",
+    "#": "cave_wall",
+    "r": "cave_rock",
+    "p": "pipe_h",
+    "v": "pipe_v",
+    "S": "shelf",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "Y": "plant",
+    "h": "hay",
+    "u": "vault",
+    "L": "lab_machine",
+    "q": "table",
+    "g": "valve",
+    "e": "channel",
+    "y": "channel_dry",
+    "j": "pipe_v",
+    "k": "pipe_c"
+   },
+   "rows": [
+    "################",
+    "#..pppppppp....#",
+    "#..............#",
+    "#.rr....r..rr..#",
+    "#..........r...#",
+    "#.r..rr........#",
+    "#......r...r...#",
+    "#.rr..........r#",
+    "#....r..rr.....#",
+    "#..r......r..r.#",
+    "#..........r...#",
+    "#.r..rr.......r#",
+    "#..............#",
+    "#######..#######"
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 7,
+   "y": 13,
+   "to": "route_01",
+   "tx": 3,
+   "ty": 27,
+   "dir": "down"
+  },
+  {
+   "x": 8,
+   "y": 13,
+   "to": "route_01",
+   "tx": 3,
+   "ty": 27,
+   "dir": "down"
+  }
+ ],
+ "trainers": [
+  {
+   "id": "pipe_tech",
+   "x": 9,
+   "y": 7,
+   "look": "tech",
+   "dir": "left",
+   "sight": 3
+  }
+ ],
+ "objects": [
+  {
+   "type": "item",
+   "x": 13,
+   "y": 2,
+   "item": "signal_crystal",
+   "n": 1
+  },
+  {
+   "type": "item",
+   "x": 2,
+   "y": 12,
+   "item": "patch_kit",
+   "n": 2
+  },
+  {
+   "type": "scan",
+   "x": 12,
+   "y": 11,
+   "item": "cache_fragment",
+   "n": 1,
+   "text": "FIELD SCAN: a cache fragment, humming faintly against the pipe wall."
+  },
+  {
+   "type": "sign",
+   "x": 5,
+   "y": 4,
+   "text": "Someone has chalked an arrow on the wall: 'DEEPER'. Below it, another arrow: 'NO, NOT THAT WAY'."
+  }
+ ]
+}

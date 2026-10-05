@@ -1,0 +1,945 @@
+{
+ "id": "rivermoor",
+ "name": "RIVERMOOR TOWN",
+ "w": 36,
+ "h": 26,
+ "base": "grass",
+ "outdoor": true,
+ "weather": true,
+ "bgm": "rivermoor",
+ "battleBg": "grass",
+ "ops": [
+  {
+   "op": "speckle",
+   "t": "grass2",
+   "seed": 3,
+   "rect": [
+    1,
+    1,
+    34,
+    24
+   ],
+   "count": 110,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "speckle",
+   "t": "grass3",
+   "seed": 4,
+   "rect": [
+    1,
+    1,
+    34,
+    24
+   ],
+   "count": 40,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "speckle",
+   "t": "flowers_r",
+   "seed": 5,
+   "rect": [
+    1,
+    1,
+    34,
+    24
+   ],
+   "count": 16,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "speckle",
+   "t": "flowers_y",
+   "seed": 6,
+   "rect": [
+    1,
+    1,
+    34,
+    24
+   ],
+   "count": 16,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 2,
+   "y": 7,
+   "w": 32,
+   "h": 2
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "cobble",
+   "x": 11,
+   "y": 9,
+   "w": 15,
+   "h": 5
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 17,
+   "y": 14,
+   "w": 2,
+   "h": 5
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "water",
+   "x": 1,
+   "y": 19,
+   "w": 34,
+   "h": 2
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "bridge_v",
+   "x": 17,
+   "y": 19,
+   "w": 2,
+   "h": 2
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 17,
+   "y": 21,
+   "w": 2,
+   "h": 5
+  },
+  {
+   "op": "stamp",
+   "name": "house_blue",
+   "x": 3,
+   "y": 3
+  },
+  {
+   "op": "stamp",
+   "name": "house_red",
+   "x": 10,
+   "y": 3
+  },
+  {
+   "op": "stamp",
+   "name": "lab_blue",
+   "x": 17,
+   "y": 3
+  },
+  {
+   "op": "stamp",
+   "name": "house_green",
+   "x": 24,
+   "y": 3
+  },
+  {
+   "op": "stamp",
+   "name": "lab_grey",
+   "x": 29,
+   "y": 3
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "antenna",
+   "pts": [
+    [
+     31,
+     2
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "beacon",
+   "pts": [
+    [
+     33,
+     2
+    ]
+   ]
+  },
+  {
+   "op": "border",
+   "l": "o",
+   "t": "tree",
+   "gaps": [
+    [
+     17,
+     25
+    ],
+    [
+     18,
+     25
+    ]
+   ]
+  },
+  {
+   "op": "scatter",
+   "t": "tree",
+   "seed": 11,
+   "rect": [
+    1,
+    1,
+    34,
+    2
+   ],
+   "count": 16
+  },
+  {
+   "op": "scatter",
+   "t": "pine",
+   "seed": 12,
+   "rect": [
+    1,
+    14,
+    15,
+    5
+   ],
+   "count": 9,
+   "keep": [
+    [
+     3,
+     10,
+     8,
+     7
+    ]
+   ]
+  },
+  {
+   "op": "scatter",
+   "t": "tree",
+   "seed": 13,
+   "rect": [
+    20,
+    14,
+    14,
+    5
+   ],
+   "count": 10
+  },
+  {
+   "op": "scatter",
+   "t": "tree",
+   "seed": 14,
+   "rect": [
+    1,
+    21,
+    15,
+    4
+   ],
+   "count": 10
+  },
+  {
+   "op": "scatter",
+   "t": "pine",
+   "seed": 15,
+   "rect": [
+    20,
+    21,
+    14,
+    4
+   ],
+   "count": 6,
+   "keep": [
+    [
+     26,
+     20,
+     8,
+     5
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "fence_h",
+   "pts": [
+    [
+     3,
+     10
+    ],
+    [
+     4,
+     10
+    ],
+    [
+     5,
+     10
+    ],
+    [
+     7,
+     10
+    ],
+    [
+     8,
+     10
+    ],
+    [
+     9,
+     10
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "fence_v",
+   "pts": [
+    [
+     2,
+     11
+    ],
+    [
+     2,
+     12
+    ],
+    [
+     2,
+     13
+    ],
+    [
+     2,
+     14
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     10,
+     12
+    ],
+    [
+     10,
+     13
+    ],
+    [
+     10,
+     14
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "fence_h",
+   "pts": [
+    [
+     3,
+     15
+    ],
+    [
+     4,
+     15
+    ],
+    [
+     5,
+     15
+    ],
+    [
+     6,
+     15
+    ],
+    [
+     7,
+     15
+    ],
+    [
+     8,
+     15
+    ],
+    [
+     9,
+     15
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "flowerbox",
+   "pts": [
+    [
+     3,
+     11
+    ],
+    [
+     9,
+     11
+    ],
+    [
+     6,
+     14
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "rock",
+   "pts": [
+    [
+     4,
+     13
+    ],
+    [
+     8,
+     13
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "lamp",
+   "pts": [
+    [
+     11,
+     9
+    ],
+    [
+     25,
+     9
+    ],
+    [
+     11,
+     13
+    ],
+    [
+     25,
+     13
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "terminal",
+   "pts": [
+    [
+     18,
+     10
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "sign",
+   "pts": [
+    [
+     9,
+     9
+    ],
+    [
+     16,
+     24
+    ],
+    [
+     13,
+     12
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "mailbox",
+   "pts": [
+    [
+     7,
+     6
+    ],
+    [
+     14,
+     6
+    ],
+    [
+     21,
+     7
+    ]
+   ]
+  },
+  {
+   "op": "fill",
+   "l": "o",
+   "t": "cave_wall",
+   "x": 27,
+   "y": 21,
+   "w": 6,
+   "h": 3
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "dark",
+   "pts": [
+    [
+     29,
+     23
+    ],
+    [
+     30,
+     23
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "fence_h",
+   "pts": [
+    [
+     29,
+     24
+    ],
+    [
+     30,
+     24
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "sign",
+   "pts": [
+    [
+     28,
+     24
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "flowerbox",
+   "pts": [
+    [
+     4,
+     22
+    ],
+    [
+     8,
+     22
+    ],
+    [
+     12,
+     22
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "sign",
+   "pts": [
+    [
+     6,
+     23
+    ]
+   ]
+  },
+  {
+   "op": "patch",
+   "l": "g",
+   "t": "glitch_a",
+   "seed": 31,
+   "rect": [
+    24,
+    9,
+    10,
+    9
+   ],
+   "blobs": 5,
+   "r": 2,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3",
+    "path",
+    "cobble"
+   ],
+   "when": "relay_done"
+  },
+  {
+   "op": "patch",
+   "l": "g",
+   "t": "glitch_b",
+   "seed": 32,
+   "rect": [
+    28,
+    12,
+    6,
+    5
+   ],
+   "blobs": 2,
+   "r": 1,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3",
+    "path"
+   ],
+   "when": "relay_done"
+  },
+  {
+   "op": "speckle",
+   "l": "g",
+   "t": "glitch_grass",
+   "seed": 33,
+   "rect": [
+    18,
+    14,
+    16,
+    5
+   ],
+   "count": 16,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ],
+   "when": "relay_done"
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "hole",
+   "pts": [
+    [
+     30,
+     12
+    ],
+    [
+     32,
+     15
+    ],
+    [
+     27,
+     16
+    ]
+   ],
+   "when": "relay_done"
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "monitor",
+   "pts": [
+    [
+     27,
+     10
+    ]
+   ],
+   "when": "relay_done"
+  }
+ ],
+ "warps": [
+  {
+   "x": 5,
+   "y": 6,
+   "to": "player_house_1f",
+   "tx": 4,
+   "ty": 5,
+   "dir": "up"
+  },
+  {
+   "x": 12,
+   "y": 6,
+   "to": "mira_house",
+   "tx": 3,
+   "ty": 4,
+   "dir": "up"
+  },
+  {
+   "x": 19,
+   "y": 6,
+   "to": "vale_lab",
+   "tx": 4,
+   "ty": 6,
+   "dir": "up"
+  },
+  {
+   "x": 26,
+   "y": 6,
+   "to": "rivermoor_mart",
+   "tx": 3,
+   "ty": 4,
+   "dir": "up"
+  },
+  {
+   "x": 31,
+   "y": 6,
+   "to": "old_relay_1",
+   "tx": 5,
+   "ty": 8,
+   "dir": "up",
+   "when": "relay_open"
+  },
+  {
+   "x": 17,
+   "y": 25,
+   "to": "route_01",
+   "tx": 12,
+   "ty": 1,
+   "dir": "down"
+  },
+  {
+   "x": 18,
+   "y": 25,
+   "to": "route_01",
+   "tx": 13,
+   "ty": 1,
+   "dir": "down"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "mira_intro",
+   "x": 5,
+   "y": 7,
+   "onEnter": true,
+   "once": "mira_intro_seen",
+   "script": "mira_intro",
+   "when": {
+    "not": "met_mira"
+   }
+  },
+  {
+   "id": "relay_locked",
+   "x": 31,
+   "y": 6,
+   "script": "relay_locked",
+   "when": {
+    "not": "relay_open"
+   }
+  },
+  {
+   "id": "rm_relay_done",
+   "x": 18,
+   "y": 8,
+   "onEnter": true,
+   "once": "rm_corruption_seen",
+   "script": "rivermoor_corruption",
+   "when": "relay_done"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "mira",
+   "x": 9,
+   "y": 8,
+   "look": "mira",
+   "dir": "right",
+   "name": "MIRA",
+   "show": {
+    "not": "met_mira"
+   },
+   "text": "Come on, {p}! Professor Vale's waiting. Race you to the workshop!"
+  },
+  {
+   "id": "woman1",
+   "x": 22,
+   "y": 12,
+   "look": "mom",
+   "dir": "down",
+   "move": "wander",
+   "r": 2,
+   "name": "RESIDENT",
+   "scripts": [
+    {
+     "when": "relay_done",
+     "run": "woman_after"
+    },
+    {
+     "run": "woman_before"
+    }
+   ]
+  },
+  {
+   "id": "kid_savelet",
+   "x": 5,
+   "y": 12,
+   "look": "kid",
+   "dir": "down",
+   "move": "look",
+   "name": "LENNY",
+   "scripts": [
+    {
+     "when": {
+      "flag": "savelet_returned"
+     },
+     "run": "kid_savelet_done"
+    },
+    {
+     "when": {
+      "flag": "savelet_found"
+     },
+     "run": "kid_savelet_found"
+    },
+    {
+     "when": {
+      "flag": "savelet_quest"
+     },
+     "run": "kid_savelet_wait"
+    },
+    {
+     "run": "kid_savelet_start"
+    }
+   ]
+  },
+  {
+   "id": "kid2",
+   "x": 7,
+   "y": 13,
+   "look": "kid2",
+   "dir": "left",
+   "move": "wander",
+   "r": 1,
+   "name": "KID",
+   "text": "I'm playing 'Signal Tower'. I'm the tower. Nobody else wants to be the tower."
+  },
+  {
+   "id": "vale_fan",
+   "x": 21,
+   "y": 9,
+   "look": "oldman",
+   "dir": "left",
+   "move": "look",
+   "name": "OLD TIMER",
+   "scripts": [
+    {
+     "when": "relay_done",
+     "run": "oldtimer_after"
+    },
+    {
+     "run": "oldtimer_before"
+    }
+   ]
+  },
+  {
+   "id": "canal_fisher",
+   "x": 12,
+   "y": 18,
+   "look": "farmer",
+   "dir": "down",
+   "move": "none",
+   "name": "ANGLER",
+   "scripts": [
+    {
+     "when": "relay_done",
+     "run": "angler_after"
+    },
+    {
+     "run": "angler_before"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "terminal",
+   "x": 18,
+   "y": 10,
+   "text": "A public Debugger terminal. Its screen says: SIGNAL STATUS: STABLE. It says that every four seconds, whether you ask or not."
+  },
+  {
+   "type": "sign",
+   "x": 9,
+   "y": 9,
+   "text": "RIVERMOOR - Small Town. Brighter Days Ahead."
+  },
+  {
+   "type": "sign",
+   "x": 16,
+   "y": 24,
+   "text": "ROUTE 01 - GREENLINE PATH. Briarfield 2 km. Please keep your Bytekin on a short leash. Or a short stability."
+  },
+  {
+   "type": "sign",
+   "x": 13,
+   "y": 12,
+   "text": "RIVERMOOR SQUARE. The fountain has been out of service since the Signal Tower stopped humming."
+  },
+  {
+   "type": "sign",
+   "x": 6,
+   "y": 23,
+   "text": "RIVERSIDE PARK. No fishing. No feeding. No explaining."
+  },
+  {
+   "type": "sign",
+   "x": 28,
+   "y": 24,
+   "text": "RIVERMOOR RAILWAY TUNNEL. CLOSED. The gate is locked with a Decrypt-grade lock. Someone has scratched 'LATER' into the paint."
+  },
+  {
+   "type": "sign",
+   "x": 7,
+   "y": 6,
+   "text": "A mailbox with the name 'JAX' crossed out and rewritten by hand as '{p}'."
+  },
+  {
+   "type": "sign",
+   "x": 14,
+   "y": 6,
+   "text": "A mailbox. It contains a flyer: 'PROF. VALE'S SIGNAL ECOLOGY LECTURE: ATTENDANCE: 3'."
+  },
+  {
+   "type": "sign",
+   "x": 21,
+   "y": 7,
+   "text": "A mailbox that has been receiving mail from a street that does not exist. The mail is polite.",
+   "when": {
+    "not": "relay_done"
+   }
+  },
+  {
+   "type": "sign",
+   "x": 27,
+   "y": 10,
+   "text": "A monitor, plugged into nothing, shows the square you are standing in. From slightly above. With one extra lamp post.",
+   "when": "relay_done"
+  },
+  {
+   "type": "scan",
+   "x": 20,
+   "y": 16,
+   "item": "pixel_dust",
+   "n": 2,
+   "text": "FIELD SCAN: a pocket of leftover pixels, trapped between two flagstones."
+  },
+  {
+   "type": "item",
+   "x": 4,
+   "y": 23,
+   "item": "stability_clamp",
+   "n": 2
+  },
+  {
+   "type": "item",
+   "x": 33,
+   "y": 15,
+   "item": "patch_kit",
+   "n": 1
+  }
+ ]
+}

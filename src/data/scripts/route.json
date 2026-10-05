@@ -1,0 +1,162 @@
+{
+ "mira_route1": [
+  {
+   "set": "mira_r1_vis"
+  },
+  {
+   "show": "mira",
+   "x": 12,
+   "y": 37,
+   "dir": "up"
+  },
+  {
+   "move": "player",
+   "path": "d0"
+  },
+  {
+   "say": "Hey, {p}! Over here!",
+   "who": "MIRA"
+  },
+  {
+   "move": "mira",
+   "path": "u1",
+   "slow": true
+  },
+  {
+   "say": "I've been running diagnostics on {rival}. Do you know how many times it blinked while I watched? Thirty. Evenly spaced. Like a metronome.",
+   "who": "MIRA"
+  },
+  {
+   "say": "I figured the Debugger would work on my Bytekin the same way as yours. So: let's see how well *you* handle yours.",
+   "who": "MIRA"
+  },
+  {
+   "say": "Tactical advantage is just a polite way of saying I did my homework!",
+   "who": "MIRA"
+  },
+  {
+   "battle": "mira_1",
+   "skipPre": true,
+   "skipWin": true,
+   "on": {
+    "win": [
+     {
+      "say": "Okay. Okay! You win. This round.",
+      "who": "MIRA"
+     },
+     {
+      "say": "Here. Stability Clamps. Hit a wild Bytekin with one and its STABILITY drops, which makes CONTAIN much easier. I made three.",
+      "who": "MIRA"
+     },
+     {
+      "give": "stability_clamp",
+      "n": 3
+     },
+     {
+      "say": "Briarfield's just past the tall grass. Vale says the Node there is 'acting up'. I want to see why before you do.",
+      "who": "MIRA"
+     },
+     {
+      "say": "Race you!",
+      "who": "MIRA"
+     },
+     {
+      "move": "mira",
+      "path": "d2",
+      "fast": true
+     },
+     {
+      "hide": "mira"
+     },
+     {
+      "unset": "mira_r1_vis"
+     },
+     {
+      "set": "mira_1_done"
+     }
+    ]
+   }
+  },
+  {
+   "unset": "mira_r1_vis"
+  }
+ ],
+ "oldman_r1": [
+  {
+   "say": "Have we met?",
+   "who": "OLD MAN"
+  },
+  {
+   "say": "No? Hm. You have a familiar face. Everyone does, lately.",
+   "who": "OLD MAN"
+  }
+ ],
+ "oldman_r1_after": [
+  {
+   "say": "Have we met?",
+   "who": "OLD MAN"
+  },
+  {
+   "say": "The grass seems to be growing in the wrong order today. I think. Or I'm the one who's wrong.",
+   "who": "OLD MAN"
+  }
+ ],
+ "tech_r1": [
+  {
+   "if": {
+    "flag": "side_pipe_started"
+   },
+   "then": [
+    {
+     "if": {
+      "item": "signal_crystal"
+     },
+     "then": [
+      {
+       "say": "You found it! ...You keep it. I have twelve. They're all lost in different places.",
+       "who": "FIELD TECH"
+      }
+     ],
+     "else": [
+      {
+       "say": "The crystal's somewhere in Drainage Pipe 01. West side, down the cave path. Watch for pipes. And Mudbytes.",
+       "who": "FIELD TECH"
+      }
+     ]
+    }
+   ],
+   "else": [
+    {
+     "say": "I'm on Route 01 duty. Fixing the signal posts. They keep fixing themselves back.",
+     "who": "FIELD TECH"
+    },
+    {
+     "say": "I dropped a SIGNAL CRYSTAL in Drainage Pipe 01 yesterday. It's a thing that makes Signal-type Bytekin evolve. Sort of.",
+     "who": "FIELD TECH"
+    },
+    {
+     "ask": "If you find it, you can keep it. I just want to know where it went. Deal?",
+     "yes": [
+      {
+       "quest": "start",
+       "id": "side_pipe"
+      },
+      {
+       "set": "side_pipe_started"
+      },
+      {
+       "say": "Entrance is on the west side of Route 01, past the hiker. Thanks!",
+       "who": "FIELD TECH"
+      }
+     ],
+     "no": [
+      {
+       "say": "Okay. The pipe isn't going anywhere. Probably.",
+       "who": "FIELD TECH"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,106 @@
+{
+ "id": "mira_house",
+ "name": "MIRA'S HOUSE",
+ "w": 7,
+ "h": 6,
+ "base": "wood",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "carpet_r",
+   "x": 2,
+   "y": 2,
+   "w": 3,
+   "h": 2
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "D": "door_in",
+    "b": "bed_top",
+    "B": "bed_bot",
+    "S": "shelf",
+    "V": "tv",
+    "P": "plant",
+    "T": "table2",
+    "C": "chair",
+    "F": "fridge",
+    "K": "stove",
+    "N": "counter",
+    "G": "globe",
+    "M": "lab_machine",
+    "Z": "workbench",
+    "X": "crate",
+    "R": "terminal",
+    "Q": "table"
+   },
+   "rows": [
+    "WWwWWWW",
+    ".S.G.SP",
+    ".......",
+    "T......"
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     3,
+     5
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 3,
+   "y": 5,
+   "to": "rivermoor",
+   "tx": 12,
+   "ty": 7,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "mira_mom",
+   "x": 4,
+   "y": 3,
+   "look": "oldlady",
+   "dir": "left",
+   "name": "MIRA'S MOM",
+   "text": "Mira left at dawn with a notebook and a thermos. She says the Signal is 'doing something'. She said the same about the toaster."
+  }
+ ],
+ "objects": [
+  {
+   "type": "sign",
+   "x": 1,
+   "y": 1,
+   "text": "A wall of Mira's notes: 'WHY DO THE CLOCKS SKIP?' is underlined four times. Under it, in smaller writing: 'maybe it's not skipping. maybe we are.'"
+  },
+  {
+   "type": "sign",
+   "x": 5,
+   "y": 1,
+   "text": "Sticky notes on the shelf: 'Ask Vale about the old tower.' 'Vale never answers questions about the old tower.' 'Ask again.'"
+  },
+  {
+   "type": "sign",
+   "x": 3,
+   "y": 1,
+   "text": "A globe of the Velora Region. Someone has stuck a small pin on every town. Several pins are missing."
+  }
+ ]
+}

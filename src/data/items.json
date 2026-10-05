@@ -1,0 +1,19 @@
+{
+  "patch_kit":     { "name": "Patch Kit",      "cat": "HEALING", "price": 80,  "desc": "Restores 25 HP.", "use": "both", "fx": { "heal": 25 } },
+  "patch_kit_l":   { "name": "Patch Kit L",    "cat": "HEALING", "price": 240, "desc": "Restores 70 HP.", "use": "both", "fx": { "heal": 70 } },
+  "full_patch":    { "name": "Full Patch",     "cat": "HEALING", "price": 600, "desc": "Fully restores HP.", "use": "both", "fx": { "healPct": 100 } },
+  "restore_chip":  { "name": "Restore Chip",   "cat": "HEALING", "price": 400, "desc": "Revives a fainted Bytekin at half HP.", "use": "both", "fx": { "revive": 50 } },
+  "status_wipe":   { "name": "Status Wipe",    "cat": "STATUS",  "price": 120, "desc": "Cures any status condition.", "use": "both", "fx": { "cure": "ALL" } },
+  "power_cell":    { "name": "Power Cell",     "cat": "HEALING", "price": 200, "desc": "Restores 10 PP to one move.", "use": "field", "fx": { "pp": 10 } },
+  "stability_clamp": { "name": "Stability Clamp", "cat": "CAPTURE", "price": 150, "desc": "Battle: lowers a wild Bytekin's Stability by 30.", "use": "battle", "fx": { "stab": -30 } },
+  "contain_module":  { "name": "Contain Module",  "cat": "CAPTURE", "price": 250, "desc": "Boosts a CONTAIN attempt x1.5. Select under CONTAIN.", "use": "contain", "fx": { "containMult": 1.5 } },
+  "signal_beacon": { "name": "Signal Beacon",  "cat": "DEBUG",   "price": 180, "desc": "Doubles wild encounter rate for 80 steps.", "use": "field", "fx": { "beacon": 80 } },
+  "signal_crystal":{ "name": "Signal Crystal", "cat": "EVOLUTION","price": 0,  "desc": "A crystal humming with spare bandwidth. Evolves certain SIGNAL Bytekin.", "use": "field", "fx": { "evoItem": true } },
+  "cache_fragment":{ "name": "Cache Fragment","cat": "MATERIALS","price": 0,   "sell": 60, "desc": "A shard of duplicated data. Sells well.", "use": "none", "fx": {} },
+  "pixel_dust":    { "name": "Pixel Dust",     "cat": "MATERIALS","price": 0,  "sell": 30, "desc": "Fine glitter left by corrupted Bytekin.", "use": "none", "fx": {} },
+  "debugger":      { "name": "Debugger",       "cat": "KEY ITEMS","price": 0,  "desc": "Professor Vale's handheld. Scans, indexes and CONTAINS Bytekin.", "use": "none", "fx": {} },
+  "relay_note":    { "name": "Relay Note",     "cat": "KEY ITEMS","price": 0,  "desc": "A scrap from the Old Signal Relay: TRIANGLE, CIRCLE, SQUARE. 'When the signal flows, the tower wakes.'", "use": "none", "fx": {} },
+  "relay_pass":    { "name": "Relay Keycard",  "cat": "KEY ITEMS","price": 0,  "desc": "Opens the Old Signal Relay maintenance door.", "use": "none", "fx": {} },
+  "root_key_01":   { "name": "Root Key 01",    "cat": "KEY ITEMS","price": 0,  "desc": "Proof that Node 1 (Briarfield) is restored. Grants PULSE.", "use": "none", "fx": {} },
+  "pulse_module":  { "name": "PULSE Module",   "cat": "KEY ITEMS","price": 0,  "desc": "Field ability: wakes dormant Signal switches.", "use": "none", "fx": {} }
+}

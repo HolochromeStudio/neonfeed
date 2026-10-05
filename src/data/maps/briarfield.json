@@ -1,0 +1,925 @@
+{
+ "id": "briarfield",
+ "name": "BRIARFIELD",
+ "w": 34,
+ "h": 30,
+ "base": "grass",
+ "outdoor": true,
+ "weather": true,
+ "bgm": "briarfield",
+ "battleBg": "farm",
+ "area": "briarfield_fields",
+ "ops": [
+  {
+   "op": "speckle",
+   "t": "grass2",
+   "seed": 3,
+   "rect": [
+    1,
+    1,
+    32,
+    28
+   ],
+   "count": 140,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "speckle",
+   "t": "grass3",
+   "seed": 4,
+   "rect": [
+    1,
+    1,
+    32,
+    28
+   ],
+   "count": 40,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "speckle",
+   "t": "flowers_y",
+   "seed": 6,
+   "rect": [
+    1,
+    1,
+    32,
+    28
+   ],
+   "count": 20,
+   "onlyOn": [
+    "grass"
+   ]
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 15,
+   "y": 1,
+   "w": 2,
+   "h": 26
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 4,
+   "y": 9,
+   "w": 27,
+   "h": 2
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "cobble",
+   "x": 12,
+   "y": 8,
+   "w": 8,
+   "h": 5
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 8,
+   "y": 8,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 24,
+   "y": 7,
+   "w": 1,
+   "h": 2
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 5,
+   "y": 16,
+   "w": 1,
+   "h": 3
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 5,
+   "y": 11,
+   "w": 1,
+   "h": 5
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "path",
+   "x": 11,
+   "y": 22,
+   "w": 5,
+   "h": 1
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "soil",
+   "x": 19,
+   "y": 14,
+   "w": 13,
+   "h": 13
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "crop",
+   "x": 19,
+   "y": 15,
+   "w": 13,
+   "h": 1
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "crop",
+   "x": 19,
+   "y": 17,
+   "w": 13,
+   "h": 1
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "crop",
+   "x": 19,
+   "y": 19,
+   "w": 13,
+   "h": 1
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "crop",
+   "x": 19,
+   "y": 21,
+   "w": 13,
+   "h": 1
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "crop",
+   "x": 19,
+   "y": 23,
+   "w": 13,
+   "h": 1
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "crop",
+   "x": 19,
+   "y": 25,
+   "w": 13,
+   "h": 1
+  },
+  {
+   "op": "fill",
+   "l": "o",
+   "t": "channel_dry",
+   "x": 19,
+   "y": 14,
+   "w": 13,
+   "h": 1,
+   "when": {
+    "not": "node_1_complete"
+   }
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "channel",
+   "x": 19,
+   "y": 14,
+   "w": 13,
+   "h": 1,
+   "when": "node_1_complete"
+  },
+  {
+   "op": "stamp",
+   "name": "node",
+   "x": 21,
+   "y": 3
+  },
+  {
+   "op": "stamp",
+   "name": "hub",
+   "x": 6,
+   "y": 4
+  },
+  {
+   "op": "stamp",
+   "name": "house_red",
+   "x": 3,
+   "y": 12
+  },
+  {
+   "op": "stamp",
+   "name": "barn",
+   "x": 9,
+   "y": 18
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 1,
+   "rect": [
+    2,
+    19,
+    6,
+    8
+   ],
+   "blobs": 3,
+   "r": 3,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 2,
+   "rect": [
+    11,
+    23,
+    10,
+    5
+   ],
+   "blobs": 3,
+   "r": 3,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "patch",
+   "t": "tallgrass",
+   "seed": 3,
+   "rect": [
+    2,
+    2,
+    3,
+    6
+   ],
+   "blobs": 2,
+   "r": 2,
+   "onlyOn": [
+    "grass",
+    "grass2",
+    "grass3"
+   ]
+  },
+  {
+   "op": "border",
+   "l": "o",
+   "t": "tree",
+   "gaps": [
+    [
+     15,
+     0
+    ],
+    [
+     16,
+     0
+    ]
+   ]
+  },
+  {
+   "op": "scatter",
+   "t": "tree",
+   "seed": 41,
+   "rect": [
+    1,
+    1,
+    13,
+    6
+   ],
+   "count": 8
+  },
+  {
+   "op": "scatter",
+   "t": "tree",
+   "seed": 42,
+   "rect": [
+    29,
+    1,
+    4,
+    11
+   ],
+   "count": 8
+  },
+  {
+   "op": "scatter",
+   "t": "pine",
+   "seed": 43,
+   "rect": [
+    1,
+    27,
+    32,
+    2
+   ],
+   "count": 14
+  },
+  {
+   "op": "scatter",
+   "t": "tree",
+   "seed": 44,
+   "rect": [
+    1,
+    14,
+    2,
+    14
+   ],
+   "count": 6
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "hay",
+   "pts": [
+    [
+     8,
+     23
+    ],
+    [
+     9,
+     23
+    ],
+    [
+     7,
+     24
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "silo",
+   "pts": [
+    [
+     17,
+     19
+    ],
+    [
+     17,
+     20
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "lamp",
+   "pts": [
+    [
+     12,
+     8
+    ],
+    [
+     19,
+     8
+    ],
+    [
+     12,
+     12
+    ],
+    [
+     19,
+     12
+    ],
+    [
+     14,
+     1
+    ],
+    [
+     17,
+     1
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "terminal",
+   "pts": [
+    [
+     10,
+     9
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "sign",
+   "pts": [
+    [
+     17,
+     8
+    ],
+    [
+     14,
+     25
+    ],
+    [
+     20,
+     6
+    ],
+    [
+     10,
+     7
+    ],
+    [
+     4,
+     15
+    ],
+    [
+     22,
+     13
+    ]
+   ]
+  },
+  {
+   "op": "fill",
+   "l": "o",
+   "t": "fence_h",
+   "x": 13,
+   "y": 26,
+   "w": 5,
+   "h": 1
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "flowerbox",
+   "pts": [
+    [
+     13,
+     10
+    ],
+    [
+     18,
+     10
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "mailbox",
+   "pts": [
+    [
+     8,
+     16
+    ],
+    [
+     27,
+     13
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "crate",
+   "pts": [
+    [
+     26,
+     8
+    ],
+    [
+     27,
+     8
+    ]
+   ],
+   "when": {
+    "flag": "node_1_complete"
+   }
+  }
+ ],
+ "warps": [
+  {
+   "x": 15,
+   "y": 0,
+   "to": "route_01",
+   "tx": 12,
+   "ty": 38,
+   "dir": "up"
+  },
+  {
+   "x": 16,
+   "y": 0,
+   "to": "route_01",
+   "tx": 13,
+   "ty": 38,
+   "dir": "up"
+  },
+  {
+   "x": 8,
+   "y": 7,
+   "to": "briarfield_hub",
+   "tx": 4,
+   "ty": 6,
+   "dir": "up"
+  },
+  {
+   "x": 5,
+   "y": 15,
+   "to": "briar_house",
+   "tx": 3,
+   "ty": 4,
+   "dir": "up"
+  },
+  {
+   "x": 11,
+   "y": 21,
+   "to": "briarfield_barn",
+   "tx": 5,
+   "ty": 6,
+   "dir": "up"
+  },
+  {
+   "x": 24,
+   "y": 6,
+   "to": "node1_station",
+   "tx": 6,
+   "ty": 14,
+   "dir": "up"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "mira_b",
+   "x": 14,
+   "y": 8,
+   "w": 5,
+   "h": 1,
+   "script": "mira_briarfield",
+   "when": {
+    "flag": "starter_selected",
+    "not": "mira_2_done"
+   }
+  },
+  {
+   "id": "voss_meet",
+   "x": 24,
+   "y": 8,
+   "onEnter": true,
+   "once": "voss_meeting_seen",
+   "script": "voss_meeting",
+   "when": {
+    "flag": "node_1_complete",
+    "not": "met_voss"
+   }
+  },
+  {
+   "id": "briar_arrive",
+   "x": 15,
+   "y": 1,
+   "onEnter": true,
+   "once": "visited_briarfield",
+   "script": "briar_arrive"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "mira",
+   "x": 16,
+   "y": 7,
+   "look": "mira",
+   "dir": "down",
+   "name": "MIRA",
+   "show": {
+    "flag": "mira_b_vis"
+   }
+  },
+  {
+   "id": "farmer_a",
+   "x": 18,
+   "y": 16,
+   "look": "farmer",
+   "dir": "left",
+   "move": "wander",
+   "r": 2,
+   "name": "FARMER",
+   "scripts": [
+    {
+     "when": "node_1_complete",
+     "run": "farmer_a_after"
+    },
+    {
+     "run": "farmer_a_before"
+    }
+   ]
+  },
+  {
+   "id": "farmer_b",
+   "x": 28,
+   "y": 12,
+   "look": "farmer2",
+   "dir": "down",
+   "move": "wander",
+   "r": 2,
+   "name": "FARMER",
+   "scripts": [
+    {
+     "when": "node_1_complete",
+     "run": "farmer_b_after"
+    },
+    {
+     "run": "farmer_b_before"
+    }
+   ]
+  },
+  {
+   "id": "briar_kid",
+   "x": 14,
+   "y": 15,
+   "look": "kid2",
+   "dir": "down",
+   "move": "wander",
+   "r": 2,
+   "name": "KID",
+   "text": "Some of the sprouts blink at me. I blink back. Nobody wins."
+  },
+  {
+   "id": "hub_waiter",
+   "x": 11,
+   "y": 10,
+   "look": "oldlady",
+   "dir": "right",
+   "move": "look",
+   "name": "GRANNY",
+   "scripts": [
+    {
+     "when": "node_1_complete",
+     "run": "granny_after"
+    },
+    {
+     "run": "granny_before"
+    }
+   ]
+  },
+  {
+   "id": "oldman_b",
+   "x": 19,
+   "y": 11,
+   "look": "oldman",
+   "dir": "left",
+   "move": "look",
+   "name": "OLD MAN",
+   "show": {
+    "flag": "node_1_complete"
+   },
+   "scripts": [
+    {
+     "run": "oldman_b"
+    }
+   ]
+  },
+  {
+   "id": "cs1",
+   "x": 22,
+   "y": 9,
+   "look": "clean",
+   "dir": "down",
+   "move": "none",
+   "name": "CLEAN STATE",
+   "show": {
+    "flag": "node_1_complete"
+   },
+   "scripts": [
+    {
+     "run": "cs_worker1"
+    }
+   ]
+  },
+  {
+   "id": "cs2",
+   "x": 26,
+   "y": 9,
+   "look": "clean",
+   "dir": "left",
+   "move": "none",
+   "name": "CLEAN STATE",
+   "show": {
+    "flag": "node_1_complete"
+   },
+   "scripts": [
+    {
+     "run": "cs_worker2"
+    }
+   ]
+  },
+  {
+   "id": "cs3",
+   "x": 17,
+   "y": 25,
+   "look": "clean",
+   "dir": "up",
+   "move": "none",
+   "name": "CLEAN STATE",
+   "show": {
+    "flag": "node_1_complete"
+   },
+   "scripts": [
+    {
+     "run": "cs_worker3"
+    }
+   ]
+  },
+  {
+   "id": "voss",
+   "x": 24,
+   "y": 9,
+   "look": "voss",
+   "dir": "up",
+   "name": "DIRECTOR VOSS",
+   "show": {
+    "flag": "voss_vis"
+   },
+   "scripts": [
+    {
+     "run": "voss_idle"
+    }
+   ]
+  },
+  {
+   "id": "briar_woman",
+   "x": 4,
+   "y": 17,
+   "look": "farmer2",
+   "dir": "right",
+   "move": "look",
+   "name": "FARMER'S WIFE",
+   "scripts": [
+    {
+     "when": {
+      "flag": "crops_done"
+     },
+     "run": "crops_thanks"
+    },
+    {
+     "when": {
+      "flag": "crops_quest"
+     },
+     "run": "crops_wait"
+    },
+    {
+     "run": "crops_start"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "terminal",
+   "x": 10,
+   "y": 9,
+   "text": "A Debugger terminal beside the Hub. A little pixel sprite pokes out from behind it, then ducks back in.",
+   "rest": false
+  },
+  {
+   "type": "sign",
+   "x": 17,
+   "y": 8,
+   "text": "BRIARFIELD SQUARE. The harvest festival has been postponed until further notice. (Reason: crops.)"
+  },
+  {
+   "type": "sign",
+   "x": 14,
+   "y": 25,
+   "text": "ROAD TO WHISPERWOOD (SOUTH).",
+   "when": {
+    "not": "node_1_complete"
+   }
+  },
+  {
+   "type": "sign",
+   "x": 14,
+   "y": 25,
+   "text": "CLEAN STATE NOTICE: Signal maintenance in progress. The Whisperwood road is CLOSED until further notice. NO ERRORS. NO UNCERTAINTY.",
+   "when": {
+    "flag": "node_1_complete"
+   }
+  },
+  {
+   "type": "sign",
+   "x": 20,
+   "y": 6,
+   "text": "IRRIGATION CONTROL STATION - Node 1. Keeper: MARA. Visitors welcome. Please wipe your boots. And your Bytekin."
+  },
+  {
+   "type": "sign",
+   "x": 10,
+   "y": 7,
+   "text": "BRIARFIELD HUB: Patch Center + Shop + Debugger Terminal. Open every day (the days are also open)."
+  },
+  {
+   "type": "sign",
+   "x": 4,
+   "y": 15,
+   "text": "The Hallow family farm. No trespassing. Trespassing is allowed with a snack."
+  },
+  {
+   "type": "sign",
+   "x": 22,
+   "y": 13,
+   "text": "CROP ROWS 1-6. Please do not count the crops. They notice."
+  },
+  {
+   "type": "sign",
+   "x": 8,
+   "y": 16,
+   "text": "A mailbox. A pile of identical letters, all addressed to 'The New One'."
+  },
+  {
+   "type": "sign",
+   "x": 27,
+   "y": 13,
+   "text": "A mailbox holding a farm invoice for 40 crates. You count 80 crates. You decide not to count again."
+  },
+  {
+   "type": "scan",
+   "x": 22,
+   "y": 16,
+   "item": "cache_fragment",
+   "n": 1,
+   "counter": "crops_found",
+   "text": "FIELD SCAN: a crop that exists twice. One copy gives off cached data - a CACHE FRAGMENT!"
+  },
+  {
+   "type": "scan",
+   "x": 27,
+   "y": 20,
+   "item": "cache_fragment",
+   "n": 1,
+   "counter": "crops_found",
+   "text": "FIELD SCAN: another duplicated sprout. Its twin is nowhere to be seen."
+  },
+  {
+   "type": "scan",
+   "x": 30,
+   "y": 24,
+   "item": "cache_fragment",
+   "n": 1,
+   "counter": "crops_found",
+   "text": "FIELD SCAN: a third duplicate crop, humming the same note as the other two."
+  },
+  {
+   "type": "scan",
+   "id": "savelet_scan",
+   "x": 11,
+   "y": 9,
+   "flag": "savelet_scanned",
+   "text": "FIELD SCAN: a faint Signal behind the terminal... something small is hiding there!",
+   "script": "savelet_scan",
+   "when": {
+    "flag": "savelet_quest"
+   }
+  },
+  {
+   "type": "scan",
+   "x": 3,
+   "y": 25,
+   "item": "pixel_dust",
+   "n": 2,
+   "text": "FIELD SCAN: pixel dust, sparkling in the tall grass."
+  },
+  {
+   "type": "item",
+   "x": 30,
+   "y": 3,
+   "item": "patch_kit_l",
+   "n": 1
+  },
+  {
+   "type": "item",
+   "x": 2,
+   "y": 8,
+   "item": "stability_clamp",
+   "n": 1
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+{
+  "appId": "studio.holochrome.bugbyte",
+  "appName": "BUGBYTE",
+  "webDir": "dist",
+  "backgroundColor": "#000000",
+  "ios": { "contentInset": "never" },
+  "android": { "allowMixedContent": false }
+}

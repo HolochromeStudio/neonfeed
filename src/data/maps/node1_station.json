@@ -1,0 +1,322 @@
+{
+ "id": "node1_station",
+ "name": "IRRIGATION STATION",
+ "w": 13,
+ "h": 16,
+ "base": "metal",
+ "outdoor": false,
+ "bgm": "indoor",
+ "battleBg": "node",
+ "tint": "#e0f0ff",
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "metal2",
+   "x": 5,
+   "y": 10,
+   "w": 3,
+   "h": 6
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "G": "gate",
+    "T": "terminal",
+    "g": "valve",
+    "e": "channel",
+    "y": "channel_dry",
+    "W": "wall_in",
+    "j": "pipe_v",
+    "k": "pipe_c",
+    "h": "pipe_h",
+    "L": "lab_machine",
+    "N": "note",
+    "B": "beacon",
+    "q": "counter",
+    "S": "statue"
+   },
+   "rows": [
+    "DDDDDDDDDDDDD",
+    "CM...N.N...MC",
+    "C...........C",
+    "C...........C",
+    "C...........C",
+    "C...........C",
+    "C...........C",
+    "C...........C",
+    "C...........C",
+    "C...........C",
+    "C..g..g..g..C",
+    "C...........C",
+    "C...........C",
+    "C...........C",
+    "C...........C",
+    "CCCCCC.CCCCCC"
+   ]
+  },
+  {
+   "op": "fill",
+   "l": "o",
+   "t": "channel",
+   "x": 3,
+   "y": 3,
+   "w": 1,
+   "h": 7,
+   "when": "lane_1"
+  },
+  {
+   "op": "fill",
+   "l": "o",
+   "t": "channel",
+   "x": 6,
+   "y": 3,
+   "w": 1,
+   "h": 7,
+   "when": "lane_2"
+  },
+  {
+   "op": "fill",
+   "l": "o",
+   "t": "channel",
+   "x": 9,
+   "y": 3,
+   "w": 1,
+   "h": 7,
+   "when": "lane_3"
+  },
+  {
+   "op": "fill",
+   "l": "o",
+   "t": "channel_dry",
+   "x": 3,
+   "y": 3,
+   "w": 1,
+   "h": 7,
+   "when": {
+    "not": "lane_1"
+   }
+  },
+  {
+   "op": "fill",
+   "l": "o",
+   "t": "channel_dry",
+   "x": 6,
+   "y": 3,
+   "w": 1,
+   "h": 7,
+   "when": {
+    "not": "lane_2"
+   }
+  },
+  {
+   "op": "fill",
+   "l": "o",
+   "t": "channel_dry",
+   "x": 9,
+   "y": 3,
+   "w": 1,
+   "h": 7,
+   "when": {
+    "not": "lane_3"
+   }
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "pipe_v",
+   "pts": [
+    [
+     3,
+     2
+    ],
+    [
+     6,
+     2
+    ],
+    [
+     9,
+     2
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "gate_open",
+   "pts": [
+    [
+     6,
+     0
+    ]
+   ],
+   "when": "node1_valves_done"
+  },
+  {
+   "op": "clear",
+   "x": 6,
+   "y": 0,
+   "w": 1,
+   "h": 1,
+   "when": "node1_valves_done"
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "gate",
+   "pts": [
+    [
+     6,
+     0
+    ]
+   ],
+   "when": {
+    "not": "node1_valves_done"
+   }
+  }
+ ],
+ "warps": [
+  {
+   "x": 6,
+   "y": 15,
+   "to": "briarfield",
+   "tx": 24,
+   "ty": 7,
+   "dir": "down"
+  },
+  {
+   "x": 6,
+   "y": 0,
+   "to": "node1_arena",
+   "tx": 5,
+   "ty": 9,
+   "dir": "up",
+   "when": "node1_valves_done"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "node_enter",
+   "x": 6,
+   "y": 13,
+   "onEnter": true,
+   "once": "node1_enter_seen",
+   "script": "node1_enter"
+  }
+ ],
+ "trainers": [
+  {
+   "id": "node1_farmer1",
+   "x": 4,
+   "y": 13,
+   "look": "farmer",
+   "dir": "right",
+   "sight": 3
+  },
+  {
+   "id": "node1_farmer2",
+   "x": 2,
+   "y": 5,
+   "look": "farmer2",
+   "dir": "down",
+   "sight": 3
+  },
+  {
+   "id": "node1_tech",
+   "x": 10,
+   "y": 6,
+   "look": "tech",
+   "dir": "down",
+   "sight": 3
+  }
+ ],
+ "npcs": [
+  {
+   "id": "mara",
+   "x": 6,
+   "y": 12,
+   "look": "mara",
+   "dir": "down",
+   "name": "MARA",
+   "show": {
+    "not": "node1_valves_done"
+   },
+   "scripts": [
+    {
+     "run": "mara_station"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "script",
+   "x": 3,
+   "y": 10,
+   "script": "valve_v1",
+   "id": "valve1"
+  },
+  {
+   "type": "script",
+   "x": 6,
+   "y": 10,
+   "script": "valve_v2",
+   "id": "valve2"
+  },
+  {
+   "type": "script",
+   "x": 9,
+   "y": 10,
+   "script": "valve_v3",
+   "id": "valve3"
+  },
+  {
+   "type": "sign",
+   "x": 1,
+   "y": 1,
+   "text": "A monitor shows three channels. LEFT: ?  MIDDLE: ?  RIGHT: ?  Underneath: 'All three must flow at once to wake the Control Room.'"
+  },
+  {
+   "type": "sign",
+   "x": 5,
+   "y": 1,
+   "text": "VALVE NOTES (in Mara's handwriting): 'V1 splits LEFT + MIDDLE. V2 splits MIDDLE + RIGHT. V3 feeds RIGHT only. A dry bed is walkable; a flowing one is not.'"
+  },
+  {
+   "type": "sign",
+   "x": 7,
+   "y": 1,
+   "text": "A second note, in someone else's handwriting: 'The outer valves carry the memory. The middle one only borrows.'"
+  },
+  {
+   "type": "sign",
+   "x": 11,
+   "y": 1,
+   "text": "A monitor shows the fields outside. Every row of crops is subtly duplicated."
+  },
+  {
+   "type": "item",
+   "x": 1,
+   "y": 13,
+   "item": "patch_kit",
+   "n": 2
+  },
+  {
+   "type": "item",
+   "x": 11,
+   "y": 13,
+   "item": "status_wipe",
+   "n": 1
+  }
+ ]
+}

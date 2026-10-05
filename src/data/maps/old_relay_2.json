@@ -1,0 +1,306 @@
+{
+ "id": "old_relay_2",
+ "name": "OLD SIGNAL TOWER",
+ "w": 15,
+ "h": 11,
+ "base": "metal",
+ "outdoor": false,
+ "bgm": "relay",
+ "glitchMusic": true,
+ "area": "old_relay",
+ "battleBg": "relay",
+ "tint": "#c8c0f0",
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "metal2",
+   "x": 6,
+   "y": 1,
+   "w": 3,
+   "h": 9
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "plate_tri",
+   "pts": [
+    [
+     5,
+     5
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "plate_cir",
+   "pts": [
+    [
+     7,
+     5
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "plate_sq",
+   "pts": [
+    [
+     9,
+     5
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "plate_tri_on",
+   "pts": [
+    [
+     5,
+     5
+    ]
+   ],
+   "when": "relay_plate_tri"
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "plate_cir_on",
+   "pts": [
+    [
+     7,
+     5
+    ]
+   ],
+   "when": "relay_plate_cir"
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "plate_sq_on",
+   "pts": [
+    [
+     9,
+     5
+    ]
+   ],
+   "when": "relay_plate_sq"
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "O": "statue",
+    "H": "hole",
+    "#": "cave_wall",
+    "r": "cave_rock",
+    "p": "pipe_h",
+    "v": "pipe_v",
+    "S": "shelf",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "Y": "plant",
+    "h": "hay",
+    "u": "vault"
+   },
+   "rows": [
+    "DDDDDDDGDDDDDDD",
+    "CR.M..R.R..M.RC",
+    "C.............C",
+    "C.R.........R.C",
+    "C.R...........C",
+    "CZZ...........C",
+    "CMZ.........X.C",
+    "C..........X.XC",
+    "CX...........MC",
+    "C.............C",
+    "CCCCCCC...CCCCC"
+   ]
+  },
+  {
+   "op": "clear",
+   "x": 7,
+   "y": 0,
+   "w": 1,
+   "h": 1,
+   "when": "relay_puzzle_solved"
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "gate_open",
+   "pts": [
+    [
+     7,
+     0
+    ]
+   ],
+   "when": "relay_puzzle_solved"
+  }
+ ],
+ "warps": [
+  {
+   "x": 7,
+   "y": 10,
+   "to": "old_relay_1",
+   "tx": 5,
+   "ty": 1,
+   "dir": "down"
+  },
+  {
+   "x": 8,
+   "y": 10,
+   "to": "old_relay_1",
+   "tx": 6,
+   "ty": 1,
+   "dir": "down"
+  },
+  {
+   "x": 7,
+   "y": 0,
+   "to": "old_relay_core",
+   "tx": 7,
+   "ty": 9,
+   "dir": "up",
+   "when": "relay_puzzle_solved"
+  },
+  {
+   "x": 9,
+   "y": 10,
+   "to": "old_relay_1",
+   "tx": 6,
+   "ty": 1,
+   "dir": "down"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "relay2_enter",
+   "x": 6,
+   "y": 8,
+   "w": 3,
+   "h": 1,
+   "once": "relay2_seen",
+   "script": "relay2_enter"
+  },
+  {
+   "id": "plate_tri",
+   "x": 5,
+   "y": 5,
+   "script": "relay_plate_tri",
+   "when": {
+    "not": "relay_puzzle_solved"
+   }
+  },
+  {
+   "id": "plate_cir",
+   "x": 7,
+   "y": 5,
+   "script": "relay_plate_cir",
+   "when": {
+    "not": "relay_puzzle_solved"
+   }
+  },
+  {
+   "id": "plate_sq",
+   "x": 9,
+   "y": 5,
+   "script": "relay_plate_sq",
+   "when": {
+    "not": "relay_puzzle_solved"
+   }
+  }
+ ],
+ "npcs": [
+  {
+   "id": "mira",
+   "x": 4,
+   "y": 8,
+   "look": "mira",
+   "dir": "right",
+   "name": "MIRA",
+   "show": {
+    "all": [
+     "relay_started",
+     {
+      "not": "starter_selected"
+     },
+     {
+      "not": "relay_puzzle_solved"
+     }
+    ]
+   },
+   "scripts": [
+    {
+     "run": "mira_relay2_hint"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "script",
+   "x": 2,
+   "y": 3,
+   "script": "relay_note",
+   "id": "relay_note_obj"
+  },
+  {
+   "type": "sign",
+   "x": 3,
+   "y": 1,
+   "text": "A monitor shows three shapes and a loading bar that never loads."
+  },
+  {
+   "type": "sign",
+   "x": 11,
+   "y": 1,
+   "text": "A monitor shows the same three shapes in a different order. Then it flickers back."
+  },
+  {
+   "type": "sign",
+   "x": 12,
+   "y": 6,
+   "text": "Crates of spare parts. One of them is labelled 'SPARE TOWER'. It is a full-sized antenna segment."
+  },
+  {
+   "type": "item",
+   "x": 12,
+   "y": 8,
+   "item": "patch_kit",
+   "n": 1
+  },
+  {
+   "type": "scan",
+   "x": 1,
+   "y": 9,
+   "item": "cache_fragment",
+   "n": 1,
+   "text": "FIELD SCAN: a fold in the floor. A fragment of cached data is inside."
+  }
+ ]
+}

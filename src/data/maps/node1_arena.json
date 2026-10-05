@@ -1,0 +1,131 @@
+{
+ "id": "node1_arena",
+ "name": "CONTROL ROOM",
+ "w": 11,
+ "h": 10,
+ "base": "metal",
+ "outdoor": false,
+ "bgm": "indoor",
+ "battleBg": "node",
+ "tint": "#e0f0ff",
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "metal2",
+   "x": 4,
+   "y": 1,
+   "w": 3,
+   "h": 9
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "channel",
+   "x": 1,
+   "y": 2,
+   "w": 1,
+   "h": 7
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "channel",
+   "x": 9,
+   "y": 2,
+   "w": 1,
+   "h": 7
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "G": "gate",
+    "T": "terminal",
+    "g": "valve",
+    "e": "channel",
+    "y": "channel_dry",
+    "W": "wall_in",
+    "j": "pipe_v",
+    "k": "pipe_c",
+    "h": "pipe_h",
+    "L": "lab_machine",
+    "N": "note",
+    "B": "beacon",
+    "q": "counter",
+    "S": "statue"
+   },
+   "rows": [
+    "DDDDDDDDDDD",
+    "CM..LTL..MC",
+    "C.........C",
+    "C.........C",
+    "C.........C",
+    "C.........C",
+    "C.........C",
+    "C.........C",
+    "C.........C",
+    "CCCCC.CCCCC"
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 5,
+   "y": 9,
+   "to": "node1_station",
+   "tx": 6,
+   "ty": 1,
+   "dir": "down"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "boss_trigger",
+   "x": 4,
+   "y": 5,
+   "w": 3,
+   "h": 1,
+   "script": "mara_boss",
+   "when": {
+    "not": "node_1_complete"
+   }
+  }
+ ],
+ "npcs": [
+  {
+   "id": "mara",
+   "x": 5,
+   "y": 2,
+   "look": "mara",
+   "dir": "down",
+   "name": "MARA",
+   "scripts": [
+    {
+     "when": "node_1_complete",
+     "run": "mara_after"
+    },
+    {
+     "run": "mara_boss"
+    }
+   ]
+  }
+ ],
+ "objects": [
+  {
+   "type": "terminal",
+   "x": 5,
+   "y": 1,
+   "text": "The Node 1 control terminal. The status reads: IRRIGATION: NORMAL. CACHE LINK: SYNCED."
+  }
+ ]
+}

@@ -1,0 +1,707 @@
+{
+ "home_bed": [
+  {
+   "ask": "A comfy bed. Rest until morning and recover your Bytekin?",
+   "yes": [
+    {
+     "rest": true
+    }
+   ],
+   "no": []
+  }
+ ],
+ "mom_morning": [
+  {
+   "say": "Good morning, {p}! There's toast. Don't eat the toast. It's not real toast. ...I mean, eat it. It's fine."
+  },
+  {
+   "say": "Mira's been waiting outside since sunrise. She says she's 'not waiting', she's 'standing with purpose'."
+  }
+ ],
+ "mom_met_mira": [
+  {
+   "say": "Professor Vale's workshop, huh? Tell him he still owes me a casserole dish."
+  },
+  {
+   "say": "And {p}... eat something before you go anywhere strange. Strange things are always worse on an empty stomach."
+  }
+ ],
+ "mom_after": [
+  {
+   "say": "Your Bytekin look worn out, sweetheart. And so do you."
+  },
+  {
+   "ask": "Want to rest a while?",
+   "yes": [
+    {
+     "rest": true
+    }
+   ],
+   "no": [
+    {
+     "say": "Come home whenever you want. The kitchen light will be on. Probably the same one."
+    }
+   ]
+  }
+ ],
+ "mira_intro": [
+  {
+   "bgm": "rivermoor"
+  },
+  {
+   "face": "mira",
+   "dir": "left"
+  },
+  {
+   "say": "{p}! There you are!",
+   "who": "MIRA"
+  },
+  {
+   "move": "mira",
+   "path": "l3"
+  },
+  {
+   "face": "player",
+   "dir": "up"
+  },
+  {
+   "say": "Did you see it? This morning? The clocks went 9:59, then 10:01. Forty-one times I've logged that. Forty-one!",
+   "who": "MIRA"
+  },
+  {
+   "say": "Professor Vale said to bring you to his workshop. He's finally letting us help with Signal Ecology!",
+   "who": "MIRA"
+  },
+  {
+   "say": "Which is, officially, 'the study of unusual electromagnetic behaviour in animals'. Unofficially it's the study of everything weird.",
+   "who": "MIRA"
+  },
+  {
+   "say": "Race you there! Loser buys the first Patch Kit!",
+   "who": "MIRA"
+  },
+  {
+   "move": "mira",
+   "path": "r10 u1",
+   "fast": true
+  },
+  {
+   "hide": "mira"
+  },
+  {
+   "set": "met_mira"
+  },
+  {
+   "text": "Press START to open the menu."
+  }
+ ],
+ "relay_locked": [
+  {
+   "say": "The Old Signal Relay's door is sealed. A faded plate reads: DECOMMISSIONED. Someone has underlined it twice."
+  },
+  {
+   "move": "player",
+   "path": "d1"
+  }
+ ],
+ "vale_intro": [
+  {
+   "bgm": "indoor"
+  },
+  {
+   "say": "Ah. {p}. Punctual, for once.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "And Mira. Early, as always. I could have predicted it. In fact I did. It's in a notebook.",
+   "who": "PROF. VALE",
+   "when": {
+    "flag": "met_mira"
+   }
+  },
+  {
+   "say": "Right. Signal Ecology. Publicly it means electromagnetic behaviour in animals. Strange fur. Odd migrations. Birds that fly in squares.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "Privately... it means I have a spectrograph that has been humming the same note since the day you were born.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "Lately the note has been drifting. Clocks skip. Radios say things nobody sent. Signs print words that aren't in any language.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "And the animals have been *duplicating*. Briefly. Then unduplicating. I would very much like to know why.",
+   "who": "PROF. VALE"
+  },
+  {
+   "set": "vale_intro_done"
+  },
+  {
+   "sfx": "power_off"
+  },
+  {
+   "fade": "out",
+   "ms": 120
+  },
+  {
+   "shake": 500
+  },
+  {
+   "wait": 500
+  },
+  {
+   "fade": "in",
+   "ms": 200
+  },
+  {
+   "say": "..."
+  },
+  {
+   "say": "That was the whole district. Every light in Rivermoor just went out.",
+   "who": "PROF. VALE"
+  },
+  {
+   "sfx": "power"
+  },
+  {
+   "shake": 700
+  },
+  {
+   "wait": 600
+  },
+  {
+   "say": "And that... that is the Old Signal Relay. It's powering up. It hasn't had power in twenty years.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "That's impossible. Stay here. Both of you. I mean it. I'll call someone.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "You said 'stay here' like we don't know where the relay is. Come on, {p}!",
+   "who": "MIRA"
+  },
+  {
+   "move": "mira",
+   "path": "d3 l0",
+   "fast": true
+  },
+  {
+   "hide": "mira"
+  },
+  {
+   "say": "Mira! ...Oh, for the love of -",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "{p}. If you must follow her... the relay's maintenance door will open when the tower is live. Don't touch anything glowing. Touch everything glowing carefully. Take this.",
+   "who": "PROF. VALE"
+  },
+  {
+   "give": "patch_kit",
+   "n": 3
+  },
+  {
+   "say": "I'm right behind you. Probably. Possibly. Depending on stairs.",
+   "who": "PROF. VALE"
+  },
+  {
+   "set": "relay_started"
+  },
+  {
+   "set": "relay_open"
+  },
+  {
+   "text": "The Old Signal Relay is open!"
+  }
+ ],
+ "vale_default": [
+  {
+   "if": {
+    "flag": "keys_stolen"
+   },
+   "then": [
+    {
+     "say": "Everything is breaking, {p}. Be careful.",
+     "who": "PROF. VALE"
+    }
+   ],
+   "else": [
+    {
+     "if": {
+      "flag": "node_1_complete"
+     },
+     "then": [
+      {
+       "say": "Root Key 01. So the Node woke up for you. Good. That's... good.",
+       "who": "PROF. VALE"
+      },
+      {
+       "say": "About the man in the white coat. If he comes back, don't give him the Debugger. Please.",
+       "who": "PROF. VALE"
+      }
+     ],
+     "else": [
+      {
+       "if": {
+        "flag": "relay_done"
+       },
+       "then": [
+        {
+         "say": "The relay's quiet again. Eerily quiet. I'd like you to look into the Node in Briarfield. Route 01, past the grass.",
+         "who": "PROF. VALE"
+        },
+        {
+         "ask": "Need to rest your Bytekin before you go?",
+         "yes": [
+          {
+           "heal": true
+          },
+          {
+           "say": "All patched up.",
+           "who": "PROF. VALE"
+          }
+         ],
+         "no": []
+        }
+       ],
+       "else": [
+        {
+         "say": "The tower wasn't on when I woke up. It's on now. I do not like this at all.",
+         "who": "PROF. VALE"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "relay1_glitch": [
+  {
+   "glitch": 500
+  },
+  {
+   "shake": 400
+  },
+  {
+   "say": "For a second the hallway repeated. The same corridor, twice, stacked like a bad copy."
+  },
+  {
+   "say": "The floor tiles blinked out and back. A few did not come back."
+  }
+ ],
+ "relay2_enter": [
+  {
+   "say": "Over here, {p}! The door at the top is sealed.",
+   "who": "MIRA"
+  },
+  {
+   "say": "Three plates on the floor. A triangle, a circle, a square. And that note by the rack. I stepped on the plates in random order and the floor *yelled* at me.",
+   "who": "MIRA"
+  }
+ ],
+ "mira_relay2_hint": [
+  {
+   "if": {
+    "flag": "relay_note_read"
+   },
+   "then": [
+    {
+     "say": "Triangle, circle, square. In that order. Like the first three words of a language.",
+     "who": "MIRA"
+    },
+    {
+     "say": "Walk onto the plates in the order the note says. If you get it wrong the whole floor resets.",
+     "who": "MIRA"
+    }
+   ],
+   "else": [
+    {
+     "say": "Read the note near the rack first. I'm not stepping on those plates again. They have a temper.",
+     "who": "MIRA"
+    }
+   ]
+  }
+ ],
+ "relay_note": [
+  {
+   "if": {
+    "flag": "relay_note_read"
+   },
+   "then": [
+    {
+     "say": "The note: 'When the signal flows, the tower wakes. TRIANGLE. CIRCLE. SQUARE.'"
+    }
+   ],
+   "else": [
+    {
+     "say": "A scrap of paper taped to the rack. It reads:"
+    },
+    {
+     "say": "'When the signal flows, the tower wakes. Triangle. Circle. Square. In that order, the way a message is first spoken. - V.'"
+    },
+    {
+     "give": "relay_note",
+     "n": 1,
+     "quiet": true
+    },
+    {
+     "set": "relay_note_read"
+    },
+    {
+     "text": "Got the RELAY NOTE."
+    }
+   ]
+  }
+ ],
+ "relay_plate_tri": [
+  {
+   "puzzle": "relay_plate",
+   "id": "tri"
+  }
+ ],
+ "relay_plate_cir": [
+  {
+   "puzzle": "relay_plate",
+   "id": "cir"
+  }
+ ],
+ "relay_plate_sq": [
+  {
+   "puzzle": "relay_plate",
+   "id": "sq"
+  }
+ ],
+ "ch0_core": [
+  {
+   "move": "player",
+   "path": "u3",
+   "slow": true
+  },
+  {
+   "glitch": 400
+  },
+  {
+   "shake": 500
+  },
+  {
+   "say": "The core room is wrong in a hundred small ways. Walls that lean. Light with no source."
+  },
+  {
+   "say": "Three small shapes flicker around the antenna core. They are tearing at it - or trying to hold it together. It's hard to tell."
+  },
+  {
+   "sfx": "glitch"
+  },
+  {
+   "place": "vale",
+   "x": 7,
+   "y": 9,
+   "dir": "up"
+  },
+  {
+   "place": "mira",
+   "x": 6,
+   "y": 9,
+   "dir": "up"
+  },
+  {
+   "set": "core_vale"
+  },
+  {
+   "flash": 200
+  },
+  {
+   "say": "{p}! Don't - don't scare them!",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "A Null cat. A Loop worm. A Signal bird. Three Bytekin. At once. In a *relay*. I've only ever seen one in twenty years!",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "They're not attacking the core. They're trying to stabilize it... and it's tearing them apart. Neither of them can hold on much longer.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "{p}. Take this. It's a DEBUGGER. It scans, indexes, and stabilizes Bytekin with CONTAIN. I built it for exactly this and was too much of a coward to try it.",
+   "who": "PROF. VALE"
+  },
+  {
+   "give": "debugger",
+   "n": 1,
+   "key": true
+  },
+  {
+   "say": "Pick one of them and stabilize it. Walk up and press A. Quickly!",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "Dibs on whichever one you don't pick!",
+   "who": "MIRA"
+  },
+  {
+   "set": "core_choose"
+  }
+ ],
+ "pick_nullcat": [
+  {
+   "say": "NULLCAT. Type NULL. A small black cat with pixels missing around its tail. Evasive. Disruptive. Curious."
+  },
+  {
+   "ask": "Stabilize NULLCAT with the Debugger?",
+   "yes": [
+    {
+     "pickStarter": "nullcat"
+    },
+    {
+     "run": "after_pick"
+    }
+   ],
+   "no": []
+  }
+ ],
+ "pick_segbyte": [
+  {
+   "say": "SEGBYTE. Type LOOP. A segmented worm whose body doesn't quite connect. Multi-hit. Stacking. Stubborn."
+  },
+  {
+   "ask": "Stabilize SEGBYTE with the Debugger?",
+   "yes": [
+    {
+     "pickStarter": "segbyte"
+    },
+    {
+     "run": "after_pick"
+    }
+   ],
+   "no": []
+  }
+ ],
+ "pick_bitbird": [
+  {
+   "say": "BITBIRD. Type SIGNAL. A small blue bird whose wings sometimes show the wrong animation frame. Fast. Informed. Chatty."
+  },
+  {
+   "ask": "Stabilize BITBIRD with the Debugger?",
+   "yes": [
+    {
+     "pickStarter": "bitbird"
+    },
+    {
+     "run": "after_pick"
+    }
+   ],
+   "no": []
+  }
+ ],
+ "after_pick": [
+  {
+   "sfx": "scan"
+  },
+  {
+   "flash": 150
+  },
+  {
+   "wait": 300
+  },
+  {
+   "sfx": "contain_ok"
+  },
+  {
+   "jingle": "jingle_item",
+   "wait": 900
+  },
+  {
+   "say": "The Debugger flashes. {p} stabilized {starter}!"
+  },
+  {
+   "say": "Then I'll take that one!",
+   "who": "MIRA"
+  },
+  {
+   "say": "The other two flicker, look back at you for one frame, and blink out into the Signal."
+  },
+  {
+   "set": "core_tutorial_pending"
+  },
+  {
+   "set": "mira_has_starter"
+  },
+  {
+   "run": "core_tutorial"
+  }
+ ],
+ "core_tutorial": [
+  {
+   "shake": 600
+  },
+  {
+   "sfx": "power"
+  },
+  {
+   "glitch": 300
+  },
+  {
+   "say": "The antenna core spits out a glitching CACHEMOUSE - the relay's resident hoarder! It copied itself seven times on the way out."
+  },
+  {
+   "say": "A corrupted Cachemouse! {p} - FIGHT to wear it down, then CONTAIN it with the Debugger!",
+   "who": "PROF. VALE"
+  },
+  {
+   "battle": "wild",
+   "species": "cachemouse",
+   "level": 4,
+   "tutorial": true,
+   "on": {
+    "contained": [
+     {
+      "set": "tutorial_contained"
+     }
+    ]
+   }
+  },
+  {
+   "set": "relay_tutorial_done"
+  },
+  {
+   "unset": "core_tutorial_pending"
+  },
+  {
+   "wait": 300
+  },
+  {
+   "bgm": "relay"
+  },
+  {
+   "say": "The core's monitor flickers. Letters scroll across it slowly."
+  },
+  {
+   "say": "HELLO?",
+   "kind": "winGlitch"
+  },
+  {
+   "glitch": 300
+  },
+  {
+   "say": "...",
+   "kind": "winGlitch"
+  },
+  {
+   "say": "PROCESS TERMINATED.",
+   "kind": "winGlitch"
+  },
+  {
+   "sfx": "power_off"
+  },
+  {
+   "fade": "out",
+   "ms": 150
+  },
+  {
+   "shake": 500
+  },
+  {
+   "wait": 600
+  },
+  {
+   "fade": "in",
+   "ms": 300
+  },
+  {
+   "say": "...That wasn't in any log. Not a single one.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "Vale. What was that? Did the relay just try to talk to us?",
+   "who": "MIRA"
+  },
+  {
+   "say": "A glitch, Mira. Feedback from the core. Nothing more.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "{p}. The Debugger just updated itself. FIELD SCAN is now online. Walk close to glittering spots and press A.",
+   "who": "PROF. VALE"
+  },
+  {
+   "set": "has_scan"
+  },
+  {
+   "text": "FIELD SCAN unlocked!"
+  },
+  {
+   "say": "Hold on to that Debugger. You are, as far as I know, the first person who ever stabilized a Bytekin on purpose.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "There's a Node in Briarfield, down Route 01, that's been acting up. Irrigation. Crops. Duplicating. The Debugger might be able to help.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "I'll patch up here. Mira, go with them. And Mira - *don't* run off this time.",
+   "who": "PROF. VALE"
+  },
+  {
+   "say": "No promises!",
+   "who": "MIRA"
+  },
+  {
+   "set": "relay_done"
+  },
+  {
+   "unset": "core_vale"
+  },
+  {
+   "hide": "vale"
+  },
+  {
+   "hide": "mira"
+  },
+  {
+   "text": "Head south to Briarfield via Route 01!"
+  }
+ ],
+ "vale_core_wait": [
+  {
+   "say": "Go on, {p}. Walk out slowly. Don't touch the antenna.",
+   "who": "PROF. VALE"
+  }
+ ],
+ "mira_core_wait": [
+  {
+   "say": "I'm not going anywhere. I'm taking notes. Many, many notes.",
+   "who": "MIRA"
+  }
+ ],
+ "vale_after_core": [
+  {
+   "say": "Briarfield, {p}.",
+   "who": "PROF. VALE"
+  }
+ ],
+ "mira_after_core": [
+  {
+   "say": "Briarfield. Right.",
+   "who": "MIRA"
+  }
+ ],
+ "rivermoor_corruption": [
+  {
+   "shake": 300
+  },
+  {
+   "glitch": 250
+  },
+  {
+   "say": "A hum runs through the town. Somewhere in the east, a patch of ground has gone the wrong colour."
+  },
+  {
+   "say": "Rivermoor looks a little less sure of itself."
+  }
+ ]
+}

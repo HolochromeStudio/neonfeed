@@ -1,0 +1,106 @@
+{
+ "id": "rivermoor_mart",
+ "name": "RIVERMOOR MART",
+ "w": 7,
+ "h": 6,
+ "base": "tile_floor",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "D": "door_in",
+    "b": "bed_top",
+    "B": "bed_bot",
+    "S": "shelf",
+    "V": "tv",
+    "P": "plant",
+    "T": "table2",
+    "C": "chair",
+    "F": "fridge",
+    "K": "stove",
+    "N": "counter",
+    "G": "globe",
+    "M": "lab_machine",
+    "Z": "workbench",
+    "X": "crate",
+    "R": "terminal",
+    "Q": "table"
+   },
+   "rows": [
+    "WWwWWWW",
+    ".SSSSS.",
+    ".NN.NN.",
+    ".......",
+    "P.....X"
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     3,
+     5
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 3,
+   "y": 5,
+   "to": "rivermoor",
+   "tx": 26,
+   "ty": 7,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "mart_clerk",
+   "x": 3,
+   "y": 2,
+   "look": "clerk",
+   "dir": "down",
+   "name": "CLERK",
+   "scripts": [
+    {
+     "when": {
+      "flag": "relay_done"
+     },
+     "run": "mart_clerk_after"
+    },
+    {
+     "run": "mart_clerk"
+    }
+   ]
+  },
+  {
+   "id": "mart_shopper",
+   "x": 1,
+   "y": 3,
+   "look": "oldlady",
+   "dir": "right",
+   "move": "look",
+   "name": "SHOPPER",
+   "text": "I only come in to look at the vending machine. It gives free drinks now. I do not ask why."
+  }
+ ],
+ "objects": [
+  {
+   "type": "sign",
+   "x": 6,
+   "y": 4,
+   "text": "Stacked crates of Patch Kits. The labels have been reprinted three times because the old ones kept changing."
+  }
+ ]
+}

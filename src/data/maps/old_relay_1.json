@@ -1,0 +1,221 @@
+{
+ "id": "old_relay_1",
+ "name": "OLD SIGNAL RELAY",
+ "w": 12,
+ "h": 10,
+ "base": "metal",
+ "outdoor": false,
+ "bgm": "relay",
+ "glitchMusic": true,
+ "area": "old_relay",
+ "battleBg": "relay",
+ "tint": "#c8c0f0",
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "metal2",
+   "x": 5,
+   "y": 1,
+   "w": 2,
+   "h": 8
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "metal_cable",
+   "x": 5,
+   "y": 3,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "metal_cable",
+   "x": 5,
+   "y": 6,
+   "w": 2,
+   "h": 1
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "gate_open",
+   "pts": [
+    [
+     5,
+     0
+    ],
+    [
+     6,
+     0
+    ]
+   ]
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "O": "statue",
+    "H": "hole",
+    "#": "cave_wall",
+    "r": "cave_rock",
+    "p": "pipe_h",
+    "v": "pipe_v",
+    "S": "shelf",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "Y": "plant",
+    "h": "hay",
+    "u": "vault"
+   },
+   "rows": [
+    "DDDDD..DDDDD",
+    "CR.M.....MRC",
+    "C..........C",
+    "C.RR....RR.C",
+    "C..........C",
+    "C...P..P...C",
+    "C.RR....RR.C",
+    "C..........C",
+    "C..........C",
+    "CCCCC..CCCCC"
+   ]
+  },
+  {
+   "op": "patch",
+   "l": "g",
+   "t": "glitch_b",
+   "seed": 7,
+   "rect": [
+    1,
+    2,
+    10,
+    7
+   ],
+   "blobs": 3,
+   "r": 1,
+   "onlyOn": [
+    "metal",
+    "metal2"
+   ],
+   "when": "relay_glitch_seen"
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "hole",
+   "pts": [
+    [
+     2,
+     4
+    ],
+    [
+     9,
+     7
+    ],
+    [
+     3,
+     8
+    ]
+   ],
+   "when": "relay_glitch_seen"
+  }
+ ],
+ "warps": [
+  {
+   "x": 5,
+   "y": 9,
+   "to": "rivermoor",
+   "tx": 31,
+   "ty": 7,
+   "dir": "down"
+  },
+  {
+   "x": 6,
+   "y": 9,
+   "to": "rivermoor",
+   "tx": 31,
+   "ty": 7,
+   "dir": "down"
+  },
+  {
+   "x": 5,
+   "y": 0,
+   "to": "old_relay_2",
+   "tx": 7,
+   "ty": 9,
+   "dir": "up"
+  },
+  {
+   "x": 6,
+   "y": 0,
+   "to": "old_relay_2",
+   "tx": 7,
+   "ty": 9,
+   "dir": "up"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "relay_glitch",
+   "x": 5,
+   "y": 5,
+   "w": 2,
+   "h": 1,
+   "once": "relay_glitch_seen",
+   "script": "relay1_glitch"
+  }
+ ],
+ "objects": [
+  {
+   "type": "sign",
+   "x": 3,
+   "y": 1,
+   "text": "A monitor reads: RELAY STATUS: ONLINE. Then, a half second later: RELAY STATUS: ONLINE. Then: RELAY STATUS: ONLINE."
+  },
+  {
+   "type": "sign",
+   "x": 9,
+   "y": 1,
+   "text": "A cracked monitor shows a hallway. This hallway. A figure stands in it with its back to you. It is you."
+  },
+  {
+   "type": "item",
+   "x": 1,
+   "y": 8,
+   "item": "patch_kit",
+   "n": 1
+  },
+  {
+   "type": "scan",
+   "x": 10,
+   "y": 4,
+   "item": "pixel_dust",
+   "n": 1,
+   "text": "FIELD SCAN: pixels lying on the floor like spilled sand."
+  }
+ ]
+}

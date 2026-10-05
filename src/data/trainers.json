@@ -1,0 +1,266 @@
+{
+ "mira_1": {
+  "name": "MIRA",
+  "cls": "RIVAL",
+  "look": "mira",
+  "ai": "smart",
+  "reward": 300,
+  "bgm": "battle_rival",
+  "teamBy": {
+   "nullcat": [
+    [
+     "segbyte",
+     5
+    ]
+   ],
+   "segbyte": [
+    [
+     "bitbird",
+     5
+    ]
+   ],
+   "bitbird": [
+    [
+     "nullcat",
+     5
+    ]
+   ]
+  },
+  "win": "I rolled a double-check on my math. Fine - you win this one.",
+  "lose": "Told you. Tactics beat vibes."
+ },
+ "mira_2": {
+  "name": "MIRA",
+  "cls": "RIVAL",
+  "look": "mira",
+  "ai": "smart",
+  "reward": 500,
+  "bgm": "battle_rival",
+  "teamBy": {
+   "nullcat": [
+    [
+     "segbyte",
+     11
+    ],
+    [
+     "pingmoth",
+     9
+    ]
+   ],
+   "segbyte": [
+    [
+     "bitbird",
+     11
+    ],
+    [
+     "cachemouse",
+     9
+    ]
+   ],
+   "bitbird": [
+    [
+     "nullcat",
+     11
+    ],
+    [
+     "gnatpkt",
+     9
+    ]
+   ]
+  },
+  "win": "Hm. Your Bytekin trust you more than mine trust me. I should look into that.",
+  "lose": "Data does not lie."
+ },
+ "route1_courier": {
+  "name": "COURIER TOBY",
+  "cls": "COURIER",
+  "look": "courier",
+  "ai": "random",
+  "reward": 120,
+  "team": [
+   [
+    "cachemouse",
+    5
+   ],
+   [
+    "pingmoth",
+    5
+   ]
+  ],
+  "win": "My parcel got delivered faster than my pride.",
+  "lose": "Fast delivery!"
+ },
+ "route1_kid": {
+  "name": "BUG-FAN PIP",
+  "cls": "COLLECTOR",
+  "look": "kid",
+  "ai": "random",
+  "reward": 80,
+  "team": [
+   [
+    "looplet",
+    6
+   ]
+  ],
+  "win": "Mine was cuter anyway.",
+  "lose": "Yes!"
+ },
+ "route1_hiker": {
+  "name": "HIKER GRETA",
+  "cls": "HIKER",
+  "look": "hiker",
+  "ai": "basic",
+  "reward": 150,
+  "team": [
+   [
+    "rustbot",
+    7
+   ],
+   [
+    "staticfrog",
+    7
+   ]
+  ],
+  "win": "My knees hurt and so does my record.",
+  "lose": "Good walking, bad battling."
+ },
+ "route1_coder": {
+  "name": "CODER VIK",
+  "cls": "STREET CODER",
+  "look": "coder",
+  "ai": "basic",
+  "reward": 160,
+  "team": [
+   [
+    "gnatpkt",
+    7
+   ],
+   [
+    "pingmoth",
+    8
+   ]
+  ],
+  "win": "Compiled without errors... except you.",
+  "lose": "Segfault. Yours."
+ },
+ "pipe_tech": {
+  "name": "TECH DANI",
+  "cls": "MAINTENANCE",
+  "look": "tech",
+  "ai": "basic",
+  "reward": 180,
+  "team": [
+   [
+    "mudbyte",
+    8
+   ],
+   [
+    "rustbot",
+    8
+   ]
+  ],
+  "win": "I only came down here to fix a pipe!",
+  "lose": "Pipe fixed. You, not so much."
+ },
+ "node1_farmer1": {
+  "name": "FARMER OTTO",
+  "cls": "NODE APPRENTICE",
+  "look": "farmer",
+  "ai": "basic",
+  "reward": 200,
+  "team": [
+   [
+    "cropclone",
+    9
+   ],
+   [
+    "cachemouse",
+    9
+   ]
+  ],
+  "win": "The sprouts never lie to me like you do.",
+  "lose": "Harvest time!"
+ },
+ "node1_farmer2": {
+  "name": "FARMER LINA",
+  "cls": "NODE APPRENTICE",
+  "look": "farmer2",
+  "ai": "basic",
+  "reward": 220,
+  "team": [
+   [
+    "dripulse",
+    10
+   ],
+   [
+    "cropclone",
+    10
+   ]
+  ],
+  "win": "Mara said you'd be good. She undersold it.",
+  "lose": "Watered down."
+ },
+ "node1_tech": {
+  "name": "TECH ROWAN",
+  "cls": "SIGNAL TECH",
+  "look": "tech",
+  "ai": "smart",
+  "reward": 240,
+  "team": [
+   [
+    "pingmoth",
+    10
+   ],
+   [
+    "rustbot",
+    10
+   ],
+   [
+    "gnatpkt",
+    10
+   ]
+  ],
+  "win": "The valves were my idea. Honest.",
+  "lose": "Signal lost."
+ },
+ "briar_oldlady": {
+  "name": "GRAN HELGA",
+  "cls": "COLLECTOR",
+  "look": "oldlady",
+  "ai": "basic",
+  "reward": 200,
+  "team": [
+   [
+    "hamcache",
+    11
+   ]
+  ],
+  "win": "In my day we lost on purpose to be polite.",
+  "lose": "Knit one, win one."
+ },
+ "mara": {
+  "name": "NODE KEEPER MARA",
+  "cls": "NODE KEEPER",
+  "look": "mara",
+  "ai": "smart",
+  "reward": 800,
+  "bgm": "battle_node",
+  "boss": "mara",
+  "team": [
+   [
+    "cropclone",
+    12
+   ],
+   [
+    "dripulse",
+    12
+   ],
+   [
+    "cachemouse",
+    13
+   ]
+  ],
+  "win": "The channels run clean. You earned this.",
+  "lose": "Cache cleared. Try again."
+ }
+}

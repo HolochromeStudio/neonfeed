@@ -1,0 +1,183 @@
+{
+ "id": "vale_lab",
+ "name": "VALE'S WORKSHOP",
+ "w": 9,
+ "h": 8,
+ "base": "tile_floor",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "fill",
+   "l": "g",
+   "t": "metal",
+   "x": 1,
+   "y": 4,
+   "w": 3,
+   "h": 3
+  },
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "D": "door_in",
+    "b": "bed_top",
+    "B": "bed_bot",
+    "S": "shelf",
+    "V": "tv",
+    "P": "plant",
+    "T": "table2",
+    "C": "chair",
+    "F": "fridge",
+    "K": "stove",
+    "N": "counter",
+    "G": "globe",
+    "M": "lab_machine",
+    "Z": "workbench",
+    "X": "crate",
+    "R": "terminal",
+    "Q": "table"
+   },
+   "rows": [
+    "WWwWWWwWW",
+    ".MMZ.ZG.X",
+    ".........",
+    ".........",
+    ".........",
+    "X.......R"
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     4,
+     7
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 4,
+   "y": 7,
+   "to": "rivermoor",
+   "tx": 19,
+   "ty": 7,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "vale",
+   "x": 4,
+   "y": 3,
+   "look": "vale",
+   "dir": "down",
+   "name": "PROF. VALE",
+   "scripts": [
+    {
+     "when": {
+      "flag": "keys_stolen"
+     },
+     "run": "vale_default"
+    },
+    {
+     "run": "vale_default"
+    }
+   ],
+   "show": {
+    "any": [
+     {
+      "not": "relay_started"
+     },
+     {
+      "flag": "relay_done"
+     }
+    ]
+   }
+  },
+  {
+   "id": "mira",
+   "x": 3,
+   "y": 3,
+   "look": "mira",
+   "dir": "right",
+   "name": "MIRA",
+   "show": {
+    "all": [
+     "met_mira",
+     {
+      "not": "relay_started"
+     }
+    ]
+   },
+   "text": "I've read every page on that desk. Twice. Don't tell him."
+  }
+ ],
+ "triggers": [
+  {
+   "id": "vale_arrive",
+   "x": 4,
+   "y": 6,
+   "onEnter": true,
+   "script": "vale_intro",
+   "once": "vale_intro_seen",
+   "when": {
+    "flag": "met_mira"
+   }
+  }
+ ],
+ "objects": [
+  {
+   "type": "terminal",
+   "x": 8,
+   "y": 5,
+   "text": "A Debugger terminal. A sticky note on the screen: 'DO NOT RESTART. - E.V.'",
+   "rest": false
+  },
+  {
+   "type": "sign",
+   "x": 1,
+   "y": 1,
+   "text": "A machine labelled SIGNAL SPECTROGRAPH. Its graph shows a flat line, then a tiny spike every few seconds, like a heartbeat."
+  },
+  {
+   "type": "sign",
+   "x": 2,
+   "y": 1,
+   "text": "The machine hums at the same note as the streetlights outside."
+  },
+  {
+   "type": "sign",
+   "x": 3,
+   "y": 1,
+   "text": "A workbench covered with chunky handheld devices, each half-finished. One screen says: DEBUGGER MK.IV - UNSTABLE."
+  },
+  {
+   "type": "sign",
+   "x": 5,
+   "y": 1,
+   "text": "A drawer of old blueprints. Every page has a tower on it. Every tower has a different number of antennas."
+  },
+  {
+   "type": "sign",
+   "x": 6,
+   "y": 1,
+   "text": "A globe covered in tiny tape arrows. They all point at Rivermoor."
+  },
+  {
+   "type": "sign",
+   "x": 8,
+   "y": 1,
+   "text": "Crates labelled FRAGILE. One is labelled HANDLE LIKE A SECRET."
+  }
+ ]
+}

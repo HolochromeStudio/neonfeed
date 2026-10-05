@@ -1,0 +1,656 @@
+{
+ "mira_briarfield": [
+  {
+   "set": "mira_b_vis"
+  },
+  {
+   "show": "mira",
+   "x": 16,
+   "y": 7,
+   "dir": "down"
+  },
+  {
+   "say": "Took you long enough!",
+   "who": "MIRA"
+  },
+  {
+   "move": "mira",
+   "path": "d1",
+   "slow": true
+  },
+  {
+   "say": "I've been in this town an hour. The irrigation Node won't open for me. Mara says it only responds to 'someone with a proper Debugger'.",
+   "who": "MIRA"
+  },
+  {
+   "say": "I'd say I'm offended, but I'm mostly curious. So. Another round. For science!",
+   "who": "MIRA"
+  },
+  {
+   "battle": "mira_2",
+   "skipPre": true,
+   "skipWin": true,
+   "on": {
+    "win": [
+     {
+      "say": "Your Bytekin trust you. Mine trust me... conditionally.",
+      "who": "MIRA"
+     },
+     {
+      "say": "Okay. The Node's yours. I'm going to the library to find out why my notes keep changing.",
+      "who": "MIRA"
+     },
+     {
+      "give": "power_cell",
+      "n": 2
+     },
+     {
+      "move": "mira",
+      "path": "d2 l6",
+      "fast": true
+     },
+     {
+      "hide": "mira"
+     },
+     {
+      "unset": "mira_b_vis"
+     },
+     {
+      "set": "mira_2_done"
+     }
+    ]
+   }
+  },
+  {
+   "unset": "mira_b_vis"
+  }
+ ],
+ "nurse_heal": [
+  {
+   "say": "Welcome to the Briarfield Patch Center! We repair, recharge, and gently reboot Bytekin.",
+   "who": "PATCH NURSE"
+  },
+  {
+   "if": {
+    "flag": "expert_costs"
+   },
+   "then": [],
+   "else": []
+  },
+  {
+   "ask": "Shall I patch up your whole party?",
+   "yes": [
+    {
+     "heal": true
+    },
+    {
+     "say": "All done! Your Bytekin are in perfect condition. Not too perfect, I hope.",
+     "who": "PATCH NURSE"
+    }
+   ],
+   "no": [
+    {
+     "say": "Come back any time. I'm very stable. It's a job requirement.",
+     "who": "PATCH NURSE"
+    }
+   ]
+  }
+ ],
+ "hub_clerk": [
+  {
+   "say": "Welcome to BRIARFIELD HUB. We sell what you need and a few things you don't.",
+   "who": "CLERK"
+  },
+  {
+   "shop": "briarfield_hub"
+  },
+  {
+   "say": "Come again!",
+   "who": "CLERK"
+  }
+ ],
+ "mart_clerk": [
+  {
+   "say": "Welcome to RIVERMOOR MART! Everything is exactly where it was. Mostly.",
+   "who": "CLERK"
+  },
+  {
+   "shop": "rivermoor_mart"
+  },
+  {
+   "say": "Thank you! The vending machine's out front, if you like free drinks.",
+   "who": "CLERK"
+  }
+ ],
+ "mart_clerk_after": [
+  {
+   "say": "Welcome to RIVERMOOR MART! Please ignore the shelves that are a little less shelf-like than they were.",
+   "who": "CLERK"
+  },
+  {
+   "shop": "rivermoor_mart"
+  },
+  {
+   "say": "Please come again. If 'again' is still a thing.",
+   "who": "CLERK"
+  }
+ ],
+ "node1_enter": [
+  {
+   "say": "You're the one with the Debugger. Good. I've been waiting for someone who doesn't poke things with a stick.",
+   "who": "MARA"
+  },
+  {
+   "say": "I'm MARA. Keeper of Node 1. Briarfield's irrigation runs through here. Lately the channels have been running *uphill*. And the crops have been showing up twice.",
+   "who": "MARA"
+  },
+  {
+   "say": "Three channels carry the water: LEFT, MIDDLE, RIGHT. Three valves control them. Get all three flowing at once and the Control Room opens.",
+   "who": "MARA"
+  },
+  {
+   "say": "My apprentices are in the way. Battle them if they see you. I trained them to stop trespassers.",
+   "who": "MARA"
+  },
+  {
+   "say": "Notes are on the wall. Read them. Everything on that wall is true, which is more than I can say about the pipes.",
+   "who": "MARA"
+  },
+  {
+   "set": "met_mara"
+  }
+ ],
+ "mara_station": [
+  {
+   "if": {
+    "flag": "node1_valves_done"
+   },
+   "then": [
+    {
+     "say": "The Control Room is open. Go on. I'll meet you there.",
+     "who": "MARA"
+    }
+   ],
+   "else": [
+    {
+     "say": "Stuck? The notes on the wall tell you what each valve does. V1 flips LEFT and MIDDLE. V2 flips MIDDLE and RIGHT. V3 flips RIGHT only.",
+     "who": "MARA"
+    },
+    {
+     "say": "A flowing channel is blocked. A dry channel is walkable. You need all three flowing - and you start with all three dry.",
+     "who": "MARA"
+    },
+    {
+     "ask": "Want the answer? ...I'll tell you if you ask nicely.",
+     "yes": [
+      {
+       "say": "The outer valves. V1 and V3. Leave the middle one alone.",
+       "who": "MARA"
+      }
+     ],
+     "no": [
+      {
+       "say": "Good. Figuring it out is half the Node.",
+       "who": "MARA"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "valve_v1": [
+  {
+   "puzzle": "valve",
+   "id": "v1"
+  }
+ ],
+ "valve_v2": [
+  {
+   "puzzle": "valve",
+   "id": "v2"
+  }
+ ],
+ "valve_v3": [
+  {
+   "puzzle": "valve",
+   "id": "v3"
+  }
+ ],
+ "mara_boss": [
+  {
+   "if": {
+    "flag": "node_1_complete"
+   },
+   "then": [
+    {
+     "run": "mara_after"
+    },
+    {
+     "end": true
+    }
+   ]
+  },
+  {
+   "say": "Welcome to the Control Room, {p}.",
+   "who": "MARA"
+  },
+  {
+   "say": "My Bytekin share a CACHE LINK. They back each other up every other turn. Not a trick. Just good housekeeping.",
+   "who": "MARA"
+  },
+  {
+   "say": "Break the LINK and they stop recovering. Hit hard, and don't be shy about their Stability. Let's see what you've got!",
+   "who": "MARA"
+  },
+  {
+   "battle": "mara",
+   "skipPre": true,
+   "skipWin": true,
+   "on": {
+    "win": [
+     {
+      "say": "The channels run clean. You earned this.",
+      "who": "MARA"
+     },
+     {
+      "give": "root_key_01",
+      "n": 1,
+      "key": true
+     },
+     {
+      "say": "That's ROOT KEY 01. Proof that Node 1 is restored. It also unlocks something for your Debugger.",
+      "who": "MARA"
+     },
+     {
+      "give": "pulse_module",
+      "n": 1,
+      "key": true
+     },
+     {
+      "set": "has_pulse"
+     },
+     {
+      "say": "PULSE. Your Debugger can now send a pulse into dormant Signal switches. They're all over Velora. Most of them lead somewhere interesting.",
+      "who": "MARA"
+     },
+     {
+      "sfx": "pulse"
+     },
+     {
+      "flash": 250
+     },
+     {
+      "say": "Funny thing. The water ran clean the instant you opened the valves. Too clean. I don't like clean.",
+      "who": "MARA"
+     },
+     {
+      "say": "Go outside. Look at the town. Tell me I'm wrong.",
+      "who": "MARA"
+     },
+     {
+      "set": "node_1_complete"
+     },
+     {
+      "set": "node_1_clear"
+     }
+    ]
+   }
+  }
+ ],
+ "mara_after": [
+  {
+   "say": "Look after that Root Key. It's more than a trophy.",
+   "who": "MARA"
+  },
+  {
+   "ask": "Need patching up?",
+   "yes": [
+    {
+     "heal": true
+    },
+    {
+     "say": "There. Good as new. Or good as slightly-older.",
+     "who": "MARA"
+    }
+   ],
+   "no": []
+  }
+ ],
+ "voss_meeting": [
+  {
+   "set": "voss_vis"
+  },
+  {
+   "set": "met_voss"
+  },
+  {
+   "bgm": "clean"
+  },
+  {
+   "show": "voss",
+   "x": 24,
+   "y": 9,
+   "dir": "up"
+  },
+  {
+   "move": "voss",
+   "path": "u1",
+   "slow": true
+  },
+  {
+   "say": "Ah. You must be {p}.",
+   "who": "DIR. VOSS"
+  },
+  {
+   "say": "I'm Silas Voss. Director of Clean State. I came personally. It isn't every day an irrigation fault of this scale resolves itself.",
+   "who": "DIR. VOSS"
+  },
+  {
+   "say": "We had been tracking it for months. It turns out one of our own relays was the cause. You fixed in an afternoon what my engineers could not in a season.",
+   "who": "DIR. VOSS"
+  },
+  {
+   "say": "May I see it? The Debugger. I promise to be gentle.",
+   "who": "DIR. VOSS"
+  },
+  {
+   "ask": "Hand over your Debugger?",
+   "yes": [
+    {
+     "say": "Remarkable. A Mark IV, if I'm not mistaken. I helped design the first.",
+     "who": "DIR. VOSS"
+    },
+    {
+     "say": "You keep it. It seems to like you. Most things do, I suspect, for the first few minutes.",
+     "who": "DIR. VOSS"
+    }
+   ],
+   "no": [
+    {
+     "say": "Wise. It's a delicate thing. I would have asked the same.",
+     "who": "DIR. VOSS"
+    }
+   ]
+  },
+  {
+   "say": "Tell Ellis I said hello. He'll know who.",
+   "who": "DIR. VOSS"
+  },
+  {
+   "say": "We're closing the road to Whisperwood while we recalibrate the region's Signal. A temporary measure. Nobody should be hurt by uncertainty.",
+   "who": "DIR. VOSS"
+  },
+  {
+   "say": "You see, every tragedy begins as an exception.",
+   "who": "DIR. VOSS"
+  },
+  {
+   "say": "NO ERRORS. NO UNCERTAINTY. It isn't a slogan. It's a promise. Good afternoon.",
+   "who": "DIR. VOSS"
+  },
+  {
+   "move": "voss",
+   "path": "d8 r0",
+   "slow": true
+  },
+  {
+   "hide": "voss"
+  },
+  {
+   "unset": "voss_vis"
+  },
+  {
+   "bgm": "briarfield"
+  },
+  {
+   "say": "INCOMING: PROF. VALE",
+   "kind": "winDark"
+  },
+  {
+   "say": "{p}? ...Was there a man in a white coat? Grey hair. Careful voice.",
+   "who": "PROF. VALE",
+   "kind": "winDark"
+  },
+  {
+   "say": "Did he give his name? ...No. Never mind. Don't tell me.",
+   "who": "PROF. VALE",
+   "kind": "winDark"
+  },
+  {
+   "say": "Don't give him the Debugger. Please. I'll explain when I can. I just... need a little more time.",
+   "who": "PROF. VALE",
+   "kind": "winDark"
+  },
+  {
+   "say": "CALL ENDED",
+   "kind": "winDark"
+  },
+  {
+   "title": "CHAPTER 1",
+   "sub": "THE SIGNAL CONNECTS WHAT REMAINS"
+  },
+  {
+   "set": "chapter1_done"
+  },
+  {
+   "say": "The road to Whisperwood is closed. But Briarfield, Route 01, and every corner you skipped are open. The Signal keeps humming. Explore! You may find more than you expected."
+  }
+ ],
+ "voss_idle": [
+  {
+   "say": "A pleasure, {p}.",
+   "who": "DIR. VOSS"
+  }
+ ],
+ "cs_worker1": [
+  {
+   "say": "Clean State field team. We're calibrating the irrigation sensors. Please stay off the pipes.",
+   "who": "CLEAN STATE"
+  },
+  {
+   "say": "Sir - ma'am - citizen - please do not duplicate the crops. They're already within tolerance.",
+   "who": "CLEAN STATE"
+  }
+ ],
+ "cs_worker2": [
+  {
+   "say": "This town used to be 4% noisy. Now it's 0.2%. We're extremely proud.",
+   "who": "CLEAN STATE"
+  }
+ ],
+ "cs_worker3": [
+  {
+   "say": "The road south is closed. Signal maintenance. NO ERRORS. NO UNCERTAINTY.",
+   "who": "CLEAN STATE"
+  },
+  {
+   "say": "...Do you want to try the slogan? Everyone says it feels nice.",
+   "who": "CLEAN STATE"
+  }
+ ],
+ "kid_savelet_start": [
+  {
+   "say": "My imaginary friend disappeared. His name's SAVELET. He lived near the little computer machines.",
+   "who": "LENNY"
+  },
+  {
+   "say": "Mom says imaginary friends can't 'disappear' because they were never there. But I saw him. He had a blue body. He waved.",
+   "who": "LENNY"
+  },
+  {
+   "ask": "Will you look for him? You have the scanner thing.",
+   "yes": [
+    {
+     "quest": "start",
+     "id": "side_savelet"
+    },
+    {
+     "set": "savelet_quest"
+    },
+    {
+     "say": "Thank you! He only came out near the terminals. Try the one in Briarfield. It's the one nearest the pipes.",
+     "who": "LENNY"
+    }
+   ],
+   "no": [
+    {
+     "say": "It's okay. He'll find his own way back. I hope.",
+     "who": "LENNY"
+    }
+   ]
+  }
+ ],
+ "kid_savelet_wait": [
+  {
+   "say": "Did you find SAVELET? He only shows up near terminals. Use your scanner thing!",
+   "who": "LENNY"
+  }
+ ],
+ "kid_savelet_found": [
+  {
+   "say": "You... found him?! He's - he's with you?",
+   "who": "LENNY"
+  },
+  {
+   "say": "He says you almost lost to him twice. He remembers *everything*.",
+   "who": "LENNY"
+  },
+  {
+   "say": "He wants to stay with you. He says you're the first person who ever left him a save point.",
+   "who": "LENNY"
+  },
+  {
+   "set": "savelet_returned"
+  },
+  {
+   "credits": 500
+  },
+  {
+   "give": "power_cell",
+   "n": 2
+  },
+  {
+   "say": "Take care of him!",
+   "who": "LENNY"
+  }
+ ],
+ "kid_savelet_done": [
+  {
+   "say": "SAVELET says hello. Mostly in typing noises.",
+   "who": "LENNY"
+  }
+ ],
+ "savelet_scan": [
+  {
+   "say": "Behind the terminal, a small blue shape darts between pixels. It looks very, very tired."
+  },
+  {
+   "battle": "wild",
+   "species": "savelet",
+   "level": 7,
+   "on": {
+    "contained": [
+     {
+      "set": "savelet_found"
+     }
+    ],
+    "win": [
+     {
+      "unset": "savelet_scanned"
+     }
+    ],
+    "ran": [
+     {
+      "unset": "savelet_scanned"
+     }
+    ],
+    "fled": [
+     {
+      "unset": "savelet_scanned"
+     }
+    ]
+   }
+  }
+ ],
+ "crops_start": [
+  {
+   "say": "Our crops have been doubling up overnight. I don't mind the extra, but the *extra* has opinions.",
+   "who": "FARMER'S WIFE"
+  },
+  {
+   "say": "Could you look for the originals - I mean, the duplicates? There's three, I think. Use your Field Scan. Walk close to a glittering crop and press A.",
+   "who": "FARMER'S WIFE"
+  },
+  {
+   "ask": "Will you help?",
+   "yes": [
+    {
+     "quest": "start",
+     "id": "side_crops"
+    },
+    {
+     "set": "crops_quest"
+    }
+   ],
+   "no": []
+  }
+ ],
+ "crops_wait": [
+  {
+   "if": {
+    "min": [
+     "crops_found",
+     3
+    ]
+   },
+   "then": [
+    {
+     "say": "Three? Three! They've stopped glowing!",
+     "who": "FARMER'S WIFE"
+    },
+    {
+     "set": "crops_done"
+    },
+    {
+     "give": "contain_module",
+     "n": 2
+    },
+    {
+     "credits": 300
+    },
+    {
+     "say": "That's a Contain Module for each pair of hands. Don't ask where I got them. The Hub sells them. I mean. I didn't get them.",
+     "who": "FARMER'S WIFE"
+    }
+   ],
+   "else": [
+    {
+     "say": "Use your Field Scan: walk near a glittering spot in the fields and press A. You've found {crops_found} so far.",
+     "who": "FARMER'S WIFE"
+    }
+   ]
+  }
+ ],
+ "crops_thanks": [
+  {
+   "say": "The crops are behaving! Mostly!",
+   "who": "FARMER'S WIFE"
+  }
+ ],
+ "briar_arrive": [
+  {
+   "set": "visited_briarfield"
+  },
+  {
+   "text": "Briarfield - the Hub heals and sells supplies."
+  }
+ ],
+ "barn_pulse": [
+  {
+   "sfx": "door"
+  },
+  {
+   "say": "Somewhere behind the hay, a heavy bolt slides back. The old gate swings open!"
+  }
+ ]
+}

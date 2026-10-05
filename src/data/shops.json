@@ -1,0 +1,4 @@
+{
+  "rivermoor_mart": { "name": "RIVERMOOR MART", "stock": ["patch_kit","status_wipe","stability_clamp","signal_beacon"] },
+  "briarfield_hub": { "name": "BRIARFIELD HUB", "stock": ["patch_kit","patch_kit_l","status_wipe","restore_chip","stability_clamp","contain_module","power_cell","signal_beacon"] }
+}

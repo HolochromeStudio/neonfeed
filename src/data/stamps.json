@@ -1,0 +1,221 @@
+{
+ "house_blue": {
+  "rows": [
+   "ABBBC",
+   "DEEEF",
+   "GHGHG",
+   "GGIGG"
+  ],
+  "legend": {
+   "A": "o:roof_blue_tl",
+   "B": "o:roof_blue_tm",
+   "C": "o:roof_blue_tr",
+   "D": "o:roof_blue_l",
+   "E": "o:roof_blue_m",
+   "F": "o:roof_blue_r",
+   "G": "o:wall",
+   "H": "o:wall_win",
+   "I": "o:door"
+  }
+ },
+ "lab_blue": {
+  "rows": [
+   "ABBBBC",
+   "DEEEEF",
+   "GHGGHG",
+   "GGIGGG"
+  ],
+  "legend": {
+   "A": "o:roof_blue_tl",
+   "B": "o:roof_blue_tm",
+   "C": "o:roof_blue_tr",
+   "D": "o:roof_blue_l",
+   "E": "o:roof_blue_m",
+   "F": "o:roof_blue_r",
+   "G": "o:wall_grey",
+   "H": "o:wall_grey_win",
+   "I": "o:door_grey"
+  }
+ },
+ "house_red": {
+  "rows": [
+   "ABBBC",
+   "DEEEF",
+   "GHGHG",
+   "GGIGG"
+  ],
+  "legend": {
+   "A": "o:roof_red_tl",
+   "B": "o:roof_red_tm",
+   "C": "o:roof_red_tr",
+   "D": "o:roof_red_l",
+   "E": "o:roof_red_m",
+   "F": "o:roof_red_r",
+   "G": "o:wall",
+   "H": "o:wall_win",
+   "I": "o:door"
+  }
+ },
+ "lab_red": {
+  "rows": [
+   "ABBBBC",
+   "DEEEEF",
+   "GHGGHG",
+   "GGIGGG"
+  ],
+  "legend": {
+   "A": "o:roof_red_tl",
+   "B": "o:roof_red_tm",
+   "C": "o:roof_red_tr",
+   "D": "o:roof_red_l",
+   "E": "o:roof_red_m",
+   "F": "o:roof_red_r",
+   "G": "o:wall_grey",
+   "H": "o:wall_grey_win",
+   "I": "o:door_grey"
+  }
+ },
+ "house_green": {
+  "rows": [
+   "ABBBC",
+   "DEEEF",
+   "GHGHG",
+   "GGIGG"
+  ],
+  "legend": {
+   "A": "o:roof_green_tl",
+   "B": "o:roof_green_tm",
+   "C": "o:roof_green_tr",
+   "D": "o:roof_green_l",
+   "E": "o:roof_green_m",
+   "F": "o:roof_green_r",
+   "G": "o:wall",
+   "H": "o:wall_win",
+   "I": "o:door"
+  }
+ },
+ "lab_green": {
+  "rows": [
+   "ABBBBC",
+   "DEEEEF",
+   "GHGGHG",
+   "GGIGGG"
+  ],
+  "legend": {
+   "A": "o:roof_green_tl",
+   "B": "o:roof_green_tm",
+   "C": "o:roof_green_tr",
+   "D": "o:roof_green_l",
+   "E": "o:roof_green_m",
+   "F": "o:roof_green_r",
+   "G": "o:wall_grey",
+   "H": "o:wall_grey_win",
+   "I": "o:door_grey"
+  }
+ },
+ "house_grey": {
+  "rows": [
+   "ABBBC",
+   "DEEEF",
+   "GHGHG",
+   "GGIGG"
+  ],
+  "legend": {
+   "A": "o:roof_grey_tl",
+   "B": "o:roof_grey_tm",
+   "C": "o:roof_grey_tr",
+   "D": "o:roof_grey_l",
+   "E": "o:roof_grey_m",
+   "F": "o:roof_grey_r",
+   "G": "o:wall",
+   "H": "o:wall_win",
+   "I": "o:door"
+  }
+ },
+ "lab_grey": {
+  "rows": [
+   "ABBBBC",
+   "DEEEEF",
+   "GHGGHG",
+   "GGIGGG"
+  ],
+  "legend": {
+   "A": "o:roof_grey_tl",
+   "B": "o:roof_grey_tm",
+   "C": "o:roof_grey_tr",
+   "D": "o:roof_grey_l",
+   "E": "o:roof_grey_m",
+   "F": "o:roof_grey_r",
+   "G": "o:wall_grey",
+   "H": "o:wall_grey_win",
+   "I": "o:door_grey"
+  }
+ },
+ "barn": {
+  "rows": [
+   "ABBBBC",
+   "DEEEEF",
+   "GGGGGG",
+   "GGIGGG"
+  ],
+  "legend": {
+   "A": "o:roof_red_tl",
+   "B": "o:roof_red_tm",
+   "C": "o:roof_red_tr",
+   "D": "o:roof_red_l",
+   "E": "o:roof_red_m",
+   "F": "o:roof_red_r",
+   "G": "o:wall_barn",
+   "I": "o:door_barn"
+  }
+ },
+ "hub": {
+  "rows": [
+   "ABBBBC",
+   "DEEEEF",
+   "GHGSHG",
+   "GGIGGG"
+  ],
+  "legend": {
+   "A": "o:roof_green_tl",
+   "B": "o:roof_green_tm",
+   "C": "o:roof_green_tr",
+   "D": "o:roof_green_l",
+   "E": "o:roof_green_m",
+   "F": "o:roof_green_r",
+   "G": "o:wall",
+   "H": "o:wall_win",
+   "S": "o:hubsign",
+   "I": "o:door"
+  }
+ },
+ "node": {
+  "rows": [
+   "ABBBBBBC",
+   "DEEEEEEF",
+   "GHGGSGHG",
+   "GGGIGGGG"
+  ],
+  "legend": {
+   "A": "o:roof_grey_tl",
+   "B": "o:roof_grey_tm",
+   "C": "o:roof_grey_tr",
+   "D": "o:roof_grey_l",
+   "E": "o:roof_grey_m",
+   "F": "o:roof_grey_r",
+   "G": "o:wall_grey",
+   "H": "o:wall_grey_win",
+   "S": "o:nodesign",
+   "I": "o:door_grey"
+  }
+ },
+ "pond": {
+  "rows": [
+   "www",
+   "www"
+  ],
+  "legend": {
+   "w": "g:water"
+  }
+ }
+}

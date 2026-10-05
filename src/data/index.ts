@@ -1,0 +1,37 @@
+import typesJson from './types.json';
+import movesJson from './moves.json';
+import abilitiesJson from './abilities.json';
+import statusJson from './statusEffects.json';
+import bytekinJson from './bytekin.json';
+import itemsJson from './items.json';
+import shopsJson from './shops.json';
+import encountersJson from './encounters.json';
+import trainersJson from './trainers.json';
+import bossesJson from './bosses.json';
+import questsJson from './quests.json';
+import stampsJson from './stamps.json';
+import worldmapJson from './worldmap.json';
+import type { MoveData, SpeciesData, ItemData, TypeId, StatusId } from '../types';
+
+export const TYPE_ORDER = typesJson.order as TypeId[];
+export const TYPE_COLORS = typesJson.colors as Record<TypeId, string>;
+export const TYPE_CHART = typesJson.chart as Record<TypeId, { super: TypeId[]; resist: TypeId[] }>;
+export const TYPE_BLURB = typesJson.blurb as Record<TypeId, string>;
+export const MOVES = movesJson as unknown as Record<string, MoveData>;
+export const ABILITIES = abilitiesJson as Record<string, { name: string; desc: string }>;
+export const STATUS = statusJson as Record<StatusId, { short: string; color: string; desc: string; verb: string; cure: string; tick: string }>;
+export const SPECIES = bytekinJson as unknown as Record<string, SpeciesData>;
+export const ITEMS = itemsJson as unknown as Record<string, ItemData>;
+export const SHOPS = shopsJson as Record<string, { name: string; stock: string[] }>;
+export const ENCOUNTERS = encountersJson as unknown as Record<string, { rate: number; grass?: boolean; table: { s: string; min: number; max: number; w: number; time?: string[]; weather?: string[]; rare?: boolean }[] }>;
+export const TRAINERS = trainersJson as unknown as Record<string, any>;
+export const BOSSES = bossesJson as Record<string, any>;
+export const QUESTS = questsJson as unknown as Record<string, any>;
+const scriptFiles = import.meta.glob('./scripts/*.json', { eager: true, import: 'default' }) as Record<string, Record<string, any[]>>;
+const mapFiles = import.meta.glob('./maps/*.json', { eager: true, import: 'default' }) as Record<string, any>;
+export const SCRIPTS: Record<string, any[]> = Object.assign({}, ...Object.values(scriptFiles));
+export const MAPS: Record<string, any> = Object.fromEntries(Object.values(mapFiles).map((m: any) => [m.id, m]));
+export const STAMPS = stampsJson as unknown as Record<string, { rows: string[]; legend: Record<string, string> }>;
+export const WORLDMAP = worldmapJson as any;
+
+export const SPECIES_ORDER = Object.keys(SPECIES).sort((a, b) => SPECIES[a].dex - SPECIES[b].dex);

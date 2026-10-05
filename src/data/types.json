@@ -1,0 +1,35 @@
+{
+  "order": ["NULL","SIGNAL","LOOP","CACHE","VIRAL","STATIC","VECTOR","CRYPT","PULSE","ARCHIVE","GLITCH","CORE"],
+  "colors": {
+    "NULL": "#5a5a78", "SIGNAL": "#38a8e8", "LOOP": "#48b868", "CACHE": "#e8a838", "VIRAL": "#a8c828", "STATIC": "#d8d048",
+    "VECTOR": "#e8704a", "CRYPT": "#7a48c8", "PULSE": "#e84878", "ARCHIVE": "#a88858", "GLITCH": "#c838d8", "CORE": "#98a0b8"
+  },
+  "chart": {
+    "NULL":    { "super": ["SIGNAL","CACHE"],   "resist": ["CORE","ARCHIVE"] },
+    "SIGNAL":  { "super": ["LOOP","STATIC"],    "resist": ["CRYPT","PULSE"] },
+    "LOOP":    { "super": ["NULL","CORE"],      "resist": ["ARCHIVE","STATIC"] },
+    "CACHE":   { "super": ["VECTOR","STATIC"],  "resist": ["NULL","PULSE"] },
+    "VIRAL":   { "super": ["CACHE","PULSE"],    "resist": ["CRYPT","CORE"] },
+    "STATIC":  { "super": ["VECTOR","VIRAL"],   "resist": ["SIGNAL","ARCHIVE"] },
+    "VECTOR":  { "super": ["CRYPT","LOOP"],     "resist": ["CACHE","GLITCH"] },
+    "CRYPT":   { "super": ["GLITCH","STATIC"],  "resist": ["NULL","CRYPT"] },
+    "PULSE":   { "super": ["NULL","SIGNAL"],    "resist": ["CORE","VIRAL"] },
+    "ARCHIVE": { "super": ["GLITCH","VIRAL"],   "resist": ["LOOP","CRYPT"] },
+    "GLITCH":  { "super": ["CORE","ARCHIVE","SIGNAL"], "resist": ["GLITCH","VECTOR"] },
+    "CORE":    { "super": ["GLITCH","VIRAL"],   "resist": ["CORE","PULSE"] }
+  },
+  "blurb": {
+    "NULL": "Evasion and disruption. Strong vs SIGNAL, CACHE.",
+    "SIGNAL": "Speed and priority. Strong vs LOOP, STATIC.",
+    "LOOP": "Multi-hit and stacking. Strong vs NULL, CORE.",
+    "CACHE": "Stored power and recovery. Strong vs VECTOR, STATIC.",
+    "VIRAL": "Spreads status. Strong vs CACHE, PULSE.",
+    "STATIC": "Noise and overload. Strong vs VECTOR, VIRAL.",
+    "VECTOR": "Direct force. Strong vs CRYPT, LOOP.",
+    "CRYPT": "Defence and locks. Strong vs GLITCH, STATIC.",
+    "PULSE": "Raw energy. Strong vs NULL, SIGNAL.",
+    "ARCHIVE": "Memory and history. Strong vs GLITCH, VIRAL.",
+    "GLITCH": "Powerful but unstable. Strong vs CORE, ARCHIVE, SIGNAL.",
+    "CORE": "Standard system process. Strong vs GLITCH, VIRAL."
+  }
+}

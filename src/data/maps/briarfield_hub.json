@@ -1,0 +1,156 @@
+{
+ "id": "briarfield_hub",
+ "name": "BRIARFIELD HUB",
+ "w": 9,
+ "h": 8,
+ "base": "tile_floor",
+ "outdoor": false,
+ "bgm": "indoor",
+ "noTitle": true,
+ "ops": [
+  {
+   "op": "rows",
+   "l": "o",
+   "x": 0,
+   "y": 0,
+   "legend": {
+    "D": "wall_in_dark",
+    "C": "cable_wall",
+    "R": "rack",
+    "M": "monitor",
+    "P": "pillar",
+    "X": "crate",
+    "Z": "workbench",
+    "N": "note",
+    "A": "antenna",
+    "B": "beacon",
+    "G": "gate",
+    "T": "terminal",
+    "O": "statue",
+    "H": "hole",
+    "#": "cave_wall",
+    "r": "cave_rock",
+    "p": "pipe_h",
+    "v": "pipe_v",
+    "S": "shelf",
+    "W": "wall_in",
+    "w": "wall_in_win",
+    "d": "door_in",
+    "t": "table2",
+    "c": "chair",
+    "F": "fridge",
+    "K": "stove",
+    "n": "counter",
+    "V": "tv",
+    "Y": "plant",
+    "h": "hay",
+    "u": "vault",
+    "L": "lab_machine",
+    "q": "table",
+    "g": "valve",
+    "e": "channel",
+    "y": "channel_dry",
+    "j": "pipe_v",
+    "k": "pipe_c"
+   },
+   "rows": [
+    "WWwWWwWWW",
+    ".SS...SS.",
+    ".nn.n.nn.",
+    ".........",
+    ".........",
+    "Y.......Y"
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "healpad",
+   "pts": [
+    [
+     3,
+     1
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "o",
+   "t": "vault",
+   "pts": [
+    [
+     7,
+     4
+    ]
+   ]
+  },
+  {
+   "op": "set",
+   "l": "g",
+   "t": "exit_mat",
+   "pts": [
+    [
+     4,
+     7
+    ]
+   ]
+  }
+ ],
+ "warps": [
+  {
+   "x": 4,
+   "y": 7,
+   "to": "briarfield",
+   "tx": 8,
+   "ty": 8,
+   "dir": "down"
+  }
+ ],
+ "npcs": [
+  {
+   "id": "nurse",
+   "x": 3,
+   "y": 2,
+   "look": "nurse",
+   "dir": "down",
+   "name": "PATCH NURSE",
+   "scripts": [
+    {
+     "run": "nurse_heal"
+    }
+   ]
+  },
+  {
+   "id": "hub_clerk",
+   "x": 5,
+   "y": 2,
+   "look": "clerk",
+   "dir": "down",
+   "name": "CLERK",
+   "scripts": [
+    {
+     "run": "hub_clerk"
+    }
+   ]
+  },
+  {
+   "id": "hub_trainer",
+   "x": 2,
+   "y": 4,
+   "look": "coder",
+   "dir": "right",
+   "move": "look",
+   "name": "CODER",
+   "text": "The vending machine here dispenses Stability Clamps. It dispensed one yesterday that I had already clamped. I do not understand time anymore."
+  }
+ ],
+ "objects": [
+  {
+   "type": "terminal",
+   "x": 7,
+   "y": 4,
+   "text": "BYTE VAULT TERMINAL. Your stored Bytekin are listed here, plus a few entries that say '(unknown)'.",
+   "rest": true
+  }
+ ]
+}

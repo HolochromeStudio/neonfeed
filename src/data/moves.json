@@ -1,0 +1,737 @@
+{
+ "packet_drop": {
+  "name": "PACKET DROP",
+  "type": "NULL",
+  "cat": "hit",
+  "power": 40,
+  "acc": 100,
+  "pp": 30,
+  "desc": "Drops pixels from the foe. Chips Stability.",
+  "fx": [
+   {
+    "t": "stab",
+    "amt": -8
+   }
+  ]
+ },
+ "null_claw": {
+  "name": "NULL CLAW",
+  "type": "NULL",
+  "cat": "hit",
+  "power": 55,
+  "acc": 100,
+  "pp": 20,
+  "desc": "A claw that deletes what it touches.",
+  "fx": [
+   {
+    "t": "stab",
+    "amt": -6
+   }
+  ]
+ },
+ "void_pounce": {
+  "name": "VOID POUNCE",
+  "type": "NULL",
+  "cat": "hit",
+  "power": 75,
+  "acc": 95,
+  "pp": 15,
+  "desc": "Leaps from nowhere. High crit chance.",
+  "fx": [
+   {
+    "t": "crit"
+   }
+  ]
+ },
+ "phase_shift": {
+  "name": "PHASE SHIFT",
+  "type": "NULL",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 20,
+  "desc": "Slips out of sync with time. SPD +2.",
+  "fx": [
+   {
+    "t": "stat",
+    "stat": "spd",
+    "n": 2,
+    "who": "self"
+   }
+  ]
+ },
+ "null_field": {
+  "name": "NULL FIELD",
+  "type": "NULL",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 10,
+  "desc": "5 turns: all stat changes are erased.",
+  "fx": [
+   {
+    "t": "field",
+    "id": "NULL_FIELD",
+    "turns": 5
+   }
+  ]
+ },
+ "repeat": {
+  "name": "REPEAT",
+  "type": "LOOP",
+  "cat": "hit",
+  "power": 14,
+  "acc": 95,
+  "pp": 25,
+  "desc": "Hits 2-5 times.",
+  "fx": [
+   {
+    "t": "multi",
+    "min": 2,
+    "max": 5
+   }
+  ]
+ },
+ "chain_bite": {
+  "name": "CHAIN BITE",
+  "type": "LOOP",
+  "cat": "hit",
+  "power": 40,
+  "acc": 100,
+  "pp": 25,
+  "desc": "Bites twice in a row.",
+  "fx": [
+   {
+    "t": "multi",
+    "min": 2,
+    "max": 2
+   }
+  ]
+ },
+ "coil": {
+  "name": "COIL",
+  "type": "LOOP",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 20,
+  "desc": "Winds up. ATK +1 and DEF +1.",
+  "fx": [
+   {
+    "t": "stat",
+    "stat": "atk",
+    "n": 1,
+    "who": "self"
+   },
+   {
+    "t": "stat",
+    "stat": "def",
+    "n": 1,
+    "who": "self"
+   }
+  ]
+ },
+ "stack_overflow": {
+  "name": "STACK OVERFLOW",
+  "type": "LOOP",
+  "cat": "hit",
+  "power": 100,
+  "acc": 80,
+  "pp": 5,
+  "desc": "Huge hit. May LOOP the user.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "LOOPED",
+    "chance": 25,
+    "who": "self"
+   }
+  ]
+ },
+ "infinite_loop": {
+  "name": "INFINITE LOOP",
+  "type": "LOOP",
+  "cat": "sys",
+  "power": 55,
+  "acc": 100,
+  "pp": 15,
+  "desc": "Locks the foe in a LOOP.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "LOOPED",
+    "chance": 30,
+    "who": "foe"
+   }
+  ]
+ },
+ "ping": {
+  "name": "PING",
+  "type": "SIGNAL",
+  "cat": "sys",
+  "power": 35,
+  "acc": 100,
+  "pp": 30,
+  "desc": "Quick pulse. Always strikes first.",
+  "pri": 1,
+  "fx": []
+ },
+ "wing_flicker": {
+  "name": "WING FLICKER",
+  "type": "SIGNAL",
+  "cat": "sys",
+  "power": 50,
+  "acc": 100,
+  "pp": 25,
+  "desc": "Wings stutter and strike twice as fast.",
+  "fx": [
+   {
+    "t": "stab",
+    "amt": -4
+   }
+  ]
+ },
+ "signal_boost": {
+  "name": "SIGNAL BOOST",
+  "type": "SIGNAL",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 20,
+  "desc": "SPD +1 and SYS +1.",
+  "fx": [
+   {
+    "t": "stat",
+    "stat": "spd",
+    "n": 1,
+    "who": "self"
+   },
+   {
+    "t": "stat",
+    "stat": "sys",
+    "n": 1,
+    "who": "self"
+   }
+  ]
+ },
+ "desync": {
+  "name": "DESYNC",
+  "type": "SIGNAL",
+  "cat": "status",
+  "power": 0,
+  "acc": 85,
+  "pp": 15,
+  "desc": "DESYNCs the foe and lowers its SPD.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "DESYNCED",
+    "chance": 100,
+    "who": "foe"
+   },
+   {
+    "t": "stat",
+    "stat": "spd",
+    "n": -1,
+    "who": "foe"
+   }
+  ]
+ },
+ "echo_command": {
+  "name": "ECHO COMMAND",
+  "type": "SIGNAL",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 10,
+  "desc": "Copies the foe's last move.",
+  "fx": [
+   {
+    "t": "copyLast"
+   }
+  ]
+ },
+ "broadcast": {
+  "name": "BROADCAST",
+  "type": "SIGNAL",
+  "cat": "sys",
+  "power": 75,
+  "acc": 100,
+  "pp": 15,
+  "desc": "Blasts a wide transmission.",
+  "fx": [
+   {
+    "t": "stab",
+    "amt": -10
+   }
+  ]
+ },
+ "priority_mail": {
+  "name": "PRIORITY MAIL",
+  "type": "SIGNAL",
+  "cat": "sys",
+  "power": 45,
+  "acc": 100,
+  "pp": 15,
+  "desc": "Delivered before anything else.",
+  "pri": 2,
+  "fx": []
+ },
+ "cache_load": {
+  "name": "CACHE LOAD",
+  "type": "CACHE",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 10,
+  "desc": "Restores 50% of max HP.",
+  "fx": [
+   {
+    "t": "heal",
+    "pct": 50
+   }
+  ]
+ },
+ "cache_hit": {
+  "name": "CACHE HIT",
+  "type": "CACHE",
+  "cat": "hit",
+  "power": 45,
+  "acc": 100,
+  "pp": 25,
+  "desc": "A stored strike, reused.",
+  "fx": []
+ },
+ "memory_dump": {
+  "name": "MEMORY DUMP",
+  "type": "CACHE",
+  "cat": "sys",
+  "power": 70,
+  "acc": 100,
+  "pp": 15,
+  "desc": "Dumps stored data at the foe.",
+  "fx": []
+ },
+ "copy_paste": {
+  "name": "COPY PASTE",
+  "type": "CACHE",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 10,
+  "desc": "Duplicates itself. ATK +1 and heals 25%.",
+  "fx": [
+   {
+    "t": "stat",
+    "stat": "atk",
+    "n": 1,
+    "who": "self"
+   },
+   {
+    "t": "heal",
+    "pct": 25
+   }
+  ]
+ },
+ "memory_leak": {
+  "name": "MEMORY LEAK",
+  "type": "VIRAL",
+  "cat": "status",
+  "power": 0,
+  "acc": 90,
+  "pp": 15,
+  "desc": "CORRUPTS the foe.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "CORRUPTED",
+    "chance": 100,
+    "who": "foe"
+   }
+  ]
+ },
+ "infect": {
+  "name": "INFECT",
+  "type": "VIRAL",
+  "cat": "sys",
+  "power": 45,
+  "acc": 100,
+  "pp": 25,
+  "desc": "A nibble of malware. May CORRUPT.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "CORRUPTED",
+    "chance": 30,
+    "who": "foe"
+   }
+  ]
+ },
+ "worm_bite": {
+  "name": "WORM BITE",
+  "type": "VIRAL",
+  "cat": "hit",
+  "power": 60,
+  "acc": 100,
+  "pp": 20,
+  "desc": "Bites and drains HP.",
+  "fx": [
+   {
+    "t": "drain",
+    "pct": 40
+   }
+  ]
+ },
+ "static_shock": {
+  "name": "STATIC SHOCK",
+  "type": "STATIC",
+  "cat": "sys",
+  "power": 40,
+  "acc": 100,
+  "pp": 30,
+  "desc": "May OVERLOAD the foe.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "OVERLOADED",
+    "chance": 20,
+    "who": "foe"
+   }
+  ]
+ },
+ "white_noise": {
+  "name": "WHITE NOISE",
+  "type": "STATIC",
+  "cat": "status",
+  "power": 0,
+  "acc": 100,
+  "pp": 20,
+  "desc": "SYS -1 and ATK -1 on the foe.",
+  "fx": [
+   {
+    "t": "stat",
+    "stat": "sys",
+    "n": -1,
+    "who": "foe"
+   },
+   {
+    "t": "stat",
+    "stat": "atk",
+    "n": -1,
+    "who": "foe"
+   }
+  ]
+ },
+ "feedback": {
+  "name": "FEEDBACK",
+  "type": "STATIC",
+  "cat": "sys",
+  "power": 80,
+  "acc": 100,
+  "pp": 10,
+  "desc": "Screeching feedback. Chips Stability.",
+  "fx": [
+   {
+    "t": "stab",
+    "amt": -12
+   }
+  ]
+ },
+ "vector_dash": {
+  "name": "VECTOR DASH",
+  "type": "VECTOR",
+  "cat": "hit",
+  "power": 60,
+  "acc": 100,
+  "pp": 20,
+  "desc": "A dead-straight rush.",
+  "fx": []
+ },
+ "slash_path": {
+  "name": "SLASH PATH",
+  "type": "VECTOR",
+  "cat": "hit",
+  "power": 70,
+  "acc": 100,
+  "pp": 15,
+  "desc": "High crit chance.",
+  "fx": [
+   {
+    "t": "crit"
+   }
+  ]
+ },
+ "cipher_wall": {
+  "name": "CIPHER WALL",
+  "type": "CRYPT",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 15,
+  "desc": "DEF +2.",
+  "fx": [
+   {
+    "t": "stat",
+    "stat": "def",
+    "n": 2,
+    "who": "self"
+   }
+  ]
+ },
+ "hash_strike": {
+  "name": "HASH STRIKE",
+  "type": "CRYPT",
+  "cat": "hit",
+  "power": 65,
+  "acc": 100,
+  "pp": 20,
+  "desc": "A scrambled blow.",
+  "fx": []
+ },
+ "brute_force": {
+  "name": "BRUTE FORCE",
+  "type": "CRYPT",
+  "cat": "hit",
+  "power": 95,
+  "acc": 85,
+  "pp": 10,
+  "desc": "Hits hard. User takes 25% recoil.",
+  "fx": [
+   {
+    "t": "recoil",
+    "pct": 25
+   }
+  ]
+ },
+ "pulse_wave": {
+  "name": "PULSE WAVE",
+  "type": "PULSE",
+  "cat": "sys",
+  "power": 60,
+  "acc": 100,
+  "pp": 20,
+  "desc": "A rolling surge.",
+  "fx": []
+ },
+ "overvolt": {
+  "name": "OVERVOLT",
+  "type": "PULSE",
+  "cat": "hit",
+  "power": 90,
+  "acc": 90,
+  "pp": 10,
+  "desc": "Over-driven. 20% recoil.",
+  "fx": [
+   {
+    "t": "recoil",
+    "pct": 20
+   }
+  ]
+ },
+ "pulse_mend": {
+  "name": "PULSE MEND",
+  "type": "PULSE",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 10,
+  "desc": "Restores 40% HP and cures status.",
+  "fx": [
+   {
+    "t": "heal",
+    "pct": 40
+   },
+   {
+    "t": "cure"
+   }
+  ]
+ },
+ "backtrace": {
+  "name": "BACKTRACE",
+  "type": "ARCHIVE",
+  "cat": "sys",
+  "power": 60,
+  "acc": 0,
+  "pp": 20,
+  "desc": "Never misses.",
+  "fx": []
+ },
+ "fragment": {
+  "name": "FRAGMENT",
+  "type": "ARCHIVE",
+  "cat": "sys",
+  "power": 50,
+  "acc": 100,
+  "pp": 20,
+  "desc": "May FRAGMENT the foe. Chips Stability.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "FRAGMENTED",
+    "chance": 30,
+    "who": "foe"
+   },
+   {
+    "t": "stab",
+    "amt": -8
+   }
+  ]
+ },
+ "archive_pull": {
+  "name": "ARCHIVE PULL",
+  "type": "ARCHIVE",
+  "cat": "sys",
+  "power": 70,
+  "acc": 100,
+  "pp": 15,
+  "desc": "Pulls stored energy. Drains 30%.",
+  "fx": [
+   {
+    "t": "drain",
+    "pct": 30
+   }
+  ]
+ },
+ "false_input": {
+  "name": "FALSE INPUT",
+  "type": "GLITCH",
+  "cat": "sys",
+  "power": 50,
+  "acc": 90,
+  "pp": 20,
+  "desc": "May DESYNC the foe.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "DESYNCED",
+    "chance": 30,
+    "who": "foe"
+   }
+  ]
+ },
+ "glitch_burst": {
+  "name": "GLITCH BURST",
+  "type": "GLITCH",
+  "cat": "sys",
+  "power": 80,
+  "acc": 85,
+  "pp": 10,
+  "desc": "Wildly unstable: 50%-180% power.",
+  "fx": [
+   {
+    "t": "unstable"
+   }
+  ]
+ },
+ "bit_rot": {
+  "name": "BIT ROT",
+  "type": "GLITCH",
+  "cat": "status",
+  "power": 0,
+  "acc": 90,
+  "pp": 15,
+  "desc": "FRAGMENTS the foe and cuts Stability.",
+  "fx": [
+   {
+    "t": "status",
+    "status": "FRAGMENTED",
+    "chance": 100,
+    "who": "foe"
+   },
+   {
+    "t": "stab",
+    "amt": -25
+   }
+  ]
+ },
+ "bit_crush": {
+  "name": "BIT CRUSH",
+  "type": "CORE",
+  "cat": "hit",
+  "power": 55,
+  "acc": 100,
+  "pp": 25,
+  "desc": "A plain, crunchy hit.",
+  "fx": []
+ },
+ "core_dump": {
+  "name": "CORE DUMP",
+  "type": "CORE",
+  "cat": "hit",
+  "power": 75,
+  "acc": 100,
+  "pp": 15,
+  "desc": "Dumps everything at once.",
+  "fx": []
+ },
+ "overwrite": {
+  "name": "OVERWRITE",
+  "type": "CORE",
+  "cat": "hit",
+  "power": 85,
+  "acc": 95,
+  "pp": 10,
+  "desc": "Writes over the foe. Cuts Stability.",
+  "fx": [
+   {
+    "t": "stab",
+    "amt": -10
+   }
+  ]
+ },
+ "reboot": {
+  "name": "REBOOT",
+  "type": "CORE",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 5,
+  "desc": "Sleeps 2 turns, then full HP and no status.",
+  "fx": [
+   {
+    "t": "reboot"
+   }
+  ]
+ },
+ "stabilize": {
+  "name": "STABILIZE",
+  "type": "CORE",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 15,
+  "desc": "Raises own Stability by 30.",
+  "fx": [
+   {
+    "t": "stab",
+    "amt": 30,
+    "who": "self"
+   }
+  ]
+ },
+ "scan": {
+  "name": "SCAN",
+  "type": "SIGNAL",
+  "cat": "status",
+  "power": 0,
+  "acc": 0,
+  "pp": 20,
+  "desc": "Probes the foe: Stability -20.",
+  "fx": [
+   {
+    "t": "stab",
+    "amt": -20
+   }
+  ]
+ },
+ "tackle_sync": {
+  "name": "SYNC SLAM",
+  "type": "CORE",
+  "cat": "hit",
+  "power": 40,
+  "acc": 100,
+  "pp": 30,
+  "desc": "Slams into the foe.",
+  "fx": []
+ }
+}

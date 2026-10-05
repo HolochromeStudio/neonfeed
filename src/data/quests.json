@@ -1,0 +1,322 @@
+{
+ "main_wake": {
+  "title": "Good Morning, Rivermoor",
+  "category": "MAIN",
+  "giver": "Mira",
+  "location": "rivermoor",
+  "locationName": "Rivermoor",
+  "desc": "Mira is waiting outside. Something is odd about today's clocks.",
+  "objectives": [
+   {
+    "text": "Meet Mira in town",
+    "type": "flag",
+    "flag": "met_mira"
+   }
+  ],
+  "rewards": {
+   "credits": 50
+  },
+  "autoStart": {
+   "flag": "game_start"
+  },
+  "followup": "main_vale"
+ },
+ "main_vale": {
+  "title": "Professor Vale's Workshop",
+  "category": "MAIN",
+  "giver": "Mira",
+  "location": "vale_lab",
+  "locationName": "Vale's Workshop",
+  "desc": "Mira says Professor Vale wants to see you. Race her there.",
+  "objectives": [
+   {
+    "text": "Visit Vale's workshop",
+    "type": "flag",
+    "flag": "vale_intro_done"
+   }
+  ],
+  "rewards": {
+   "credits": 100
+  },
+  "followup": "main_relay"
+ },
+ "main_relay": {
+  "title": "Investigate the Old Signal Tower",
+  "category": "MAIN",
+  "giver": "Vale",
+  "location": "old_relay_1",
+  "locationName": "Old Signal Relay",
+  "desc": "The relay has powered itself on after twenty years. Restore power to the antenna and find out why.",
+  "objectives": [
+   {
+    "text": "Enter the Old Signal Relay",
+    "type": "flag",
+    "flag": "relay_open"
+   },
+   {
+    "text": "Restore power to the antenna",
+    "type": "flag",
+    "flag": "relay_puzzle_solved"
+   },
+   {
+    "text": "Stabilize a Bytekin",
+    "type": "flag",
+    "flag": "starter_selected"
+   },
+   {
+    "text": "Face the Relay Core",
+    "type": "flag",
+    "flag": "relay_done"
+   }
+  ],
+  "rewards": {
+   "credits": 300,
+   "items": {
+    "stability_clamp": 2
+   }
+  },
+  "followup": "main_route1"
+ },
+ "main_route1": {
+  "title": "Greenline Path",
+  "category": "MAIN",
+  "giver": "Vale",
+  "location": "route_01",
+  "locationName": "Route 01",
+  "desc": "Vale wants you to look into Briarfield's strange irrigation. Cross Route 01 and meet Mira on the way.",
+  "objectives": [
+   {
+    "text": "Win the rival battle on Route 01",
+    "type": "flag",
+    "flag": "mira_1_done"
+   },
+   {
+    "text": "Reach Briarfield",
+    "type": "flag",
+    "flag": "visited_briarfield"
+   }
+  ],
+  "rewards": {
+   "credits": 300
+  },
+  "followup": "main_node1"
+ },
+ "main_node1": {
+  "title": "Node 1: Briarfield",
+  "category": "MAIN",
+  "giver": "Mara",
+  "location": "briarfield",
+  "locationName": "Briarfield",
+  "desc": "Briarfield's irrigation has gone wrong. The Node Keeper MARA waits in the Irrigation Station.",
+  "objectives": [
+   {
+    "text": "Reach the Irrigation Station",
+    "type": "flag",
+    "flag": "met_mara"
+   },
+   {
+    "text": "Get all three channels flowing",
+    "type": "flag",
+    "flag": "node1_valves_done"
+   },
+   {
+    "text": "Defeat Node Keeper Mara",
+    "type": "flag",
+    "flag": "node_1_complete"
+   }
+  ],
+  "rewards": {
+   "credits": 600,
+   "items": {
+    "patch_kit_l": 3
+   }
+  },
+  "followup": "main_ch1"
+ },
+ "main_ch1": {
+  "title": "A Clean Arrival",
+  "category": "MAIN",
+  "giver": "Voss",
+  "location": "briarfield",
+  "locationName": "Briarfield",
+  "desc": "Outside the Node, Clean State has arrived. Their Director wants a word.",
+  "objectives": [
+   {
+    "text": "Meet Director Voss",
+    "type": "flag",
+    "flag": "met_voss"
+   }
+  ],
+  "rewards": {
+   "credits": 0,
+   "items": {
+    "full_patch": 2
+   }
+  },
+  "completionFlags": [
+   "chapter1_done_quest"
+  ]
+ },
+ "side_savelet": {
+  "title": "Save File",
+  "category": "SIDE",
+  "giver": "Lenny",
+  "location": "briarfield",
+  "locationName": "Briarfield",
+  "desc": "Lenny's imaginary friend SAVELET went missing. It only appears near save terminals. Scan the terminal in Briarfield.",
+  "objectives": [
+   {
+    "text": "Find the faint Signal at the Briarfield terminal",
+    "type": "flag",
+    "flag": "savelet_found"
+   },
+   {
+    "text": "Return to Lenny in Rivermoor",
+    "type": "flag",
+    "flag": "savelet_returned"
+   }
+  ],
+  "rewards": {
+   "credits": 0
+  }
+ },
+ "side_crops": {
+  "title": "Cropped Up",
+  "category": "SIDE",
+  "giver": "Farmer's Wife",
+  "location": "briarfield",
+  "locationName": "Briarfield",
+  "desc": "Crops in Briarfield are duplicating overnight. Find the three doubled crops with Field Scan.",
+  "objectives": [
+   {
+    "text": "Scan duplicated crops",
+    "type": "counter",
+    "flag": "crops_found",
+    "count": 3
+   },
+   {
+    "text": "Report to the farmer's wife",
+    "type": "flag",
+    "flag": "crops_done"
+   }
+  ],
+  "rewards": {
+   "credits": 0
+  }
+ },
+ "side_pipe": {
+  "title": "Down the Drain",
+  "category": "SIDE",
+  "giver": "Field Tech",
+  "location": "drainage_pipe_01",
+  "locationName": "Drainage Pipe 01",
+  "desc": "A tech lost a SIGNAL CRYSTAL in Drainage Pipe 01 (west of Route 01). You may keep it.",
+  "objectives": [
+   {
+    "text": "Find the Signal Crystal",
+    "type": "item",
+    "item": "signal_crystal",
+    "count": 1
+   }
+  ],
+  "rewards": {
+   "credits": 250
+  }
+ },
+ "res_seen": {
+  "title": "Field Notes I",
+  "category": "RESEARCH",
+  "giver": "Debugger",
+  "location": "",
+  "locationName": "Velora",
+  "desc": "Log 6 species in the ByteDex.",
+  "objectives": [
+   {
+    "text": "Bytekin seen",
+    "type": "seen",
+    "count": 6
+   }
+  ],
+  "rewards": {
+   "credits": 200,
+   "items": {
+    "patch_kit": 2
+   }
+  },
+  "autoStart": {
+   "flag": "starter_selected"
+  }
+ },
+ "res_contain": {
+  "title": "Field Notes II",
+  "category": "RESEARCH",
+  "giver": "Debugger",
+  "location": "",
+  "locationName": "Velora",
+  "desc": "CONTAIN three different species.",
+  "objectives": [
+   {
+    "text": "Species contained",
+    "type": "contained",
+    "count": 3
+   }
+  ],
+  "rewards": {
+   "credits": 300,
+   "items": {
+    "stability_clamp": 3
+   }
+  },
+  "autoStart": {
+   "flag": "starter_selected"
+  }
+ },
+ "res_seen2": {
+  "title": "Field Notes III",
+  "category": "RESEARCH",
+  "giver": "Debugger",
+  "location": "",
+  "locationName": "Velora",
+  "desc": "Log 14 species in the ByteDex.",
+  "objectives": [
+   {
+    "text": "Bytekin seen",
+    "type": "seen",
+    "count": 14
+   }
+  ],
+  "rewards": {
+   "credits": 500,
+   "items": {
+    "contain_module": 3
+   }
+  },
+  "autoStart": {
+   "flag": "starter_selected"
+  }
+ },
+ "res_wins": {
+  "title": "Debug Practice",
+  "category": "RESEARCH",
+  "giver": "Debugger",
+  "location": "",
+  "locationName": "Velora",
+  "desc": "Win 10 battles.",
+  "objectives": [
+   {
+    "text": "Battles won",
+    "type": "wins",
+    "count": 10
+   }
+  ],
+  "rewards": {
+   "credits": 400,
+   "items": {
+    "patch_kit_l": 2
+   }
+  },
+  "autoStart": {
+   "flag": "starter_selected"
+  }
+ }
+}
