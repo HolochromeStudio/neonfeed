@@ -210,7 +210,7 @@ static func unit_card(id: String, size: Vector2 = Vector2(200, 270), show_level:
 	var sprite := Atlas.rect(Data.unit_art(id), size.x * 0.9, size.y * 0.46)
 	sprite.position = Vector2(size.x * 0.05, size.y * 0.1)
 	root.add_child(sprite)
-	var nm := label(d["name"], int(size.x * 0.17), INK, true)
+	var nm := label(d["name"], int(size.x * (0.17 if String(d["name"]).length() <= 9 else 0.125)), INK, true)
 	nm.position = Vector2(4, size.y * 0.6)
 	nm.size = Vector2(size.x - 8, size.y * 0.16)
 	nm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -259,6 +259,8 @@ static func _fmt(n: int) -> String:
 	return str(n)
 
 static func fmt_num(n: float) -> String:
+	if n == floorf(n) and n < 10000.0:
+		return str(int(n))
 	if n >= 1000000.0:
 		return "%.1fM" % (n / 1000000.0)
 	if n >= 10000.0:

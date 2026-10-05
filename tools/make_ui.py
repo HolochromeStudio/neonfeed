@@ -218,3 +218,40 @@ def star(col, sz=40):
     return finish(im, sz, S, ow=1, sticker=False)
 put(star((250, 200, 60)), "ui_star_gold.png"); put(star((180, 176, 170)), "ui_star_gray.png"); put(star((230, 90, 70)), "ui_star_red.png")
 print("generated", n, "ui files")
+
+# ------------------------------------------------------------------ paper houses / pines for the world map (reconstructed in the sheet's style)
+def house(body, roof, w=120, h=110, floors=1, seed=1):
+    S = 4
+    W, H = (w + 12) * S, (h + 12) * S
+    im = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    x0, y1 = 6 * S, (h + 6) * S
+    bh = int(h * (0.38 + 0.2 * floors)) * S
+    d.rectangle([x0 + 8 * S, y1 - bh, (w + 6) * S - 8 * S, y1], fill=body + (255,))
+    # roof
+    d.polygon([(x0, y1 - bh + 4 * S), ((w // 2 + 6) * S, y1 - bh - int(h * 0.38) * S), ((w + 6) * S, y1 - bh + 4 * S)], fill=roof + (255,))
+    # door + windows
+    d.rectangle([(w // 2 - 7 + 6) * S, y1 - 24 * S, (w // 2 + 7 + 6) * S, y1], fill=(120, 76, 50, 255))
+    for fl in range(floors):
+        for wx in (22, w - 38):
+            yy = y1 - bh + (10 + fl * 30) * S
+            d.rectangle([(wx + 6) * S, yy, (wx + 22) * S, yy + 18 * S], fill=(172, 206, 226, 255), outline=(60, 44, 40, 255), width=2 * S)
+    return finish(im, 1, S, ow=2, sticker=False) if False else _outline(im, S)
+def _outline(im, S):
+    a = im.getchannel("A"); dil = a.filter(ImageFilter.MaxFilter(2 * S * 2 + 1))
+    res = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    o = Image.new("RGBA", im.size, INK + (0,)); o.putalpha(dil); res.alpha_composite(o); res.alpha_composite(im)
+    return res.resize((res.width // S, res.height // S), Image.LANCZOS)
+put(house((230, 214, 182), (196, 82, 70), seed=1), "prop_house_a.png")
+put(house((214, 186, 150), (70, 96, 150), floors=1, seed=2), "prop_house_b.png")
+put(house((192, 120, 84), (110, 70, 56), w=140, floors=1, seed=3), "prop_house_c.png")
+put(house((226, 210, 190), (86, 128, 120), w=100, h=150, floors=2, seed=4), "prop_house_d.png")
+def pine(sz=110):
+    S = 4; W, H = (sz) * S, (int(sz * 1.5)) * S
+    im = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.rectangle([W // 2 - 7 * S, H - 26 * S, W // 2 + 7 * S, H - 4 * S], fill=(110, 76, 52, 255))
+    for k in range(3):
+        top = (8 + k * 30) * S; bw = (36 + k * 12) * S
+        d.polygon([(W // 2, top), (W // 2 - bw // 2 - 4 * S, top + 56 * S), (W // 2 + bw // 2 + 4 * S, top + 56 * S)], fill=(58 + k * 6, 112 + k * 8, 86, 255))
+    return _outline(im, S)
+put(pine(), "prop_pine.png")
+print("houses/pines added")

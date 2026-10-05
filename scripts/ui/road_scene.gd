@@ -3,15 +3,15 @@ extends Control
 ## Animated paper-collage street used on title / home / menus: scrolling asphalt, props, and traffic with wheel bob.
 
 const BIOME_LOOK := {
-	"city_center": {"ground": "tile_concrete_cracked", "tint": Color(0.82, 0.82, 0.86), "sky": Color("7fa6c8")},
-	"suburbs": {"ground": "tile_grass_flowers", "tint": Color(1, 1, 1), "sky": Color("93bcd8")},
-	"highway": {"ground": "tile_grass_dry", "tint": Color(1, 0.95, 0.85), "sky": Color("9bb5c6")},
-	"industrial": {"ground": "tile_concrete_cracked", "tint": Color(0.75, 0.72, 0.68), "sky": Color("a8a39a")},
-	"desert": {"ground": "tile_grass_dry", "tint": Color(1.25, 0.95, 0.6), "sky": Color("e9a96a")},
-	"snow_town": {"ground": "tile_grass_patch", "tint": Color(2.0, 2.1, 2.3), "sky": Color("b7cde0")},
-	"beach_road": {"ground": "tile_grass_dry", "tint": Color(1.4, 1.2, 0.85), "sky": Color("7dc0e0")},
-	"countryside": {"ground": "tile_grass_flowers", "tint": Color(0.95, 1.05, 0.85), "sky": Color("98c4dc")},
-	"night_city": {"ground": "tile_concrete_cracked", "tint": Color(0.38, 0.4, 0.6), "sky": Color("2c2d52")},
+	"city_center": {"ground": "ground_concrete", "tint": Color(0.82, 0.82, 0.86), "sky": Color("7fa6c8")},
+	"suburbs": {"ground": "ground_grass_flowers", "tint": Color(1, 1, 1), "sky": Color("93bcd8")},
+	"highway": {"ground": "ground_dry", "tint": Color(1, 0.95, 0.85), "sky": Color("9bb5c6")},
+	"industrial": {"ground": "ground_concrete", "tint": Color(0.75, 0.72, 0.68), "sky": Color("a8a39a")},
+	"desert": {"ground": "ground_sand", "tint": Color(1.1, 0.95, 0.8), "sky": Color("e9a96a")},
+	"snow_town": {"ground": "ground_snow", "tint": Color(1, 1, 1), "sky": Color("b7cde0")},
+	"beach_road": {"ground": "ground_sand", "tint": Color(1.1, 1.05, 0.95), "sky": Color("7dc0e0")},
+	"countryside": {"ground": "ground_grass_flowers", "tint": Color(0.95, 1.05, 0.85), "sky": Color("98c4dc")},
+	"night_city": {"ground": "ground_dark", "tint": Color(0.7, 0.72, 0.95), "sky": Color("2c2d52")},
 }
 
 var biome: String = "city_center"

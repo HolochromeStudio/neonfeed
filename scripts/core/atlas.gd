@@ -45,11 +45,11 @@ func sprite(key: String, feet: bool = false) -> Sprite2D:
 
 func rect(key: String, w: float, h: float) -> TextureRect:
 	var r := TextureRect.new()
+	r.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	r.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	r.texture = tex(key)
 	r.custom_minimum_size = Vector2(w, h)
 	r.size = Vector2(w, h)
-	r.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	r.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return r
 

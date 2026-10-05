@@ -110,3 +110,23 @@ def save(img, relpath):
     os.makedirs(os.path.dirname(p), exist_ok=True)
     img.save(p, optimize=True)
     return p
+
+
+def painterly(img, k=4, edge=0.68):
+    """Cut-paper repaint of a low-res scene: bilateral flattening + inked edges instead of a blurry upscale."""
+    import cv2
+    big = img.convert("RGB").resize((img.width * k, img.height * k), Image.LANCZOS)
+    a = np.asarray(big).copy()
+    b = cv2.bilateralFilter(a, 9, 40, 9)
+    b = cv2.bilateralFilter(b, 9, 40, 9)
+    b = cv2.edgePreservingFilter(b, flags=1, sigma_s=40, sigma_r=0.25)
+    out = b.copy()
+    if edge < 1.0:
+        g = cv2.cvtColor(b, cv2.COLOR_RGB2GRAY)
+        e = cv2.dilate(cv2.Canny(g, 80, 170), np.ones((2, 2), np.uint8))
+        out[e > 0] = (out[e > 0] * edge).astype(np.uint8)
+    blur = cv2.GaussianBlur(out, (0, 0), 2.0)
+    out = cv2.addWeighted(out, 1.5, blur, -0.5, 0)
+    res = Image.fromarray(out).convert("RGBA")
+    res.putalpha(img.getchannel("A").resize(res.size, Image.BILINEAR))
+    return res

@@ -79,7 +79,7 @@ func build() -> void:
 	_spr("doll_arm", Vector2(0, 24), _arm_l, tint(top_c))
 	_spr("doll_hand", Vector2(0, 54), _arm_l, tint(skin))
 	# head group
-	_head = Node2D.new(); _head.position = Vector2(0, -150); _body.add_child(_head)
+	_head = Node2D.new(); _head.position = Vector2(0, -138); _body.add_child(_head)
 	_spr("doll_ear", Vector2(-46, -40), _head, tint(skin))
 	_spr("doll_ear", Vector2(46, -40), _head, tint(skin))
 	_spr("doll_head", Vector2(0, -40), _head, tint(skin))

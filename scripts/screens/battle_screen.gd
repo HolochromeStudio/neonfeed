@@ -743,6 +743,9 @@ func _finish() -> void:
 	var s := sim.summary()
 	s["crits"] = sim.stats["crits"]
 	s["relics"] = sim.relics_owned.size()
+	for rid in sim.relics_owned:
+		if not (rid in Save.data["relics_seen"]):
+			Save.data["relics_seen"].append(rid)
 	s["max_synergies"] = _max_syn
 	var res: String = sim.result
 	if mode == "pvp" and opp_sim:

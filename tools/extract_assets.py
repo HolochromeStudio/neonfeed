@@ -160,3 +160,4 @@ out(cutout((74,160,228,236), thr_white=False, thr=40, erode=0, pad=0), "ui/logo/
 out(cutout((12,234,216,266), thr_white=False, thr=40, erode=0, pad=0), "ui/logo/logo_strapline.png")
 out(cutout((212,166,272,252)), "ui/logo/logo_cone.png")
 print("wrote", count, "source assets")
+

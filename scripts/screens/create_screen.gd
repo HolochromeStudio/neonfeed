@@ -1,7 +1,5 @@
-extends Screen
+extends "res://scripts/screens/customize_screen.gd"
 
-func _ready() -> void:
-	super._ready()
-	UI.paper_bg(self)
-	add_child(UI.label("create (todo)", 60, UI.WHITE, true))
-	Game.toast("create screen")
+func init(a: Dictionary) -> void:
+	args = a
+	create_mode = true
