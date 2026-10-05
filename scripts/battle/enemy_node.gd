@@ -26,6 +26,7 @@ var _hit_squash: float = 0.0
 var _sx: float = 1.0
 var _stun_icon: Sprite2D
 var _dead: bool = false
+var _smoke_t: float = 0.0
 var wheels: Array = []
 var _wheel_rot: float = 0.0
 
@@ -161,6 +162,25 @@ func sync(sim: BattleSim, dt: float) -> void:
 		tw.tween_property(d, "scale", Vector2(0.9, 0.9), 0.5)
 		tw.tween_property(d, "modulate:a", 0.0, 0.5)
 		tw.chain().tween_callback(d.queue_free)
+	# damage states: smoke at <50% HP, sparks + shudder at <25%
+	var hpf := e.hp / e.max_hp
+	if hpf < 0.5 and not view.preview and Save.setting("quality") != "low":
+		_smoke_t -= dt
+		if _smoke_t <= 0.0:
+			_smoke_t = 0.45 if hpf >= 0.25 else 0.25
+			var sm := Atlas.sprite("fx_smoke_tiny")
+			sm.position = position + Vector2(-e.dir.x * 10, -sprite.texture.region.size.y * _fit * 0.5)
+			sm.scale = Vector2(0.28, 0.28)
+			sm.modulate = Color(0.8, 0.8, 0.8, 0.8)
+			view.fx_layer.add_child(sm)
+			var stw := sm.create_tween()
+			stw.set_parallel(true)
+			stw.tween_property(sm, "position:y", sm.position.y - 50, 0.7)
+			stw.tween_property(sm, "scale", Vector2(0.6, 0.6), 0.7)
+			stw.tween_property(sm, "modulate:a", 0.0, 0.7)
+			stw.chain().tween_callback(sm.queue_free)
+	if hpf < 0.25:
+		body.position.x = sin(_t * 40.0) * 1.5
 	var keys := e.st.keys()
 	if keys != _keys:
 		_keys = keys.duplicate()

@@ -173,10 +173,15 @@ func _fill_grid() -> void:
 		elif it["color"] != Color.WHITE:
 			var sw := ColorRect.new()
 			sw.color = it["color"]
-			sw.position = Vector2(60, 24); sw.size = Vector2(80, 80)
+			sw.position = Vector2(34, 24); sw.size = Vector2(60, 76)
 			cell.add_child(sw)
-			var sw_o := Atlas.nine("ui_panel_paper", 16)
-			sw_o.size = Vector2(0, 0)
+			var ico: String = it.get("icon", "")
+			if ico != "" and Atlas.has(ico):
+				var ic2 := Atlas.rect(ico, 80, 80)
+				ic2.position = Vector2(100, 22)
+				cell.add_child(ic2)
+			else:
+				sw.position = Vector2(60, 24); sw.size = Vector2(80, 80)
 		else:
 			var no := UI.label("NONE", 34, UI.INK_SOFT, true)
 			no.position = Vector2(0, 40); no.size = Vector2(200, 50)

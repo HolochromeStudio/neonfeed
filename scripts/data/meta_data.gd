@@ -150,18 +150,26 @@ static func cosmetics() -> Array:
 	a.append(_cos("acc_headphones", "accessory", "Headphones", 160, "shop", "cos_accessories_headphones"))
 	a.append(_cos("acc_backpack", "accessory", "Backpack", 90, "", "doll_backpack"))
 	a.append(_cos("acc_trophy", "accessory", "Survival Trophy", 0, "ach:survival_30", "icon_trophy"))
-	var tops := [["Patchwork Blue", Color("5b79b0"), 0, ""], ["Navy Scarf", Color("3a4f82"), 0, ""], ["Hi-Vis Orange", Color("e0873a"), 100, "shop"], ["Teal Hoodie", Color("3f9a94"), 120, "shop"],
-		["Red Jacket", Color("c24a43"), 150, "lvl:3"], ["Green Jacket", Color("4f8a50"), 150, "shop"], ["Tan Coat", Color("c49a62"), 100, "lvl:2"], ["Grey Jacket", Color("8a8a88"), 80, "shop"],
-		["Taxi Yellow", Color("e8b83a"), 200, "lvl:5"], ["Violet", Color("7d63b0"), 200, "shop"], ["Gold Suit", Color("e2b84a"), 0, "ach:ch_9"]]
+	var tops := [["Patchwork Blue", Color("5b79b0"), 0, "", "cos_tops_patchwork_tee"], ["Navy Scarf", Color("3a4f82"), 0, "", "cos_tops_navy_scarf"], ["Hi-Vis Orange", Color("e0873a"), 100, "shop", "cos_tops_tan_jacket"],
+		["Teal Hoodie", Color("3f9a94"), 120, "shop", "cos_tops_teal_hoodie"], ["Red Jacket", Color("c24a43"), 150, "lvl:3", "cos_tops_red_jacket"], ["Green Jacket", Color("4f8a50"), 150, "shop", "cos_tops_green_jacket"],
+		["Tan Coat", Color("c49a62"), 100, "lvl:2", "cos_tops_tan_jacket"], ["Grey Jacket", Color("8a8a88"), 80, "shop", "cos_tops_grey_jacket"], ["Taxi Yellow", Color("e8b83a"), 200, "lvl:5", "cos_bottoms_yellow_jacket"],
+		["Violet", Color("7d63b0"), 200, "shop", "cos_tops_blue_hoodie"], ["Gold Suit", Color("e2b84a"), 0, "ach:ch_9", "cos_tops_tan_jacket"]]
 	for i in tops.size():
-		a.append(_cos("top_%d" % i, "top", tops[i][0], tops[i][2], tops[i][3] if tops[i][3] != "" else "", "", tops[i][1]))
+		var c := _cos("top_%d" % i, "top", tops[i][0], tops[i][2], tops[i][3] if tops[i][3] != "" else "", "", tops[i][1])
+		c["icon"] = tops[i][4]
+		a.append(c)
 	a[a.size() - 1]["unlock"] = "ach:ch_9"
-	var bots := [["Denim", Color("3f5f8f"), 0, ""], ["Cargo Brown", Color("7a5a3a"), 0, ""], ["Charcoal", Color("45464a"), 90, "shop"], ["Khaki", Color("b3a070"), 90, "lvl:2"], ["Forest", Color("3f6a45"), 110, "shop"], ["Crimson", Color("9a3a3a"), 140, "shop"]]
+	var bots := [["Denim", Color("3f5f8f"), 0, "", "cos_bottoms_jeans"], ["Cargo Brown", Color("7a5a3a"), 0, "", "cos_bottoms_cargo"], ["Charcoal", Color("45464a"), 90, "shop", "cos_bottoms_overalls"],
+		["Khaki", Color("b3a070"), 90, "lvl:2", "cos_bottoms_denim_shorts"], ["Forest", Color("3f6a45"), 110, "shop", "cos_bottoms_dark_jacket"], ["Crimson", Color("9a3a3a"), 140, "shop", "cos_bottoms_red_pack"]]
 	for i in bots.size():
-		a.append(_cos("bot_%d" % i, "bottom", bots[i][0], bots[i][2], bots[i][3] if bots[i][3] != "" else "", "", bots[i][1]))
-	var shoes := [["Dark Boots", Color("3a2e2a"), 0, ""], ["Red Sneakers", Color("c24a43"), 80, "shop"], ["White Kicks", Color("e8e4dc"), 80, "lvl:3"], ["Brown Boots", Color("7a5238"), 60, "shop"]]
+		var c2 := _cos("bot_%d" % i, "bottom", bots[i][0], bots[i][2], bots[i][3] if bots[i][3] != "" else "", "", bots[i][1])
+		c2["icon"] = bots[i][4]
+		a.append(c2)
+	var shoes := [["Dark Boots", Color("3a2e2a"), 0, "", ""], ["Red Sneakers", Color("c24a43"), 80, "shop", "cos_bottoms_red_sneakers"], ["White Kicks", Color("e8e4dc"), 80, "lvl:3", ""], ["Brown Boots", Color("7a5238"), 60, "shop", ""]]
 	for i in shoes.size():
-		a.append(_cos("shoe_%d" % i, "shoes", shoes[i][0], shoes[i][2], shoes[i][3] if shoes[i][3] != "" else "", "", shoes[i][1]))
+		var c3 := _cos("shoe_%d" % i, "shoes", shoes[i][0], shoes[i][2], shoes[i][3] if shoes[i][3] != "" else "", "", shoes[i][1])
+		c3["icon"] = shoes[i][4]
+		a.append(c3)
 	a.append(_cos("hat_crown", "hat", "Jam Crown", 0, "ach:kills_10000", "icon_crown"))
 	a.append(_cos("hat_golden", "hat", "Golden Hard Hat", 0, "ach:ch_9", "cos_hats_cap_green"))
 	a.append(_cos("top_gold", "top", "Collector's Coat", 0, "ach:units_60", "", Color("f0c850")))

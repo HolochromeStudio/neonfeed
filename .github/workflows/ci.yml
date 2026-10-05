@@ -17,5 +17,7 @@ jobs:
         run: godot --headless --path . res://tests/unit_test.tscn
       - name: Multiplayer message layer
         run: godot --headless --path . res://tests/net_test.tscn
+      - name: All modes end-to-end (survival, PvP, co-op)
+        run: godot --headless --path . res://tests/modes_test.tscn -- --save=ci_modes.json --fresh
       - name: First-run flow (intro -> create -> tutorial -> campaign -> save/load)
         run: godot --headless --path . res://tests/flow_test.tscn -- --save=ci_flow.json --fresh

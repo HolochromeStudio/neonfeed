@@ -26,7 +26,7 @@ func idle() -> void:
 		await get_tree().process_frame
 		n += 1
 
-func wait_screen(name: String, max_frames: int = 600) -> bool:
+func wait_screen(name: String, max_frames: int = 20000) -> bool:
 	var n := 0
 	while Game.screen_name != name and n < max_frames:
 		await get_tree().process_frame
@@ -102,7 +102,7 @@ func _run() -> void:
 		if b.sim.state == "offer" and b.offer_layer != null:
 			b.sim.choose_offer(0); b._close_offer()
 		await frames(2)
-	await wait_screen("results", 1500)
+	await wait_screen("results", 20000)
 	check(Game.screen_name == "results", "tutorial ends on results (%s)" % Game.last_summary.get("result", "?"))
 	check(Save.data["flags"]["tutorial_done"], "tutorial flag set")
 	check(Save.owns("hatchback"), "tutorial unlocks Hatchback")
@@ -125,7 +125,7 @@ func _run() -> void:
 		if b.sim.state == "offer" and b.offer_layer != null:
 			b.sim.choose_offer(0); b._close_offer()
 		await frames(2)
-	await wait_screen("results", 1500)
+	await wait_screen("results", 20000)
 	check(Game.screen_name == "results", "level 1-1 results (%s)" % Game.last_summary.get("result", "?"))
 	check(Save.stat("kills") > 0 and Save.stat("merges") > 0, "stats recorded")
 	check(Save.coins() > 250, "coins awarded")

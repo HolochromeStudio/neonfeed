@@ -32,6 +32,8 @@ var _stun_icon: Sprite2D
 var _wheel_ph: float = 0.0
 var _dust_t: float = 0.0
 var _hop: float = 0.0
+var beacon: Sprite2D
+var muzzle: Sprite2D
 var wheels: Array = []
 var _wheel_rot: float = 0.0
 var _roll: float = 0.0
@@ -62,6 +64,18 @@ func setup(unit: BattleSim.SimUnit, v: BattleView, anim: bool) -> void:
 	_fit = clampf(_fit, 0.8, 1.55)
 	_apply_scale()
 	_add_wheels()
+	if "emergency" in u.def["tags"] or "police" in u.def["tags"]:
+		beacon = Atlas.sprite("fx_glow")
+		beacon.position = Vector2(0, -sprite.texture.region.size.y * 0.92)
+		beacon.scale = Vector2(0.55, 0.55)
+		beacon.modulate = Color(1, 0.2, 0.2, 0.0)
+		sprite.add_child(beacon)
+		beacon.scale = Vector2(0.55 / maxf(_fit, 0.01), 0.55 / maxf(_fit, 0.01)) * 1.0
+	muzzle = Atlas.sprite("fx_glow")
+	muzzle.modulate = Color(1, 0.9, 0.5, 0.0)
+	muzzle.position = Vector2(0, -52)
+	muzzle.scale = Vector2(0.7, 0.7)
+	body.add_child(muzzle)
 	_hl = Atlas.sprite("fx_ring")
 	_hl.visible = false
 	_hl.scale = Vector2(1.1, 0.8)
@@ -159,6 +173,8 @@ func recoil(target: Vector2) -> void:
 	_squash = float(an["squash"])
 	_target_flip = -1.0 if target.x > position.x else 1.0
 	_tilt = clampf(d.x * float(an["tilt"]), -0.14, 0.14)
+	muzzle.position = Vector2(d.x * 38.0, -52 + d.y * 20.0)
+	muzzle.modulate.a = 0.9
 
 func flash(c: Color) -> void:
 	_flash_t = 0.25
@@ -231,6 +247,12 @@ func sync(sim: BattleSim, dt: float) -> void:
 		ws.rotation = _wheel_rot
 	body.position = Vector2(_recoil.x * 0.3, 36 + bob * 0.6 + _recoil.y * 0.3)
 	body.rotation = _tilt + sin(_t * 1.3 + _ph) * 0.006
+	if muzzle.modulate.a > 0.0:
+		muzzle.modulate.a = maxf(0.0, muzzle.modulate.a - dt * 9.0)
+	if beacon:
+		var ph := fmod(_t * 3.0, 2.0)
+		var red := ph < 1.0
+		beacon.modulate = Color(1.0, 0.25, 0.2, 0.0) if false else (Color(1.0, 0.25, 0.2, 0.75 * (1.0 - fmod(ph, 1.0))) if red else Color(0.3, 0.5, 1.0, 0.75 * (1.0 - fmod(ph, 1.0))))
 	# status visuals
 	var keys := u.st.keys()
 	if keys != _status_keys:

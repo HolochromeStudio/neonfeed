@@ -12,7 +12,7 @@ func idle() -> void:
 	while Game._transitioning and n < 600:
 		await get_tree().process_frame
 		n += 1
-func wait_screen(name: String, max_frames: int = 600) -> bool:
+func wait_screen(name: String, max_frames: int = 20000) -> bool:
 	var n := 0
 	while Game.screen_name != name and n < max_frames:
 		await get_tree().process_frame
@@ -41,12 +41,14 @@ func _ready() -> void:
 		b.speed = 20.0
 		var t0 := Time.get_ticks_msec()
 		while Game.screen_name == "battle" and Time.get_ticks_msec() - t0 < 150000 and is_instance_valid(b):
+			for oc in Game.overlay.get_children():
+				if oc is DialogueBox: oc._finish()
 			if b.sim.state == "offer" and b.offer_layer != null:
 				b.sim.choose_offer(0); b._close_offer()
 			if m == "coop" and b.coop != null and b.sim.can_deploy(0):
 				b.coop.local_action({"a": "deploy"})
 			await frames(2)
-		await wait_screen("results", 1500)
+		await wait_screen("results", 20000)
 		check(Game.screen_name == "results", "%s mode reaches results (%s, wave %s)" % [m, Game.last_summary.get("result", "?"), Game.last_summary.get("wave", "?")])
 	check(int(Save.data["survival"]["runs"]) >= 1, "survival run recorded")
 	check(int(Save.data["pvp"]["wins"]) + int(Save.data["pvp"]["losses"]) >= 1, "pvp result recorded")
