@@ -38,7 +38,7 @@ export const S = {
   },
   results: {
     death: 'YOU DIED',
-    victory: 'BOUNTY PAID',
+    victory: 'VICTORY',
     retry: 'RIDE AGAIN',
     cont: 'CONTINUE',
     saloon: 'SALOON',

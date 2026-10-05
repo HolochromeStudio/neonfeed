@@ -37,7 +37,7 @@ export function wantedPoster(scene: Phaser.Scene, cfg: WantedPosterConfig): Phas
   const { w, h } = cfg;
   const seed = seedOf(entry.id);
   const boss = entry.kind === 'boss';
-  const kids: Phaser.GameObjects.GameObject[] = [];
+  const kids: Array<Phaser.GameObjects.Image | Phaser.GameObjects.Graphics> = [];
   const g = scene.add.graphics();
   drawParchment(g, w, h, seed % 97, boss ? { fill: C.parchmentLight } : {});
   kids.push(g);
@@ -67,8 +67,7 @@ export function wantedPoster(scene: Phaser.Scene, cfg: WantedPosterConfig): Phas
   }
 
   const c = scene.add.container(Math.round(cfg.x + w / 2), Math.round(cfg.y + h / 2), kids);
-  for (const k of kids) (k as Phaser.GameObjects.Components.Transform & Phaser.GameObjects.GameObject).setPosition?.(
-    (k as unknown as { x: number }).x - w / 2, (k as unknown as { y: number }).y - h / 2);
+  for (const k of kids) k.setPosition(k.x - w / 2, k.y - h / 2);
   c.setSize(w, h);
   if (cfg.angle) c.setAngle(cfg.angle);
   if (cfg.depth !== undefined) c.setDepth(cfg.depth);

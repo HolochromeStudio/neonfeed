@@ -33,7 +33,7 @@ export function drawBitmap(g: G, rows: Bitmap, x: number, y: number, scale: numb
   }
 }
 
-export function drawNail(g: G, x: number, y: number, light = C.brassLight): void {
+export function drawNail(g: G, x: number, y: number, light: number = C.brassLight): void {
   rect(g, C.ink, x, y, 4, 4);
   rect(g, C.brassDark, x + 1, y + 1, 2, 2);
   rect(g, light, x + 1, y + 1, 1, 1);
@@ -48,13 +48,13 @@ export interface PlankLook {
   hi: number;
 }
 
-export const PLANK_LOOKS = {
+export type PlankLookName = 'primary' | 'secondary' | 'danger' | 'disabled';
+export const PLANK_LOOKS: Record<PlankLookName, PlankLook> = {
   primary: { boards: [C.woodLight, C.woodMid], trim: C.brass, trimHi: C.brassLight, trimLo: C.brassDark, grain: C.woodMid, hi: C.woodHi },
   secondary: { boards: [C.woodMid, C.wood], trim: C.brassDark, trimHi: C.brass, trimLo: C.wood, grain: C.wood, hi: C.woodLight },
   danger: { boards: [0x9a3a2c, C.redDark], trim: C.brass, trimHi: C.brassLight, trimLo: C.brassDark, grain: C.redDark, hi: C.red },
   disabled: { boards: [C.disabledFill, 0x2e241d], trim: C.parchmentBurn, trimHi: C.parchmentBurn, trimLo: C.woodDark, grain: 0x2e241d, hi: C.disabledFill },
-} satisfies Record<string, PlankLook>;
-export type PlankLookName = keyof typeof PLANK_LOOKS;
+};
 
 /**
  * Wood plank sign with brass trim. Local coords (0,0) = top-left of the w x h hit box.
@@ -121,12 +121,11 @@ export function drawParchment(g: G, w: number, h: number, seed = 1, look: Parchm
     rect(g, burn, 2, y, l, Math.min(seg, h - 4 - y));
     rect(g, burn, w - 2 - r, y, r, Math.min(seg, h - 4 - y));
   }
-  // age stains and a faint fold line
+  // age stains
   const n = Math.max(3, Math.floor((w * h) / 2600));
   for (let i = 0; i < n; i++) {
     rect(g, stain, 6 + Math.floor(hash01(seed, i, 5) * (w - 20)), 6 + Math.floor(hash01(seed, i, 6) * (h - 14)), 4 + Math.floor(hash01(seed, i, 7) * 6), 2);
   }
-  rect(g, stain, 6, Math.floor(h * 0.5), w - 12, 1);
 }
 
 /** Rarity card: parchment with a coloured border and corner shape studs (colour-blind safe cue). */

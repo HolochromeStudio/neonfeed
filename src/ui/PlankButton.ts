@@ -74,7 +74,8 @@ export class PlankButton {
 
     // fit label
     let scale = cfg.labelScale ?? (variant === 'primary' ? 3 : 2);
-    const room = w - 28;
+    const lockRoom = cfg.lockWhenDisabled === false ? 0 : 12;
+    const room = w - 28 - lockRoom;
     while (scale > 1 && lineWidth(cfg.label, scale) > room) scale--;
     this.textScale = scale;
     this.labelImg = pixelText(scene, w / 2, (h - 4) / 2, cfg.label, { scale, color: C.cream, originX: 0.5, originY: 0.5 });
@@ -114,6 +115,7 @@ export class PlankButton {
     this.downG.setVisible(pressed);
     const dy = pressed ? 2 : 0;
     this.labelImg.setY(Math.round((this.rect.h - 4) / 2) + dy);
+    this.labelImg.setX(Math.round(this.rect.w / 2) + (disabled && this.cfg.lockWhenDisabled !== false ? 10 : 0));
     this.lockG.setVisible(disabled && this.cfg.lockWhenDisabled !== false);
     this.lockG.setY(Math.round((this.rect.h - 4) / 2 - 8));
     const color = disabled ? C.disabledText : C.cream;
@@ -133,7 +135,7 @@ export class PlankButton {
   setLabel(label: string): void {
     this.labelStr = label;
     let scale = this.cfg.labelScale ?? (this.cfg.variant === 'primary' ? 3 : 2);
-    while (scale > 1 && lineWidth(label, scale) > this.rect.w - 28) scale--;
+    while (scale > 1 && lineWidth(label, scale) > this.rect.w - 28 - (this.cfg.lockWhenDisabled === false ? 0 : 12)) scale--;
     const d = this.labelImg.getData('px') as { style: { scale: number } };
     d.style.scale = scale;
     setPixelText(this.labelImg, label);
