@@ -202,7 +202,7 @@ var last_summary: Dictionary = {}
 
 func build_cfg(mode: String, p: Dictionary = {}) -> Dictionary:
 	var cfg := {"mode": mode, "seed": int(Time.get_ticks_usec() % 1000000), "deck": Save.active_deck().duplicate(), "levels": Save.levels_map(),
-		"city_hp": 20, "start_sp": 50, "cols": 5, "rows": 3, "first_offer": 2, "boosters": p.get("boosters", [])}
+		"city_hp": 20, "start_sp": 50, "cols": 4, "rows": 4, "first_offer": 2, "boosters": p.get("boosters", [])}
 	for b in cfg["boosters"]:
 		match b:
 			"rush_ticket": cfg["bonus_sp"] = 30
@@ -230,7 +230,7 @@ func build_cfg(mode: String, p: Dictionary = {}) -> Dictionary:
 			cfg["opponent"] = p.get("opponent", {})
 		"coop":
 			cfg.merge({"chapter": 4, "waves": 16, "boss": "tank", "biome": "industrial", "enemy_pool": ["slow_car", "speedster", "suv", "truck", "bus", "gang_cars", "police_chase", "armored_truck"],
-				"difficulty": 1.1, "title": "CO-OP", "rows": 6, "cell": Vector2(150, 140), "coop": true, "budget_mult": 1.7,
+				"difficulty": 1.1, "title": "CO-OP", "cols": 5, "rows": 6, "cell": Vector2(150, 140), "coop": true, "budget_mult": 1.7,
 				"partner_deck": p.get("partner_deck", ["police", "fire_engine", "ambulance", "tow_truck", "school_bus"])}, true)
 	return cfg
 

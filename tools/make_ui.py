@@ -284,3 +284,13 @@ def wheel_img(sz=64):
     d.ellipse([c + 8 * S, c - 2 * S, c + 12 * S, c + 2 * S], fill=(255, 255, 255, 255))
     return im.resize((sz, sz), Image.LANCZOS)
 put(wheel_img(), "fx_wheel.png")
+
+def dice_img(sz=128):
+    S = 4; im, d = glyph_canvas(sz, S)
+    d.rounded_rectangle([20 * S, 20 * S, 108 * S, 108 * S], radius=20 * S, fill=(252, 248, 238, 255), outline=(54, 40, 34, 255), width=3 * S)
+    d.rounded_rectangle([26 * S, 26 * S, 102 * S, 60 * S], radius=14 * S, fill=(255, 255, 255, 120))
+    for (px, py) in [(40, 40), (88, 40), (64, 64), (40, 88), (88, 88)]:
+        d.ellipse([(px - 8) * S, (py - 8) * S, (px + 8) * S, (py + 8) * S], fill=(54, 40, 34, 255))
+    im = im.rotate(-8, resample=Image.BICUBIC)
+    return finish(im, sz, S, ow=2, sticker=False)
+put(dice_img(), "icon_dice.png")

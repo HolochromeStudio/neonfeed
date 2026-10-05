@@ -48,7 +48,7 @@ func _ready() -> void:
 	ok(String(m.opp["name"]) == "Bot" and int(m.opp["wave"]) >= 1, "offline rival behaves like a remote peer")
 	# ---- co-op lockstep: inputs from A applied on both sims
 	var ccfg := {"seed": 9, "deck": ["taxi", "compact", "pickup", "city_bus", "delivery_van"], "partner_deck": ["police", "fire_engine", "ambulance", "tow_truck", "school_bus"], "waves": 5, "chapter": 2,
-		"enemy_pool": ["slow_car"], "levels": {}, "coop": true, "rows": 6, "cell": Vector2(136, 118), "grid_origin": Vector2(200, 905)}
+		"enemy_pool": ["slow_car"], "levels": {}, "coop": true, "rows": 6, "cell": Vector2(136, 118), "grid_origin": Vector2(190, 500)}
 	var c1 := BattleSim.new(); c1.setup(ccfg)
 	var c2 := BattleSim.new(); c2.setup(ccfg)
 	var p2 := MatchTransport.Loopback.pair()

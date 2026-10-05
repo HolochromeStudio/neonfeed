@@ -18,6 +18,7 @@ var wave_bar_bg: NinePatchRect
 var hp_label: Label
 var hp_bar: NinePatchRect
 var hp_bar_w: float = 300.0
+var hearts: Array = []
 var sp_label: Label
 var cost_label: Label
 var deploy_btn: PaperButton
@@ -68,7 +69,7 @@ func _ready() -> void:
 	sim = BattleSim.new()
 	var c := cfg.duplicate()
 	if mode == "coop":
-		c["grid_origin"] = Vector2(vp.x * 0.5 - 540.0 + (1080.0 - 5 * 136.0) * 0.5, 905)
+		c["grid_origin"] = Vector2(vp.x * 0.5 - 540.0 + 190.0, 500)
 		c["cell"] = Vector2(136, 118)
 	sim.setup(c)
 	sim.ended.connect(_on_sim_ended)
@@ -142,30 +143,34 @@ func _build_hud() -> void:
 	hud.add_child(speed_btn)
 	# city HP
 	var hpw := Atlas.nine("ui_panel_dark", 30)
-	hpw.size = Vector2(340, 70)
+	hpw.size = Vector2(320, 84)
 	hpw.position = Vector2(20, top + 104)
 	hud.add_child(hpw)
-	var heart := UI.icon("icon_heart", 54)
-	heart.position = Vector2(8, 8)
-	hpw.add_child(heart)
+	for hi in 5:
+		var hh := UI.icon("icon_heart", 50)
+		hh.position = Vector2(12 + hi * 58, 10)
+		hpw.add_child(hh)
+		hearts.append(hh)
 	var hbg := Atlas.nine("ui_bar_bg", 18)
 	hbg.size = Vector2(hp_bar_w - 70, 26)
 	hbg.position = Vector2(68, 22)
+	hbg.visible = false
 	hpw.add_child(hbg)
 	hp_bar = Atlas.nine("ui_bar_fill_green", 18)
 	hp_bar.size = Vector2(hp_bar_w - 70, 26)
 	hp_bar.position = Vector2(68, 22)
+	hp_bar.visible = false
 	hpw.add_child(hp_bar)
-	hp_label = UI.label("20", 26, UI.WHITE, true, HORIZONTAL_ALIGNMENT_CENTER, 5)
-	hp_label.size = Vector2(hp_bar_w - 70, 26)
-	hp_label.position = Vector2(68, 22)
+	hp_label = UI.label("20", 22, Color(1, 1, 1, 0.9), true, HORIZONTAL_ALIGNMENT_CENTER, 5)
+	hp_label.size = Vector2(300, 24)
+	hp_label.position = Vector2(8, 52)
 	hpw.add_child(hp_label)
 	# SP
 	var spw := Atlas.nine("ui_panel_dark", 30)
 	spw.size = Vector2(300, 70)
 	spw.position = Vector2(vp.x - 320, top + 104)
 	hud.add_child(spw)
-	var bolt := UI.icon("icon_bolt", 54)
+	var bolt := UI.icon("icon_coin", 54)
 	bolt.position = Vector2(10, 8)
 	spw.add_child(bolt)
 	sp_label = UI.label("50", 42, UI.YELLOW, true, HORIZONTAL_ALIGNMENT_RIGHT, 6)
@@ -228,7 +233,7 @@ func _build_hud() -> void:
 			deck_row.add_child(holder)
 	# deploy button
 	var bw := 420.0
-	deploy_btn = UI.btn("DEPLOY", "red", Vector2(bw, 150), func(): _on_deploy(), 62)
+	deploy_btn = UI.btn("DEPLOY", "red", Vector2(bw, 150), func(): _on_deploy(), 58, "icon_dice")
 	deploy_btn.position = Vector2(vp.x - bw - 20, bottom_y + 70)
 	hud.add_child(deploy_btn)
 	cost_label = UI.label("10 SP", 34, UI.YELLOW, true, HORIZONTAL_ALIGNMENT_CENTER, 7)
@@ -328,6 +333,10 @@ func _update_hud(dt: float) -> void:
 	var wf := sim.wave_progress() if sim.total_waves > 0 else clampf(float(sim.wave % 10) / 10.0, 0, 1)
 	wave_bar.size.x = maxf(22.0, 360.0 * wf)
 	hp_bar.size.x = maxf(8.0, (hp_bar_w - 70) * clampf(float(sim.city_hp) / float(sim.city_max), 0.0, 1.0))
+	var hfrac := clampf(float(sim.city_hp) / float(maxi(1, sim.city_max)), 0.0, 1.0)
+	for hi in hearts.size():
+		var full: bool = hfrac > float(hi) / float(hearts.size()) + 0.001
+		hearts[hi].modulate = Color(1, 1, 1, 1) if full else Color(0.25, 0.2, 0.2, 0.45)
 	hp_label.text = "%d / %d" % [maxi(0, sim.city_hp), sim.city_max]
 	var frac := float(sim.city_hp) / float(sim.city_max)
 	if frac < 0.3 and not _warned_hp:

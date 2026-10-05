@@ -12,7 +12,7 @@ const RANK_DMG := [1.0, 2.7, 7.0, 18.0, 46.0, 118.0, 300.0, 760.0]
 const RANK_SPD := [1.0, 1.0, 1.04, 1.08, 1.12, 1.16, 1.2, 1.25]
 const MAX_RANK_STD := 7
 const SP_SCALE := 3.4
-const SPEED_SCALE := 1.4
+const SPEED_SCALE := 1.7
 const FIELD_W := 1080.0
 
 # ---------------------------------------------------------------- inner classes
@@ -83,11 +83,12 @@ class SimEnemy:
 var cfg: Dictionary
 var rng := RandomNumberGenerator.new()
 var wave_rng := RandomNumberGenerator.new()
-var cols: int = 5
-var rows: int = 3
+var cols: int = 4
+var rows: int = 4
 var cell := Vector2(190, 190)
-var grid_origin := Vector2(65, 960)
+var grid_origin := Vector2(115, 480)
 var path_pts: PackedVector2Array = PackedVector2Array()
+var fly_end := Vector2(1150, 1300)
 var path_cum: PackedFloat32Array = PackedFloat32Array()
 var path_len: float = 0.0
 var flying_len: float = 0.0
@@ -169,9 +170,9 @@ func setup(config: Dictionary) -> void:
 	cfg = config
 	rng.seed = int(cfg.get("seed", 12345))
 	wave_rng.seed = int(cfg.get("wave_seed", cfg.get("seed", 12345)))
-	cols = int(cfg.get("cols", 5)); rows = int(cfg.get("rows", 3))
+	cols = int(cfg.get("cols", 4)); rows = int(cfg.get("rows", 4))
 	cell = cfg.get("cell", Vector2(190, 190))
-	grid_origin = cfg.get("grid_origin", Vector2((FIELD_W - cols * cell.x) * 0.5, 960))
+	grid_origin = cfg.get("grid_origin", Vector2((FIELD_W - 90.0 - cols * cell.x) * 0.5, 480))
 	coop = bool(cfg.get("coop", false))
 	deck = cfg.get("deck", ["taxi", "police", "fire_engine", "tow_truck", "city_bus"]).duplicate()
 	partner_deck = cfg.get("partner_deck", []).duplicate()
@@ -205,21 +206,22 @@ func setup(config: Dictionary) -> void:
 	dirty = true
 
 func _build_path() -> void:
+	## C-shaped orbit: top lane left->right, down the right-hand street, bottom lane right->left. The grid sits between the lanes.
 	path_pts.clear()
-	var ys := [330.0, 560.0, 790.0]
-	var r := 115.0
-	var xl := 80.0
-	var xr := 1000.0
-	path_pts.append(Vector2(-70, ys[0]))
-	path_pts.append(Vector2(xr, ys[0]))
-	for i in range(1, 13):
-		var a := -PI / 2 + PI * i / 12.0
-		path_pts.append(Vector2(xr + cos(a) * r, (ys[0] + ys[1]) * 0.5 + sin(a) * r))
-	path_pts.append(Vector2(xl, ys[1]))
-	for i in range(1, 13):
-		var a := -PI / 2 - PI * i / 12.0
-		path_pts.append(Vector2(xl + cos(a) * r, (ys[1] + ys[2]) * 0.5 + sin(a) * r))
-	path_pts.append(Vector2(1150, ys[2]))
+	var yt := grid_origin.y - 115.0
+	var yb := grid_origin.y + rows * cell.y + 115.0
+	var xr := FIELD_W - 72.0
+	var r := 90.0
+	path_pts.append(Vector2(-70, yt))
+	path_pts.append(Vector2(xr - r, yt))
+	for i in range(1, 9):
+		var a := -PI / 2 + (PI / 2) * i / 8.0
+		path_pts.append(Vector2(xr - r + cos(a) * r, yt + r + sin(a) * r))
+	path_pts.append(Vector2(xr, yb - r))
+	for i in range(1, 9):
+		var a := (PI / 2) * i / 8.0
+		path_pts.append(Vector2(xr - r + cos(a) * r, yb - r + sin(a) * r))
+	path_pts.append(Vector2(-70, yb))
 	path_cum.resize(path_pts.size())
 	var acc := 0.0
 	for i in path_pts.size():
@@ -227,7 +229,8 @@ func _build_path() -> void:
 			acc += path_pts[i].distance_to(path_pts[i - 1])
 		path_cum[i] = acc
 	path_len = acc
-	flying_len = path_pts[0].distance_to(Vector2(1150, 790)) * 0.62
+	fly_end = Vector2(FIELD_W + 70.0, yb)
+	flying_len = path_pts[0].distance_to(fly_end) * 0.62
 
 func path_pos(d: float) -> Vector2:
 	if d <= 0.0:
@@ -275,7 +278,7 @@ func _ev(e: Dictionary) -> void:
 
 func hp_scale(w: int) -> float:
 	var ch := 1.0 + 0.25 * mini(chapter_idx - 1, 2) + 0.55 * clampi(chapter_idx - 3, 0, 3) + 0.9 * maxi(chapter_idx - 6, 0)
-	return pow(hp_scale_base, maxf(0.0, w - 1.0)) * ch * difficulty * (1.0 + enemy_hp_mult_extra + _m("enemy_hp"))
+	return pow(hp_scale_base, maxf(0.0, w - 1.0)) * ch * difficulty * GEOM_HP * (1.0 + enemy_hp_mult_extra + _m("enemy_hp"))
 
 func unit_base_dmg(u: SimUnit) -> float:
 	var lv := 1.0 + 0.09 * (u.level - 1)
@@ -871,7 +874,7 @@ func _start_wave() -> void:
 				swave += float(t["n"])
 	sp += swave
 	if swave > 0:
-		_ev({"t": "sp", "amt": swave, "pos": Vector2(540, 1560)})
+		_ev({"t": "sp", "amt": swave, "pos": Vector2(540, 1500)})
 	if _m("city_regen") > 0:
 		_heal_city(int(_m("city_regen")))
 	var rw := int(syn_fx.get("city_regen_waves", 0.0))
@@ -942,8 +945,8 @@ func inject_enemy(id: String, count: int = 1) -> void:
 func _update_enemy_pos(e: SimEnemy) -> void:
 	if e.flying:
 		var f := clampf(e.progress / maxf(1.0, path_len * 0.62), 0.0, 1.0)
-		e.pos = path_pts[0].lerp(Vector2(1150, 790), f)
-		e.dir = (Vector2(1150, 790) - path_pts[0]).normalized()
+		e.pos = path_pts[0].lerp(fly_end, f)
+		e.dir = (fly_end - path_pts[0]).normalized()
 	else:
 		e.pos = path_pos(e.progress)
 		e.dir = path_dir(e.progress)
@@ -1011,7 +1014,7 @@ func call_next_wave() -> void:
 	if state == "countdown" and wave_timer > 0.5:
 		var bonus := wave_timer * 1.5
 		sp += bonus
-		_ev({"t": "sp", "amt": bonus, "pos": Vector2(540, 1560)})
+		_ev({"t": "sp", "amt": bonus, "pos": Vector2(540, 1500)})
 		wave_timer = 0.0
 
 func _end_wave() -> void:
@@ -1020,7 +1023,7 @@ func _end_wave() -> void:
 	var bonus := (14.0 + 3.0 * wave) * (1.0 + _m("clear_bonus"))
 	if enemies.is_empty():
 		sp += bonus
-		_ev({"t": "sp", "amt": bonus, "pos": Vector2(540, 1560)})
+		_ev({"t": "sp", "amt": bonus, "pos": Vector2(540, 1500)})
 	_ev({"t": "wave_clear", "wave": wave, "bonus": bonus})
 	if no_upgrades or (tutorial and wave != 1):
 		return

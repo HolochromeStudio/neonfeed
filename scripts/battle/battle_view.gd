@@ -67,90 +67,126 @@ func _layout() -> void:
 	world.position = Vector2((vp.x - FIELD_W * _scale) * 0.5, y_offset)
 
 # ------------------------------------------------------------------ background
+const ARENA_GROUND := {
+	"city_center": "ground_asphalt", "suburbs": "ground_grass_flowers", "highway": "ground_asphalt", "industrial": "ground_concrete",
+	"desert": "ground_sand", "snow_town": "ground_snow", "beach_road": "ground_sand", "countryside": "ground_grass_flowers", "night_city": "ground_dark",
+}
+
+func _tile_rect(tex_key: String, pos: Vector2, sz: Vector2, tint: Color = Color.WHITE) -> TextureRect:
+	var t := TextureRect.new()
+	t.texture = Atlas.tile(tex_key)
+	t.stretch_mode = TextureRect.STRETCH_TILE
+	t.position = pos
+	t.size = sz
+	t.modulate = tint
+	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return t
+
+func _line(pts: PackedVector2Array, w: float, col: Color) -> Line2D:
+	var l := Line2D.new()
+	l.points = pts
+	l.width = w
+	l.default_color = col
+	l.joint_mode = Line2D.LINE_JOINT_ROUND
+	l.begin_cap_mode = Line2D.LINE_CAP_NONE
+	l.antialiased = true
+	return l
+
 func _build_background() -> void:
+	## Top-down intersection: asphalt everywhere, a concrete sidewalk above and below, a C-shaped road around the parking grid.
 	var look: Dictionary = RoadScene.BIOME_LOOK.get(sim.biome, RoadScene.BIOME_LOOK["city_center"])
 	var night: bool = sim.biome == "night_city"
-	var sky := ColorRect.new()
-	sky.color = look["sky"]
-	sky.position = Vector2(-600, -600); sky.size = Vector2(2300, 1200)
-	bg_layer.add_child(sky)
-	var pic := TextureRect.new()
-	pic.texture = Atlas.tex("biome_" + sim.biome)
-	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	pic.stretch_mode = TextureRect.STRETCH_SCALE
-	pic.position = Vector2(-300, -60)
-	pic.size = Vector2(FIELD_W + 600, 460)
-	pic.modulate = Color(0.95, 0.95, 1.0, 0.96)
-	bg_layer.add_child(pic)
-	var ground := TextureRect.new()
-	ground.texture = Atlas.tile(look["ground"])
-	ground.stretch_mode = TextureRect.STRETCH_TILE
-	ground.position = Vector2(-300, 230)
-	ground.size = Vector2(FIELD_W + 600, 2000)
-	ground.modulate = look["tint"]
-	bg_layer.add_child(ground)
-	var ground_edge := ColorRect.new()
-	ground_edge.color = Color(0.1, 0.07, 0.05, 0.5)
-	ground_edge.position = Vector2(-300, 226); ground_edge.size = Vector2(FIELD_W + 600, 8)
-	bg_layer.add_child(ground_edge)
-	# decorations between lanes first (below the road)
-	_scatter_props(night)
-	# road: cream border -> asphalt (textured) -> dashed centre line
-	var border := Line2D.new()
-	border.points = sim.path_pts
-	border.width = 168.0
-	border.default_color = Color("e8dcc0")
-	border.joint_mode = Line2D.LINE_JOINT_ROUND
-	border.begin_cap_mode = Line2D.LINE_CAP_NONE
-	bg_layer.add_child(border)
+	var yt: float = sim.path_pts[0].y
+	var yb: float = sim.path_pts[sim.path_pts.size() - 1].y
+	var gkey: String = ARENA_GROUND.get(sim.biome, "ground_asphalt")
+	var base := _tile_rect(gkey, Vector2(-300, -500), Vector2(FIELD_W + 600, 3200), look["tint"] if gkey != "ground_asphalt" else Color(0.92, 0.92, 1.0))
+	bg_layer.add_child(base)
+	# sidewalks with curb + soft shadow
+	for sw in [[-500.0, yt - 112.0], [yb + 112.0, 2600.0]]:
+		var y0: float = sw[0]
+		var y1: float = sw[1]
+		bg_layer.add_child(_tile_rect("ground_concrete", Vector2(-300, y0), Vector2(FIELD_W + 600, y1 - y0), Color(1.04, 1.02, 0.98) if not night else Color(0.6, 0.6, 0.8)))
+		var edge_y: float = y1 if y0 < 0 else y0
+		var curb := ColorRect.new()
+		curb.color = Color("efe4c8") if not night else Color("8a8aa8")
+		curb.position = Vector2(-300, edge_y - (12.0 if y0 < 0 else 0.0)); curb.size = Vector2(FIELD_W + 600, 12)
+		bg_layer.add_child(curb)
+		var shade := ColorRect.new()
+		shade.color = Color(0, 0, 0, 0.22)
+		shade.position = Vector2(-300, edge_y + (0.0 if y0 < 0 else -22.0)); shade.size = Vector2(FIELD_W + 600, 22)
+		bg_layer.add_child(shade)
+	# parking plaza under the grid
+	var plaza := Panel.new()
+	var psb := StyleBoxFlat.new()
+	psb.bg_color = Color(0.33, 0.34, 0.42, 0.9) if not night else Color(0.18, 0.18, 0.3, 0.9)
+	psb.set_corner_radius_all(40)
+	psb.border_color = Color("efe4c8")
+	psb.set_border_width_all(7)
+	psb.shadow_color = Color(0, 0, 0, 0.3); psb.shadow_size = 14; psb.shadow_offset = Vector2(0, 8)
+	plaza.add_theme_stylebox_override("panel", psb)
+	plaza.position = sim.grid_origin - Vector2(26, 26)
+	plaza.size = Vector2(sim.cols * sim.cell.x, sim.rows * sim.cell.y) + Vector2(52, 52)
+	plaza.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	grid_layer.add_child(plaza)
+	# the road: soft shadow, cream curb paint, asphalt, dashed centre line
+	var shadow := _line(sim.path_pts, 176.0, Color(0, 0, 0, 0.28))
+	shadow.position = Vector2(0, 9)
+	bg_layer.add_child(shadow)
+	bg_layer.add_child(_line(sim.path_pts, 166.0, Color("efe4c8") if not night else Color("8a8aa8")))
 	var road := Line2D.new()
 	road.points = sim.path_pts
 	road.width = 150.0
 	road.texture = Atlas.tile("ground_asphalt")
 	road.texture_mode = Line2D.LINE_TEXTURE_TILE
 	road.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-	road.default_color = Color(1, 1, 1) if not night else Color(0.55, 0.55, 0.75)
+	road.default_color = Color(1.12, 1.12, 1.2) if not night else Color(0.55, 0.55, 0.75)
 	road.joint_mode = Line2D.LINE_JOINT_ROUND
 	bg_layer.add_child(road)
-	var dash_pts := PackedVector2Array()
-	var d := 40.0
+	var d := 30.0
 	while d < sim.path_len - 120.0:
-		var a := sim.path_pos(d)
-		var b := sim.path_pos(d + 34.0)
-		var l := Line2D.new()
-		l.points = PackedVector2Array([a, b])
-		l.width = 9.0
-		l.default_color = Color("f1d27a") if sim.biome != "night_city" else Color("e6c36a")
-		l.antialiased = true
+		var pa := sim.path_pos(d)
+		var pb := sim.path_pos(d + 34.0)
+		var l := _line(PackedVector2Array([pa, pb]), 9.0, Color("f1d27a"))
 		bg_layer.add_child(l)
 		d += 76.0
-	# direction chevrons on the road
-	for dd in [300.0, 900.0, 1560.0, 2100.0, 2700.0]:
+	# zebra crossings and arrows
+	for dd in [210.0, sim.path_len * 0.5, sim.path_len - 210.0]:
 		var p := sim.path_pos(dd)
-		var ang := sim.path_dir(dd).angle()
-		var ch := Line2D.new()
-		ch.width = 8
-		ch.default_color = Color(1, 1, 1, 0.55)
-		ch.points = PackedVector2Array([Vector2(-14, -16), Vector2(8, 0), Vector2(-14, 16)])
-		ch.position = p + Vector2(0, 40).rotated(ang)
+		var dir := sim.path_dir(dd)
+		var nrm := Vector2(-dir.y, dir.x)
+		for k in range(-3, 4):
+			bg_layer.add_child(_line(PackedVector2Array([p + nrm * (k * 20.0) - dir * 36.0, p + nrm * (k * 20.0) + dir * 36.0]), 11.0, Color(1, 1, 1, 0.82)))
+	for f in [0.14, 0.3, 0.62, 0.78, 0.9]:
+		var dd2: float = sim.path_len * f
+		var p2 := sim.path_pos(dd2)
+		var ang := sim.path_dir(dd2).angle()
+		var ch := _line(PackedVector2Array([Vector2(-14, -16), Vector2(8, 0), Vector2(-14, 16)]), 8.0, Color(1, 1, 1, 0.5))
+		ch.position = p2 + Vector2(0, 40).rotated(ang)
 		ch.rotation = ang
 		bg_layer.add_child(ch)
-	# spawn / goal markers
-	var start_sign := Atlas.sprite("prop_stop_sign", true) if false else Atlas.sprite("prop_barricade_a", true)
-	start_sign.position = Vector2(30, 330 - 78); start_sign.scale = Vector2(0.9, 0.9)
+	# manhole covers
+	for dd3 in [sim.path_len * 0.22, sim.path_len * 0.7]:
+		var c := sim.path_pos(dd3) + Vector2(0, 28)
+		for rr in [[40.0, Color(0.16, 0.16, 0.2)], [33.0, Color(0.3, 0.3, 0.36)], [24.0, Color(0.22, 0.22, 0.27)]]:
+			var pg := Polygon2D.new()
+			var pts := PackedVector2Array()
+			for i in 24:
+				pts.append(c + Vector2(cos(TAU * i / 24.0), sin(TAU * i / 24.0)) * float(rr[0]))
+			pg.polygon = pts
+			pg.color = rr[1]
+			bg_layer.add_child(pg)
+	# spawn barricade and the city gate
+	var start_sign := Atlas.sprite("prop_barricade_a", true)
+	start_sign.position = Vector2(40, yt - 95); start_sign.scale = Vector2(0.9, 0.9)
 	bg_layer.add_child(start_sign)
-	var gate := Atlas.sprite("prop_barricade_b", true)
-	gate.position = Vector2(FIELD_W - 40, 790 - 78); gate.scale = Vector2(1.0, 1.0)
+	var gate := ColorRect.new()
+	gate.color = Color(0.86, 0.2, 0.18, 0.55)
+	gate.position = Vector2(26, yb - 78); gate.size = Vector2(18, 156)
 	bg_layer.add_child(gate)
 	var goal := Atlas.sprite("prop_traffic_light", true)
-	goal.position = Vector2(FIELD_W - 100, 790 + 150); goal.scale = Vector2(1.1, 1.1)
+	goal.position = Vector2(46, yb + 175); goal.scale = Vector2(1.0, 1.0)
 	bg_layer.add_child(goal)
-	# paper table under the grid
-	var tbl := Atlas.nine("ui_panel_cardboard", 44)
-	var gh := sim.rows * sim.cell.y
-	tbl.position = Vector2(sim.grid_origin.x - 36, sim.grid_origin.y - 36)
-	tbl.size = Vector2(sim.cols * sim.cell.x + 72, gh + 72)
-	grid_layer.add_child(tbl)
+	_scatter_props(night, yt, yb)
 	if night:
 		var dark := ColorRect.new()
 		dark.color = Color(0.05, 0.05, 0.2, 0.28)
@@ -158,30 +194,27 @@ func _build_background() -> void:
 		dark.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		top_fx.add_child(dark)
 
-func _scatter_props(night: bool) -> void:
+func _scatter_props(night: bool, yt: float, yb: float) -> void:
 	var rs := RandomNumberGenerator.new()
 	rs.seed = 777 + hash(sim.biome)
-	var keys := ["prop_tree", "prop_bush", "prop_street_lamp", "prop_hydrant", "prop_bench", "prop_trash_can", "prop_bush_rocks", "prop_traffic_light"]
+	var keys := ["prop_tree", "prop_bush", "prop_street_lamp", "prop_hydrant", "prop_bench", "prop_trash_can", "prop_bush_rocks", "prop_tree"]
 	if sim.biome == "desert":
 		keys = ["prop_rock", "prop_bush_rocks", "prop_rock", "prop_bush"]
 	if sim.biome in ["industrial"]:
 		keys = ["prop_barricade_a", "prop_barricade_b", "prop_junction_box", "prop_trash_can", "prop_street_lamp", "prop_rock"]
 	var spots: Array = []
-	# pockets between lanes (inside the U-turns) and below the last lane
-	for row in [[330.0, 560.0], [560.0, 790.0]]:
-		var y: float = (row[0] + row[1]) * 0.5
-		var x := 150.0
-		while x < FIELD_W - 130.0:
-			spots.append(Vector2(x + rs.randf_range(-30, 30), y + rs.randf_range(30, 60)))
-			x += rs.randf_range(200, 330)
-	var x2 := 80.0
-	while x2 < FIELD_W:
-		spots.append(Vector2(x2, 890 + rs.randf_range(0, 20)))
-		x2 += rs.randf_range(150, 260)
+	var x := 90.0
+	while x < FIELD_W - 60.0:
+		spots.append(Vector2(x + rs.randf_range(-20, 20), yt - 125 + rs.randf_range(-6, 6)))
+		x += rs.randf_range(140, 230)
+	x = 150.0
+	while x < FIELD_W - 60.0:
+		spots.append(Vector2(x + rs.randf_range(-20, 20), yb + 205 + rs.randf_range(-8, 8)))
+		x += rs.randf_range(140, 230)
 	for p in spots:
 		var s := Atlas.sprite(keys[rs.randi() % keys.size()], true)
 		s.position = p
-		s.scale = Vector2.ONE * rs.randf_range(0.8, 1.0)
+		s.scale = Vector2.ONE * rs.randf_range(0.7, 0.85)
 		if night:
 			s.modulate = Color(0.55, 0.55, 0.75)
 		bg_layer.add_child(s)
@@ -194,8 +227,9 @@ func _build_grid() -> void:
 		sp.position = sim.slot_pos(i) - sp.size * 0.5
 		grid_layer.add_child(sp)
 		slot_sprites.append(sp)
+		sp.modulate = Color(1, 1, 1, 0.78)
 		if sim.coop and sim.slot_owner(i) == 1:
-			sp.modulate = Color(0.75, 0.85, 1.0)
+			sp.modulate = Color(0.75, 0.85, 1.0, 0.78)
 
 func add_coop_labels() -> void:
 	var mid := sim.grid_origin.y + sim.rows * 0.5 * sim.cell.y
