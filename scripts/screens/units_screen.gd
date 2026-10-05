@@ -180,11 +180,7 @@ func _fill_grid() -> void:
 			holder.add_child(nbg)
 			nb.size = nbg.size
 			nbg.add_child(nb)
-		holder.mouse_filter = Control.MOUSE_FILTER_STOP
-		holder.gui_input.connect(func(ev):
-			if ev is InputEventMouseButton and not ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
-				if scroll.get_v_scroll_bar().get_global_rect().size.x >= 0:
-					Audio.sfx("click"); _open_detail(id))
+		UI.tappable(holder, func(): Audio.sfx("click"); _open_detail(id))
 		grid.add_child(holder)
 	if grid.get_child_count() > 0:
 		grid.get_child(0).modulate.a = 1.0

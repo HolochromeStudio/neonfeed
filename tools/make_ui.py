@@ -255,3 +255,26 @@ def pine(sz=110):
     return _outline(im, S)
 put(pine(), "prop_pine.png")
 print("houses/pines added")
+
+# ------------------------------------------------------------------ spinning wheel overlay (tyre + hub with lugs so rotation reads)
+def wheel_img(sz=64):
+    S = 4
+    im = Image.new("RGBA", (sz * S, sz * S), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    c = sz * S / 2
+    d.ellipse([2 * S, 2 * S, (sz - 2) * S, (sz - 2) * S], fill=(34, 30, 30, 255), outline=(14, 10, 10, 255), width=2 * S)
+    # tread nicks
+    for k in range(10):
+        a = k * math.pi / 5
+        x0 = c + math.cos(a) * 28 * S; y0 = c + math.sin(a) * 28 * S
+        x1 = c + math.cos(a) * 24 * S; y1 = c + math.sin(a) * 24 * S
+        d.line([x0, y0, x1, y1], fill=(70, 64, 62, 255), width=2 * S)
+    d.ellipse([c - 15 * S, c - 15 * S, c + 15 * S, c + 15 * S], fill=(168, 168, 170, 255), outline=(60, 56, 56, 255), width=2 * S)
+    for k in range(5):
+        a = k * 2 * math.pi / 5
+        x = c + math.cos(a) * 9 * S; y = c + math.sin(a) * 9 * S
+        d.ellipse([x - 3.2 * S, y - 3.2 * S, x + 3.2 * S, y + 3.2 * S], fill=(84, 82, 86, 255))
+    d.ellipse([c - 4 * S, c - 4 * S, c + 4 * S, c + 4 * S], fill=(228, 228, 232, 255), outline=(60, 56, 56, 255), width=S)
+    # a single bright mark so spin is visible
+    d.ellipse([c + 8 * S, c - 2 * S, c + 12 * S, c + 2 * S], fill=(255, 255, 255, 255))
+    return im.resize((sz, sz), Image.LANCZOS)
+put(wheel_img(), "fx_wheel.png")

@@ -40,9 +40,10 @@ var _hover_slot: int = -1
 var _last_wave: int = 0
 var _pulse_t: float = 0.0
 var bot: BotAI
-var opp_sim: BattleSim
-var opp_bot: BotAI
+var pvp: PvpMatch
+var coop: CoopMatch
 var mini: Control
+var chat_row: Control
 var _opp_kills: int = 0
 var tut: Dictionary = {}
 var tut_arrow: Control
@@ -70,9 +71,6 @@ func _ready() -> void:
 		c["grid_origin"] = Vector2(vp.x * 0.5 - 540.0 + (1080.0 - 5 * 136.0) * 0.5, 905)
 		c["cell"] = Vector2(136, 118)
 	sim.setup(c)
-	if mode == "coop":
-		var pb := BotAI.new(1, 0.7, false)
-		sim.partner_ai = pb
 	sim.ended.connect(_on_sim_ended)
 	view = BattleView.new()
 	view.y_offset = Game.safe_top + 10
@@ -85,6 +83,9 @@ func _ready() -> void:
 		_setup_pvp()
 	if mode == "coop":
 		view.add_coop_labels()
+		_setup_coop()
+	if mode in ["pvp", "coop"]:
+		_build_chat()
 	if cfg.get("tutorial", false):
 		_tutorial_begin()
 	if Dev.goto_args.has("bot"):
@@ -270,11 +271,10 @@ func _process(dt: float) -> void:
 			if bot != null:
 				bot.step(sim, step)
 			sim.tick(step)
-			if opp_sim:
-				opp_bot.step(opp_sim, step)
-				opp_sim.tick(step)
-				opp_sim.events.clear()
-				_pvp_check()
+			if pvp:
+				pvp.tick(step)
+			if coop:
+				coop.tick(step)
 			if sim.state == "offer":
 				break
 		_poll_events()
@@ -383,7 +383,10 @@ func _on_deploy() -> void:
 		view._text(Vector2(540, 1400), msg, Color("ff8a7a"), 40)
 		UI.wobble(deploy_btn if false else view.world, 0.0)
 		return
-	sim.deploy(0, -1, forced)
+	if coop:
+		coop.local_action({"a": "deploy"})
+	else:
+		sim.deploy(0, -1, forced)
 
 # ================================================================= input
 func _gui_input(ev: InputEvent) -> void:
@@ -453,7 +456,10 @@ func _release(pos: Vector2) -> void:
 		node.end_drag()
 		var ok := false
 		if s >= 0 and s != _drag_unit.slot and sim.slot_owner(s) == 0:
-			ok = sim.move_unit(_drag_unit, s)
+			if coop:
+				ok = coop.local_action({"a": "move", "u": _drag_unit.id, "slot": s})
+			else:
+				ok = sim.move_unit(_drag_unit, s)
 		if not ok and is_instance_valid(node) and sim.units.has(_drag_unit):
 			var tw := node.create_tween()
 			tw.tween_property(node, "position", sim.slot_pos(_drag_unit.slot), 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -762,50 +768,72 @@ func _finish() -> void:
 			Save.data["relics_seen"].append(rid)
 	s["max_synergies"] = _max_syn
 	var res: String = sim.result
-	if mode == "pvp" and opp_sim:
-		s["result"] = "victory" if (opp_sim.city_hp <= 0 or (sim.city_hp > 0 and sim.city_hp >= opp_sim.city_hp and res == "victory")) else ("victory" if res == "victory" and opp_sim.city_hp < sim.city_hp else "defeat")
+	if mode == "pvp" and pvp:
+		s["result"] = pvp.final_result()
 	Game.finish_run(s, cfg)
 
-# ================================================================= PvP
+# ================================================================= PvP / Co-op (adapters over a MatchTransport)
 func _setup_pvp() -> void:
-	var oc := cfg.duplicate()
 	var opp: Dictionary = cfg.get("opponent", {})
-	oc["deck"] = opp.get("deck", ["police", "taxi", "fire_engine", "tow_truck", "city_bus"])
-	oc["seed"] = int(cfg["seed"]) + 77
-	oc["wave_seed"] = int(cfg["seed"])
-	oc["player_sim"] = false
 	cfg["wave_seed"] = cfg["seed"]
 	sim.wave_rng.seed = int(cfg["seed"])
-	opp_sim = BattleSim.new()
-	opp_sim.setup(oc)
-	opp_bot = BotAI.new(0, float(opp.get("skill", 0.6)), true)
-	opp_sim.ended.connect(func(r): _pvp_check())
-	sim.kill_hook = func(e): _pvp_kill(sim, opp_sim, e)
-	opp_sim.kill_hook = func(e): _pvp_kill(opp_sim, sim, e)
+	var rival := BotPeers.Rival.new()
+	rival.configure(cfg, opp)
+	pvp = PvpMatch.new()
+	pvp.start(sim, rival)
+	pvp.emote.connect(func(id): _chat_bubble("them", id))
+	pvp.sent_pressure.connect(func(en, n): view._text(Vector2(900, 760), "SENT!", Color("ff9a8a"), 40))
 	mini = PvpMini.new()
-	mini.setup(opp_sim, opp)
+	mini.setup(pvp, opp)
 	mini.position = Vector2(20, Game.safe_top + 186)
 	mini.size = Vector2(vsize().x - 40, 64)
 	hud.add_child(mini)
 
-func _pvp_kill(from: BattleSim, to: BattleSim, e: BattleSim.SimEnemy) -> void:
-	if e.sent:
-		return
-	var n: int = int(from.stats["kills"])
-	if e.elite or e.boss:
-		to.inject_enemy("suv", 2)
-	elif n % 5 == 0:
-		to.inject_enemy("slow_car", 1)
-	if from == sim and n % 5 == 0:
-		view._text(Vector2(900, 760), "SENT!", Color("ff9a8a"), 40)
+func _setup_coop() -> void:
+	var partner := BotPeers.Partner.new()
+	partner.configure(sim, String(cfg.get("partner_name", "Officer Dana")))
+	coop = CoopMatch.new()
+	coop.start(sim, partner)
+	coop.emote.connect(func(id): _chat_bubble("them", id))
 
-func _pvp_check() -> void:
-	if ended or sim.state == "ended":
-		return
-	if opp_sim.city_hp <= 0:
-		sim._finish("victory")
-	elif opp_sim.state == "ended" and opp_sim.result == "victory" and sim.state != "ended":
-		pass
+func _build_chat() -> void:
+	var vp := vsize()
+	var bottom_y := vp.y - (250 if mode == "coop" else 300) - Game.safe_bottom
+	var ch := UI.btn("CHAT", "lavender", Vector2(150, 62), func(): chat_row.visible = not chat_row.visible, 30)
+	ch.position = Vector2(vp.x - 340, bottom_y - 4)
+	hud.add_child(ch)
+	chat_row = HBoxContainer.new()
+	chat_row.position = Vector2(30, bottom_y - 150)
+	chat_row.add_theme_constant_override("separation", 10)
+	chat_row.visible = false
+	hud.add_child(chat_row)
+	for e in [["go", "GO!"], ["oops", "Oops!"], ["thanks", "Thanks!"], ["on_my_way", "On my way!"]]:
+		var b := UI.btn(e[1], "yellow", Vector2(230, 80), func():
+			chat_row.visible = false
+			_chat_bubble("me", e[0])
+			if pvp: pvp.send_emote(e[0])
+			if coop: coop.send_emote(e[0]), 32)
+		chat_row.add_child(b)
+
+const CHAT_TEXT := {"go": "GO!", "oops": "Oops!", "thanks": "Thanks!", "on_my_way": "On my way!"}
+func _chat_bubble(who: String, id: String) -> void:
+	var vp := vsize()
+	var bub := Atlas.nine("ui_bubble", 40)
+	bub.size = Vector2(300, 110)
+	bub.position = Vector2(30 if who == "me" else vp.x - 330, Game.safe_top + 270)
+	hud.add_child(bub)
+	var l := UI.label(CHAT_TEXT.get(id, id), 44, UI.INK, true)
+	l.size = Vector2(300, 100)
+	bub.add_child(l)
+	var tag := UI.label("YOU" if who == "me" else (pvp.opp["name"] if pvp else (coop.partner_name if coop else "")), 22, UI.INK_SOFT, true)
+	tag.position = Vector2(0, 76); tag.size = Vector2(300, 30)
+	bub.add_child(tag)
+	UI.pop_in(bub)
+	Audio.sfx("pop", 1.3)
+	var tw := bub.create_tween()
+	tw.tween_interval(2.4)
+	tw.tween_property(bub, "modulate:a", 0.0, 0.4)
+	tw.tween_callback(bub.queue_free)
 
 # ================================================================= tutorial
 func _tutorial_begin() -> void:

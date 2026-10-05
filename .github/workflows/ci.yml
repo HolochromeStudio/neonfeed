@@ -1,0 +1,21 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import project
+        run: godot --headless --path . --import || true
+      - name: Content validator (60 units / 138 upgrades / 50 relics ...)
+        run: godot --headless --path . res://tests/validate.tscn
+      - name: Simulator stress (every unit, upgrade, relic, boss)
+        run: godot --headless --path . res://tests/stress.tscn
+      - name: Rule tests
+        run: godot --headless --path . res://tests/unit_test.tscn
+      - name: Multiplayer message layer
+        run: godot --headless --path . res://tests/net_test.tscn
+      - name: First-run flow (intro -> create -> tutorial -> campaign -> save/load)
+        run: godot --headless --path . res://tests/flow_test.tscn -- --save=ci_flow.json --fresh

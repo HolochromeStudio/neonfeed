@@ -58,12 +58,12 @@ func _ready() -> void:
 	add_child(stage)
 	var floor_strip := ColorRect.new()
 	floor_strip.color = Color("6b6660")
-	floor_strip.position = Vector2(30, 410); floor_strip.size = Vector2(stage.size.x - 60, 120)
+	floor_strip.position = Vector2(56, 425); floor_strip.size = Vector2(stage.size.x - 112, 100)
 	stage.add_child(floor_strip)
 	var dash := TextureRect.new()
 	dash.texture = Atlas.tile("tile_road_dashed_yellow_h")
 	dash.stretch_mode = TextureRect.STRETCH_TILE
-	dash.position = Vector2(30, 440); dash.size = Vector2(stage.size.x - 60, 60)
+	dash.position = Vector2(56, 455); dash.size = Vector2(stage.size.x - 112, 40)
 	dash.modulate = Color(1, 1, 1, 0.8)
 	stage.add_child(dash)
 	doll = Doll.new()
@@ -198,10 +198,7 @@ func _fill_grid() -> void:
 		cell.add_child(sl)
 		if not owned:
 			cell.modulate = Color(0.8, 0.8, 0.8)
-		cell.mouse_filter = Control.MOUSE_FILTER_STOP
-		cell.gui_input.connect(func(ev):
-			if ev is InputEventMouseButton and not ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
-				_tap_item(it, owned))
+		UI.tappable(cell, func(): _tap_item(it, owned))
 		grid.add_child(cell)
 
 func _tap_item(it: Dictionary, owned: bool) -> void:

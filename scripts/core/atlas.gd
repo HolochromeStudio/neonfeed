@@ -71,3 +71,14 @@ func tile(name: String) -> Texture2D:
 	if not _tiles.has(name):
 		_tiles[name] = load("res://assets/runtime/tex/%s.png" % name)
 	return _tiles[name]
+
+var _wheels: Dictionary = {}
+var _wheels_loaded: bool = false
+## Wheel layout for a vehicle sprite key (veh_x / en_x): [[x, y, r], ...] in runtime px relative to the sprite's bottom-centre.
+func wheels(key: String) -> Array:
+	if not _wheels_loaded:
+		_wheels_loaded = true
+		var f := FileAccess.open("res://assets/runtime/wheels.json", FileAccess.READ)
+		if f:
+			_wheels = JSON.parse_string(f.get_as_text())
+	return _wheels.get(key, [])

@@ -1314,6 +1314,15 @@
 152
 ]
 },
+"fx_wheel": {
+"page": 6,
+"rect": [
+1666,
+1676,
+64,
+64
+]
+},
 "icon_alert": {
 "page": 5,
 "rect": [
@@ -2289,7 +2298,7 @@
 "ui_bar_bg": {
 "page": 6,
 "rect": [
-1358,
+1418,
 1776,
 248,
 52
@@ -2298,7 +2307,7 @@
 "ui_bar_fill_blue": {
 "page": 6,
 "rect": [
-1106,
+1166,
 1776,
 248,
 52
@@ -2307,7 +2316,7 @@
 "ui_bar_fill_green": {
 "page": 6,
 "rect": [
-854,
+914,
 1776,
 248,
 52
@@ -2334,7 +2343,7 @@
 "ui_bar_fill_red": {
 "page": 6,
 "rect": [
-1610,
+1670,
 1776,
 248,
 52
@@ -2343,7 +2352,7 @@
 "ui_bar_fill_teal": {
 "page": 6,
 "rect": [
-602,
+662,
 1776,
 248,
 52
@@ -2685,7 +2694,7 @@
 "ui_halftone_tile": {
 "page": 6,
 "rect": [
-1666,
+1734,
 1676,
 64,
 64
@@ -2964,7 +2973,7 @@
 "ui_status_armor_break": {
 "page": 6,
 "rect": [
-302,
+362,
 1776,
 56,
 56
@@ -2973,7 +2982,7 @@
 "ui_status_burn": {
 "page": 6,
 "rect": [
-1734,
+1802,
 1676,
 56,
 56
@@ -2982,7 +2991,7 @@
 "ui_status_fear": {
 "page": 6,
 "rect": [
-182,
+242,
 1776,
 56,
 56
@@ -2991,7 +3000,7 @@
 "ui_status_haste": {
 "page": 6,
 "rect": [
-362,
+422,
 1776,
 56,
 56
@@ -3000,7 +3009,7 @@
 "ui_status_jammed": {
 "page": 6,
 "rect": [
-422,
+482,
 1776,
 56,
 56
@@ -3009,7 +3018,7 @@
 "ui_status_marked": {
 "page": 6,
 "rect": [
-2,
+62,
 1776,
 56,
 56
@@ -3018,58 +3027,13 @@
 "ui_status_oil": {
 "page": 6,
 "rect": [
-1974,
-1676,
+2,
+1776,
 56,
 56
 ]
 },
 "ui_status_pushback": {
-"page": 6,
-"rect": [
-62,
-1776,
-56,
-56
-]
-},
-"ui_status_regen": {
-"page": 6,
-"rect": [
-242,
-1776,
-56,
-56
-]
-},
-"ui_status_shield": {
-"page": 6,
-"rect": [
-482,
-1776,
-56,
-56
-]
-},
-"ui_status_shock": {
-"page": 6,
-"rect": [
-1914,
-1676,
-56,
-56
-]
-},
-"ui_status_silence": {
-"page": 6,
-"rect": [
-542,
-1776,
-56,
-56
-]
-},
-"ui_status_slow": {
 "page": 6,
 "rect": [
 122,
@@ -3078,10 +3042,55 @@
 56
 ]
 },
+"ui_status_regen": {
+"page": 6,
+"rect": [
+302,
+1776,
+56,
+56
+]
+},
+"ui_status_shield": {
+"page": 6,
+"rect": [
+542,
+1776,
+56,
+56
+]
+},
+"ui_status_shock": {
+"page": 6,
+"rect": [
+1982,
+1676,
+56,
+56
+]
+},
+"ui_status_silence": {
+"page": 6,
+"rect": [
+602,
+1776,
+56,
+56
+]
+},
+"ui_status_slow": {
+"page": 6,
+"rect": [
+182,
+1776,
+56,
+56
+]
+},
 "ui_status_stun": {
 "page": 6,
 "rect": [
-1854,
+1922,
 1676,
 56,
 56
@@ -3090,7 +3099,7 @@
 "ui_status_wet": {
 "page": 6,
 "rect": [
-1794,
+1862,
 1676,
 56,
 56

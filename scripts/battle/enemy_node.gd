@@ -26,6 +26,8 @@ var _hit_squash: float = 0.0
 var _sx: float = 1.0
 var _stun_icon: Sprite2D
 var _dead: bool = false
+var wheels: Array = []
+var _wheel_rot: float = 0.0
 
 func setup(en: BattleSim.SimEnemy, v: BattleView) -> void:
 	e = en
@@ -50,10 +52,18 @@ func setup(en: BattleSim.SimEnemy, v: BattleView) -> void:
 	_fit = clampf(104.0 / w, 0.6, 1.1) * float(en.def.get("scale", 1.0))
 	if en.boss:
 		_fit = clampf(190.0 / w, 0.8, 1.6) * 1.0
+	_fit *= en.size_mult
 	if en.elite:
 		_fit *= 1.12
 		glow.modulate = Color(1, 0.85, 0.3, 0.55)
 	sprite.scale = Vector2(_fit, _fit)
+	for wd in Atlas.wheels(String(en.def["art"])):
+		var ws := Atlas.sprite("fx_wheel")
+		ws.position = Vector2(wd[0], wd[1])
+		var kk: float = float(wd[2]) * 1.86 / 64.0
+		ws.scale = Vector2(kk, kk)
+		sprite.add_child(ws)
+		wheels.append(ws)
 	hp_bg = Atlas.nine("ui_bar_bg", 20)
 	hp_bg.size = Vector2(70, 14) * (1.6 if en.boss else 1.0)
 	hp_bg.position = Vector2(-hp_bg.size.x * 0.5, -sprite.texture.region.size.y * _fit - 22)
@@ -103,6 +113,11 @@ func sync(sim: BattleSim, dt: float) -> void:
 		_flip = lerpf(_flip, want_flip, clampf(dt * 10.0, 0, 1))
 	var speedf := clampf(e.speed / 90.0, 0.5, 2.5)
 	var moving := not e.st.has("stun")
+	if moving and not wheels.is_empty():
+		var dirsign := -1.0 if fear else 1.0
+		_wheel_rot += (e.speed * dt / 7.0) * dirsign * (1.0 if _flip < 0.0 else -1.0) * -1.0
+		for ws in wheels:
+			ws.rotation = _wheel_rot
 	var bob := sin(_t * 9.0 * speedf + _ph) * (1.6 if moving else 0.2)
 	body.position.y = bob * 0.5 - (6.0 if e.flying else 0.0) + (sin(_t * 3.0) * 8.0 if e.flying else 0.0)
 	var tilt := dir.y * 0.18 * (-_flip) if absf(dir.x) > 0.05 else dir.y * 0.15

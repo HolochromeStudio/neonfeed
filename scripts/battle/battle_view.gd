@@ -33,6 +33,9 @@ var tutorial_focus: Array = []
 var _scale: float = 1.0
 var dim_non_focus: bool = false
 var y_offset: float = 0.0
+var combo: int = 0
+var combo_t: float = 0.0
+var combo_node: Control
 
 func setup(s: BattleSim, is_preview: bool = false) -> void:
 	sim = s
@@ -220,6 +223,11 @@ func _process(dt: float) -> void:
 	if sim == null:
 		return
 	t += dt
+	if combo_node and is_instance_valid(combo_node) and t - combo_t > 1.6:
+		combo_node.modulate.a = maxf(0.0, combo_node.modulate.a - dt * 3.0)
+		if combo_node.modulate.a <= 0.0:
+			combo_node.queue_free()
+			combo_node = null
 	_process_events()
 	for id in unit_nodes.keys():
 		var un: UnitNode = unit_nodes[id]
@@ -319,13 +327,13 @@ func _handle(e: Dictionary) -> void:
 		"hit":
 			_do_hit(e)
 		"miss":
-			_text(e["pos"] + Vector2(0, -50), "MISS", Color("c8c8c8"), 34)
+			sticker(e["pos"] + Vector2(0, -50), "lbl_miss", 0.55)
 		"kill":
 			_do_kill(e)
 		"leak":
 			_do_leak(e)
 		"block":
-			_text(e["pos"], "BLOCKED", Color("8ad0ff"), 42)
+			sticker(e["pos"] + Vector2(-40, -20), "lbl_block", 0.7)
 			Audio.sfx("shield")
 		"splash":
 			_ring(e["pos"], float(e["r"]), {"wet": Color("7ab8f0"), "armor_break": Color("c8a070"), "burn": Color("f08a4a")}.get(e.get("st", ""), Color("ffe6a0")))
@@ -447,8 +455,9 @@ func _do_merge(e: Dictionary) -> void:
 		st.chain().tween_callback(sparkle.queue_free)
 		Audio.sfx("merge_big" if int(e["rank"]) >= 4 else "merge", 1.0 + 0.04 * int(e["rank"]))
 		Audio.haptic(25)
+		sticker(slot_p + Vector2(0, -120), "lbl_merge", 0.7)
 		if e.get("lucky", false):
-			_text(slot_p + Vector2(0, -130), "LUCKY!", Color("ffe08a"), 54)
+			_text(slot_p + Vector2(0, -170), "LUCKY!", Color("ffe08a"), 54)
 		if e.get("failed", false):
 			_text(slot_p + Vector2(0, -130), "FAIL", Color("ff8a7a"), 54)
 		if int(e["rank"]) >= 5:
@@ -533,7 +542,8 @@ func _do_hit(e: Dictionary) -> void:
 		return
 	var d := float(e["dmg"])
 	if e["crit"]:
-		_text(e["pos"] + Vector2(_rng.randf_range(-20, 20), -60), UI.fmt_num(d) + "!", Color("ffd24a"), 52)
+		sticker(e["pos"] + Vector2(_rng.randf_range(-20, 20), -90), "lbl_critical", 0.5)
+		_text(e["pos"] + Vector2(_rng.randf_range(-20, 20), -50), UI.fmt_num(d) + "!", Color("ffd24a"), 52)
 		Audio.sfx("crit", 1.0, -10)
 	elif d >= 1.0 and _rng.randf() < 0.55:
 		_text(e["pos"] + Vector2(_rng.randf_range(-24, 24), -50), UI.fmt_num(d), Color("fbf6ea"), 30)
@@ -556,6 +566,7 @@ func _do_kill(e: Dictionary) -> void:
 	elif e["elite"]:
 		_explosion(e["pos"], 1.0)
 		shake(6)
+	_combo_hit()
 	if not hide_texts and not preview and float(e["sp"]) > 0.0 and (e["boss"] or e["elite"] or _rng.randf() < 0.5):
 		_text(e["pos"] + Vector2(0, -20), "+%d" % int(e["sp"]), Color("ffe08a"), 32)
 
@@ -617,12 +628,12 @@ func _add_cone(e: Dictionary) -> void:
 
 func _hook_line(from: Vector2, to: Vector2) -> void:
 	var l := Line2D.new()
-	l.width = 6
-	l.default_color = Color("3a2e2a")
+	l.width = 4
+	l.default_color = Color(0.23, 0.18, 0.16, 0.75)
 	l.points = PackedVector2Array([from + Vector2(0, -30), to])
 	fx_layer.add_child(l)
 	var tw := create_tween()
-	tw.tween_property(l, "modulate:a", 0.0, 0.3)
+	tw.tween_property(l, "modulate:a", 0.0, 0.18)
 	tw.tween_callback(l.queue_free)
 
 func _lightning(pts: Array) -> void:
@@ -659,6 +670,8 @@ func _ring(pos: Vector2, r: float, col: Color) -> void:
 func _burst(pos: Vector2, n: int) -> void:
 	if Save.setting("quality") == "low":
 		n = maxi(2, n / 3)
+	if fx_layer.get_child_count() > 140:
+		return
 	for i in n:
 		var s := Atlas.sprite("fx_scrap_%02d" % (_rng.randi() % 14))
 		s.position = pos
@@ -713,6 +726,8 @@ func _flash(col: Color) -> void:
 func _text(pos: Vector2, txt: String, col: Color, fsize: int = 36) -> void:
 	if preview:
 		return
+	if text_layer.get_child_count() > 34 and fsize < 44:
+		return   # keep the screen readable (and cheap) when combat gets chaotic
 	var l := UI.label(txt, fsize, col, true, HORIZONTAL_ALIGNMENT_CENTER, 8, Color(0.12, 0.08, 0.07, 0.95))
 	l.position = pos - Vector2(100, 24)
 	l.size = Vector2(200, 50)
@@ -725,6 +740,53 @@ func _text(pos: Vector2, txt: String, col: Color, fsize: int = 36) -> void:
 	tw.tween_property(l, "position:y", l.position.y - 70, 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tw.tween_property(l, "modulate:a", 0.0, 0.3).set_delay(0.55)
 	tw.chain().tween_callback(l.queue_free)
+
+func sticker(pos: Vector2, key: String, sc: float = 0.8, extra: String = "") -> void:
+	if preview or hide_texts:
+		return
+	var spr := Atlas.sprite(key)
+	spr.position = pos
+	spr.scale = Vector2(sc * 0.3, sc * 0.3)
+	spr.rotation = _rng.randf_range(-0.12, 0.12)
+	text_layer.add_child(spr)
+	if extra != "":
+		var l := UI.label(extra, int(46 * sc), UI.INK, true, HORIZONTAL_ALIGNMENT_CENTER, 0)
+		l.size = Vector2(200, 50)
+		l.position = Vector2(-100, 20) / 1.0
+		l.scale = Vector2.ONE / maxf(sc, 0.3) * 0.3
+		spr.add_child(l)
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(spr, "scale", Vector2(sc, sc), 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(spr, "position:y", pos.y - 60, 0.9)
+	tw.tween_property(spr, "modulate:a", 0.0, 0.3).set_delay(0.7)
+	tw.chain().tween_callback(spr.queue_free)
+
+func _combo_hit() -> void:
+	if t - combo_t < 1.3:
+		combo += 1
+	else:
+		combo = 1
+	combo_t = t
+	if combo >= 3 and not preview:
+		if combo_node == null or not is_instance_valid(combo_node):
+			combo_node = Control.new()
+			combo_node.size = Vector2(300, 120)
+			combo_node.position = Vector2(size.x - 330, 300)
+			combo_node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			var st := Atlas.rect("lbl_combo", 260, 90)
+			combo_node.add_child(st)
+			var nl := UI.label("", 56, UI.WHITE, true, HORIZONTAL_ALIGNMENT_CENTER, 10)
+			nl.name = "n"
+			nl.position = Vector2(0, 70); nl.size = Vector2(260, 60)
+			combo_node.add_child(nl)
+			add_child(combo_node)
+		(combo_node.get_node("n") as Label).text = "x%d" % combo
+		combo_node.pivot_offset = Vector2(130, 60)
+		combo_node.scale = Vector2(1.3, 1.3)
+		combo_node.modulate.a = 1.0
+		create_tween().tween_property(combo_node, "scale", Vector2.ONE, 0.15)
+		Audio.sfx("tick", 1.0 + minf(combo, 20) * 0.04, -6)
 
 func banner(text: String, color: String = "red", dur: float = 1.6) -> void:
 	var vpw := size.x

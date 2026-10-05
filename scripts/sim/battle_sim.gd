@@ -11,7 +11,8 @@ extends RefCounted
 const RANK_DMG := [1.0, 2.7, 7.0, 18.0, 46.0, 118.0, 300.0, 760.0]
 const RANK_SPD := [1.0, 1.0, 1.04, 1.08, 1.12, 1.16, 1.2, 1.25]
 const MAX_RANK_STD := 7
-const SP_SCALE := 3.0
+const SP_SCALE := 3.4
+const SPEED_SCALE := 1.4
 const FIELD_W := 1080.0
 
 # ---------------------------------------------------------------- inner classes
@@ -69,6 +70,8 @@ class SimEnemy:
 	var timers: Dictionary = {}
 	var phase: int = 0
 	var sp: float = 1.0
+	var sp_mult: float = 1.0
+	var size_mult: float = 1.0
 	var leak: int = 1
 	var flying: bool = false
 	var sent: bool = false
@@ -271,11 +274,11 @@ func _ev(e: Dictionary) -> void:
 	events.append(e)
 
 func hp_scale(w: int) -> float:
-	var ch := 1.0 + 0.30 * (chapter_idx - 1)
+	var ch := 1.0 + 0.25 * mini(chapter_idx - 1, 2) + 0.55 * clampi(chapter_idx - 3, 0, 3) + 0.9 * maxi(chapter_idx - 6, 0)
 	return pow(hp_scale_base, maxf(0.0, w - 1.0)) * ch * difficulty * (1.0 + enemy_hp_mult_extra + _m("enemy_hp"))
 
 func unit_base_dmg(u: SimUnit) -> float:
-	var lv := 1.0 + 0.07 * (u.level - 1)
+	var lv := 1.0 + 0.09 * (u.level - 1)
 	return float(u.def["dmg"]) * RANK_DMG[u.rank - 1] * lv
 
 func unit_interval(u: SimUnit) -> float:
@@ -490,6 +493,38 @@ func move_unit(u: SimUnit, to_slot: int) -> bool:
 	_ev({"t": "move", "unit": u.id, "slot": to_slot, "other": other.id if other else -1, "from": from})
 	dirty = true
 	return true
+
+## Single entry point for every player input (local touch, bot, network peer, replay). Returns true if applied.
+func apply_action(owner: int, a: Dictionary) -> bool:
+	match String(a.get("a", "")):
+		"deploy":
+			return deploy(owner, int(a.get("slot", -1)), String(a.get("unit", ""))) != null
+		"merge":
+			var u1 := unit_by_id(int(a.get("u1", -1)))
+			var u2 := unit_by_id(int(a.get("u2", -1)))
+			if u1 == null or u2 == null or u1.owner != owner:
+				return false
+			return merge(u1, u2) != null
+		"move":
+			var u := unit_by_id(int(a.get("u", -1)))
+			if u == null or u.owner != owner:
+				return false
+			return move_unit(u, int(a.get("slot", -1)))
+		"sell":
+			var u3 := unit_by_id(int(a.get("u", -1)))
+			if u3 == null or u3.owner != owner:
+				return false
+			sell_unit(u3)
+			return true
+		"choose":
+			if state != "offer":
+				return false
+			choose_offer(int(a.get("i", 0)))
+			return true
+		"call_wave":
+			call_next_wave()
+			return true
+	return false
 
 func sell_unit(u: SimUnit) -> void:
 	if u == null:
@@ -748,8 +783,8 @@ func boss_id_for(w: int) -> String:
 
 func make_wave(w: int) -> Array:
 	var spawns: Array = []
-	var budget := 7.0 + 4.6 * pow(float(w), 1.08)
-	budget *= 1.0 + 0.12 * (chapter_idx - 1)
+	var budget := 6.0 + 3.6 * pow(float(w), 1.06)
+	budget *= 1.0 + 0.07 * (chapter_idx - 1)
 	if cfg.get("budget_mult", 1.0) != 1.0:
 		budget *= float(cfg["budget_mult"])
 	var avail: Array = []
@@ -780,15 +815,25 @@ func make_wave(w: int) -> Array:
 			break
 		spent += cost
 		list.append(id)
+	# very dense waves are condensed into fewer, tougher vehicles so a wave never drags on
+	var hpm := 1
+	if list.size() > 26:
+		hpm = int(ceil(list.size() / 26.0))
+		var cond: Array = []
+		var i := 0
+		while i < list.size():
+			cond.append(list[i])
+			i += hpm
+		list = cond
 	var n := list.size()
-	var dur := clampf(5.0 + n * 0.55, 6.0, 24.0)
+	var dur := clampf(4.0 + n * 0.42, 6.0, 15.0)
 	var step := dur / maxf(1.0, float(n))
 	for id in list:
 		var pack: int = int(Data.enemies[id].get("pack", 1))
-		var espd: float = float(Data.enemies[id]["speed"]) * (1.0 + 0.012 * minf(w, 30))
-		var gap := 112.0 / maxf(espd, 40.0)
+		var espd: float = float(Data.enemies[id]["speed"]) * SPEED_SCALE * (1.0 + 0.012 * minf(w, 30))
+		var gap := 92.0 / maxf(espd, 40.0)
 		for p in pack:
-			spawns.append({"t": t + p * gap, "id": id, "elite": false, "boss": false})
+			spawns.append({"t": t + p * gap, "id": id, "elite": false, "boss": false, "hpm": hpm})
 		t += maxf(step * wave_rng.randf_range(0.7, 1.3), gap * (float(pack) + 0.3))
 	# elites
 	if w % 5 == 0 and not tutorial:
@@ -845,7 +890,7 @@ func _heal_city(n: int) -> void:
 	if city_hp != before:
 		_ev({"t": "heal", "amt": city_hp - before})
 
-func _spawn_enemy(id: String, elite: bool, boss: bool, pos_prog: float = 0.0, from_split: bool = false) -> SimEnemy:
+func _spawn_enemy(id: String, elite: bool, boss: bool, pos_prog: float = 0.0, from_split: bool = false, hpm: int = 1) -> SimEnemy:
 	var e := SimEnemy.new()
 	e.id = next_id; next_id += 1
 	e.eid = id
@@ -854,9 +899,12 @@ func _spawn_enemy(id: String, elite: bool, boss: bool, pos_prog: float = 0.0, fr
 	var scale := hp_scale(maxi(1, wave))
 	if from_split:
 		scale *= 0.6
-	var hp := float(e.def["hp"]) * scale
+	var hp := float(e.def["hp"]) * scale * float(hpm)
+	e.sp_mult = float(hpm)
+	if hpm > 1:
+		e.size_mult = 1.0 + 0.08 * (hpm - 1)
 	if boss:
-		hp = float(e.def["hp"]) * hp_scale(maxi(1, wave)) * 0.55
+		hp = float(e.def["hp"]) * hp_scale(maxi(1, wave)) * 0.7
 	if elite:
 		hp *= 3.4
 		e.shield = hp * 0.2
@@ -865,9 +913,9 @@ func _spawn_enemy(id: String, elite: bool, boss: bool, pos_prog: float = 0.0, fr
 	var spd_mult := 1.0 + enemy_speed_mult_extra + _m("enemy_fast") - _m("enemy_slow")
 	if has_rule("gridlock"):
 		spd_mult -= 0.40
-	e.speed = float(e.def["speed"]) * maxf(0.3, spd_mult) * (1.0 + 0.012 * minf(wave, 30))
+	e.speed = float(e.def["speed"]) * SPEED_SCALE * maxf(0.3, spd_mult) * (1.0 + 0.012 * minf(wave, 30))
 	e.armor = clampf(float(e.def.get("armor", 0.0)) + (0.1 if elite else 0.0), 0.0, 0.85)
-	e.sp = float(e.def["sp"]) * (4.0 if elite else 1.0)
+	e.sp = float(e.def["sp"]) * (4.0 if elite else 1.0) * sqrt(float(hpm))
 	e.leak = int(e.def["leak"]) * (2 if elite else 1)
 	e.flying = bool(e.def.get("flying", false))
 	e.progress = pos_prog
@@ -917,8 +965,6 @@ func tick(dt: float) -> void:
 	_update_rules(dt)
 	_flush_sent(dt)
 	_cleanup_dead()
-	if partner_ai != null:
-		partner_ai.step(self, dt)
 	if city_hp <= 0 and state != "ended":
 		if has_rule("second_chance") and not second_chance_used:
 			second_chance_used = true
@@ -952,8 +998,8 @@ func _update_wave(dt: float) -> void:
 			wave_clock += dt
 			while not wave_spawn_left.is_empty() and wave_spawn_left[0]["t"] <= wave_clock:
 				var s: Dictionary = wave_spawn_left.pop_front()
-				_spawn_enemy(s["id"], s["elite"], s["boss"])
-			if wave_spawn_left.is_empty() and (enemies.is_empty() or wave_clock >= 32.0 + 0.3 * wave):
+				_spawn_enemy(s["id"], s["elite"], s["boss"], 0.0, false, int(s.get("hpm", 1)))
+			if wave_spawn_left.is_empty() and (enemies.is_empty() or wave_clock >= 22.0 + 0.25 * wave):
 				_end_wave()
 	if state == "countdown" and total_waves > 0 and wave >= total_waves and enemies.is_empty() and wave_spawn_left.is_empty():
 		_finish("victory")
@@ -967,7 +1013,7 @@ func call_next_wave() -> void:
 
 func _end_wave() -> void:
 	state = "countdown"
-	wave_timer = 3.0 if tutorial else 5.5
+	wave_timer = 3.0 if tutorial else 4.0
 	var bonus := (14.0 + 3.0 * wave) * (1.0 + _m("clear_bonus"))
 	if enemies.is_empty():
 		sp += bonus

@@ -33,21 +33,44 @@ def part(w, h, draw_fn, ow=2, shade=True):
 # --- body parts (coordinates in 2x runtime pixels)
 def rrect(d, x, y, w, h, r, fill):
     d.rounded_rectangle([x, y, x + w, y + h], radius=r, fill=fill)
-put(part(30, 44, lambda d, x, y, w, h: rrect(d, x, y, w, h, 12 * S, SH + (255,))), "doll_leg.png")
-put(part(36, 18, lambda d, x, y, w, h: d.ellipse([x, y, x + w, y + h], fill=SH + (255,))), "doll_shoe.png")
+LINE = INK + (255,)
+def leg(d, x, y, w, h):
+    rrect(d, x, y, w, h, 12 * S, SH + (255,))
+    d.line([x + 4 * S, y + h * 0.5, x + w - 4 * S, y + h * 0.5 + 2 * S], fill=LINE, width=2 * S)       # knee crease
+    d.line([x + w * 0.5, y + 4 * S, x + w * 0.5, y + h * 0.42], fill=(120, 110, 110, 160), width=S)        # seam
+put(part(30, 44, leg), "doll_leg.png")
+def shoe(d, x, y, w, h):
+    d.ellipse([x, y, x + w, y + h], fill=SH + (255,))
+    d.arc([x + 3 * S, y + 2 * S, x + w - 3 * S, y + h * 1.6], 200, 340, fill=LINE, width=2 * S)             # toe cap
+    d.rectangle([x + 4 * S, y + h * 0.78, x + w - 4 * S, y + h * 0.9], fill=(250, 250, 250, 200))           # sole
+put(part(36, 18, shoe), "doll_shoe.png")
 def torso(d, x, y, w, h):
-    d.polygon([(x + 4 * S, y), (x + w - 4 * S, y), (x + w, y + h - 6 * S), (x + w - 4 * S, y + h), (x + 4 * S, y + h), (x, y + h - 6 * S)], fill=SH + (255,))
     d.rounded_rectangle([x, y, x + w, y + h], radius=9 * S, fill=SH + (255,))
+    cx = x + w / 2
+    # collar / neckline
+    d.polygon([(cx - 9 * S, y), (cx + 9 * S, y), (cx, y + 13 * S)], fill=(245, 240, 232, 255), outline=LINE)
+    # zip + pockets + hem
+    d.line([cx, y + 13 * S, cx, y + h - 2 * S], fill=LINE, width=2 * S)
+    d.rounded_rectangle([x + 6 * S, y + h * 0.58, x + 20 * S, y + h * 0.78], radius=3 * S, outline=LINE, width=2 * S)
+    d.rounded_rectangle([x + w - 20 * S, y + h * 0.58, x + w - 6 * S, y + h * 0.78], radius=3 * S, outline=LINE, width=2 * S)
+    d.line([x + 3 * S, y + h - 7 * S, x + w - 3 * S, y + h - 7 * S], fill=(90, 80, 80, 200), width=2 * S)
+    d.ellipse([cx - 3 * S, y + 22 * S, cx + 3 * S, y + 28 * S], fill=(240, 200, 80, 255), outline=LINE, width=S)   # button
 put(part(62, 64, torso), "doll_torso.png")
-put(part(20, 50, lambda d, x, y, w, h: rrect(d, x, y, w, h, 9 * S, SH + (255,))), "doll_arm.png")
+def arm(d, x, y, w, h):
+    rrect(d, x, y, w, h, 9 * S, SH + (255,))
+    d.line([x + 1 * S, y + h - 12 * S, x + w - 1 * S, y + h - 12 * S], fill=LINE, width=2 * S)             # cuff
+put(part(20, 50, arm), "doll_arm.png")
 put(part(22, 22, lambda d, x, y, w, h: d.ellipse([x, y, x + w, y + h], fill=SH + (255,))), "doll_hand.png")
 put(part(24, 22, lambda d, x, y, w, h: d.ellipse([x, y, x + w, y + h], fill=SH + (255,)), shade=False), "doll_ear.png")
 def head(d, x, y, w, h):
     d.rounded_rectangle([x, y, x + w, y + h], radius=int(w * 0.42), fill=SH + (255,))
+    d.arc([x + 8 * S, y + h * 0.55, x + w - 8 * S, y + h + 6 * S], 20, 160, fill=(120, 100, 100, 120), width=2 * S)   # jaw shade
 put(part(84, 78, head), "doll_head.png")
 put(part(14, 8, lambda d, x, y, w, h: d.ellipse([x, y, x + w, y + h], fill=(255, 150, 140, 255)), ow=0, shade=False), "doll_cheek.png")
 def backpack(d, x, y, w, h):
     d.rounded_rectangle([x, y, x + w, y + h], radius=8 * S, fill=SH + (255,))
+    d.line([x + 4 * S, y + h * 0.4, x + w - 4 * S, y + h * 0.4], fill=LINE, width=2 * S)
+    d.rounded_rectangle([x + 10 * S, y + h * 0.5, x + w - 10 * S, y + h * 0.85], radius=4 * S, outline=LINE, width=2 * S)
 put(part(52, 56, backpack), "doll_backpack.png")
 
 # --- faces (untinted)

@@ -32,6 +32,9 @@ var _stun_icon: Sprite2D
 var _wheel_ph: float = 0.0
 var _dust_t: float = 0.0
 var _hop: float = 0.0
+var wheels: Array = []
+var _wheel_rot: float = 0.0
+var _roll: float = 0.0
 
 func setup(unit: BattleSim.SimUnit, v: BattleView, anim: bool) -> void:
 	u = unit
@@ -58,6 +61,7 @@ func setup(unit: BattleSim.SimUnit, v: BattleView, anim: bool) -> void:
 	_fit = minf(v.sim.cell.x * 0.86 / tw, v.sim.cell.y * 0.62 / th)
 	_fit = clampf(_fit, 0.8, 1.55)
 	_apply_scale()
+	_add_wheels()
 	_hl = Atlas.sprite("fx_ring")
 	_hl.visible = false
 	_hl.scale = Vector2(1.1, 0.8)
@@ -70,6 +74,15 @@ func setup(unit: BattleSim.SimUnit, v: BattleView, anim: bool) -> void:
 	_update_rank(true)
 	if anim:
 		_drive_in()
+
+func _add_wheels() -> void:
+	for w in Atlas.wheels(Data.unit_art(u.uid)):
+		var ws := Atlas.sprite("fx_wheel")
+		ws.position = Vector2(w[0], w[1])
+		var k: float = float(w[2]) * 1.86 / 64.0
+		ws.scale = Vector2(k, k)
+		sprite.add_child(ws)
+		wheels.append(ws)
 
 func _apply_scale() -> void:
 	var rs := 1.0 + 0.035 * (u.rank - 1)
@@ -206,6 +219,15 @@ func sync(sim: BattleSim, dt: float) -> void:
 	_flip = lerpf(_flip, _target_flip, clampf(dt * 14.0, 0, 1))
 	var rs := 1.0 + 0.035 * (u.rank - 1)
 	sprite.scale = Vector2(_fit * rs * _flip, _fit * rs * _squash)
+	# wheels turn while idling (slowly), spin up when driving in / attacking
+	var spin := 1.2 if not _driving else 14.0
+	if u.cd < 0.15 and not u.st.has("stun"):
+		spin += 3.0
+	if u.st.has("stun"):
+		spin = 0.0
+	_wheel_rot += spin * dt * 6.0
+	for ws in wheels:
+		ws.rotation = _wheel_rot
 	body.position = Vector2(_recoil.x * 0.3, 36 + bob * 0.6 + _recoil.y * 0.3)
 	body.rotation = _tilt + sin(_t * 1.3 + _ph) * 0.006
 	# status visuals

@@ -79,6 +79,21 @@ static func btn(text: String, color: String = "teal", size: Vector2 = Vector2(36
 		b.pressed.connect(cb)
 	return b
 
+## Make a control tappable inside ScrollContainers: PASS lets drags scroll the list; a release within ~18px of the press is a tap.
+static func tappable(c: Control, cb: Callable) -> void:
+	c.mouse_filter = Control.MOUSE_FILTER_PASS
+	var st := {"p": Vector2.ZERO, "down": false}
+	c.gui_input.connect(func(ev: InputEvent):
+		if ev is InputEventMouseButton and ev.button_index == MOUSE_BUTTON_LEFT:
+			if ev.pressed:
+				st["p"] = ev.global_position; st["down"] = true
+			elif st["down"]:
+				st["down"] = false
+				if ev.global_position.distance_to(st["p"]) < 18.0:
+					cb.call()
+		elif ev is InputEventMouseMotion and st["down"] and ev.global_position.distance_to(st["p"]) >= 18.0:
+			st["down"] = false)
+
 static func set_full_rect(c: Control) -> void:
 	c.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
