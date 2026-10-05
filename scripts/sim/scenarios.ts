@@ -8,6 +8,7 @@ import { BOSSES } from '../../src/data/bosses';
 import { RUN_TUNING } from '../../src/systems/RunSystem';
 import { PERK_BY_ID, RARITY_WEIGHTS, type PerkDef } from '../../src/data/perks';
 import { REGION_LIST } from '../../src/data/regions';
+import { RUN_END, SHOP_BASE, CATALOG } from '../../src/data/economy';
 
 export interface Patch {
   duel?: (c: typeof DUEL_CONFIG) => void;
@@ -16,6 +17,8 @@ export interface Patch {
   run?: (r: Record<string, unknown>) => void;
   rarity?: (w: Record<string, number>) => void;
   regions?: (r: typeof REGION_LIST) => void;
+  /** Edits to economy.ts RUN_END (settlement rates) and item prices. */
+  economy?: (e: { runEnd: Record<string, number>; shop: Record<string, number>; catalog: typeof CATALOG }) => void;
   /** Per-perk edits, applied to the live PerkDef objects (functions such as `when` are preserved). */
   perks?: Record<string, (p: PerkDef) => void>;
 }
@@ -28,6 +31,9 @@ export function withPatch<T>(patch: Patch, fn: () => T): T {
     bosses: structuredClone(BOSSES),
     run: { ...(RUN_TUNING as unknown as Record<string, unknown>) },
     rarity: { ...RARITY_WEIGHTS } as Record<string, number>,
+    runEnd: { ...(RUN_END as unknown as Record<string, number>) },
+    shop: { ...(SHOP_BASE as unknown as Record<string, number>) },
+    catalog: structuredClone(CATALOG),
     regions: structuredClone(REGION_LIST),
   };
   const perkSnap = Object.keys(patch.perks ?? {}).map((id) => {
@@ -42,6 +48,7 @@ export function withPatch<T>(patch: Patch, fn: () => T): T {
     patch.run?.(RUN_TUNING as unknown as Record<string, unknown>);
     patch.rarity?.(RARITY_WEIGHTS as unknown as Record<string, number>);
     patch.regions?.(REGION_LIST as unknown as typeof REGION_LIST);
+    patch.economy?.({ runEnd: RUN_END as unknown as Record<string, number>, shop: SHOP_BASE as unknown as Record<string, number>, catalog: CATALOG });
     return fn();
   } finally {
     for (const { p, copy } of perkSnap) {
@@ -54,6 +61,9 @@ export function withPatch<T>(patch: Patch, fn: () => T): T {
     restore(RUN_TUNING, snap.run);
     restore(RARITY_WEIGHTS, snap.rarity);
     restore(REGION_LIST, snap.regions);
+    restore(RUN_END, snap.runEnd);
+    restore(SHOP_BASE, snap.shop);
+    restore(CATALOG, snap.catalog);
   }
 }
 
@@ -70,11 +80,12 @@ function restore(target: unknown, snapshot: unknown): void {
   for (const k of Object.keys(s)) {
     const sv = s[k];
     const tv = t[k];
-    if (Array.isArray(sv) && Array.isArray(tv) && sv.length === tv.length) {
-      sv.forEach((x, i) => {
-        if (typeof x === 'object' && x !== null && typeof tv[i] === 'object' && tv[i] !== null) restore(tv[i], x);
-        else tv[i] = x;
-      });
+    if (Array.isArray(sv) && Array.isArray(tv) && sv.length === tv.length && sv.every((x) => typeof x === 'object' && x !== null)) {
+      // arrays of objects keep their element identity (REGIONS_BY_ID and friends hold references)
+      sv.forEach((x, i) => restore(tv[i], x));
+    } else if (Array.isArray(sv)) {
+      // arrays of primitives are replaced by a fresh copy: a patch may have assigned an array it still owns (tuples like aimErrorPx)
+      t[k] = structuredClone(sv);
     } else if (typeof sv === 'object' && sv !== null && !Array.isArray(sv) && typeof tv === 'object' && tv !== null && !Array.isArray(tv)) {
       restore(tv, sv);
     } else t[k] = typeof sv === 'object' && sv !== null ? structuredClone(sv) : sv;

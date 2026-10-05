@@ -47,6 +47,8 @@ export interface DuelSimOptions {
   reloadMs?: number;
   /** Cap on duel length in ms before it is called a stall. */
   maxMs?: number;
+  /** Tracing hook: receives the DuelSystem before any input (attach listeners for debugging). */
+  onDuel?: (duel: DuelSystem) => void;
 }
 
 /** True when this checkout's DuelSystem reads DuelParams.modifiers (A02 perk hooks). */
@@ -146,6 +148,7 @@ export function simulateDuel(enemyId: string, skill: SkillModel, prng: Rng, o: D
   }
   const duel = new DuelSystem(params);
   if (bossSys) bossSys.attachDuel(duel);
+  o.onDuel?.(duel);
 
   let headshots = 0;
   let armorBroken = false;

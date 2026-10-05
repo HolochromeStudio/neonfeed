@@ -185,7 +185,7 @@ export function rookieAccuracy(n: number): Section {
     { label: 'aim 0-38 (Bandit accuracy), lead 620', aim: [0, 38], lead: 620 },
   ];
   for (const v of variants) {
-    const patch: Patch = { enemies: (e) => { e.rookie.aimErrorPx = v.aim; e.rookie.tell.leadMs = v.lead; } };
+    const patch: Patch = { enemies: (e) => { e.rookie.aimErrorPx = [...v.aim] as [number, number]; e.rookie.tell.leadMs = v.lead; } };
     const cells = withPatch(patch, () => SKILLS.map((s) => {
       const rs = batchDuelsRaw('rookie', s, n, { difficulty: 0.05 });
       data[`${v.label}|${s.id}`] = cleanRate(rs);
@@ -194,6 +194,51 @@ export function rookieAccuracy(n: number): Section {
     rows.push([v.label, ...cells]);
   }
   const md = '\nClean-win rate vs a Rookie at depth difficulty 0.05 (Rookie hp 1).\n\n' + table(['Rookie variant', ...SKILLS.map((s) => s.id)], rows) + '\n';
+  return { md, data };
+}
+
+/** Tell-lead ladder for the early enemies: which `tell.leadMs` puts each skill inside the adopted band. */
+export function leadSweep(n: number): Section {
+  const cases: { id: string; d: number; leads: number[]; aim?: [number, number] }[] = [
+    { id: 'rookie', d: 0.05, leads: [900, 800, 750, 700], aim: [4, 40] },
+    { id: 'bandit', d: 0.1, leads: [620, 660, 700, 740] },
+    { id: 'gunslinger', d: 0.5, leads: [560, 600, 640, 680] },
+    { id: 'sheriff', d: 0.5, leads: [600, 640, 680, 720] },
+    { id: 'sniper', d: 0.5, leads: [1000, 860, 760, 700] },
+    { id: 'knife_thrower', d: 0.5, leads: [780, 720, 660, 600] },
+    { id: 'horse_rider', d: 0.5, leads: [820, 740, 680, 620] },
+    { id: 'drunk', d: 0.5, leads: [800, 700, 640, 600] },
+  ];
+  const rows: (string | number)[][] = [];
+  const data: Record<string, unknown> = {};
+  for (const c of cases) {
+    for (const lead of c.leads) {
+      const patch: Patch = { enemies: (e) => { e[c.id as keyof typeof e].tell.leadMs = lead; if (c.aim) e[c.id as keyof typeof e].aimErrorPx = [...c.aim] as [number, number]; } };
+      const cells = withPatch(patch, () => SKILLS.map((s) => {
+        const v = cleanRate(batchDuelsRaw(c.id, s, n, { difficulty: c.d }));
+        data[`${c.id}|${lead}|${s.id}`] = v;
+        return pct(v);
+      }));
+      rows.push([`${c.id} (d ${c.d})${c.aim ? ` aim ${c.aim.join('-')}` : ''}`, lead, ...cells]);
+    }
+  }
+  const md = '\nClean-win rate by `tell.leadMs` (floor 450). Rookie rows also use aim 4-40.\n\n' + table(['enemy', 'tell.leadMs', ...SKILLS.map((s) => s.id)], rows) + '\n';
+  return { md, data };
+}
+
+export function bossHpSweep(n: number): Section {
+  const rows: (string | number)[][] = [];
+  const data: Record<string, unknown> = {};
+  for (const hp of [3, 4, 5, 6]) {
+    for (const s of [AVERAGE, SKILLED, EXPERT]) {
+      const rs = batchDuelsRaw('sheriff', s, n, { difficulty: 0.42, bossId: 'mad_dog_mcgraw', enemyHp: hp });
+      const a = aggregateDuels(rs);
+      const p3 = rs.filter((r) => (r.bossPhase ?? 1) >= 3).length / rs.length;
+      data[`${hp}|${s.id}`] = { clean: cleanRate(rs), damage: a.meanDamage, sec: a.meanSec, p3 };
+      rows.push([hp, s.id, pct(cleanRate(rs)), a.meanDamage.toFixed(2), a.meanSec.toFixed(1), pct(p3)]);
+    }
+  }
+  const md = '\nMad Dog McGraw at d 0.42 with boss hp overridden (data: 3, +1 at d >= 0.75).\n\n' + table(['boss hp', 'skill', 'clean win', 'hits/duel', 'sec', 'reaches phase 3'], rows) + '\n';
   return { md, data };
 }
 
@@ -260,20 +305,21 @@ export function runMany(n: number, base: Omit<RunSimOptions, 'seed'>, seedBase =
 
 const REGION3 = ['dust_creek', 'canyon', 'railroad'] as const;
 
-export function runStats(n: number): Section {
+export function runStats(n: number, extra: { patch: Patch; opts?: Partial<RunSimOptions> } = { patch: {} }): Section {
   const data: Record<string, RunAgg> = {};
   const rows: (string | number)[][] = [];
+  const mk = (o: Omit<RunSimOptions, 'seed'>): RunRecord[] => withPatch(extra.patch, () => runMany(n, { ...o, ...(extra.opts ?? {}) }));
   for (const s of SKILLS) {
-    const a = aggRuns(runMany(n, { skill: s, regions: REGION3 }), 3);
+    const a = aggRuns(mk({ skill: s, regions: REGION3 }), 3);
     data[s.id] = a;
     rows.push([s.id, pct(a.win), pct(a.clear[0]), pct(a.cond[1]), pct(a.cond[2]), f1(a.minutes), a.minutesPerRegion.map((m) => f1(m)).join(' / '), f1(a.duels), f1(a.damage), f1(a.deaths), f1(a.retries)]);
   }
   let md = '\n#### Three-region run (first release), random perk picks, retries on\n\n' + table(
-    ['skill', 'run win', 'clear Dust Creek', 'clear Canyon | reached', 'clear Railroad | reached', 'run min', 'min per region (cleared)', 'duels', 'hits taken', 'deaths', 'paid retries'], rows) + '\n';
+    ['skill', 'run win', 'clear Dust Creek', 'clear Canyon (if reached)', 'clear Railroad (if reached)', 'run min', 'min per region (cleared)', 'duels', 'hits taken', 'deaths', 'paid retries'], rows) + '\n';
 
   const rows2: (string | number)[][] = [];
   for (const s of SKILLS) {
-    const a = aggRuns(runMany(n, { skill: s, regions: ['dust_creek'] }), 1);
+    const a = aggRuns(mk({ skill: s, regions: ['dust_creek'] }), 1);
     data[`dust-only|${s.id}`] = a;
     rows2.push([s.id, pct(a.win), f1(a.minutes), f1(a.duels), f1(a.damage), f1(a.bossHp[0]), Object.entries(a.killers).sort((x, y) => y[1] - x[1]).slice(0, 3).map(([k, v]) => `${k} ${v}`).join(', ')]);
   }
@@ -296,17 +342,33 @@ export function runStats(n: number): Section {
 
 // ------------------------------------------------------------------ 8. difficulty ramp
 
-export function difficultyRamp(n: number): Section {
+export function difficultyRamp(n: number, extra: { patch: Patch; opts?: Partial<RunSimOptions> } = { patch: {} }): Section {
   const rows: (string | number)[][] = [];
   const data: Record<string, RunAgg> = {};
   for (const s of [NOVICE, AVERAGE, SKILLED, EXPERT]) {
-    for (const mode of ['run', 'region'] as const) {
-      const a = aggRuns(runMany(n, { skill: s, regions: REGION3, difficultyMode: mode }), 3);
+    for (const mode of ['run', 'region', 'steep'] as const) {
+      const a = aggRuns(withPatch(extra.patch, () => runMany(n, { skill: s, regions: REGION3, difficultyMode: mode, ...(extra.opts ?? {}) })), 3);
       data[`${s.id}|${mode}`] = a;
-      rows.push([s.id, mode === 'run' ? 'one curve per run (current)' : 'restarts each region', pct(a.win), pct(a.cond[0]), pct(a.cond[1]), pct(a.cond[2]), a.killers ? Object.entries(a.killers).sort((x, y) => y[1] - x[1]).slice(0, 2).map(([k, v]) => `${k} ${v}`).join(', ') : '']);
+      rows.push([s.id, mode === 'run' ? 'one curve per run (current)' : mode === 'region' ? 'restarts each region' : 'one curve + 0.12 per region', pct(a.win), pct(a.cond[0]), pct(a.cond[1]), pct(a.cond[2]), a.killers ? Object.entries(a.killers).sort((x, y) => y[1] - x[1]).slice(0, 2).map(([k, v]) => `${k} ${v}`).join(', ') : '']);
     }
   }
-  const md = '\n' + table(['skill', 'ramp', 'run win', 'clear R1', 'clear R2 | reached', 'clear R3 | reached', 'top killers'], rows) + '\n';
+  const md = '\n' + table(['skill', 'ramp', 'run win', 'clear R1', 'clear R2 (if reached)', 'clear R3 (if reached)', 'top killers'], rows) + '\n';
+  return { md, data };
+}
+
+export function regionLength(n: number, hard: { patch: Patch; opts?: Partial<RunSimOptions>; label: string }): Section {
+  const rows: (string | number)[][] = [];
+  const data: Record<string, unknown> = {};
+  for (const nodes of [7, 10, 14, 20]) {
+    for (const mode of [{ label: 'current data', patch: {} as Patch, opts: {} as Partial<RunSimOptions> }, hard]) {
+      const patch: Patch = { ...mode.patch, regions: (r) => { for (const x of r) x.nodeCount = nodes; } };
+      const a = aggRuns(withPatch(patch, () => runMany(n, { skill: AVERAGE, regions: REGION3, ...(mode.opts ?? {}) })), 3);
+      data[`${nodes}|${mode.label}`] = a;
+      rows.push([nodes, mode.label, f1(mean(a.minutesPerRegion.filter((x) => x > 0))), f1(a.minutes), f1(a.duels), pct(a.clear[0]), pct(a.win)]);
+    }
+  }
+  const md = '\nAverage skill. Minutes per region use the time model in runSim.ts TIME_MODEL (3 s per map pick, 8 s duel framing, 14 s boss framing, 30 s shop, 8 s rest, 14 s event, 8 s treasure).\n\n' +
+    table(['nodes per region', 'data', 'min per region (cleared)', 'min per 3-region run', 'duels per run', 'clear region 1', 'win 3 regions'], rows) + '\n';
   return { md, data };
 }
 
@@ -396,11 +458,15 @@ export function perkPolicies(n: number): Section {
 export interface Pool { t: number; open: number; runs: RunRecord[] }
 
 export function buildPools(per: number): Pool[] {
+  return buildPoolsWith(per, {});
+}
+
+export function buildPoolsWith(per: number, extra: Partial<RunSimOptions>): Pool[] {
   const pools: Pool[] = [];
   for (let t = 0.2; t <= 2.61; t += 0.4) {
     for (const open of [1, 2, 3]) {
       const regions = REGION3.slice(0, open);
-      pools.push({ t: Math.round(t * 10) / 10, open, runs: runMany(per, { skill: skillAt(t), regions }, 5000 + open * 100) });
+      pools.push({ t: Math.round(t * 10) / 10, open, runs: runMany(per, { skill: skillAt(t), regions, ...extra }, 5000 + open * 100) });
     }
   }
   return pools;
@@ -408,23 +474,25 @@ export function buildPools(per: number): Pool[] {
 
 const gameplay = CATALOG.filter((c) => c.kind !== 'cosmetic' && !c.staged && !c.starter);
 
-export function simulateMeta(pools: readonly Pool[], learner: (i: number) => number, nRuns: number, seed: number): { boughtAt: Record<string, number>; coinsPerRun: number[]; banked: number[] } {
+export function simulateMeta(pools: readonly Pool[], learner: (i: number) => number, nRuns: number, seed: number, coinScale = 1, claimBoard = true, boardScale = 1): { boughtAt: Record<string, number>; coinsPerRun: number[]; banked: number[]; board: number[] } {
   const rng = new Rng(seed);
   let meta: MetaSave = defaultMeta();
   const boughtAt: Record<string, number> = {};
-  const coinsPerRun: number[] = [], banked: number[] = [];
+  const coinsPerRun: number[] = [], banked: number[] = [], board: number[] = [];
   for (let i = 1; i <= nRuns; i++) {
     const t = learner(i - 1);
     const open = Math.min(3, 1 + meta.unlocks.regions.length);
     const near = [...pools].filter((p) => p.open === open).sort((a, b) => Math.abs(a.t - t) - Math.abs(b.t - t))[0];
-    const rec = near.runs[rng.int(0, near.runs.length - 1)];
+    const rec0 = near.runs[rng.int(0, near.runs.length - 1)];
+    const rec = coinScale === 1 ? rec0 : { ...rec0, summary: { ...rec0.summary, coins: Math.floor(rec0.summary.coins * coinScale) } };
     const day = `2026-01-${String(1 + ((i - 1) % 28)).padStart(2, '0')}`;
-    const before = meta.coins;
     banked.push(computeSettlement(meta, rec.summary).total);
     coinsPerRun.push(rec.coinsEarned);
     meta = settleRunWithBounties(meta, rec.summary, day);
-    meta = claimAll(meta, day).meta;
-    void before;
+    const claimed = claimBoard ? claimAll(meta, day) : { meta, total: 0 };
+    meta = claimed.meta;
+    if (boardScale !== 1) meta = { ...meta, coins: Math.max(0, meta.coins - Math.floor(claimed.total * (1 - boardScale))) };
+    board.push(Math.floor(claimed.total * boardScale));
     for (;;) {
       const opts = availableItems(meta).filter((c) => checkPurchase(meta, c.id).ok).filter((c) => c.kind !== 'cosmetic').sort((a, b) => a.price - b.price);
       if (!opts.length) break;
@@ -432,42 +500,69 @@ export function simulateMeta(pools: readonly Pool[], learner: (i: number) => num
       boughtAt[opts[0].id] = i;
     }
   }
-  return { boughtAt, coinsPerRun, banked };
+  return { boughtAt, coinsPerRun, banked, board };
 }
 
-export function economy(per: number, metaSeeds: number): Section {
-  const pools = buildPools(per);
+export function economy(per: number, metaSeeds: number, hard?: { patch: Patch; opts?: Partial<RunSimOptions>; label: string }): Section {
   const learners: { id: string; f: (i: number) => number }[] = [
     { id: 'slow learner (t=0.3+0.012i)', f: (i) => Math.min(2.6, 0.3 + 0.012 * i) },
     { id: 'typical learner (t=0.5+0.025i)', f: (i) => Math.min(2.6, 0.5 + 0.025 * i) },
     { id: 'fast learner (t=0.8+0.04i)', f: (i) => Math.min(2.6, 0.8 + 0.04 * i) },
   ];
   const tierDone = (b: Record<string, number>, t: number): number => Math.max(...gameplay.filter((c) => c.tier === t).map((c) => b[c.id] ?? Infinity));
-  const rows: (string | number)[][] = [];
+  const fmt = (v: number): string => (Number.isFinite(v) ? String(v) : '>100');
   const data: Record<string, unknown> = {};
-  for (const l of learners) {
-    const sims = Array.from({ length: metaSeeds }, (_, k) => simulateMeta(pools, l.f, 100, 1000 + k));
-    const firsts = sims.map((s) => Math.min(...Object.values(s.boughtAt)));
-    const tiers = [1, 2, 3, 4].map((t) => median(sims.map((s) => tierDone(s.boughtAt, t))));
-    const canyon = median(sims.map((s) => s.boughtAt.canyon ?? Infinity));
-    const railroad = median(sims.map((s) => s.boughtAt.railroad ?? Infinity));
-    const coins = mean(sims.flatMap((s) => s.coinsPerRun.slice(0, 20)));
-    const bank = mean(sims.flatMap((s) => s.banked.slice(0, 20)));
-    data[l.id] = { firsts, tiers, canyon, railroad, coins, bank };
-    const fmt = (v: number): string => (Number.isFinite(v) ? String(v) : '>100');
-    rows.push([l.id, fmt(median(firsts)), fmt(tiers[0]), fmt(tiers[1]), fmt(tiers[2]), fmt(tiers[3]), fmt(canyon), fmt(railroad), f1(coins), f1(bank)]);
+  const pacing = (label: string, pools: readonly Pool[], learnerSet: typeof learners, coinScale: number, patch: Patch = {}, claimBoard = true, boardScale = 1): (string | number)[][] => {
+    const rows: (string | number)[][] = [];
+    for (const l of learnerSet) {
+      const sims = withPatch(patch, () => Array.from({ length: metaSeeds }, (_, k) => simulateMeta(pools, l.f, 100, 1000 + k, coinScale, claimBoard, boardScale)));
+      const firsts = sims.map((s) => Math.min(...Object.values(s.boughtAt)));
+      const tiers = [1, 2, 3, 4].map((t) => median(sims.map((s) => tierDone(s.boughtAt, t))));
+      const canyon = median(sims.map((s) => s.boughtAt.canyon ?? Infinity));
+      const railroad = median(sims.map((s) => s.boughtAt.railroad ?? Infinity));
+      const bank = mean(sims.flatMap((s) => s.banked.slice(0, 20)));
+      const board = mean(sims.flatMap((s) => s.board.slice(0, 20)));
+      data[`${label}|${l.id}`] = { firsts, tiers, canyon, railroad, bank, board };
+      rows.push([label, l.id, fmt(median(firsts)), fmt(tiers[0]), fmt(tiers[1]), fmt(tiers[2]), fmt(tiers[3]), fmt(canyon), fmt(railroad), f1(bank), f1(board)]);
+    }
+    return rows;
+  };
+  const head = ['coin supply', 'learner', 'first unlock', 'tier 1', 'tier 2', 'tier 3', 'tier 4', 'Canyon bought', 'Railroad bought', 'banked per run (first 20)', 'bounty-board claims per run (first 20)'];
+  const pools = buildPools(per);
+  let rows: (string | number)[][] = pacing('current data', pools, learners, 1);
+  for (const k of [0.5, 0.33, 0.2]) rows = rows.concat(pacing(`in-run coins x${k}`, pools, [learners[1]], k));
+  const settleWhatIfs: { label: string; patch: Patch }[] = [
+    { label: 'first capture 15% -> 5% of poster', patch: { economy: (e) => { e.runEnd.firstCaptureRate = 0.05; } } },
+    { label: 'bank 40/50% -> 20/25%', patch: { economy: (e) => { e.runEnd.bankRateDeath = 0.2; e.runEnd.bankRateVictory = 0.25; } } },
+    { label: 'first capture 5% + bank 20/25%', patch: { economy: (e) => { e.runEnd.firstCaptureRate = 0.05; e.runEnd.bankRateDeath = 0.2; e.runEnd.bankRateVictory = 0.25; } } },
+  ];
+  rows = rows.concat(pacing('no bounty-board claims (runs only)', pools, [learners[1]], 1, {}, false));
+  for (const k of [0.5, 0.25]) rows = rows.concat(pacing(`bounty-board rewards x${k}`, pools, [learners[1]], 1, {}, true, k));
+  for (const w of settleWhatIfs) rows = rows.concat(pacing(w.label, pools, [learners[1]], 1, w.patch));
+  let hardPools: Pool[] | null = null;
+  if (hard) {
+    hardPools = withPatch(hard.patch, () => buildPoolsWith(per, hard.opts ?? {}));
+    rows = rows.concat(pacing(hard.label, hardPools, learners, 1));
   }
   const rows2: (string | number)[][] = [];
   for (const p of pools.filter((q) => [0.2, 1, 1.8, 2.6].some((x) => Math.abs(x - q.t) < 0.11))) {
     const a = aggRuns(p.runs, p.open);
     const banks = p.runs.map((r) => computeSettlement(defaultMeta(), r.summary).total);
-    rows2.push([p.t, p.open, pct(a.win), f1(a.coinsEarned), f1(a.coinsEnd), f1(mean(banks)), f1(a.minutes)]);
+    const stl = p.runs.map((r) => computeSettlement(metaWithAllCaptures(), r.summary).total);
+    rows2.push([p.t, p.open, pct(a.win), f1(a.coinsEarned), f1(a.coinsEnd), f1(mean(banks)), f1(mean(stl)), f1(a.minutes)]);
   }
-  const md = '\n#### Unlock pacing with simulated run outcomes (median over meta seeds; run index at which each tier is complete)\n\n' +
-    table(['learner', 'first unlock', 'tier 1', 'tier 2', 'tier 3', 'tier 4', 'Canyon bought', 'Railroad bought', 'in-run coins earned (first 20 runs)', 'banked per run (first 20)'], rows) +
-    '\n\nA09 documented medians: first 2-3, tier 1 about 14, tier 2 about 27, tier 3 about 40, tier 4 about 52.\n\n#### Run outcomes by skill step t (0 novice, 1 average, 2 skilled, 3 expert) and open regions\n\n' +
-    table(['t', 'regions open', 'run win', 'in-run coins earned', 'held at end', 'banked at first-capture-free settle', 'minutes'], rows2) + '\n';
+  const md = '\n#### Unlock pacing with simulated run outcomes (median over meta seeds; run index at which each tier is complete)\n\n' + table(head, rows) +
+    '\n\nA09 documented medians: first 2-3, tier 1 about 14, tier 2 about 27, tier 3 about 40, tier 4 about 52 (A09 used a crude win model, see docs/ECONOMY.md). Coins x k scales only `RunSummary.coins` (the held-coin part of settlement); bounty captures are unchanged.\n\n' +
+    '#### Run outcomes by skill step t (0 novice, 1 average, 2 skilled, 3 expert) and open regions\n\n' +
+    table(['t', 'regions open', 'run win', 'in-run coins earned', 'held at end', 'banked, first-ever run (incl. first-capture bounties)', 'banked, steady state (captures already made)', 'minutes'], rows2) + '\n';
   return { md, data };
+}
+
+/** A meta that already holds every first-capture stat, so settlement shows the steady-state per-run bank. */
+function metaWithAllCaptures(): MetaSave {
+  const m = defaultMeta();
+  for (const id of ['rookie', 'bandit', 'gunslinger', 'coward', 'drunk', 'sheriff', 'dual_wielder', 'sniper', 'knife_thrower', 'train_guard', 'horse_rider', 'bounty_hunter', 'mad_dog_mcgraw', 'the_undertaker', 'lady_luck', 'el_diablo']) m.stats[`capture_${id}`] = 1;
+  return m;
 }
 
 // ------------------------------------------------------------------ 11. calibration sweep

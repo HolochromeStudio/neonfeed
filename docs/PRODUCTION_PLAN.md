@@ -42,7 +42,10 @@ After Gate B: Run(A08), Economy(A09), Boss(A07), UI screens(A10) -> Balance(A18)
 | Animation defs + state graph | done |
 | Core duel (A02) | done |
 | Gate B (core duel) | PASSED (A02 + A03 + A17); human feel playtest outstanding |
-| Batch 6 (run, economy, boss, UI screens) | in progress (A08, A09, A07, A10) |
+| Batch 6 (run, economy, boss, UI screens) | done, verified |
+| Game flow wired (menu->run->duel->reward->resume) | done (A02), verified headless |
+| Balance sim (A18) | done: game too easy, package C adopted (D14) |
+| Batch 7a (balance apply + dodge) | in progress (A02, A08, A06) |
 | Follow-ups queued | A02: extract FrameClock/eventTime/PointerOwner; enemy dodge; A18 balance pass (maxDisarms, perfectMs vs display lag) |
 | Everything else | pending |
 

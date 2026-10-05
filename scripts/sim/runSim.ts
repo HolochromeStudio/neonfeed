@@ -111,8 +111,8 @@ export interface RunSimOptions {
   startPerks?: readonly string[];
   startCoins?: number;
   perkPolicy?: PerkPolicyId;
-  /** 'run' = A08's single ramp over the whole run (current); 'region' = ramp restarts each region. */
-  difficultyMode?: 'run' | 'region';
+  /** 'run' = A08's single ramp over the whole run (current); 'region' = ramp restarts each region; 'steep' = current ramp plus 0.12 per region index. */
+  difficultyMode?: 'run' | 'region' | 'steep';
   /** Added to every duel's difficulty (what-if). */
   difficultyOffset?: number;
   /** Retry after a death when affordable. */
@@ -183,7 +183,7 @@ export function playRun(o: RunSimOptions): RunRecord {
   const regionLayerStart: number[] = [];
   { let acc = 0; for (const r of regions) { regionLayerStart.push(acc); acc += getRegionDef(r).nodeCount; } }
 
-  if (o.difficultyMode === 'region' || o.difficultyOffset) {
+  if (o.difficultyMode === 'region' || o.difficultyMode === 'steep' || o.difficultyOffset) {
     const orig = run.difficultyAt.bind(run);
     (run as unknown as { difficultyAt: (n: MapNode) => number }).difficultyAt = (n: MapNode): number => {
       let d = orig(n);
@@ -194,6 +194,7 @@ export function playRun(o: RunSimOptions): RunRecord {
         const base = 0.05 + 0.15 * n.region;
         d = base + 0.6 * (local / Math.max(1, rc - 1)) + (n.type === 'elite' ? 0.08 : n.type === 'boss' ? 0.1 : 0);
       }
+      if (o.difficultyMode === 'steep') d += 0.12 * n.region;
       return Math.max(0, Math.min(1, d + (o.difficultyOffset ?? 0)));
     };
   }
@@ -239,7 +240,7 @@ export function playRun(o: RunSimOptions): RunRecord {
       if (out.status === 'refight') { enc = run.getDuel(); continue; }
       rec.deaths++;
       if (retryOn && out.canRetry) { enc = run.retryDuel(); rec.retries++; addTime(tm.retryS); continue; }
-      rec.killedBy = { enemyId: enc.enemyId, difficulty: d, region: node.region, boss: enc.boss };
+      rec.killedBy = { enemyId: enc.boss && enc.bossId ? enc.bossId : enc.enemyId, difficulty: d, region: node.region, boss: enc.boss };
       run.abandon();
       return false;
     }

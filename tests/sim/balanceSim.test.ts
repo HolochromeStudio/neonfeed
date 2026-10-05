@@ -94,6 +94,12 @@ describe('what-if patches', () => {
     expect(JSON.stringify(ENEMIES)).toBe(enemies);
     expect(PERK_BY_ID.tin_star.when).toBe(when);
   });
+  it('a patch that assigns an array it keeps using cannot be corrupted by the restore', () => {
+    const mine: [number, number] = [4, 40];
+    for (let i = 0; i < 3; i++) withPatch({ enemies: (e) => { e.rookie.aimErrorPx = mine; } }, () => { expect(ENEMIES.rookie.aimErrorPx).toEqual([4, 40]); });
+    expect(mine).toEqual([4, 40]);
+    expect(ENEMIES.rookie.aimErrorPx).toEqual([10, 70]);
+  });
   it('leadScale never goes below the F1 floor of 450 ms', () => {
     withPatch({ enemies: leadScale(0.1) }, () => {
       for (const e of Object.values(ENEMIES)) expect(e.tell.leadMs).toBeGreaterThanOrEqual(450);
