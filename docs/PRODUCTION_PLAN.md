@@ -40,7 +40,10 @@ After Gate B: Run(A08), Economy(A09), Boss(A07), UI screens(A10) -> Balance(A18)
 | Gate A (town sheet) | PASSED (A04 + A05) |
 | Placeholders (hero/enemy/FX) | done |
 | Animation defs + state graph | done |
-| Core duel (A02) | in progress |
+| Core duel (A02) | done |
+| Gate B (core duel) | PASSED (A02 + A03 + A17); human feel playtest outstanding |
+| Batch 6 (run, economy, boss, UI screens) | in progress (A08, A09, A07, A10) |
+| Follow-ups queued | A02: extract FrameClock/eventTime/PointerOwner; enemy dodge; A18 balance pass (maxDisarms, perfectMs vs display lag) |
 | Everything else | pending |
 
 ## Blockers
