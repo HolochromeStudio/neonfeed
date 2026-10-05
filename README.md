@@ -4,8 +4,9 @@ A GBA-style creature-collecting RPG for mobile, built with **TypeScript + Phaser
 The world's underlying reality behaves like software ("the Signal"). Living glitches called **Bytekin** appear when damaged
 pieces of reality try to repair themselves. You are one of the first people able to bond with them.
 
-> This repository currently contains the **Vertical Slice (v0.1)**: title -> character creation -> Rivermoor -> Old Signal Relay ->
-> Route 01 -> Briarfield -> Signal Node 1 -> **ROOT KEY 01** + **PULSE**, plus Clean State's arrival (Director Voss).
+> This repository currently contains the **Vertical Slice (v0.1)** plus **Chapter 2 (v0.2)**: title -> character creation -> Rivermoor -> Old Signal Relay ->
+> Route 01 -> Briarfield -> Signal Node 1 -> **ROOT KEY 01** + **PULSE**, plus Clean State's arrival (Director Voss);
+> then Route 02 -> Whisperwood (day/night path changes) -> Bellwether -> Signal Node 2 (numbers station, keypad, transmitter tuning, Sona) -> **ROOT KEY 02** + **FREQUENCY**, the radio shed, and 49 Bytekin.
 > Every system in the slice is fully playable and tested. The rest of the campaign (Nodes 2-8, Root, postgame) is data-driven and
 > described in `docs/ROADMAP.md`; the engine already supports everything it needs.
 
