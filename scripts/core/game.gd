@@ -146,7 +146,16 @@ func _swap(name: String, a: Dictionary) -> void:
 	screen_holder.add_child(s)
 	current = s
 	screen_name = name
+	UI.sanitize_mouse(s)
+	_sanitize_later(s)
 	screen_changed.emit(name)
+
+func _sanitize_later(s: Control) -> void:
+	for i in 3:
+		await get_tree().create_timer(0.35).timeout
+		if not is_instance_valid(s):
+			return
+		UI.sanitize_mouse(s)
 
 # ------------------------------------------------------------------ overlays
 func add_overlay(c: Control) -> void:

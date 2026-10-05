@@ -23,3 +23,7 @@ jobs:
         run: godot --headless --path . res://tests/flow_test.tscn -- --save=ci_flow.json --fresh
       - name: Real input (tap deploy, drag-merge, inspect, move, pause)
         run: godot --headless --path . res://tests/input_test.tscn -- --save=ci_input.json --fresh
+      - name: Title click leaves the title screen
+        run: godot --headless --path . res://tests/title_click_test.tscn -- --save=ci_title.json --fresh
+      - name: Every button on every screen is reachable by pointer
+        run: TJ_NODAILY=1 godot --headless --path . res://tests/ui_hit_test.tscn -- --save=ci_hit.json --fresh

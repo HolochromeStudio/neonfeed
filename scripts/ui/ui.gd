@@ -92,6 +92,16 @@ static func btn(text: String, color: String = "teal", size: Vector2 = Vector2(36
 	return b
 
 ## Make a control tappable inside ScrollContainers: PASS lets drags scroll the list; a release within ~18px of the press is a tap.
+## Decorative nodes must never swallow clicks: full-screen backdrops (ColorRect default is STOP) sat on top of the title screen's tap area.
+static func sanitize_mouse(n: Node) -> void:
+	for c in n.get_children():
+		if c is Control:
+			var ctl := c as Control
+			if ctl.mouse_filter == Control.MOUSE_FILTER_STOP and (ctl is ColorRect or ctl is TextureRect or ctl is NinePatchRect or ctl is Label or ctl is Panel):
+				if ctl.get_signal_connection_list("gui_input").is_empty() and not ctl.has_meta("blocks_input"):
+					ctl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		sanitize_mouse(c)
+
 static func tappable(c: Control, cb: Callable) -> void:
 	c.mouse_filter = Control.MOUSE_FILTER_PASS
 	var st := {"p": Vector2.ZERO, "down": false}
