@@ -2,6 +2,8 @@
 // EconomySystem / BountySystem: the Lead maps their state into these shapes, passes them through
 // scene init params and listens to the callbacks (or the scene `events` emitter, same payloads).
 
+import type { MetaSave } from '../core/SaveManager';
+
 export type Rarity = 'common' | 'rare' | 'legendary';
 
 /** Procedural pictograms (8x8) the UI can draw without art files. */
@@ -94,6 +96,8 @@ export interface RewardData extends UiSceneOptions {
   subtitle?: string;
   coins?: number;
   cards: PerkCardVM[];
+  /** Start with this card selected (its full description shown). Previews/tests. */
+  selectedId?: string;
   rerollCost?: number;
   skipCoins?: number;
   onPick?: (id: string) => void;
@@ -119,9 +123,25 @@ export interface ResultsData extends UiSceneOptions {
   onAction?: (action: ResultsAction) => void;
 }
 
+/**
+ * Settings the scene edits: exactly MetaSave['settings'] (type-only import, no runtime coupling)
+ * plus two accessibility flags UX_FLOW 3 asks for that MetaSave does not store yet. The scene
+ * always passes them back in onChange (false when absent); persisting them needs the save schema
+ * to grow two optional booleans.
+ */
+export type GameSettings = MetaSave['settings'] & { tellAssist?: boolean; captions?: boolean };
+
+export interface SettingsData extends UiSceneOptions {
+  settings: GameSettings;
+  /** Called with a full copy of the settings after every change (sliders: each 5% step). */
+  onChange?: (settings: GameSettings) => void;
+  onClose?: () => void;
+}
+
 /** Scene events emitted in addition to the callbacks. */
 export const UI_EVENTS = {
   menuAction: 'ui:menu-action',
+  rewardSelect: 'ui:reward-select',
   rewardPick: 'ui:reward-pick',
   rewardReroll: 'ui:reward-reroll',
   rewardSkip: 'ui:reward-skip',
@@ -129,4 +149,6 @@ export const UI_EVENTS = {
   shopReroll: 'ui:shop-reroll',
   shopLeave: 'ui:shop-leave',
   resultsAction: 'ui:results-action',
+  settingsChange: 'ui:settings-change',
+  settingsClose: 'ui:settings-close',
 } as const;

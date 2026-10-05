@@ -4,7 +4,9 @@ import { paintWoodWall } from '../ui/backdrops';
 import { COIN_BITMAP } from '../ui/bitmaps';
 import { drawBitmap, rect } from '../ui/draw';
 import { drawIcon } from '../ui/IconView';
-import { clipChars, formatCoins, pairSlots, stackFromBottom } from '../ui/layout';
+import { posterWidthFor, RESULTS_FIT } from '../ui/choiceLayout';
+import { fitText } from '../ui/fit';
+import { formatCoins, pairSlots, stackFromBottom } from '../ui/layout';
 import { ParchmentPanel } from '../ui/ParchmentPanel';
 import { PlankButton } from '../ui/PlankButton';
 import { pixelText, setPixelText } from '../ui/PixelText';
@@ -47,9 +49,13 @@ export class ResultsScene extends UiScene {
     // buttons first (bottom anchored), they bound the flow above
     const [primaryTop, rowTop] = stackFromBottom(this.safe, [56, 48], 8);
     const bounty = (s.bounties ?? []).slice(0, 2);
-    const fixed = 49 + 42 + 94 + (s.perks.length ? 30 : 0) + 38 + bounty.length * 20 + 6;
+    const cause = s.causeLine ?? (win ? `${entry?.name ?? 'TARGET'} COLLECTED` : `KILLED BY ${entry?.name ?? 'AN OUTLAW'}`);
+    const causeH = Math.max(42, fitText(cause, RESULTS_FIT.causeW, 2).lines.length * 18 + 6);
+    const bountyLines = bounty.map((b) => fitText(b.label, RESULTS_FIT.bountyW, 2).lines.length);
+    const bountyH = bountyLines.reduce((m, n) => m + n * 18 + 2, 0);
+    const fixed = 49 + causeH + 94 + (s.perks.length ? 30 : 0) + 38 + bountyH + 6;
     let y = this.safe.y + 8;
-    const posterH = Math.max(128, Math.min(190, primaryTop! - 8 - y - fixed));
+    const posterH = Math.max(100, Math.min(190, primaryTop! - 8 - y - fixed));
 
     // header stamp
     const header = stampText(this, { x: 180, y: y + 20, text: win ? S.results.victory : S.results.death, scale: 3, color: win ? C.brassLight : C.red, angle: -2, slam: true, reduceMotion: this.reduceMotion, depth: 20 });
@@ -57,15 +63,14 @@ export class ResultsScene extends UiScene {
     y += 49;
 
     // poster of the defeated target
-    const pw = 208;
-    wantedPoster(this, { x: 180 - pw / 2, y, w: pw, h: posterH, target: s.targetId, angle: win ? 1 : -1, depth: 10 });
+    const pw = posterWidthFor(entry?.name ?? '');
+    wantedPoster(this, { x: 180 - pw / 2, y, w: pw, h: posterH, target: s.targetId, showReward: posterH >= 136, angle: win ? 1 : -1, depth: 10 });
     stampText(this, { x: 180 + (win ? 60 : 66), y: y + 40 + Math.floor((posterH - 100) * 0.5), text: win ? S.results.stampWin : S.results.stampDeath, scale: win ? 3 : 2, color: C.redDark, angle: win ? -12 : -8, slam: true, reduceMotion: this.reduceMotion, depth: 21 });
     y += posterH + 8;
 
     // cause line
-    const cause = s.causeLine ?? (win ? `${entry?.name ?? 'TARGET'} COLLECTED` : `KILLED BY ${entry?.name ?? 'AN OUTLAW'}`);
-    pixelText(this, 180, y, cause, { scale: 2, color: C.cream, align: 'center', originX: 0.5, maxWidth: W, maxLines: 2 }).setDepth(10);
-    y += 42;
+    pixelText(this, 180, y, cause, { scale: 2, color: C.cream, align: 'center', originX: 0.5, maxWidth: RESULTS_FIT.causeW }).setDepth(10);
+    y += causeH;
 
     // stats parchment
     const stats = new ParchmentPanel(this, { x: x0, y, w: W, h: 88, seed: 8, depth: 10 });
@@ -73,12 +78,12 @@ export class ResultsScene extends UiScene {
       [S.results.duelsWon, String(s.duelsWon)],
       [S.results.bestReaction, formatReaction(s.bestReactionMs)],
       [S.results.perfect, String(s.perfectDraws)],
-      [S.results.region, clipChars(s.regionName.toUpperCase(), 13)],
+      [S.results.region, s.regionName.toUpperCase()],
     ];
     rows.forEach(([label, value], i) => {
       const ry = y + 12 + i * 18;
       pixelText(this, x0 + 14, ry, label, { scale: 2, color: C.ink, shadow: null }).setDepth(11);
-      pixelText(this, x0 + W - 14, ry, value, { scale: 2, color: C.redDark, shadow: null, originX: 1 }).setDepth(11);
+      pixelText(this, x0 + W - 14, ry, value, { scale: 2, color: C.redDark, shadow: null, originX: 1, align: 'right', maxWidth: label === S.results.region ? RESULTS_FIT.regionW : undefined }).setDepth(11);
     });
     void stats;
     y += 94;
@@ -111,11 +116,11 @@ export class ResultsScene extends UiScene {
     y += 38;
 
     // bounty progress
-    for (const b of bounty) {
-      pixelText(this, x0 + 2, y, clipChars(b.label.toUpperCase(), 20), { scale: 2, color: C.cream }).setDepth(10);
+    bounty.forEach((b, bi) => {
+      pixelText(this, x0 + 2, y, b.label.toUpperCase(), { scale: 2, color: C.cream, maxWidth: RESULTS_FIT.bountyW }).setDepth(10);
       pixelText(this, x0 + W - 2, y, `${Math.min(b.progress, b.goal)}/${b.goal}`, { scale: 2, color: b.progress >= b.goal ? C.brassLight : C.chalk, originX: 1 }).setDepth(10);
-      y += 20;
-    }
+      y += bountyLines[bi]! * 18 + 2;
+    });
 
     // actions
     const retry = win && this.params.canContinue === true ? 'continue' : 'retry';

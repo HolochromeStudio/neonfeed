@@ -4,6 +4,7 @@ import Phaser from 'phaser';
 import { MainMenuScene } from '../../src/scenes/MainMenuScene';
 import { RewardScene } from '../../src/scenes/RewardScene';
 import { ResultsScene } from '../../src/scenes/ResultsScene';
+import { SettingsScene } from '../../src/scenes/SettingsScene';
 import { ShopScene } from '../../src/scenes/ShopScene';
 import { parseInsetOverride } from '../../src/ui/safeArea';
 import { LETTERBOX_CSS } from '../../src/ui/UiTheme';
@@ -32,7 +33,7 @@ const data = {
   reduceMotion: q.get('reduce') === '1',
   insetOverride: parseInsetOverride(q.get('inset')) ?? undefined,
   onAction: rec('action'), onPick: rec('pick'), onReroll: rec('reroll'), onSkip: rec('skip'),
-  onBuy: (id: string) => { rec('buy')(id); return true; }, onLeave: rec('leave'),
+  onBuy: (id: string) => { rec('buy')(id); return true; }, onLeave: rec('leave'), onChange: rec('change'), onClose: rec('close'),
 };
 
 class Boot extends Phaser.Scene {
@@ -41,6 +42,7 @@ class Boot extends Phaser.Scene {
     this.scene.start(v.scene, data);
     const s = this.scene.get(v.scene) as UiScene;
     s.events.once('create', () => {
+      if (v.open !== undefined) (s as unknown as ShopScene).selectIndex(v.open);
       if (overlay) {
         const g = s.add.graphics().setDepth(1000);
         g.lineStyle(1, 0x00ff00, 1).strokeRect(s.safe.x, s.safe.y, s.safe.w, s.safe.h);
@@ -64,6 +66,6 @@ new Phaser.Game({
   transparent: false,
   pixelArt: true,
   scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-  scene: [Boot, MainMenuScene, RewardScene, ShopScene, ResultsScene],
+  scene: [Boot, MainMenuScene, RewardScene, ShopScene, ResultsScene, SettingsScene],
   banner: false,
 });

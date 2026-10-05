@@ -19,7 +19,7 @@ async function loadPlaywright() {
 
 const args = process.argv.slice(2);
 const withOverlay = args.includes('--overlay');
-const ALL = ['menu', 'menu_run', 'reward', 'reward_poor', 'shop', 'shop_poor', 'results_death', 'results_win'];
+const ALL = ['menu', 'menu_run', 'reward', 'reward_poor', 'reward_sel', 'reward_long', 'reward_names', 'shop', 'shop_poor', 'shop_open', 'shop_long', 'shop_long_open', 'results_death', 'results_win', 'results_long', 'settings', 'settings_alt'];
 const variants = args.filter((a) => !a.startsWith('--')).length ? args.filter((a) => !a.startsWith('--')) : ALL;
 const VIEWPORTS = [
   { name: '360x640', w: 360, h: 640, inset: '' },
@@ -74,28 +74,61 @@ try {
 
   await open(page, 'reward', VIEWPORTS[0], '&reduce=1');
   await tap(...center(await hit('card:dust_kick')));
+  if ((await events()).some((e) => e.name === 'pick')) fail('reward picked on the first tap (must need the TAKE step)');
+  await page.screenshot({ path: path.join(OUT, 'ui_reward_selected.png') });
+  await tap(...center(await hit('take')));
   const ev1 = await events();
   if (!ev1.some((e) => e.name === 'pick' && e.payload === 'dust_kick')) fail(`reward pick not reported: ${JSON.stringify(ev1)}`);
   await tap(...center(await hit('card:hair_trigger')));
+  await tap(...center(await hit('take')));
   if ((await events()).filter((e) => e.name === 'pick').length !== 1) fail('reward allowed a second pick');
   await page.screenshot({ path: path.join(OUT, 'ui_reward_picked.png') });
 
   await open(page, 'reward_poor', VIEWPORTS[0], '&reduce=1');
   await tap(...center(await hit('reroll')));
   if ((await events()).some((e) => e.name === 'reroll')) fail('disabled reroll fired');
+  await tap(...center(await hit('take')));
+  if ((await events()).some((e) => e.name === 'pick')) fail('TAKE fired with nothing selected');
 
   await open(page, 'shop', VIEWPORTS[0], '&reduce=1');
+  await tap(...center(await hit('item:0')));
   await tap(...center(await hit('buy')));
   if (!(await events()).some((e) => e.name === 'buy' && e.payload === 'luck')) fail('shop buy (<=50, no confirm) not reported');
   await tap(...center(await hit('item:3')));      // Marshal Badge $140, unaffordable at 120 coins
   await tap(...center(await hit('buy')));
   if ((await events()).filter((e) => e.name === 'buy').length !== 1) fail('unaffordable purchase fired');
+  await tap(...center(await hit('back')));
   await tap(...center(await hit('item:1')));      // Steady Hand $60 needs confirm
   await tap(...center(await hit('buy')));
   if ((await events()).filter((e) => e.name === 'buy').length !== 1) fail('purchase >50 did not need a confirm tap');
+  await page.screenshot({ path: path.join(OUT, 'ui_shop_confirm.png') });
   await tap(...center(await hit('buy')));
   if (!(await events()).some((e) => e.name === 'buy' && e.payload === 'aim')) fail('confirmed purchase not reported');
   await page.screenshot({ path: path.join(OUT, 'ui_shop_bought.png') });
+
+  await open(page, 'settings', VIEWPORTS[0], '&reduce=1');
+  await tap(...center(await hit('haptics')));
+  let ch = (await events()).filter((e) => e.name === 'change');
+  if (ch.length !== 1 || ch[0].payload.haptics !== false) fail(`haptics lever not reported: ${JSON.stringify(ch)}`);
+  await tap(...center(await hit('left')));
+  ch = (await events()).filter((e) => e.name === 'change');
+  if (ch[ch.length - 1].payload.handedness !== 'left') fail('left-handed lever not reported');
+  {
+    const r = await hit('musicVol');
+    const y = r.y + r.h / 2;
+    await page.mouse.move(r.x + 20, y);
+    await page.mouse.down();
+    await page.mouse.move(r.x + 120, y, { steps: 4 });
+    await page.mouse.move(r.x + 40, y, { steps: 4 });
+    await page.mouse.up();
+    await page.waitForTimeout(100);
+    ch = (await events()).filter((e) => e.name === 'change');
+    const last = ch[ch.length - 1].payload;
+    if (!(last.musicVol > 0 && last.musicVol < 0.6) || ch.length < 4) fail(`music slider drag not reported: ${JSON.stringify(last)} (${ch.length} changes)`);
+  }
+  await page.screenshot({ path: path.join(OUT, 'ui_settings_changed.png') });
+  await tap(...center(await hit('done')));
+  if (!(await events()).some((e) => e.name === 'close')) fail('settings close not reported');
 
   await open(page, 'menu_run', VIEWPORTS[0], '&reduce=1');
   await tap(...center(await hit('new_run')));

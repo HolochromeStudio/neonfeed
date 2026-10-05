@@ -8,10 +8,12 @@ import { CoinCounter } from '../ui/CoinCounter';
 import { drawBitmap, drawChain, drawSlate, rect } from '../ui/draw';
 import { drawIcon } from '../ui/IconView';
 import { canAfford } from '../ui/buttonLogic';
-import { clipChars, fillStack, formatCoins, pairSlots, stackFromBottom } from '../ui/layout';
+import { priceLabel, SHEET, shopLayout, sheetLayout, SHOP_ROW } from '../ui/choiceLayout';
+import type { ShopLayout } from '../ui/choiceLayout';
+import { pairSlots } from '../ui/layout';
 import { ParchmentPanel } from '../ui/ParchmentPanel';
 import { PlankButton } from '../ui/PlankButton';
-import { pixelText, setPixelText } from '../ui/PixelText';
+import { pixelText } from '../ui/PixelText';
 import { buyButtonState, SHOP_MAX_ITEMS } from '../ui/shopLogic';
 import { stampText } from '../ui/StampText';
 import { S } from '../ui/strings';
@@ -22,24 +24,28 @@ import { UiScene } from '../ui/UiScene';
 
 export const SHOP_SCENE_KEY = 'Shop';
 
-const ROW_W = 336;
 const KIND_LABEL: Record<string, string> = { perk: 'PERK', item: 'ITEM', service: 'SERVICE' };
 
+/**
+ * Two-step shop: the list shows every item (name wraps, price right). Tapping a row opens a detail
+ * sheet with the FULL description, then BUY (and a confirm tap above the price threshold). BACK or
+ * a tap outside the sheet returns to the list. Nothing a player must read is ever clipped.
+ */
 export class ShopScene extends UiScene {
   private params: ShopData = { coins: 0, items: [] };
   private items: ShopItemVM[] = [];
   private coins = 0;
   private selected = -1;
+  private open = false;
   private confirm: ConfirmState = initialConfirm();
   private rowObjs: Phaser.GameObjects.GameObject[] = [];
-  private rowTops: number[] = [];
-  private rowH = 0;
-  private listTop = 0;
-  private listBottom = 0;
+  private sheetObjs: Phaser.GameObjects.GameObject[] = [];
+  private lay?: ShopLayout;
   private counter?: CoinCounter;
   private buy?: PlankButton;
+  private back?: PlankButton;
   private reroll?: PlankButton;
-  private detailText?: Phaser.GameObjects.Image;
+  private leave?: PlankButton;
   private armTimer?: Phaser.Time.TimerEvent;
 
   constructor() {
@@ -50,9 +56,11 @@ export class ShopScene extends UiScene {
     this.params = data ?? { coins: 0, items: [] };
     this.items = this.params.items.slice(0, SHOP_MAX_ITEMS).map((i) => ({ ...i }));
     this.coins = this.params.coins;
-    this.selected = this.items.length ? 0 : -1;
+    this.selected = -1;
+    this.open = false;
     this.confirm = initialConfirm();
     this.rowObjs = [];
+    this.sheetObjs = [];
     this.setupUi(this.params);
   }
 
@@ -67,33 +75,25 @@ export class ShopScene extends UiScene {
     const rowY = sy + 52 + 10;
     this.counter = new CoinCounter(this, { x: 360 - this.safe.x, y: rowY, value: this.coins, anchor: 'right', reduceMotion: this.reduceMotion });
     this.counter.container.setDepth(10);
-    pixelText(this, this.safe.x + 2, rowY + 7, 'TAP AN ITEM', { scale: 2, color: C.chalk }).setDepth(10);
+    pixelText(this, this.safe.x + 2, rowY + 7, S.shop.pickItem, { scale: 2, color: C.chalk }).setDepth(10);
 
-    // bottom-up: [reroll|leave] 48, buy 56, detail 52
-    const [detailTop, buyTop, rowTop] = stackFromBottom(this.safe, [52, 56, 48], 8);
-    this.listTop = rowY + CoinCounter.H + 8;
-    this.listBottom = detailTop! - 8;
-    const st = fillStack(this.items.length, this.listTop, this.listBottom, 8, 64, 44);
-    this.rowH = st.itemH;
-    this.rowTops = st.tops;
-
-    const dp = new ParchmentPanel(this, { x: this.safe.x + Math.round((this.safe.w - ROW_W) / 2), y: detailTop!, w: ROW_W, h: 52, seed: 5, depth: 10 });
-    this.detailText = pixelText(this, 360 / 2, detailTop! + 26, '', { scale: 2, color: C.ink, shadow: null, align: 'center', originX: 0.5, originY: 0.5, maxWidth: ROW_W - 28, maxLines: 2 }).setDepth(11);
-    void dp;
-
-    this.buy = new PlankButton(this, { x: Math.round((360 - 280) / 2), y: buyTop!, w: 280, h: 56, label: S.shop.buy, variant: 'primary', name: 'buy', sound: 'none', onTap: () => this.onBuy() });
-    this.buy.setDepth(20);
-    const [a, b] = pairSlots(this.safe.x, this.safe.w, 8, this.leftHanded);
+    this.relayoutRows();
+    const lay = this.lay!;
     const hasReroll = p.rerollCost !== undefined;
+    const [a, b] = pairSlots(this.safe.x, this.safe.w, 8, this.leftHanded);
     const leaveSlot = hasReroll ? b : { x: Math.round((360 - 200) / 2), w: 200 };
+    const barY = lay.rowBar.y;
     if (hasReroll) {
-      this.reroll = new PlankButton(this, { x: a.x, y: rowTop!, w: a.w, h: 48, label: `${S.shop.reroll} $${p.rerollCost}`, name: 'reroll', enabled: canAfford(this.coins, p.rerollCost!), onTap: () => { p.onReroll?.(); this.events.emit(UI_EVENTS.shopReroll); } });
+      this.reroll = new PlankButton(this, { x: a.x, y: barY, w: a.w, h: 48, label: `${S.shop.reroll} $${p.rerollCost}`, name: 'reroll', enabled: canAfford(this.coins, p.rerollCost!), onTap: () => { p.onReroll?.(); this.events.emit(UI_EVENTS.shopReroll); } });
       this.reroll.setDepth(20);
     }
-    new PlankButton(this, { x: leaveSlot.x, y: rowTop!, w: leaveSlot.w, h: 48, label: S.shop.leave, name: 'leave', onTap: () => { p.onLeave?.(); this.events.emit(UI_EVENTS.shopLeave); } }).setDepth(20);
-
-    this.renderRows();
-    this.refresh();
+    this.leave = new PlankButton(this, { x: leaveSlot.x, y: barY, w: leaveSlot.w, h: 48, label: S.shop.leave, name: 'leave', onTap: () => { p.onLeave?.(); this.events.emit(UI_EVENTS.shopLeave); } });
+    this.leave.setDepth(20);
+    this.buy = new PlankButton(this, { ...lay.buy, label: S.shop.buy, variant: 'primary', name: 'buy', sound: 'none', onTap: () => this.onBuy() });
+    this.buy.setDepth(40);
+    this.back = new PlankButton(this, { ...lay.back, label: S.shop.back, name: 'back', onTap: () => this.closeSheet() });
+    this.back.setDepth(40);
+    this.applyMode();
   }
 
   // ---- public sync API (the Lead pushes canonical state back) -------------------------------
@@ -102,73 +102,101 @@ export class ShopScene extends UiScene {
     this.coins = Math.trunc(n);
     this.counter?.setValue(this.coins, true);
     this.reroll?.setEnabled(canAfford(this.coins, this.params.rerollCost ?? Number.POSITIVE_INFINITY));
-    this.renderRows();
     this.refresh();
   }
 
   setItems(items: ShopItemVM[]): void {
     this.items = items.slice(0, SHOP_MAX_ITEMS).map((i) => ({ ...i }));
-    this.selected = this.items.length ? Math.min(Math.max(0, this.selected), this.items.length - 1) : -1;
+    this.selected = -1;
+    this.open = false;
     this.confirm = initialConfirm();
-    this.relayout();
+    this.relayoutRows();
+    this.applyMode();
   }
 
   markSold(id: string): void {
     const it = this.items.find((i) => i.id === id);
     if (it) it.sold = true;
-    this.renderRows();
     this.refresh();
   }
 
-  /** Programmatic select/buy for tests. */
+  /** Programmatic: open the detail sheet of item i (same path as a tap on its row). */
   selectIndex(i: number): void {
-    this.select(i);
+    this.openSheet(i);
   }
   buyTap(): void {
     this.onBuy();
   }
-
-  private relayout(): void {
-    const st = fillStack(this.items.length, this.listTop, this.listBottom, 8, 64, 44);
-    this.rowH = st.itemH;
-    this.rowTops = st.tops;
-    this.renderRows();
-    this.refresh();
+  backTap(): void {
+    this.closeSheet();
+  }
+  get sheetOpen(): boolean {
+    return this.open;
   }
 
   // ---- internals -------------------------------------------------------------------------------
 
-  private select(i: number): void {
-    if (i === this.selected) return;
-    this.selected = i;
-    this.confirm = initialConfirm();
-    audioBus.emit({ type: 'ui_click' });
+  private relayoutRows(): void {
+    this.lay = shopLayout(this.safe, this.items.map((it) => ({ name: it.name, description: it.description, price: it.price })));
     this.renderRows();
-    this.refresh();
-  }
-
-  private current(): ShopItemVM | undefined {
-    return this.items[this.selected];
   }
 
   private refresh(): void {
-    const it = this.current();
-    const s = buyButtonState(it, this.coins, this.confirm.armedId);
-    this.buy?.setLabel(s.label);
-    this.buy?.setEnabled(s.enabled);
-    if (this.detailText) setPixelText(this.detailText, it ? (s.reason === 'confirm' ? S.shop.tapAgain : it.description) : S.shop.pickItem);
+    this.renderRows();
+    if (this.open) this.renderSheet();
+    this.applyMode();
+  }
+
+  private openSheet(i: number): void {
+    if (i < 0 || i >= this.items.length) return;
+    this.selected = i;
+    this.open = true;
+    this.confirm = initialConfirm();
+    audioBus.emit({ type: 'ui_click' });
+    this.renderSheet();
+    this.applyMode();
+  }
+
+  private closeSheet(): void {
+    if (!this.open) return;
+    this.open = false;
+    this.confirm = initialConfirm();
+    this.armTimer?.remove(false);
+    for (const o of this.sheetObjs) o.destroy();
+    this.sheetObjs = [];
+    this.applyMode();
+  }
+
+  /** Show/hide the controls that belong to the list vs the sheet, keeping the hit audit honest. */
+  private applyMode(): void {
+    const toggle = (btn: PlankButton | undefined, label: string, on: boolean): void => {
+      if (!btn) return;
+      btn.setVisible(on);
+      this.unregisterHit(label);
+      if (on) this.registerHit(label, btn.hitRect);
+    };
+    toggle(this.reroll, 'reroll', !this.open);
+    toggle(this.leave, 'leave', !this.open);
+    toggle(this.buy, 'buy', this.open);
+    toggle(this.back, 'back', this.open);
+    for (let i = 0; i < 12; i++) this.unregisterHit(`item:${i}`);
+    if (this.open) {
+      this.syncBuy();
+      return;
+    }
+    this.lay?.rows.forEach((r, i) => this.registerHit(`item:${i}`, r));
   }
 
   private onBuy(): void {
-    const it = this.current();
-    if (!it || it.sold || !canAfford(this.coins, it.price)) return;
+    const it = this.items[this.selected];
+    if (!this.open || !it || it.sold || !canAfford(this.coins, it.price)) return;
     const r = purchaseTap(this.confirm, it.id, it.price, this.time.now);
     this.confirm = r.state;
     if (r.action === 'arm') {
       audioBus.emit({ type: 'ui_click' });
       this.armTimer?.remove(false);
-      this.armTimer = this.time.delayedCall(CONFIRM_WINDOW_MS, () => { this.confirm = initialConfirm(); this.refresh(); });
-      this.refresh();
+      this.armTimer = this.time.delayedCall(CONFIRM_WINDOW_MS, () => { this.confirm = initialConfirm(); this.syncBuy(); });
+      this.syncBuy();
       return;
     }
     const res = this.params.onBuy?.(it.id);
@@ -179,65 +207,113 @@ export class ShopScene extends UiScene {
     this.coins -= it.price;
     this.counter?.setValue(this.coins, true);
     this.reroll?.setEnabled(canAfford(this.coins, this.params.rerollCost ?? Number.POSITIVE_INFINITY));
+    this.closeSheet();
     this.renderRows();
-    this.refresh();
+  }
+
+  private syncBuy(): void {
+    const it = this.items[this.selected];
+    if (!it) return;
+    const s = buyButtonState(it, this.coins, this.confirm.armedId);
+    this.buy?.setLabel(s.label);
+    this.buy?.setEnabled(s.enabled);
   }
 
   private renderRows(): void {
     for (const o of this.rowObjs) o.destroy();
     this.rowObjs = [];
-    for (let i = 0; i < 12; i++) this.unregisterHit(`item:${i}`);
-    const x = this.safe.x + Math.round((this.safe.w - ROW_W) / 2);
-    this.items.forEach((it, i) => this.drawRow(it, i, x, this.rowTops[i]!, ROW_W, this.rowH));
+    const lay = this.lay;
+    if (!lay) return;
+    this.items.forEach((it, i) => this.drawRow(it, i, lay, lay.rows[i]!));
   }
 
-  private drawRow(it: ShopItemVM, i: number, x: number, y: number, w: number, h: number): void {
-    const sel = i === this.selected;
+  private drawRow(it: ShopItemVM, i: number, lay: ShopLayout, r: { x: number; y: number; w: number; h: number }): void {
+    const { x, y, w, h } = r;
+    const R = SHOP_ROW;
     const poor = !it.sold && !canAfford(this.coins, it.price);
     const objs: Phaser.GameObjects.GameObject[] = [];
     const g = this.add.graphics().setPosition(x, y).setDepth(10);
     drawSlate(g, w, h, i * 5 + 1);
-    if (sel) {
-      for (const [bx, by, bw, bh] of [[1, 1, w - 2, 2], [1, h - 3, w - 2, 2], [1, 1, 2, h - 2], [w - 3, 1, 2, h - 2]] as const) rect(g, C.brass, bx, by, bw, bh);
-      // arrow marker (shape cue for selection)
-      for (let k = 0; k < 5; k++) rect(g, C.brassLight, 5 + k, Math.floor(h / 2) - 4 + k, 1, 9 - 2 * k);
-    }
     objs.push(g);
-    const px = 16;
-    const py = Math.round((h - 40) / 2);
+    const px = R.plateX;
+    const py = Math.round((h - R.plate) / 2);
     const plate = this.add.graphics().setPosition(x, y).setDepth(11);
-    rect(plate, C.ink, px, py, 40, 40);
-    rect(plate, it.rarity === 'legendary' ? C.brass : it.rarity === 'rare' ? C.midnight : C.parchmentDark, px + 2, py + 2, 36, 36);
+    rect(plate, C.ink, px, py, R.plate, R.plate);
+    rect(plate, it.rarity === 'legendary' ? C.brass : it.rarity === 'rare' ? C.midnight : C.parchmentDark, px + 2, py + 2, R.plate - 4, R.plate - 4);
     objs.push(plate);
     const icoColor = it.rarity === 'rare' ? C.cream : C.ink;
-    const ico = drawIcon(this, it.icon ?? { kind: it.kind === 'item' ? 'life' : 'star' }, x + px + 4, y + py + 4, 32, icoColor, 12);
-    objs.push(ico);
+    objs.push(drawIcon(this, it.icon ?? { kind: it.kind === 'item' ? 'life' : 'star' }, x + px + 4, y + py + 4, R.plate - 8, icoColor, 12));
 
     const dim = it.sold ? 0.45 : 1;
-    const tx = x + 64;
-    const nameW = 192;
-    const name = pixelText(this, tx, y + 8, clipChars(it.name, Math.floor((nameW + 2) / 12)), { scale: 2, color: C.chalk }).setDepth(12).setAlpha(dim);
-    objs.push(name);
-    const kg = this.add.graphics().setPosition(tx, y + 30).setDepth(12).setAlpha(dim);
-    if (it.rarity) drawBitmap(kg, RARITY_SHAPES[RARITY[it.rarity].shape], 0, 0, 1, C.chalkDim);
-    objs.push(kg);
+    const tx = x + R.textX;
+    const lines = lay.rowNameLines[i]!;
+    const nameH = (lines.length - 1) * 18 + 14;
     const sub = it.rarity ? `${KIND_LABEL[it.kind] ?? ''} ${RARITY[it.rarity].label}` : (KIND_LABEL[it.kind] ?? '');
-    objs.push(pixelText(this, tx + (it.rarity ? 12 : 0), y + 28, sub, { scale: 2, color: C.chalkDim, maxWidth: nameW - 12, maxLines: 1 }).setDepth(12).setAlpha(dim));
+    const showSub = h - 2 * R.padY >= nameH + 4 + 14;
+    const blockH = nameH + (showSub ? 4 + 14 : 0);
+    const ty = y + Math.round((h - blockH) / 2);
+    objs.push(pixelText(this, tx, ty, it.name, { scale: 2, color: C.chalk, maxWidth: lay.rowNameW }).setDepth(12).setAlpha(dim));
+    if (showSub) {
+      const sy = ty + nameH + 4;
+      const kg = this.add.graphics().setPosition(tx, sy + 3).setDepth(12).setAlpha(dim);
+      if (it.rarity) drawBitmap(kg, RARITY_SHAPES[RARITY[it.rarity].shape], 0, 0, 1, C.chalkDim);
+      objs.push(kg);
+      objs.push(pixelText(this, tx + (it.rarity ? 12 : 0), sy, sub, { scale: 2, color: C.chalkDim, maxWidth: lay.rowNameW - 12, maxLines: 1 }).setDepth(12).setAlpha(dim));
+    }
 
-    const price = `$${formatCoins(it.price)}`;
-    if (!it.sold) objs.push(pixelText(this, x + w - 12, y + Math.round(h / 2), price, { scale: 3, color: poor ? C.redText : C.brassLight, originX: 1, originY: 0.5 }).setDepth(12));
+    const price = priceLabel(it.price);
+    if (!it.sold) objs.push(pixelText(this, x + w - R.priceRight, y + Math.round(h / 2), price, { scale: 2, color: poor ? C.redText : C.brassLight, originX: 1, originY: 0.5 }).setDepth(12));
     if (poor) {
       const lg = this.add.graphics().setDepth(13);
-      drawBitmap(lg, ICON_BITMAPS.lock, x + w - 12 - price.length * 18 - 22, y + Math.round(h / 2) - 8, 2, C.redText);
+      drawBitmap(lg, ICON_BITMAPS.lock, x + w - R.priceRight - price.length * 12 - 20, y + Math.round(h / 2) - 8, 2, C.redText);
       drawChain(lg, x + 8, y + h - 6, x + w - 8, y + h - 6, C.chalkDim);
       objs.push(lg);
     }
     if (it.sold) objs.push(stampText(this, { x: x + w - 72, y: y + h / 2, text: S.shop.sold, scale: 3, color: C.redText, angle: -4, depth: 14 }));
 
     const zone = this.add.zone(x + w / 2, y + h / 2, w, h).setInteractive({ useHandCursor: true }).setDepth(15);
-    zone.on('pointerup', () => this.select(i));
+    zone.on('pointerup', () => { if (!this.open) this.openSheet(i); });
     objs.push(zone);
-    this.registerHit(`item:${i}`, { x, y, w, h });
     this.rowObjs.push(...objs);
+  }
+
+  /** Detail sheet: full name, kind/rarity, FULL description, price and balance. */
+  private renderSheet(): void {
+    for (const o of this.sheetObjs) o.destroy();
+    this.sheetObjs = [];
+    const it = this.items[this.selected];
+    if (!it || !this.lay) return;
+    const sl = sheetLayout(this.safe, { name: it.name, description: it.description, price: it.price }, this.lay.buy.y);
+    const { x, y, w, h } = sl.rect;
+    const objs: Phaser.GameObjects.GameObject[] = [];
+    // dim the list and catch taps outside the sheet (= BACK)
+    const dim = this.add.graphics().setDepth(30);
+    rect(dim, C.ink, 0, 0, 360, 640);
+    dim.setAlpha(0.94);
+    const catcher = this.add.zone(180, 320, 360, 640).setInteractive().setDepth(30);
+    catcher.on('pointerup', () => this.closeSheet());
+    objs.push(dim, catcher);
+    objs.push(new ParchmentPanel(this, { x, y, w, h, seed: 13, depth: 31 }).container);
+    const S_ = SHEET;
+    const plate = this.add.graphics().setPosition(x, y).setDepth(32);
+    const fill = it.rarity === 'legendary' ? C.brass : it.rarity === 'rare' ? C.midnight : C.parchmentDark;
+    rect(plate, C.ink, S_.padX, S_.padY, S_.plate, S_.plate);
+    rect(plate, fill, S_.padX + 2, S_.padY + 2, S_.plate - 4, S_.plate - 4);
+    objs.push(plate, drawIcon(this, it.icon ?? { kind: it.kind === 'item' ? 'life' : 'star' }, x + S_.padX + 6, y + S_.padY + 6, S_.plate - 12, it.rarity === 'rare' ? C.cream : C.ink, 33));
+    const hx = x + S_.padX + S_.plate + S_.headGap;
+    objs.push(pixelText(this, hx, y + S_.padY, it.name, { scale: 2, color: C.ink, shadow: null, maxWidth: sl.nameW }).setDepth(33));
+    const sub = it.rarity ? `${KIND_LABEL[it.kind] ?? ''} ${RARITY[it.rarity].label}` : (KIND_LABEL[it.kind] ?? '');
+    const sg = this.add.graphics().setPosition(hx, y + sl.subY + 1).setDepth(33);
+    if (it.rarity) drawBitmap(sg, RARITY_SHAPES[RARITY[it.rarity].shape], 0, 0, 2, C.parchmentBurn);
+    objs.push(sg, pixelText(this, hx + (it.rarity ? 22 : 0), y + sl.subY, sub, { scale: 2, color: C.wood, shadow: null, maxWidth: sl.nameW - 22, maxLines: 1 }).setDepth(33));
+    const rule = this.add.graphics().setPosition(x, y).setDepth(32);
+    rect(rule, C.parchmentBurn, S_.padX, sl.ruleY, w - 2 * S_.padX, 2);
+    objs.push(rule);
+    objs.push(pixelText(this, x + sl.descX, y + sl.descY, it.description, { scale: 2, color: C.ink, shadow: null, maxWidth: sl.descW }).setDepth(33));
+    const left = it.sold ? S.shop.soldOut : `${S.shop.price} ${priceLabel(it.price)}`;
+    objs.push(pixelText(this, x + S_.padX, y + sl.footerY, left, { scale: 2, color: C.redDark, shadow: null }).setDepth(33));
+    objs.push(pixelText(this, x + w - S_.padX, y + sl.footerY, `${S.shop.have} ${priceLabel(this.coins)}`, { scale: 2, color: C.wood, shadow: null, originX: 1 }).setDepth(33));
+    this.sheetObjs = objs;
+    this.syncBuy();
   }
 }

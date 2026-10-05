@@ -47,7 +47,7 @@ export function wantedPoster(scene: Phaser.Scene, cfg: WantedPosterConfig): Phas
   const headBottom = 12 + 7 * headScale;
 
   const showReward = cfg.showReward !== false && entry.reward > 0;
-  const name = measureText(entry.name, 2, w - 20, 2);
+  const name = measureText(entry.name, 2, w - 20);
   const nameH = name.height;
   const rewardH = showReward ? 14 + 6 : 0;
   const portTop = headBottom + 6;
@@ -61,7 +61,7 @@ export function wantedPoster(scene: Phaser.Scene, cfg: WantedPosterConfig): Phas
   kids.push(pg);
 
   const nameTop = portTop + portH + 6;
-  kids.push(pixelText(scene, w / 2, nameTop, entry.name, { scale: 2, color: C.ink, shadow: null, align: 'center', originX: 0.5, maxWidth: w - 20, maxLines: 2 }));
+  kids.push(pixelText(scene, w / 2, nameTop, entry.name, { scale: 2, color: C.ink, shadow: null, align: 'center', originX: 0.5, maxWidth: w - 20 }));
   if (showReward) {
     kids.push(pixelText(scene, w / 2, nameTop + nameH + 4, clipChars(formatReward(entry.reward), Math.floor((w - 16) / 12)), { scale: 2, color: C.redDark, shadow: null, align: 'center', originX: 0.5 }));
   }

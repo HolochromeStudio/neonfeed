@@ -1,10 +1,8 @@
-import { audioBus } from '../core/audioEvents';
 import { paintBoardwalk, paintDusk, paintHangingSign, paintSand, paintStreetProps } from '../ui/backdrops';
 import { showConfirm } from '../ui/ConfirmDialog';
 import { CoinCounter } from '../ui/CoinCounter';
 import { drawBust, drawNail, drawParchment, rect } from '../ui/draw';
 import { pairSlots, stackFromBottom } from '../ui/layout';
-import { ParchmentPanel } from '../ui/ParchmentPanel';
 import { PlankButton } from '../ui/PlankButton';
 import { pixelText } from '../ui/PixelText';
 import { S } from '../ui/strings';
@@ -20,7 +18,6 @@ const GROUND = 380;
 export class MainMenuScene extends UiScene {
   private params: MainMenuData = { coins: 0 };
   private coins?: CoinCounter;
-  private note?: ParchmentPanel;
 
   constructor() {
     super(MAIN_MENU_SCENE_KEY);
@@ -111,23 +108,11 @@ export class MainMenuScene extends UiScene {
       });
       return;
     }
-    if (a === 'settings') this.showNote(S.menu.settingsSoon);
     this.fire(a);
   }
 
   private unhideHits(): void {
     this.unregisterHit('confirm-yes');
     this.unregisterHit('confirm-no');
-  }
-
-  /** Settings is a stub: a short parchment note so the tap is acknowledged. */
-  private showNote(text: string): void {
-    this.note?.destroy();
-    const w = 288, h = 48;
-    const note = new ParchmentPanel(this, { x: 36, y: 392, w, h, depth: 50, seed: 17 });
-    const t = pixelText(this, 180, 392 + h / 2, text, { scale: 2, color: C.ink, shadow: null, originX: 0.5, originY: 0.5, maxWidth: w - 24, maxLines: 1 }).setDepth(51);
-    this.note = note;
-    audioBus.emit({ type: 'miss' });
-    this.time.delayedCall(1600, () => { note.destroy(); t.destroy(); if (this.note === note) this.note = undefined; });
   }
 }
