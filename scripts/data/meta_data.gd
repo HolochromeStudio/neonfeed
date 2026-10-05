@@ -13,7 +13,7 @@ static func _unlock_order() -> Array:
 	return out
 
 ## 9 chapters x 6 levels. Level 6 is the chapter boss. Unlock order walks the roster by rarity (54 of the 55 non-starter units;
-## the last one, "mini_tank"... see achievements) so power and rarity track progress.
+## the last, Chrono Police, is the Road Master achievement reward) so power and rarity track progress.
 static func chapters() -> Array:
 	var order := _unlock_order()
 	var defs := [
@@ -97,7 +97,7 @@ static func achievements() -> Array:
 	add.call("ch_1", "City Saved", "Clear Chapter 1.", "chapters_cleared", 1, 150, 2)
 	add.call("ch_3", "Highway Hero", "Clear 3 chapters.", "chapters_cleared", 3, 300, 3)
 	add.call("ch_5", "Halfway There", "Clear 5 chapters.", "chapters_cleared", 5, 500, 5)
-	add.call("ch_9", "Road Master", "Clear all 9 chapters.", "chapters_cleared", 9, 2000, 20, "mini_tank", "hat_golden")
+	add.call("ch_9", "Road Master", "Clear all 9 chapters.", "chapters_cleared", 9, 2000, 20, "chrono_police", "hat_golden")
 	add.call("survival_10", "Survivor", "Reach wave 10 in Survival.", "survival_best", 10, 150, 2)
 	add.call("survival_20", "Survival Expert", "Reach wave 20 in Survival.", "survival_best", 20, 400, 4)
 	add.call("survival_30", "Unstoppable", "Reach wave 30 in Survival.", "survival_best", 30, 900, 9, "", "acc_trophy")
