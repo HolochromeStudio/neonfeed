@@ -14,12 +14,12 @@ describe('view models', () => {
     }
   });
 
-  it('every perk card fits the reward card and uses only glyphs the pixel font has', () => {
+  it('every perk card carries the full description and uses only glyphs the pixel font has', () => {
     for (const p of PERKS) {
       const c = perkCard(p.id);
       expect(c.id).toBe(p.id);
       expect(c.name.length).toBeGreaterThan(0);
-      expect(c.description.length).toBeLessThanOrEqual(57);
+      expect(c.description).toBe(p.description);
       expect(['common', 'rare', 'legendary']).toContain(c.rarity);
       expect(c.icon?.kind).toBeTruthy();
       expect(glyphsSupported(c.name + c.description), p.id).toEqual([]);

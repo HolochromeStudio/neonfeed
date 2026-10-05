@@ -41,7 +41,7 @@ export function perkCard(perkId: string, tier2 = false): PerkCardVM {
   return {
     id: baseId(perkId),
     name: def.name + (tier2 ? ' +' : ''),
-    description: shortDescription(def.description),
+    description: def.description, // full text: the reward/shop scenes show it in a detail sheet and never clip it
     rarity: uiRarity(def.rarity),
     tag: def.tags[0],
     icon: perkIcon(def),
@@ -74,7 +74,7 @@ export function shopItems(offers: readonly ShopOfferView[], services: ShopServic
     }
     const def = o.perkId ? PERK_BY_ID[o.perkId] : undefined;
     if (!def) return { id: o.id, name: '???', description: 'AN UNKNOWN CURSE. BUY AT YOUR OWN RISK.', kind: 'perk', price: o.price, rarity: 'rare', icon: { kind: 'lock' } };
-    return { id: o.id, name: def.name, description: shortDescription(def.description, 60), kind: 'perk', price: o.price, rarity: uiRarity(def.rarity), icon: perkIcon(def) };
+    return { id: o.id, name: def.name, description: def.description, kind: 'perk', price: o.price, rarity: uiRarity(def.rarity), icon: perkIcon(def) };
   });
   if (services.canHeal) items.push({ id: SERVICE_HEAL, name: 'PATCH UP', description: 'RESTORE 1 LIFE.', kind: 'service', price: services.healPrice, icon: { kind: 'life' } });
   const curse = services.curses[0];

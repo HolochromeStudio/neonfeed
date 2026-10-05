@@ -151,6 +151,11 @@ export class RunMapScene extends UiScene {
 
   private drawNode(r: RunMapNodeVM, at: { x: number; y: number }): void {
     const g = this.add.graphics().setDepth(12);
+    if (r.type === 'unknown') {
+      // beyond the lookahead: a small muted pip, so the choices stand out
+      rect(g, C.parchmentBurn, at.x - 4, at.y - 4, 8, 8);
+      return;
+    }
     const x = at.x - NODE / 2;
     const y = at.y - NODE / 2;
     const choice = r.state === 'choice';

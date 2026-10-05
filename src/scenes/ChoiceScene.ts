@@ -73,7 +73,8 @@ export class ChoiceScene extends UiScene {
     const tops = stackFromBottom(this.safe, opts.map(() => OPT_H), 8);
     const bodyTop = rowY + CoinCounter.H + 10;
     const bodyBottom = (tops[0] ?? this.safe.y + this.safe.h) - 12;
-    const bodyH = Math.max(64, bodyBottom - bodyTop);
+    const lines = (p.body ?? []).length;
+    const bodyH = Math.min(Math.max(64, bodyBottom - bodyTop), Math.max(150, 40 + lines * 52));
     const x0 = this.safe.x + Math.round((this.safe.w - W) / 2);
     const panel = new ParchmentPanel(this, { x: x0, y: bodyTop, w: W, h: bodyH, seed: 11, depth: 10 });
     const lineH = 20;

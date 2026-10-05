@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "assets": "node scripts/processAssets.mjs",
-    "placeholders": "node scripts/makePlaceholders.mjs"
+    "placeholders": "node scripts/makePlaceholders.mjs",
+    "sim": "vite-node scripts/sim/run.ts"
   },
   "dependencies": {
     "phaser": "^3.80.1"
