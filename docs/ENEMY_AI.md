@@ -57,3 +57,17 @@ Data flags that need DuelSystem support (data only for now, ignored today): `arm
 | bounty_hunter | 4 | variant: feint / glint / dual | announced `variantId` |
 
 Sprite prefixes: real sheet for bandit, gunslinger, sheriff, dual_wielder, sniper, knife_thrower, train_guard, horse_rider; rookie, coward, drunk, bounty_hunter use the `enemy` placeholder (`resolveSpritePrefix`).
+
+## Scene integration notes (A02, DuelScene)
+`DuelScene` builds the opponent with `createOpponent(enemyId, rng, difficulty)` (scene data `enemyId` default `'bandit'`, `difficulty` default 0.3, hp from `enemyHpFor`), shows `def.name`, and picks the sprite prefix with `resolveSpritePrefix` against the `placeholder` atlas.
+
+| Extra | State |
+|---|---|
+| Multi-shot | Works through `shotDelayMs`/`aimErrorPx` (DuelSystem already plays every shot). The scene also telegraphs each follow-up shot (index >= 1) with a glint at the gun `dodgeWindowMs` (default 250) before it, using `snapshot().enemyShotIndex` / `enemyShotEtaMs`. Visual only. |
+| Fake tell | Played in WAIT at `fakeTell.startMs` (enemy twitch plus a small grey tell-name bubble, no `!`, no sound). It never starts the reaction clock and never fires. An early draw during the fake window is the normal flinch (+300 ms) and its text reads "FELL FOR THE FAKE". |
+| tellKind | Not played yet (the real cue is the shared red `!`). Needs per-kind art/sfx. |
+| Dodge (`dodgeWindowMs` as a player dodge, `evades`) | NOT implemented. DuelSystem has no dodge input, and `evades()` would need to be called in a fixed rng order at each player shot. Later task. |
+| `armor`, `motion`, `weakPoint`, `evadeChance` | Still data only (no DuelSystem support). |
+| Variant (`variantId`) | Not shown on a poster yet. |
+
+QA-09 (limb disarm loop): `DUEL_CONFIG.fairness.maxDisarms` (default 2) caps limb disarms per attempt; later limb hits still deal damage. A18 should tune it per enemy tier (or make it an `EnemyDef` field).

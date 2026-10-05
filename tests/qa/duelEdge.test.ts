@@ -7,14 +7,14 @@ import { BODY, CUE, Fixed, HEAD, LIMB, cfgWith, mk, quietAudio, record } from '.
 const noSlow = cfgWith({ aim: { slowMoScale: 1 } });
 
 describe('hostile time values', () => {
-  it.fails('advanceTo(NaN) must not poison the clock (QA-01)', () => {
+  it('advanceTo(NaN) must not poison the clock (QA-01)', () => {
     const d = mk();
     d.advanceTo(500);
     d.advanceTo(NaN);
     expect(Number.isNaN(d.snapshot().now)).toBe(false);
   });
 
-  it.fails('a NaN timestamp mid-duel must not make the enemy immortal (QA-01)', () => {
+  it('a NaN timestamp mid-duel must not make the enemy immortal (QA-01)', () => {
     const d = mk({ heroHp: 1 });
     d.advanceTo(CUE + 100); // cue has fired, enemy clock running
     d.input({ type: 'hold', t: NaN }); // enemyT += NaN permanently
@@ -71,7 +71,7 @@ describe('hostile time values', () => {
     expect(d.isOver).toBe(true);
   });
 
-  it.fails('after advanceTo(Infinity) a retry must still be playable (QA-01b)', () => {
+  it('after advanceTo(Infinity) a retry must still be playable (QA-01b)', () => {
     const d = mk({ heroHp: 1 });
     d.advanceTo(Infinity);
     d.retry();
@@ -116,14 +116,14 @@ describe('hostile coordinates', () => {
     expect(hit).toBe(1);
   });
 
-  it('fire with no reticle ever set is a clean miss with NaN shot coordinates (documented)', () => {
+  it('fire with no reticle ever set is a clean miss with finite shot coordinates (QA-08 fixed)', () => {
     const d = mk({ opp: new Fixed(1000, 300, 5000) });
     const shots: { x: number }[] = [];
     d.events.on('onShot', (e) => shots.push(e));
     d.input({ type: 'draw', t: CUE + 300 });
     d.input({ type: 'fire', t: CUE + 500 });
     expect(shots).toHaveLength(1);
-    expect(Number.isNaN(shots[0].x)).toBe(true); // see QA_REPORT QA-08: NaN leaks to onShot listeners (VFX)
+    expect(Number.isFinite(shots[0].x)).toBe(true); // QA-08 fixed: onShot never carries NaN
   });
 });
 
@@ -315,8 +315,8 @@ describe('disarm and enemy follow-up', () => {
     expect(d.lastResult?.cause).not.toBeNull();
   });
 
-  it('OBSERVATION: reticle parked on the limb with auto-fire disarms forever (enemy never shoots) until its hp runs out', () => {
-    const d = mk({ opp: new Fixed(1000, 300, 900, 0, 650), enemyHp: 6, heroHp: 1 });
+  it('OBSERVATION: with maxDisarms disabled (Infinity), a reticle parked on the limb disarms forever (enemy never shoots) until its hp runs out; QA-09 default caps it, see tests/duelHardening.test.ts', () => {
+    const d = mk({ opp: new Fixed(1000, 300, 900, 0, 650), enemyHp: 6, heroHp: 1, config: cfgWith({ fairness: { maxDisarms: Infinity } }) });
     let enemyShots = 0;
     d.events.on('onShot', (e) => { if (e.shooter === 'enemy') enemyShots++; });
     d.input({ type: 'draw', t: CUE + 100 });
@@ -336,7 +336,7 @@ describe('disarm and enemy follow-up', () => {
 });
 
 describe('extreme config values', () => {
-  it.fails('enemyHp 0 is already dead: a hit must WIN (QA-03)', () => {
+  it('enemyHp 0 is already dead: a hit must WIN (QA-03)', () => {
     const d = mk({ enemyHp: 0 });
     d.input({ type: 'draw', t: CUE + 100 });
     d.input({ type: 'aim', t: CUE + 300, ...HEAD });
@@ -351,7 +351,7 @@ describe('extreme config values', () => {
     expect(d.snapshot().heroHp).toBe(0);
   });
 
-  it.fails('heroHp 0: the duel should not start already lost on a missing enemy shot (QA-03)', () => {
+  it('heroHp 0: the duel should not start already lost on a missing enemy shot (QA-03)', () => {
     const d = mk({ heroHp: 0, opp: new Fixed(1000, 300, 900, 999 /* always misses */) });
     d.advanceTo(CUE + 1500);
     // an already dead hero surviving a miss and fighting on is nonsense; either LOSE immediately or constructor rejects
@@ -393,7 +393,7 @@ describe('extreme config values', () => {
     }
   });
 
-  it.fails('applyDamage(NaN) must not turn hp into NaN (QA-04)', () => {
+  it('applyDamage(NaN) must not turn hp into NaN (QA-04)', () => {
     const h = makeHealth(3);
     applyDamage(h, NaN);
     expect(Number.isNaN(h.hp)).toBe(false);

@@ -23,7 +23,16 @@ import type { Zone } from './TargetSystem';
  * Tie rules (documented, tested): a player input at the same ms as an enemy
  * shot lands first (enemy events need time strictly < input time); real phase
  * transitions at time t are visible to an input at t.
+ *
+ * Hostile input policy (QA-01..08): non-finite times never reach the clocks (NaN and -Infinity are
+ * ignored, +Infinity is clamped to `MAX_ADVANCE_MS` past now); hp <= 0 starts are normalised (enemy hp is
+ * clamped to a minimum of 1, a hero with 0 hp is already lost and the duel resolves LOSE at the first
+ * enemy shot, hit or miss); non-finite aim/fire coordinates are ignored and `onShot` never carries NaN;
+ * `onPhase` reports WAIT (lazily at the first advance/input of an attempt, and on every retry).
  */
+
+/** `advanceTo(Infinity)` is clamped to this many ms past the current clock. */
+export const MAX_ADVANCE_MS = 60_000;
 
 export type DuelPhase = 'WAIT' | 'CUE' | 'DRAW' | 'AIM' | 'SHOT' | 'RESOLVE' | 'RETRY';
 export type DuelOutcome = 'WIN' | 'LOSE';
@@ -189,6 +198,10 @@ export interface DuelSnapshot {
   /** Real ms left in the aim budget (AIM only). */
   aimRemainingMs: number | null;
   ignoredInputs: number;
+  /** Index of the enemy's next shot (0 = the cue shot). Lets the scene telegraph follow-up shots. */
+  enemyShotIndex: number;
+  /** Real ms until the enemy's next shot at the current clock speed, or null when it is not running. */
+  enemyShotEtaMs: number | null;
 }
 
 export class DuelSystem {
@@ -208,6 +221,7 @@ export class DuelSystem {
   private hero!: Health;
   private enemy!: Health;
   private phase: DuelPhase = 'WAIT';
+  private prevPhase: DuelPhase = 'WAIT';
   private outcome: DuelOutcome | null = null;
   private cause: LoseCause | null = null;
   private now = 0;
@@ -228,6 +242,9 @@ export class DuelSystem {
   private shotsFired = 0;
   private hits = 0;
   private result: DuelResult | null = null;
+  private disarms = 0;
+  /** True once `onPhase` has announced WAIT for the current attempt. */
+  private waitAnnounced = false;
 
   // enemy plan, lazily extended in index order so rng use never depends on the player
   private waitMs = 0;
@@ -242,8 +259,12 @@ export class DuelSystem {
     this.opponent = params.opponent ?? new BasicOpponent();
     this.audio = params.audio ?? audioBus;
     this.seed = params.seed;
-    this.heroMax = params.heroHp ?? this.cfg.damage.heroHp;
-    this.enemyMax = params.enemyHp ?? this.cfg.damage.enemyHp;
+    const hh = params.heroHp ?? this.cfg.damage.heroHp;
+    const eh = params.enemyHp ?? this.cfg.damage.enemyHp;
+    // QA-03: a hero with 0 hp is lost from the start (resolves at the first enemy shot); an enemy with
+    // no hp would be invulnerable, so it gets 1.
+    this.heroMax = Number.isFinite(hh) ? Math.max(0, hh) : this.cfg.damage.heroHp;
+    this.enemyMax = Number.isFinite(eh) && eh > 0 ? eh : 1;
     const e = this.cfg.arena.enemy;
     const rect = params.enemyRect ?? { x: e.x - e.w / 2, y: e.y - e.h, w: e.w, h: e.h };
     this.zones = buildZones(rect, this.cfg.arena.props, this.cfg);
@@ -286,12 +307,17 @@ export class DuelSystem {
       reticle: this.reticle ? { ...this.reticle } : null,
       aimRemainingMs: this.phase === 'AIM' && this.deadline ? Math.max(0, this.deadline.at - this.now) : null,
       ignoredInputs: this.ignored,
+      enemyShotIndex: this.enemyShotIndex,
+      enemyShotEtaMs: this.enemyRealTime() === null ? null : Math.max(0, (this.enemyRealTime() as number) - this.now),
     };
   }
 
   /** Advances the clocks to `t`, firing every due transition and enemy shot in order. */
   advanceTo(t: number): void {
+    if (Number.isNaN(t) || t === -Infinity) return; // QA-01: never poison the clocks
+    if (t === Infinity) t = this.now + MAX_ADVANCE_MS; // QA-01b
     if (t < this.now) t = this.now;
+    this.announceWait();
     for (let guard = 0; guard < 10000; guard++) {
       const dl = this.deadline;
       const dlDue = dl !== null && dl.at <= t;
@@ -313,8 +339,10 @@ export class DuelSystem {
 
   /** Applies a player input at `ev.t` (advancing time first). */
   input(ev: DuelInput): void {
-    this.advanceTo(ev.t);
-    const e = { ...ev, t: Math.max(ev.t, this.now) } as DuelInput;
+    // non-finite stamps count as "now" (QA-01); stamps in the past are clamped to now
+    const stamp = Number.isFinite(ev.t) ? ev.t : this.now;
+    this.advanceTo(stamp);
+    const e = { ...ev, t: Math.max(stamp, this.now) } as DuelInput;
     this.inputLog.push(e);
     switch (e.type) {
       case 'hold':
@@ -326,7 +354,7 @@ export class DuelSystem {
         this.onDrawInput();
         break;
       case 'aim':
-        this.reticle = { x: e.x, y: e.y };
+        if (Number.isFinite(e.x) && Number.isFinite(e.y)) this.reticle = { x: e.x, y: e.y };
         break;
       case 'fire':
         this.onFireInput(e.x, e.y);
@@ -342,13 +370,24 @@ export class DuelSystem {
     if (this.phase !== 'RETRY' && this.phase !== 'RESOLVE') return;
     this.attempt++;
     this.begin(this.now);
+    this.announceWait();
     this.events.emit('onRetry', { t: this.now, attempt: this.attempt });
     this.events.emit('onWait', { t: this.now, attempt: this.attempt });
   }
 
   // ---- internals ---------------------------------------------------------
 
+  /** QA-06: tell `onPhase` listeners about WAIT once per attempt (the constructor cannot, nobody listens yet). */
+  private announceWait(): void {
+    if (this.waitAnnounced || this.phase !== 'WAIT') return;
+    this.waitAnnounced = true;
+    this.events.emit('onPhase', { phase: 'WAIT', prev: this.prevPhase, t: this.now });
+  }
+
   private begin(t: number): void {
+    this.prevPhase = this.phase;
+    this.waitAnnounced = false;
+    this.disarms = 0;
     this.rng = new Rng(this.seed);
     this.hero = makeHealth(this.heroMax);
     this.enemy = makeHealth(this.enemyMax);
@@ -502,19 +541,23 @@ export class DuelSystem {
   }
 
   private onFireInput(x?: number, y?: number): void {
-    if (x !== undefined && y !== undefined) this.reticle = { x, y };
+    if (x !== undefined && y !== undefined && Number.isFinite(x) && Number.isFinite(y)) this.reticle = { x, y };
     if (this.phase === 'AIM') this.fire(x, y);
     else if (this.phase === 'DRAW') this.queuedFire = { x, y }; // released while the gun comes out
     else this.ignored++;
   }
 
   private fire(x?: number, y?: number): void {
-    const p = x !== undefined && y !== undefined ? { x, y } : this.reticle;
+    // non-finite coordinates are dropped (the stored reticle is used); `this.reticle` is always finite
+    const own = x !== undefined && y !== undefined && Number.isFinite(x) && Number.isFinite(y);
+    const p = own ? { x: x as number, y: y as number } : this.reticle;
     this.deadline = null;
     const crit = this.critReady && this.shotsFired === 0;
     this.shotsFired++;
     if (!p) {
-      this.events.emit('onShot', { t: this.now, shooter: 'player', x: NaN, y: NaN, crit });
+      // QA-08: no aim point: shoot straight ahead of the hero (always a miss) instead of leaking NaN
+      const fwd = this.unaimedPoint();
+      this.events.emit('onShot', { t: this.now, shooter: 'player', x: fwd.x, y: fwd.y, crit });
       this.sfx({ type: 'gunshot', shooter: 'player' });
       this.events.emit('onMiss', { t: this.now, shooter: 'player' });
       this.sfx({ type: 'miss' });
@@ -550,9 +593,16 @@ export class DuelSystem {
     this.afterPlayerShot(zone);
   }
 
+  private unaimedPoint(): { x: number; y: number } {
+    const h = this.cfg.arena.hero;
+    return { x: h.x + 60, y: h.y - 40 };
+  }
+
   private afterPlayerShot(zone: Zone | null): void {
-    if (zone?.id === 'limb' && this.enemyNext !== null) {
+    if (zone?.id === 'limb' && this.enemyNext !== null && this.disarms < this.cfg.fairness.maxDisarms) {
       // gun-arm hit disarms: the pending enemy shot is cancelled, the next one is planned.
+      // At most `fairness.maxDisarms` per attempt (QA-09 re-arm rule).
+      this.disarms++;
       this.enemyShotIndex++;
       this.planShot(this.enemyShotIndex);
       this.enemyNext = this.enemyT + this.shotDelays[this.enemyShotIndex];
@@ -579,6 +629,11 @@ export class DuelSystem {
     } else {
       this.events.emit('onMiss', { t: this.now, shooter: 'enemy' });
       this.sfx({ type: 'miss' });
+      if (isDead(this.hero)) {
+        // QA-03: a hero that started with 0 hp is lost at the first enemy shot even if it misses
+        this.resolve('LOSE', this.causeFor(phaseAtShot, i));
+        return;
+      }
     }
     this.enemyShotIndex = i + 1;
     this.planShot(i + 1);

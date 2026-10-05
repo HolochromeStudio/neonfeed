@@ -48,6 +48,12 @@ export interface DuelConfig {
     minShotGapMs: number;
     /** Enemy shot hits the hero when its aim error is at most this. */
     enemyHitTolerancePx: number;
+    /**
+     * QA-09 re-arm rule: a gun-arm (limb) hit cancels the pending enemy shot at most this many times per
+     * attempt. Later limb hits still deal damage but no longer disarm, so parking the reticle on the limb
+     * cannot hold a high-hp enemy off forever. Infinity restores the old behaviour. A18: tune per enemy tier.
+     */
+    maxDisarms: number;
   };
   resolve: { holdMs: number };
   /** Draw swipe + holster hold. */
@@ -103,8 +109,9 @@ export const DUEL_CONFIG: DuelConfig = {
     body: { x: 0.15, y: 0.26, w: 0.7, h: 0.46 },
     limb: { x: 0.0, y: 0.3, w: 0.2, h: 0.4 },
   },
-  fairness: { minLethalMs: 450, minShotGapMs: 250, enemyHitTolerancePx: 24 },
-  resolve: { holdMs: 700 },
+  fairness: { minLethalMs: 450, minShotGapMs: 250, enemyHitTolerancePx: 24, maxDisarms: 2 },
+  /** 300 ms: retry is reachable almost at once (FEEL_REVIEW item 2) and still guards a mashing thumb. */
+  resolve: { holdMs: 300 },
   input: {
     minDistancePx: 28,
     minSpeedPxPerMs: 0.12,
@@ -123,3 +130,16 @@ export const DUEL_CONFIG: DuelConfig = {
     props: [{ id: 'barrel', x: 150, y: 430, w: 28, h: 36 }],
   },
 };
+
+/** Scene-level (not duel-logic) tuning. */
+export const SCENE_TUNING = {
+  /** Largest real time one scene update may feed the duel clock; a backgrounded tab cannot replay a duel. */
+  maxFrameMs: 100,
+  /** Player tracer flight time = clamp(distance / pxPerMs, min, max) ms (FEEL_REVIEW item 4). */
+  tracer: { pxPerMs: 4, minMs: 20, maxMs: 60, enemyMs: 45 },
+  /** How long a hit/miss zone label stays up. Flinch keeps the long one: it is a lesson. */
+  flashZoneMs: 450,
+  flashFlinchMs: 700,
+  /** Retry plank, inside the holster zone where the thumb already is. */
+  retry: { cx: 180, cy: 568, w: 280, h: 72 },
+} as const;

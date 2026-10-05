@@ -92,8 +92,8 @@ describe('duel fuzz: coverage of the fuzzer itself (guards against vacuous passe
       retries += rec.resolves.length - 1;
     }
     expect([...outcomes].sort()).toEqual(['LOSE', 'WIN']);
-    // WAIT is never announced through onPhase (initial state and retry restart silently, QA-06)
-    for (const p of VALID_PHASES.filter((x) => x !== 'WAIT')) expect(phases.has(p)).toBe(true);
+    // QA-06 fixed: WAIT is announced through onPhase too
+    for (const p of VALID_PHASES) expect(phases.has(p)).toBe(true);
     expect(retries).toBeGreaterThan(50);
     expect(causes.size).toBeGreaterThanOrEqual(2);
   });

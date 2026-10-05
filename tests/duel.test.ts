@@ -46,7 +46,7 @@ function drawAndFire(d: DuelSystem, reaction: number, at: { x: number; y: number
 describe('state machine flow', () => {
   it('goes WAIT -> CUE -> DRAW -> AIM -> SHOT -> RESOLVE (WIN) -> RETRY', () => {
     const { d } = make({ enemy: 1 });
-    const phases: DuelPhase[] = [d.currentPhase];
+    const phases: DuelPhase[] = [];
     d.events.on('onPhase', (e) => phases.push(e.phase));
     d.advanceTo(999);
     expect(d.currentPhase).toBe('WAIT');
@@ -67,7 +67,7 @@ describe('state machine flow', () => {
     expect(d.currentPhase).toBe('SHOT');
     d.advanceTo(CUE + 400 + DUEL_CONFIG.aim.recoilMs);
     expect(d.currentPhase).toBe('AIM');
-    expect(phases).toEqual(['CUE', 'DRAW', 'AIM', 'SHOT', 'AIM']);
+    expect(phases).toEqual(['WAIT', 'CUE', 'DRAW', 'AIM', 'SHOT', 'AIM']);
   });
 
   it('measures reaction time from the cue', () => {

@@ -66,15 +66,15 @@ export function record(d: DuelSystem): Recorder {
   return r;
 }
 
-/** Legal phase edges (retry() restarts without an onPhase event, see QA_REPORT QA-06). */
+/** Legal phase edges. QA-06 fix: onPhase now also reports WAIT (first advance of an attempt, WAIT->WAIT; and after retry, RESOLVE/RETRY->WAIT). */
 export const LEGAL: Record<DuelPhase, DuelPhase[]> = {
-  WAIT: ['CUE'],
+  WAIT: ['CUE', 'WAIT'],
   CUE: ['DRAW', 'RESOLVE'],
   DRAW: ['AIM', 'RESOLVE'],
   AIM: ['SHOT', 'RESOLVE'],
   SHOT: ['AIM', 'RESOLVE'],
-  RESOLVE: ['RETRY'],
-  RETRY: [],
+  RESOLVE: ['RETRY', 'WAIT'],
+  RETRY: ['WAIT'],
 };
 
 const TYPES = ['hold', 'lift', 'draw', 'aim', 'fire', 'retry'] as const;

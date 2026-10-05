@@ -53,7 +53,7 @@ describe('swipe recognition edge cases', () => {
     expect(classifyDirection(0, 0, 60)).toBeNull();
     expect(classifyDirection(NaN, 1, 60)).toBeNull();
   });
-  it.fails('timestamps going backwards must not manufacture a fast swipe (QA-07)', () => {
+  it('timestamps going backwards must not manufacture a fast swipe (QA-07)', () => {
     // second sample is 50 ms BEFORE the first: dt is clamped to 1 ms => 40 px/ms
     expect(recognizeSwipe([S(100, 500, 100), S(100, 460, 50)])).toBeNull();
   });

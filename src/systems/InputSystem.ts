@@ -68,6 +68,8 @@ export function analyzeSwipe(
   let maxTravel = 0;
   for (let i = 1; i < samples.length; i++) {
     const p = samples[i];
+    // QA-07: a sample stamped earlier than its predecessor (or with a NaN stamp) is not a real move
+    if (!(p.t >= samples[i - 1].t)) continue;
     const elapsed = p.t - s0.t;
     if (elapsed > cfg.maxDurationMs) break;
     const dx = p.x - s0.x;
@@ -136,6 +138,7 @@ export class SwipeTracker {
   private samples: PointerSample[] = [];
   private active = false;
   private fired = false;
+  private pointerId: number | null = null;
 
   constructor(private readonly dir: SwipeDir = 'up', private readonly cfg: SwipeConfig = DUEL_CONFIG.input) {}
 
@@ -149,15 +152,37 @@ export class SwipeTracker {
     return this.samples[0];
   }
 
-  begin(x: number, y: number, t: number): void {
+  /** Id of the pointer this gesture belongs to (null when none was given). */
+  get ownerId(): number | null {
+    return this.pointerId;
+  }
+
+  /** `id` (optional) pins the gesture to one finger: `move`/`end` calls with another id are ignored (QA-07b). */
+  begin(x: number, y: number, t: number, id: number | null = null): void {
     this.samples = [{ x, y, t }];
     this.active = true;
     this.fired = false;
+    this.pointerId = id;
+  }
+
+  /**
+   * Restarts the gesture at the current finger position without ending the touch (same pointer id).
+   * Used at the cue: the WAIT hold can last 3 s, but `maxDurationMs` must mean "flick within
+   * 600 ms of the cue" (FEEL_REVIEW item 1).
+   */
+  reanchor(x: number, y: number, t: number): void {
+    if (!this.active) return;
+    this.samples = [{ x, y, t }];
+    this.fired = false;
+  }
+
+  private mine(id: number | null): boolean {
+    return this.pointerId === null || id === null || id === this.pointerId;
   }
 
   /** Returns a Swipe the first time the gesture qualifies, else null. */
-  move(x: number, y: number, t: number): Swipe | null {
-    if (!this.active) return null;
+  move(x: number, y: number, t: number, id: number | null = null): Swipe | null {
+    if (!this.active || !this.mine(id)) return null;
     this.samples.push({ x, y, t });
     if (this.fired) return null;
     const s = recognizeSwipe(this.samples, this.dir, this.cfg);
@@ -169,8 +194,8 @@ export class SwipeTracker {
   }
 
   /** Ends the touch. `wasTap` is true for a quick short press-release. */
-  end(x: number, y: number, t: number): { swiped: boolean; wasTap: boolean } {
-    if (!this.active) return { swiped: false, wasTap: false };
+  end(x: number, y: number, t: number, id: number | null = null): { swiped: boolean; wasTap: boolean } {
+    if (!this.active || !this.mine(id)) return { swiped: false, wasTap: false };
     this.samples.push({ x, y, t });
     this.active = false;
     return { swiped: this.fired, wasTap: !this.fired && isTap(this.samples, this.cfg) };
@@ -180,5 +205,6 @@ export class SwipeTracker {
     this.active = false;
     this.samples = [];
     this.fired = false;
+    this.pointerId = null;
   }
 }

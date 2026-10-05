@@ -11,7 +11,7 @@ export class Projectile {
     scene: Phaser.Scene,
     from: { x: number; y: number },
     to: { x: number; y: number },
-    durationMs = 90,
+    durationMs = 45,
     colour = 0xffe08a,
   ) {
     const useSprite = scene.textures.exists('placeholder') && scene.textures.get('placeholder').has('bullet');

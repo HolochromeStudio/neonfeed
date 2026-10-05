@@ -18,7 +18,7 @@ const FALLBACK_COLOURS: Record<DuelistState, number> = {
  * when the texture is missing. Feet are at (x, y), origin bottom-centre.
  */
 export class Duelist {
-  readonly prefix: 'hero' | 'enemy';
+  readonly prefix: string;
   private sprite: Phaser.GameObjects.Sprite | null = null;
   private rect: Phaser.GameObjects.Rectangle | null = null;
   private readonly baseColour: number;
@@ -28,7 +28,7 @@ export class Duelist {
     private readonly scene: Phaser.Scene,
     readonly x: number,
     readonly y: number,
-    prefix: 'hero' | 'enemy',
+    prefix: string,
     width = 64,
     height = 96,
     baseColour = prefix === 'hero' ? 0x5b86c9 : 0xa0623a,
@@ -42,6 +42,11 @@ export class Duelist {
       this.rect = scene.add.rectangle(x, y, width, height, baseColour).setOrigin(0.5, 1).setStrokeStyle(2, 0x1a0f08);
     }
     this.setState('idle');
+  }
+
+  /** The display object (sprite or fallback rectangle), e.g. for the feel layer. */
+  get display(): Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle {
+    return (this.sprite ?? this.rect) as Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
   }
 
   get usesSprite(): boolean {

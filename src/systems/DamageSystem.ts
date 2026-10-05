@@ -24,7 +24,8 @@ export function isDead(h: Health): boolean {
 /** Applies damage (clamped at 0). Damage on an already dead target does nothing. */
 export function applyDamage(h: Health, amount: number): DamageResult {
   const hpBefore = h.hp;
-  if (hpBefore <= 0 || amount <= 0) return { dealt: 0, hpBefore, hpAfter: hpBefore, killed: false };
+  // `!(amount > 0)` also rejects NaN (QA-04)
+  if (hpBefore <= 0 || !(amount > 0)) return { dealt: 0, hpBefore, hpAfter: hpBefore, killed: false };
   h.hp = Math.max(0, hpBefore - amount);
   return { dealt: hpBefore - h.hp, hpBefore, hpAfter: h.hp, killed: h.hp <= 0 };
 }

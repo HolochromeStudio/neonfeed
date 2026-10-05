@@ -78,3 +78,56 @@ describe('SwipeTracker', () => {
     expect(new SwipeTracker('up').move(1, 1, 1)).toBeNull();
   });
 });
+
+describe('hold then flick (FEEL_REVIEW item 1, regression)', () => {
+  const flick = (tr: SwipeTracker, t0: number, id: number | null = null) => {
+    let sw = null;
+    for (let i = 1; i <= 6; i++) sw = tr.move(180, 560 - i * 10, t0 + i * 8, id) ?? sw;
+    return sw;
+  };
+  it('a flick after a 1500 ms hold never registers without a re-anchor (the bug)', () => {
+    const tr = new SwipeTracker('up');
+    tr.begin(180, 560, 0);
+    expect(flick(tr, 1500)).toBeNull();
+  });
+  it('re-anchoring at the cue makes the same flick register', () => {
+    const tr = new SwipeTracker('up');
+    tr.begin(180, 560, 0);
+    tr.reanchor(180, 560, 1500);
+    const sw = flick(tr, 1500);
+    expect(sw).not.toBeNull();
+    expect(sw!.startT).toBe(1500);
+    expect(tr.isActive).toBe(true);
+  });
+  it('re-anchor clears an early swipe so the post-cue flick can draw', () => {
+    const tr = new SwipeTracker('up');
+    tr.begin(180, 560, 0);
+    tr.move(180, 520, 20);
+    expect(tr.swiped).toBe(true);
+    tr.reanchor(180, 560, 1500);
+    expect(tr.swiped).toBe(false);
+    expect(flick(tr, 1500)).not.toBeNull();
+  });
+  it('re-anchor without a touch does nothing', () => {
+    const tr = new SwipeTracker('up');
+    tr.reanchor(1, 1, 5);
+    expect(tr.isActive).toBe(false);
+  });
+});
+
+describe('pointer identity (QA-07b)', () => {
+  it('moves and releases from another pointer id are ignored', () => {
+    const tr = new SwipeTracker('up');
+    tr.begin(180, 560, 0, 1);
+    expect(tr.move(180, 300, 8, 2)).toBeNull();
+    expect(tr.end(180, 300, 9, 2)).toEqual({ swiped: false, wasTap: false });
+    expect(tr.isActive).toBe(true);
+    expect(tr.move(180, 520, 30, 1)).not.toBeNull();
+  });
+});
+
+describe('backwards timestamps (QA-07)', () => {
+  it('a sample stamped earlier than its predecessor is skipped', () => {
+    expect(recognizeSwipe([{ x: 100, y: 500, t: 100 }, { x: 100, y: 460, t: 50 }], 'up')).toBeNull();
+  });
+});
