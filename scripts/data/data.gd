@@ -59,3 +59,27 @@ func rarity_color(r: String) -> Color:
 
 func units_of_rarity(r: String) -> Array:
 	return unit_list.filter(func(u): return u["rarity"] == r)
+
+## Visual definition (art key, wheel layout, display scale) - everything the renderer needs for a vehicle.
+func unit_visual(id: String) -> Dictionary:
+	var u: Dictionary = units[id]
+	var big: bool = "heavy" in u["tags"] or "bus" in u["tags"]
+	return {"art": "veh_" + id, "wheels": Atlas.wheels("veh_" + id).size(), "scale_bias": 1.08 if big else 1.0, "glow_rank": 4,
+		"rarity_color": rarity_color(u["rarity"])}
+
+const ANIM_BY_PROJ := {
+	"bullet": {"recoil": 70.0, "squash": 0.93, "tilt": 0.08, "rumble": 8.0},
+	"lob": {"recoil": 110.0, "squash": 0.88, "tilt": 0.12, "rumble": 6.0},
+	"bolt": {"recoil": 40.0, "squash": 0.96, "tilt": 0.05, "rumble": 14.0},
+	"beam": {"recoil": 20.0, "squash": 0.98, "tilt": 0.03, "rumble": 18.0},
+	"wave": {"recoil": 60.0, "squash": 0.9, "tilt": 0.1, "rumble": 7.0},
+}
+## Animation definition: which clips a vehicle has and how strongly they play (SPAWN, IDLE, TARGET, ATTACK, ABILITY, HIT,
+## BUFF, DEBUFF, STUN, MERGE_START/END, MOVE, TURN, BRAKE, DESTROY, VICTORY are all driven from this by UnitNode).
+func unit_anim(id: String) -> Dictionary:
+	var u: Dictionary = units[id]
+	var a: Dictionary = ANIM_BY_PROJ.get(u["proj"], ANIM_BY_PROJ["bullet"]).duplicate()
+	a["heavy"] = "heavy" in u["tags"]
+	a["clips"] = ["spawn", "idle", "target", "attack", "ability", "hit", "buff", "debuff", "stun", "merge_start", "merge_end", "move", "turn", "brake", "destroy", "victory"]
+	a["spawn_time"] = 0.6 if not a["heavy"] else 0.75
+	return a

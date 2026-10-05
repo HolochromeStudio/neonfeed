@@ -78,8 +78,8 @@ func _build_background() -> void:
 	pic.texture = Atlas.tex("biome_" + sim.biome)
 	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pic.stretch_mode = TextureRect.STRETCH_SCALE
-	pic.position = Vector2(0, -60)
-	pic.size = Vector2(FIELD_W, 460)
+	pic.position = Vector2(-300, -60)
+	pic.size = Vector2(FIELD_W + 600, 460)
 	pic.modulate = Color(0.95, 0.95, 1.0, 0.96)
 	bg_layer.add_child(pic)
 	var ground := TextureRect.new()
@@ -222,6 +222,7 @@ func clear_slot_states() -> void:
 func _process(dt: float) -> void:
 	if sim == null:
 		return
+	var _t0 := Time.get_ticks_usec()
 	t += dt
 	if combo_node and is_instance_valid(combo_node) and t - combo_t > 1.6:
 		combo_node.modulate.a = maxf(0.0, combo_node.modulate.a - dt * 3.0)
@@ -229,13 +230,18 @@ func _process(dt: float) -> void:
 			combo_node.queue_free()
 			combo_node = null
 	_process_events()
+	Dev.perf_add("view.events", Time.get_ticks_usec() - _t0)
+	_t0 = Time.get_ticks_usec()
 	for id in unit_nodes.keys():
 		var un: UnitNode = unit_nodes[id]
 		un.sync(sim, dt)
 	for id in enemy_nodes.keys():
 		var en: EnemyNode = enemy_nodes[id]
 		en.sync(sim, dt)
+	Dev.perf_add("view.sync", Time.get_ticks_usec() - _t0)
+	_t0 = Time.get_ticks_usec()
 	_sort_entities()
+	Dev.perf_add("view.sort", Time.get_ticks_usec() - _t0)
 	if shake_t > 0.0:
 		shake_t -= dt
 		var a := shake_amp * (shake_t / 0.35)
@@ -787,6 +793,29 @@ func _combo_hit() -> void:
 		combo_node.modulate.a = 1.0
 		create_tween().tween_property(combo_node, "scale", Vector2.ONE, 0.15)
 		Audio.sfx("tick", 1.0 + minf(combo, 20) * 0.04, -6)
+
+func wave_banner(n: int) -> void:
+	var vpw := size.x
+	var holder := Control.new()
+	holder.size = Vector2(vpw, 200)
+	holder.position = Vector2(0, 470)
+	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(holder)
+	var st := Atlas.rect("lbl_wave", 360, 130)
+	st.position = Vector2(vpw * 0.5 - 380, 20)
+	holder.add_child(st)
+	var dg := UI.digits(n, 150)
+	dg.position = Vector2(vpw * 0.5 + 10, 10)
+	holder.add_child(dg)
+	st.position.x -= vpw
+	dg.position.x += vpw
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(st, "position:x", vpw * 0.5 - 380, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(dg, "position:x", vpw * 0.5 + 10, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.chain().tween_interval(0.7)
+	tw.chain().tween_property(holder, "modulate:a", 0.0, 0.3)
+	tw.chain().tween_callback(holder.queue_free)
 
 func banner(text: String, color: String = "red", dur: float = 1.6) -> void:
 	var vpw := size.x

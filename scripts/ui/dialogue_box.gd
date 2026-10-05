@@ -44,7 +44,7 @@ func _ready() -> void:
 	add_child(dim)
 	_stage_l = Node2D.new(); add_child(_stage_l)
 	_stage_r = Node2D.new(); add_child(_stage_r)
-	var bh := 420.0
+	var bh := 330.0
 	_box = Atlas.nine("ui_dialog_box", 46)
 	_box.size = Vector2(_vp.x - 60, bh)
 	_box.position = Vector2(30, _vp.y - bh - 30 - Game.safe_bottom)

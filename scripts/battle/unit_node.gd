@@ -154,10 +154,11 @@ func move_to_slot(p: Vector2) -> void:
 
 func recoil(target: Vector2) -> void:
 	var d := (target - position).normalized()
-	_recoil_v = -d * 70.0
-	_squash = 0.93
+	var an := Data.unit_anim(u.uid)
+	_recoil_v = -d * float(an["recoil"])
+	_squash = float(an["squash"])
 	_target_flip = -1.0 if target.x > position.x else 1.0
-	_tilt = clampf(d.x * 0.08, -0.1, 0.1)
+	_tilt = clampf(d.x * float(an["tilt"]), -0.14, 0.14)
 
 func flash(c: Color) -> void:
 	_flash_t = 0.25

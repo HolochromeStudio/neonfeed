@@ -56,6 +56,8 @@ func setup(main: Node) -> void:
 	overlay.add_child(toast_box)
 	get_viewport().size_changed.connect(_update_safe)
 	_update_safe()
+	Save.unlocked.connect(_on_unlocked)
+	get_tree().set_auto_accept_quit(false)
 
 func _update_safe() -> void:
 	var win := DisplayServer.window_get_size()
@@ -355,6 +357,8 @@ func dev_goto() -> void:
 	if name == "battle":
 		var m: String = a.get("mode", "story")
 		var cfg := build_cfg(m, {"chapter": int(a.get("ch", 1)), "level": int(a.get("lv", 1))})
+		if a.get("mode", "") == "tutorial":
+			Save.data["flags"]["created_character"] = true
 		if a.has("seed"):
 			cfg["seed"] = int(a["seed"])
 		if a.has("deck"):
@@ -365,5 +369,55 @@ func dev_goto() -> void:
 			cfg["city_hp"] = int(a["hp"])
 		last_cfg = cfg
 		go("battle", {"cfg": cfg}, false, false)
+	elif name == "results":
+		var cfg := build_cfg("story", {"chapter": 1, "level": int(a.get("lv", 1))})
+		var summ := {"result": a.get("result", "victory"), "wave": 8, "kills": 142, "merges": 17, "deploys": 33, "time": 321.0, "max_rank": 4, "upgrades": 3, "city_hp": 17, "bosses": 0, "leaks": 3, "elites": 1, "sp_earned": 600}
+		last_cfg = cfg
+		var rew := process_rewards(summ, cfg)
+		go("results", {"summary": summ, "cfg": cfg, "rewards": rew}, false, false)
 	else:
 		go(name, a, false, false)
+
+func _on_unlocked(kind: String, id: String) -> void:
+	match kind:
+		"achievement":
+			for a in Data.achievements:
+				if a["id"] == id:
+					toast("Achievement: %s" % a["name"], "icon_trophy", "teal")
+					Audio.sfx("unlock")
+		"unit":
+			if Data.units.has(id) and screen_name != "results":
+				toast("New vehicle: %s!" % Data.units[id]["name"], "icon_crown", "yellow")
+		"cosmetic":
+			if Data.cosmetics_by_id.has(id):
+				toast("New look: %s" % Data.cosmetics_by_id[id]["name"], "icon_star", "mint")
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		Save.save()
+		get_tree().quit()
+	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		handle_back()
+
+func _unhandled_input(ev: InputEvent) -> void:
+	if ev is InputEventKey and ev.pressed and ev.keycode == KEY_ESCAPE:
+		handle_back()
+
+## Android back button / Escape.
+func handle_back() -> void:
+	var pops := overlay.get_children().filter(func(c): return c is PaperPopup)
+	if not pops.is_empty():
+		(pops[pops.size() - 1] as PaperPopup).close()
+		return
+	for c in overlay.get_children():
+		if c is DialogueBox:
+			c._finish()
+			return
+	match screen_name:
+		"battle":
+			if current and current.has_method("_pause"):
+				current._pause()
+		"home", "title", "boot", "results", "intro", "create":
+			pass
+		_:
+			back()

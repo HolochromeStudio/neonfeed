@@ -34,6 +34,8 @@ static func run() -> Array:
 			if t["k"] == "status" and not Data.statuses.has(t["st"]): errs.append("unit %s: unknown status %s" % [id, t["st"]])
 			if t.has("st") and not Data.statuses.has(t["st"]): errs.append("unit %s: trait status %s unknown" % [id, t["st"]])
 		if not Audio.unit_audio(id).has("shoot"): errs.append("unit %s: no audio def" % id)
+		if not Data.unit_visual(id).has("art") or Data.unit_anim(id)["clips"].size() < 16: errs.append("unit %s: incomplete visual/animation def" % id)
+		if Atlas.wheels("veh_" + id).is_empty() and not (id in ["ufo", "mecha_vehicle", "rocket_car", "experimental_ev", "winged_van", "portal_bus"]): warn.append("unit %s has no wheel overlay" % id)
 	for r in Data.RARITIES:
 		if Data.units_of_rarity(r).size() != 10: errs.append("rarity %s should have 10 units" % r)
 	# enemies / bosses
@@ -100,6 +102,8 @@ static func run() -> Array:
 		if not Atlas.has(Data.statuses[s]["icon"]): errs.append("status %s: icon missing" % s)
 	for e in errs:
 		push_error("[validator] " + e)
+	for w in warn:
+		print("[validator] note: ", w)
 	print("[validator] units=%d upgrades=%d relics=%d synergies=%d chapters=%d achievements=%d cosmetics=%d -> %d errors" % [Data.units.size(), Data.upgrades.size(), Data.relics.size(), Data.synergies.size(), Data.chapters.size(), Data.achievements.size(), Data.cosmetics.size(), errs.size()])
 	return errs
 

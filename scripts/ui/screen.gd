@@ -42,7 +42,7 @@ func add_topbar(show_back: bool = false, title: String = "") -> Control:
 		bar.add_child(b)
 		x += 110
 	if title != "":
-		var t := UI.label(title, 50, UI.WHITE, true, HORIZONTAL_ALIGNMENT_LEFT, 8)
+		var t := UI.label(title, 50 if title.length() <= 8 else 36, UI.WHITE, true, HORIZONTAL_ALIGNMENT_LEFT, 8)
 		t.position = Vector2(x, 0)
 		t.size = Vector2(500, 90)
 		bar.add_child(t)

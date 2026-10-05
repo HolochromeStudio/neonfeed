@@ -350,6 +350,9 @@ func deploy(owner: int = 0, forced_slot: int = -1, forced_unit: String = "") -> 
 			free_deploys -= 1
 		sp -= cost
 		deploy_count += 1
+		if _m("free_deploy") > 0.0 and deploy_count % int(_m("free_deploy")) == 0:
+			free_deploys += 1
+			_ev({"t": "text", "msg": "Next deploy FREE!", "pos": Vector2(540, 900)})
 	else:
 		sp_partner -= cost
 		deploy_count_p += 1

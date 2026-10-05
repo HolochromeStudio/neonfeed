@@ -28,6 +28,10 @@ var _build_total: int = 0
 func build_step() -> float:
 	if ready_done:
 		return 1.0
+	if _build_total == 0 and _try_load_baked():
+		ready_done = true
+		apply_volumes()
+		return 1.0
 	if _build_queue.is_empty() and _build_total == 0:
 		for k in _sfx_defs():
 			_build_queue.append(k)
@@ -44,6 +48,41 @@ func build_step() -> float:
 		apply_volumes()
 		return 1.0
 	return 1.0 - float(_build_queue.size()) / float(_build_total)
+
+## Prefer pre-baked WAVs (assets/audio, produced by tests/bake_audio.tscn) so mobile boot does not pay for synthesis.
+func _try_load_baked() -> bool:
+	if not ResourceLoader.exists("res://assets/audio/sfx_click.wav"):
+		return false
+	for k in _sfx_defs():
+		var st: AudioStream = load("res://assets/audio/sfx_%s.wav" % k)
+		if st == null:
+			return false
+		_sfx[k] = st
+	for m in ["menu", "battle"]:
+		var ms: AudioStreamWAV = load("res://assets/audio/music_%s.wav" % m)
+		if ms == null:
+			return false
+		ms.loop_mode = AudioStreamWAV.LOOP_FORWARD
+		ms.loop_begin = 0
+		ms.loop_end = int(ms.data.size() / 2)
+		_music[m] = ms
+	return true
+
+func bake_to(dir: String) -> void:
+	build_all_synth()
+	DirAccess.make_dir_recursive_absolute(dir)
+	for k in _sfx:
+		(_sfx[k] as AudioStreamWAV).save_to_wav("%s/sfx_%s.wav" % [dir, k])
+	for k in _music:
+		(_music[k] as AudioStreamWAV).save_to_wav("%s/music_%s.wav" % [dir, k])
+
+func build_all_synth() -> void:
+	_build_queue.clear(); _build_total = 0; ready_done = false
+	for k in _sfx_defs():
+		_sfx[k] = _make(_sfx_defs()[k])
+	_music["menu"] = _make_music(false)
+	_music["battle"] = _make_music(true)
+	ready_done = true
 
 func build_all() -> void:
 	while build_step() < 1.0:

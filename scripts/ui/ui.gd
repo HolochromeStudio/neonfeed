@@ -94,6 +94,16 @@ static func tappable(c: Control, cb: Callable) -> void:
 		elif ev is InputEventMouseMotion and st["down"] and ev.global_position.distance_to(st["p"]) >= 18.0:
 			st["down"] = false)
 
+## Number rendered with the sheet's stencil digit sprites.
+static func digits(n: int, h: float = 120.0) -> HBoxContainer:
+	var box := HBoxContainer.new()
+	box.add_theme_constant_override("separation", -int(h * 0.12))
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for ch in str(n):
+		var r := Atlas.rect("digit_" + ch, h * 0.8, h)
+		box.add_child(r)
+	return box
+
 static func set_full_rect(c: Control) -> void:
 	c.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 

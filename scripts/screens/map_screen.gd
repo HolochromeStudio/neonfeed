@@ -43,6 +43,13 @@ func _build() -> void:
 	var bp := Atlas.rect("biome_" + ch["biome"], 300, 190)
 	bp.position = Vector2(24, 16)
 	pic.add_child(bp)
+	pic.mouse_filter = Control.MOUSE_FILTER_STOP
+	pic.gui_input.connect(func(ev):
+		if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
+			_world_overview())
+	var wh := UI.label("tap for world map", 22, UI.INK_SOFT, false, HORIZONTAL_ALIGNMENT_RIGHT)
+	wh.position = Vector2(pic.size.x - 290, 186); wh.size = Vector2(270, 28)
+	pic.add_child(wh)
 	var nm := UI.label("CHAPTER %d" % chapter, 30, UI.RED, true, HORIZONTAL_ALIGNMENT_LEFT)
 	nm.position = Vector2(340, 14); nm.size = Vector2(500, 40)
 	pic.add_child(nm)
@@ -90,6 +97,43 @@ func _build() -> void:
 	var q := UI.btn("CONTINUE  %s" % nl, "green", Vector2(560, 100), func(): _open_level(int(nl.split("-")[0]), int(nl.split("-")[1])), 44)
 	q.position = Vector2((vp.x - 560) * 0.5, vp.y - 110 - Game.safe_bottom)
 	add_child(q)
+
+func _world_overview() -> void:
+	Audio.sfx("whoosh", 1.1, -6)
+	var grid := GridContainer.new()
+	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 14)
+	grid.add_theme_constant_override("v_separation", 14)
+	var p: PaperPopup = null
+	for i in 9:
+		var C: Dictionary = Data.chapters[i]
+		var cell := Control.new()
+		cell.custom_minimum_size = Vector2(250, 250)
+		var bg := Atlas.nine("ui_panel_paper", 26)
+		bg.size = Vector2(250, 250)
+		cell.add_child(bg)
+		var pic := Atlas.rect("biome_" + C["biome"], 226, 150)
+		pic.position = Vector2(12, 10)
+		cell.add_child(pic)
+		var done := 0
+		for l in C["levels"]:
+			if Save.level_cleared(l["id"]): done += 1
+		var nm := UI.label("%d. %s" % [i + 1, C["name"]], 26, UI.INK, true)
+		nm.position = Vector2(0, 162); nm.size = Vector2(250, 36)
+		cell.add_child(nm)
+		var pr := UI.label("%d/6" % done, 28, UI.GREEN if done == 6 else UI.INK_SOFT, true)
+		pr.position = Vector2(0, 198); pr.size = Vector2(250, 36)
+		cell.add_child(pr)
+		if not Save.chapter_unlocked(i + 1):
+			var sh := ColorRect.new(); sh.color = Color(0, 0, 0, 0.5); sh.size = Vector2(250, 250); cell.add_child(sh)
+			var lk := UI.icon("icon_lock", 80); lk.position = Vector2(85, 60); cell.add_child(lk)
+		var idx := i + 1
+		cell.mouse_filter = Control.MOUSE_FILTER_STOP
+		cell.gui_input.connect(func(ev):
+			if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
+				chapter = idx; Audio.sfx("click"); _build(); if p: p.close())
+		grid.add_child(cell)
+	p = Game.popup("WORLD MAP", grid, [{"text": "CLOSE", "color": "gray"}], Vector2(900, 1010))
 
 func _switch(d: int) -> void:
 	chapter = wrapi(chapter - 1 + d, 0, 9) + 1

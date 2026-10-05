@@ -38,7 +38,7 @@ func _ready() -> void:
 	add_child(st)
 	var g := GridContainer.new()
 	g.columns = 2
-	g.position = Vector2(50, 36)
+	g.position = Vector2(50, 30)
 	g.add_theme_constant_override("h_separation", 30)
 	g.add_theme_constant_override("v_separation", 4)
 	st.add_child(g)
@@ -49,14 +49,10 @@ func _ready() -> void:
 		["Upgrades taken", Save.stat("upgrades")], ["Runs played", Save.stat("runs")]]
 	for r in rows:
 		var a := UI.label(r[0], 32, UI.INK_SOFT, false, HORIZONTAL_ALIGNMENT_LEFT)
-		a.custom_minimum_size = Vector2(380, 50)
-		var b := UI.label(str(r[1]), 36, UI.INK, true, HORIZONTAL_ALIGNMENT_RIGHT)
-		b.custom_minimum_size = Vector2(st.size.x - 100 - 380 - 30 - 250, 50)
+		a.custom_minimum_size = Vector2(560, 56)
+		var b := UI.label(str(r[1]), 38, UI.INK, true, HORIZONTAL_ALIGNMENT_RIGHT)
+		b.custom_minimum_size = Vector2(st.size.x - 100 - 560 - 30, 56)
 		g.add_child(a); g.add_child(b)
-	g.columns = 4
-	# re-flow: two stats per row
-	for c in g.get_children():
-		pass
 
 func _rename(lbl: Label) -> void:
 	var le := LineEdit.new()

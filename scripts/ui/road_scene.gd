@@ -27,6 +27,8 @@ var _layer_cars: Node2D
 var _props: Node2D
 var car_ids: Array = []
 var enemies_too: bool = true
+var _critter_t: float = 4.0
+var _critters: Array = []
 
 func setup(b: String, road_y: float, road_h: float = 300.0) -> void:
 	biome = b
@@ -99,6 +101,23 @@ func build() -> void:
 	for i in 4:
 		_spawn_car(_rng.randf_range(0, w))
 
+func _spawn_critter() -> void:
+	var w := get_viewport_rect().size.x
+	var kinds := ["pigeon", "seagull", "cat", "dog", "raccoon"]
+	if biome == "beach_road": kinds = ["seagull", "seagull", "dog", "cat"]
+	if biome == "night_city": kinds = ["raccoon", "cat", "raccoon", "pigeon"]
+	var k: String = kinds[_rng.randi() % kinds.size()]
+	var fly: bool = k in ["pigeon", "seagull"]
+	var dir := 1.0 if _rng.randf() < 0.5 else -1.0
+	var s := Atlas.sprite("npc_animal_" + k, true)
+	s.scale = Vector2(-dir, 1.0) * (0.9 if fly else 1.0)
+	var root := Node2D.new()
+	root.add_child(s)
+	var y0 := _road_y - 30 if not fly else _road_y - 190 - _rng.randf() * 60
+	root.position = Vector2(-120 if dir > 0 else w + 120, y0)
+	add_child(root)
+	_critters.append({"n": root, "vx": dir * (_rng.randf_range(70, 110) if not fly else _rng.randf_range(140, 220)), "fly": fly, "y0": y0, "ph": _rng.randf() * 6.28})
+
 func _spawn_car(x: float = -200.0) -> void:
 	var w := get_viewport_rect().size.x
 	var lane := _rng.randi() % 2
@@ -147,6 +166,23 @@ func _process(dt: float) -> void:
 			n.queue_free()
 			_cars.remove_at(i)
 		i -= 1
+	_critter_t -= dt
+	if _critter_t <= 0.0:
+		_critter_t = _rng.randf_range(7.0, 16.0)
+		_spawn_critter()
+	var ci := _critters.size() - 1
+	while ci >= 0:
+		var c: Dictionary = _critters[ci]
+		var n: Node2D = c["n"]
+		n.position.x += c["vx"] * dt
+		if c["fly"]:
+			n.position.y = c["y0"] + sin(_t * 5.0 + c["ph"]) * 26.0
+			n.rotation = sin(_t * 5.0 + c["ph"]) * 0.12
+		else:
+			n.position.y = c["y0"] - absf(sin(_t * 12.0 + c["ph"])) * 8.0
+		if n.position.x < -200 or n.position.x > w + 200:
+			n.queue_free(); _critters.remove_at(ci)
+		ci -= 1
 	_spawn_t -= dt
 	if _spawn_t <= 0.0:
 		_spawn_t = _rng.randf_range(1.2, 3.0)

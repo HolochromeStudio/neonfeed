@@ -247,6 +247,11 @@ func _build_hud() -> void:
 	hud.add_child(bld)
 	_update_hud(0.0)
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_APPLICATION_PAUSED:
+		if not ended and not paused and sim != null and sim.state != "ended":
+			_pause()
+
 func _toggle_speed() -> void:
 	speed = 2.0 if speed < 1.5 else (3.0 if speed < 2.5 else 1.0)
 	if cfg.get("tutorial", false):
@@ -261,7 +266,12 @@ func _process(dt: float) -> void:
 			set_meta("finished", true)
 			_finish()
 		return
-	if not paused and sim.state != "ended":
+	var dialogue_open := false
+	for oc in Game.overlay.get_children():
+		if oc is DialogueBox:
+			dialogue_open = true
+	if not paused and sim.state != "ended" and not dialogue_open:
+		var t0 := Time.get_ticks_usec()
 		var remaining := dt * speed
 		if Dev.god_mode:
 			sim.city_hp = sim.city_max
@@ -277,6 +287,7 @@ func _process(dt: float) -> void:
 				coop.tick(step)
 			if sim.state == "offer":
 				break
+		Dev.perf_add("sim+bot", Time.get_ticks_usec() - t0)
 		_poll_events()
 	_update_hud(dt)
 	if cfg.get("tutorial", false):
@@ -305,7 +316,7 @@ func _poll_events() -> void:
 			view.banner("ELITE WAVE %d" % sim.wave, "yellow", 1.2)
 			Audio.sfx("horn", 0.8)
 		else:
-			view.banner("WAVE %d" % sim.wave, "teal", 0.9)
+			view.wave_banner(sim.wave)
 			Audio.sfx("gong", 1.4, -6)
 
 func _update_hud(dt: float) -> void:
