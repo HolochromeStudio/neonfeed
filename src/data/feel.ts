@@ -23,6 +23,21 @@ export interface ImpactTuning {
   knockbackPx: number;
 }
 
+export interface DodgeTuning {
+  shakePx: number;
+  shakeMs: number;
+  flashAlpha: number;
+  flashMs: number;
+  flashColour: number;
+  /** Camera punch zoom (removed by reducedShake). */
+  punchZoom: number;
+  slowMoScale: number;
+  /** 0 = no slow-mo. */
+  slowMoMs: number;
+  /** Dust puff size at the hero's feet. */
+  particles: number;
+}
+
 export interface FeelConfig {
   /** Absolute ceilings. Every plan is clamped to these no matter what the tables below say. */
   caps: {
@@ -57,6 +72,18 @@ export interface FeelConfig {
     slowMoMs: number;
   };
   flinch: { twitchPx: number; twitchMs: number };
+  /** Dodge feedback (A02's onDodge / onMiss.evaded). All values are clamped by `caps` in planDodge. */
+  dodge: {
+    perfect: DodgeTuning;
+    ok: DodgeTuning;
+    /** Early / late failure: a small negative cue. */
+    fail: DodgeTuning;
+    /** Enemy shot dodged (onMiss evaded 'dodge'): the bullet whistles past. */
+    pastShot: DodgeTuning;
+    /** Dust Kick cloud: visual hint only (dust puff), never a flash or slow-mo. */
+    cloudParticles: number;
+    dustColour: number;
+  };
 
   recoil: {
     kickPx: number;
@@ -105,6 +132,10 @@ export interface FeelConfig {
     perfectDraw: HapticProfile | null;
     playerHit: HapticProfile | null;
     kill: HapticProfile | null;
+    /** The audio bus already plays 'light' for dodge/miss; perfect replaces it with a distinct pattern, ok/fail add nothing. */
+    dodgePerfect: HapticProfile | null;
+    dodgeOk: HapticProfile | null;
+    dodgeFail: HapticProfile | null;
   };
 
   /** Reaction-time number that pops in at the draw. */
@@ -155,6 +186,14 @@ export const FEEL: FeelConfig = {
     slowMoMs: 110,
   },
   flinch: { twitchPx: 3, twitchMs: 50 },
+  dodge: {
+    perfect: { shakePx: 1.5, shakeMs: 70, flashAlpha: 0.1, flashMs: 60, flashColour: 0xc9f3ff, punchZoom: 0.01, slowMoScale: 0.6, slowMoMs: 90, particles: 4 },
+    ok: { shakePx: 1, shakeMs: 50, flashAlpha: 0.05, flashMs: 50, flashColour: 0xc9f3ff, punchZoom: 0, slowMoScale: 1, slowMoMs: 0, particles: 3 },
+    fail: { shakePx: 1.5, shakeMs: 60, flashAlpha: 0.1, flashMs: 60, flashColour: 0xd24a3a, punchZoom: 0, slowMoScale: 1, slowMoMs: 0, particles: 0 },
+    pastShot: { shakePx: 1, shakeMs: 50, flashAlpha: 0, flashMs: 0, flashColour: 0xffffff, punchZoom: 0, slowMoScale: 1, slowMoMs: 0, particles: 2 },
+    cloudParticles: 5,
+    dustColour: 0xb98a4e,
+  },
 
   recoil: { kickPx: 5, kickMs: 45, settleMs: 90 },
   muzzle: {
@@ -188,7 +227,7 @@ export const FEEL: FeelConfig = {
   },
   impactFlash: { radiusPx: 14, ms: 70, colour: 0xfff3c4 },
 
-  haptics: { flinch: 'light', critHit: 'medium', perfectDraw: null, playerHit: null, kill: null },
+  haptics: { flinch: 'light', critHit: 'medium', perfectDraw: null, playerHit: null, kill: null, dodgePerfect: 'perfect_draw', dodgeOk: null, dodgeFail: null },
 
   reactionPop: {
     x: 180,

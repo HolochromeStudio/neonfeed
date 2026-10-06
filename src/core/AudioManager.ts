@@ -26,6 +26,8 @@ export const PLACEHOLDER_SOUNDS: readonly PlaceholderSound[] = [
   { id: 'hit_flesh', kind: 'sfx', note: 'PLACEHOLDER low thud' },
   { id: 'hit_prop', kind: 'sfx', note: 'PLACEHOLDER wood-ish clack' },
   { id: 'dodge', kind: 'sfx', note: 'PLACEHOLDER filtered whoosh' },
+  { id: 'dodge_perfect', kind: 'sfx', note: 'PLACEHOLDER airy two-note chime layered over the dodge whoosh' },
+  { id: 'dodge_fail', kind: 'sfx', note: 'PLACEHOLDER dull stumble thump + low blip' },
   { id: 'perfect_draw', kind: 'sfx', note: 'PLACEHOLDER bright chime arpeggio' },
   { id: 'miss', kind: 'sfx', note: 'PLACEHOLDER falling blip' },
   { id: 'ui_click', kind: 'sfx', note: 'PLACEHOLDER short tick' },
@@ -143,6 +145,14 @@ const SFX_SYNTH: Record<AudioEventType, Synth> = {
   },
   dodge: (c, o) => {
     noise(c, o, { dur: 0.25, gain: 0.3, filter: 'bandpass', freq: 400, freqEnd: 2500 });
+  },
+  dodge_perfect: (c, o) => {
+    tone(c, o, { type: 'triangle', freq: 1319, dur: 0.1, gain: 0.18 });
+    tone(c, o, { type: 'triangle', freq: 1760, dur: 0.14, gain: 0.18, delay: 0.07 });
+  },
+  dodge_fail: (c, o) => {
+    tone(c, o, { type: 'sine', freq: 160, freqEnd: 70, dur: 0.14, gain: 0.4 });
+    tone(c, o, { type: 'square', freq: 220, freqEnd: 140, dur: 0.1, gain: 0.12, delay: 0.04 });
   },
   perfect_draw: (c, o) => {
     [880, 1109, 1319, 1760].forEach((f, i) =>

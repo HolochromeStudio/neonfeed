@@ -20,6 +20,8 @@ import {
   installFeel,
   particleBudget,
   planImpact,
+  planDodge,
+  planDodgeKind,
   planPerfectDraw,
   planReactionPop,
   punchCurve,
@@ -527,5 +529,187 @@ describe('FeelSystem with a fake scene', () => {
     // FeelSystem exposes no way to delay input: it holds no reference to DuelSystem or pointer handlers
     const src = FeelSystem.toString();
     expect(src).not.toMatch(/DuelSystem|advanceTo|pointerdown|\.input\(/);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Dodge feedback
+// ---------------------------------------------------------------------------
+
+const dodgeEv = (over: Partial<DuelEvents['onDodge']> = {}): DuelEvents['onDodge'] => ({
+  t: 0, result: 'perfect', success: true, dir: 'left', etaMs: 200, windowMs: 250, shotIndex: 0,
+  fromAim: false, cloud: false, counterCrit: false, counterDraw: false, ...over,
+});
+
+describe('planDodge', () => {
+  it('every dodge tuning row respects the hard caps', () => {
+    const c = FEEL.caps;
+    for (const t of [FEEL.dodge.perfect, FEEL.dodge.ok, FEEL.dodge.fail, FEEL.dodge.pastShot]) {
+      expect(t.shakePx).toBeLessThanOrEqual(c.shakePx);
+      expect(t.shakeMs).toBeLessThanOrEqual(c.shakeMs);
+      expect(t.flashAlpha).toBeLessThanOrEqual(c.flashAlpha);
+      expect(t.flashMs).toBeLessThanOrEqual(c.flashMs);
+      expect(t.punchZoom).toBeLessThanOrEqual(c.punchZoom);
+      expect(t.slowMoMs).toBeLessThanOrEqual(c.slowMoMs);
+      if (t.slowMoMs > 0) expect(t.slowMoScale).toBeGreaterThanOrEqual(c.slowMoMinScale);
+      expect(t.particles + FEEL.dodge.cloudParticles).toBeLessThanOrEqual(c.maxParticlesPerBurst);
+    }
+  });
+
+  it('perfect > ok > fail in positivity: perfect has slow-mo + haptic, ok is lighter, fail has none', () => {
+    const p = planDodge({ result: 'perfect' }, false);
+    const o = planDodge({ result: 'ok' }, false);
+    const f1 = planDodge({ result: 'early' }, false);
+    const f2 = planDodge({ result: 'late' }, false);
+    expect(p.slowMo).not.toBeNull();
+    expect(p.slowMo!.ms).toBeLessThanOrEqual(FEEL.caps.slowMoMs);
+    expect(p.slowMo!.scale).toBeGreaterThanOrEqual(FEEL.caps.slowMoMinScale);
+    expect(p.haptic).toBe('perfect_draw');
+    expect(p.audio).toBe('dodge_perfect');
+    expect(o.slowMo).toBeNull();
+    expect(o.shake.px).toBeLessThan(p.shake.px);
+    expect(o.flash.alpha).toBeLessThan(p.flash.alpha);
+    expect(o.audio).toBeNull();
+    expect(f1.kind).toBe('fail');
+    expect(f2.kind).toBe('fail');
+    expect(f1.slowMo).toBeNull();
+    expect(f1.flash.colour).toBe(FEEL.dodge.fail.flashColour);
+    expect(f1.shake.px).toBeGreaterThan(0);
+  });
+
+  it('reducedShake scales shake to 25% and removes the zoom punch, keeps the flash', () => {
+    const full = planDodge({ result: 'perfect' }, false);
+    const red = planDodge({ result: 'perfect' }, true);
+    expect(full.punchZoom).toBeGreaterThan(0);
+    expect(red.punchZoom).toBe(0);
+    expect(red.shake.px).toBeCloseTo(full.shake.px * 0.25, 9);
+    expect(red.flash.alpha).toBe(full.flash.alpha);
+  });
+
+  it('dust cloud adds only particles (a visual hint), never flash or slow-mo, and never on failure', () => {
+    const a = planDodge({ result: 'ok', cloud: false }, false);
+    const b = planDodge({ result: 'ok', cloud: true }, false);
+    expect(b.particles).toBe(a.particles + FEEL.dodge.cloudParticles);
+    expect(b.flash).toEqual(a.flash);
+    expect(b.slowMo).toEqual(a.slowMo);
+    expect(planDodge({ result: 'late', cloud: true }, false).particles).toBe(FEEL.dodge.fail.particles);
+  });
+
+  it('absurd configs are clamped to the caps', () => {
+    const cfg: FeelConfig = JSON.parse(JSON.stringify(FEEL));
+    cfg.dodge.perfect = { ...cfg.dodge.perfect, shakePx: 99, shakeMs: 9999, flashAlpha: 9, flashMs: 9999, punchZoom: 1, slowMoScale: 0, slowMoMs: 9999, particles: 999 };
+    const p = planDodgeKind('perfect', true, false, cfg);
+    expect(p.shake.px).toBe(cfg.caps.shakePx);
+    expect(p.shake.ms).toBe(cfg.caps.shakeMs);
+    expect(p.flash.alpha).toBe(cfg.caps.flashAlpha);
+    expect(p.flash.ms).toBe(cfg.caps.flashMs);
+    expect(p.punchZoom).toBe(cfg.caps.punchZoom);
+    expect(p.slowMo).toEqual({ scale: cfg.caps.slowMoMinScale, ms: cfg.caps.slowMoMs });
+    expect(p.particles).toBe(cfg.caps.maxParticlesPerBurst);
+  });
+});
+
+describe('FeelSystem dodge events (fake scene)', () => {
+  const setup = (reducedShake = false) => {
+    const h = makeScene();
+    const bus = new TypedEmitter<DuelEvents>();
+    const play = vi.fn(() => true);
+    const emit = vi.fn();
+    const fs = new FeelSystem({ haptics: { play }, audio: { emit }, settings: () => ({ reducedShake }) });
+    fs.attach(h.scene, bus);
+    return { h, bus, play, emit, fs };
+  };
+
+  it('perfect dodge: capped shake, slow-mo that expires, haptic, chime; never blocks (no hit-stop)', () => {
+    const { h, bus, play, emit, fs } = setup();
+    bus.emit('onDodge', dodgeEv());
+    expect(h.shake).toHaveBeenCalledTimes(1);
+    const [ms, intensity] = h.shake.mock.calls[0] as [number, number];
+    expect(ms).toBeLessThanOrEqual(FEEL.caps.shakeMs);
+    expect(intensity * 360).toBeLessThanOrEqual(FEEL.caps.shakePx + 1e-9);
+    expect(play).toHaveBeenCalledWith('perfect_draw');
+    expect(emit).toHaveBeenCalledWith({ type: 'dodge_perfect' });
+    expect(fs.timeScale).toBeGreaterThanOrEqual(FEEL.caps.slowMoMinScale);
+    expect(fs.timeScale).toBeLessThan(1);
+    expect(fs.liveParticles).toBeLessThanOrEqual(FEEL.caps.maxLiveParticles);
+    let real = 0;
+    while (fs.timeScale < 1 && real < 1000) { h.emit('update', 0, 16); real += 16; }
+    expect(real).toBeLessThanOrEqual(FEEL.caps.slowMoMs + 16);
+    expect(h.raw.tweens.timeScale).toBe(1);
+  });
+
+  it('ok dodge is lighter: no slow-mo, no chime, no extra haptic', () => {
+    const { h, bus, play, emit, fs } = setup();
+    bus.emit('onDodge', dodgeEv({ result: 'ok' }));
+    expect(fs.timeScale).toBe(1);
+    expect(play).not.toHaveBeenCalled();
+    expect(emit).not.toHaveBeenCalled();
+    expect(h.shake).toHaveBeenCalledTimes(1);
+  });
+
+  it('early/late failure: small red cue, no slow-mo', () => {
+    for (const result of ['early', 'late'] as const) {
+      const { h, bus, fs } = setup();
+      bus.emit('onDodge', dodgeEv({ result, success: false }));
+      expect(fs.timeScale).toBe(1);
+      expect(h.shake).toHaveBeenCalledTimes(1);
+      expect((h.shake.mock.calls[0] as [number, number])[0]).toBeLessThanOrEqual(FEEL.caps.shakeMs);
+    }
+  });
+
+  it('reducedShake lowers the dodge shake to 25% and skips the zoom punch', () => {
+    const run = (r: boolean) => {
+      const { h, bus } = setup(r);
+      bus.emit('onDodge', dodgeEv());
+      return { i: (h.shake.mock.calls[0] as [number, number])[1], zoom: h.tweenList.filter((t) => 'zoom' in t.cfg).length };
+    };
+    const a = run(false);
+    const b = run(true);
+    expect(b.i).toBeCloseTo(a.i * 0.25, 9);
+    expect(a.zoom).toBeGreaterThan(0);
+    expect(b.zoom).toBe(0);
+  });
+
+  it('dust cloud and evaded misses spawn a dust hint, within the particle cap even in a storm', () => {
+    const { h, bus, fs } = setup();
+    bus.emit('onDodge', dodgeEv({ result: 'ok', cloud: true }));
+    expect(fs.liveParticles).toBeGreaterThan(0);
+    for (let i = 0; i < 30; i++) {
+      bus.emit('onMiss', { t: 0, shooter: 'enemy', evaded: i % 2 ? 'dust' : 'dodge' });
+      bus.emit('onDodge', dodgeEv({ cloud: true }));
+      expect(fs.liveParticles).toBeLessThanOrEqual(FEEL.caps.maxLiveParticles);
+    }
+    expect(h.raw.tweens.timeScale).toBeGreaterThanOrEqual(FEEL.caps.slowMoMinScale);
+  });
+
+  it('natural misses and player misses add no dodge feedback', () => {
+    const { h, bus } = setup();
+    bus.emit('onMiss', { t: 0, shooter: 'enemy' });
+    bus.emit('onMiss', { t: 0, shooter: 'player' });
+    expect(h.shake).not.toHaveBeenCalled();
+  });
+
+  it('onRetry / onWait / shutdown cancel dodge slow-mo, dust and flash', () => {
+    for (const how of ['onRetry', 'onWait', 'shutdown'] as const) {
+      const { h, bus, fs } = setup();
+      bus.emit('onDodge', dodgeEv({ cloud: true }));
+      expect(fs.timeScale).toBeLessThan(1);
+      expect(fs.liveParticles).toBeGreaterThan(0);
+      if (how === 'onRetry') bus.emit('onRetry', { t: 1, attempt: 1 });
+      else if (how === 'onWait') bus.emit('onWait', { t: 1, attempt: 1 });
+      else h.emit('shutdown');
+      expect(fs.timeScale).toBe(1);
+      expect(h.raw.tweens.timeScale).toBe(1);
+      expect(fs.liveParticles).toBe(0);
+      expect(h.cam.setZoom).toHaveBeenLastCalledWith(1);
+    }
+  });
+
+  it('a throwing haptic or audio sink never breaks a dodge', () => {
+    const h = makeScene();
+    const bus = new TypedEmitter<DuelEvents>();
+    const boom = () => { throw new Error('x'); };
+    new FeelSystem({ haptics: { play: boom }, audio: { emit: boom } }).attach(h.scene, bus);
+    expect(() => bus.emit('onDodge', dodgeEv())).not.toThrow();
   });
 });

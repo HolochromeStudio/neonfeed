@@ -9,6 +9,7 @@ import { applyDamage, isDead, makeHealth, shotDamage } from './DamageSystem';
 import type { Health } from './DamageSystem';
 import { effectiveReaction, gradeDraw, perfectGrade } from './DrawSystem';
 import type { Rect } from './InputSystem';
+import { BAIT_HOLD_MS } from './EnemyAISystem';
 import { buildZones, hitTest } from './TargetSystem';
 import type { Zone } from './TargetSystem';
 
@@ -49,6 +50,16 @@ import type { Zone } from './TargetSystem';
  * dodged shot (no reaction tier, so Perfect-streak perks cannot be farmed). The dodge never touches the enemy plan:
  * the first shot stays >= 450 ms after the cue (RULE F1). Perks: Counter Roll (next player shot crits), Dust Kick (the next enemy
  * shot is blocked), Matador (window mult), Slip Away (DuelResult.dodges), Tumble, Phantom Step.
+ *
+ * Opponent perk hooks (docs/ENEMY_AI.md, all optional methods on the opponent, rng-free, so F5 and the rng stream hold):
+ *  - Bluff `reactToFlinch()`: the FIRST flinch of an attempt may make the enemy fire a guaranteed miss before the cue
+ *    (`onBluff`, then onShot + onMiss `evaded: 'bluff'`, no damage). It only happens when the shot lands strictly before
+ *    the planned cue; the real cue and shot are untouched (F1) and the bluffed flinch costs no draw time.
+ *  - Bait `reactToHold(heldMs)`: once the hero has stood still `BAIT_HOLD_MS` in WAIT (anchor = start, last `hold`, or the
+ *    last reticle move) the planned cue may move EARLIER (`onBait`); a flinch cancels it. Evaluated at the exact ms
+ *    `anchor + BAIT_HOLD_MS`, never at a frame, so live play and replay agree. The cue-to-shot lead is unchanged (F1).
+ *  - Disarmer `disarmPickupMs(index, boss)`: ms added to the re-planned shot after a limb disarm (`onDisarm`). Adds time only.
+ *  - `maxDisarms` (D19): see `configForOpponent`, the scene feeds it into `fairness.maxDisarms`.
  */
 
 /** `advanceTo(Infinity)` is clamped to this many ms past the current clock. */
@@ -70,6 +81,27 @@ export interface OpponentController {
   shotDelayMs(rng: Rng, shotIndex: number): number;
   /** Aim error in px of shot `shotIndex`; the shot hits when within `fairness.enemyHitTolerancePx`. */
   aimErrorPx(rng: Rng, shotIndex: number): number;
+}
+
+/** Optional perk hooks of an opponent (EnemyAISystem's EnemyOpponent implements them). Missing methods mean "no effect". */
+export interface OpponentPerkHooks {
+  reactToFlinch?(): { fireAfterMs: number; aimErrorPx: number } | null;
+  reactToHold?(heldMs: number): { cueAtMs: number } | null;
+  disarmPickupMs?(disarmIndex: number, boss?: boolean): number;
+  /** Limb disarms allowed per attempt (D19). */
+  maxDisarms?: number;
+}
+
+/**
+ * D19: `fairness.maxDisarms` for one duel. The opponent's own cap (enemy def via maxDisarmsFor, or a boss with the field)
+ * plus the Disarmer delta; a boss without the field gets 1. Opponents with no cap (BasicOpponent, tests) keep the config value.
+ */
+export function configForOpponent(cfg: DuelConfig, opponent: OpponentController, boss: boolean, mods: Partial<DuelModifiers> = {}): DuelConfig {
+  const own = (opponent as OpponentPerkHooks).maxDisarms;
+  const cap = typeof own === 'number' && Number.isFinite(own) ? own : boss ? 1 : null;
+  if (cap === null) return cfg;
+  const delta = Number.isFinite(mods.maxDisarmsDelta) ? (mods.maxDisarmsDelta as number) : 0;
+  return { ...cfg, fairness: { ...cfg.fairness, maxDisarms: Math.max(0, cap + delta) } };
 }
 
 /** Trivial default for tests and the standalone scene. Not the real enemy AI. */
@@ -224,19 +256,25 @@ export interface DuelEvents {
   onShot: { t: number; shooter: 'player' | 'enemy'; x: number; y: number; crit: boolean };
   onHit: { t: number } & DuelHitInfo;
   /** `evaded` (enemy shots only): the miss was caused by the hero's dodge or a Dust Kick cloud. */
-  onMiss: { t: number; shooter: 'player' | 'enemy'; evaded?: 'dodge' | 'dust' };
+  onMiss: { t: number; shooter: 'player' | 'enemy'; evaded?: 'dodge' | 'dust' | 'bluff' };
   onResolve: { t: number; result: DuelResult };
   onRetry: { t: number; attempt: number };
   /** The enemy's pending shot was pushed back `ms` ms of enemy clock. */
   onStagger: { t: number; ms: number; source: StaggerSource };
   /** Every accepted dodge attempt (a rejected one counts in `ignoredInputs`). */
   onDodge: DuelDodgeInfo;
+  /** Bluff: the flinch made the enemy plan a forced-miss shot at `fireAt` (real clock). The flinch costs no time. */
+  onBluff: { t: number; fireAt: number };
+  /** Bait: the hero stood still and the cue moved to `cueAt` (real clock); `fakeCancelled` when a planned fake had not played yet. */
+  onBait: { t: number; cueAt: number; plannedCueAt: number; fakeCancelled: boolean };
+  /** A limb hit disarmed the enemy; `pickupMs` extra ms before its next shot (Disarmer drop beat), 0 without the perk. */
+  onDisarm: { t: number; index: number; pickupMs: number };
 }
 
 export type StaggerSource = 'perfect_draw' | 'headshot' | 'prop' | 'external';
 
 export const DUEL_EVENT_NAMES: readonly (keyof DuelEvents)[] = [
-  'onPhase', 'onWait', 'onFlinch', 'onCue', 'onDraw', 'onPerfectDraw', 'onAimStart', 'onShot', 'onHit', 'onMiss', 'onResolve', 'onRetry', 'onStagger', 'onDodge',
+  'onPhase', 'onWait', 'onFlinch', 'onCue', 'onDraw', 'onPerfectDraw', 'onAimStart', 'onShot', 'onHit', 'onMiss', 'onResolve', 'onRetry', 'onStagger', 'onDodge', 'onBluff', 'onBait', 'onDisarm',
 ];
 
 type Listener<T> = (payload: T) => void;
@@ -360,6 +398,11 @@ export class DuelSystem {
   private phantom = false;
   private lastEnemyShotAt: number | null = null;
   private aimBudgetTotal = 0;
+  // opponent perk hooks (all reset per attempt)
+  private bluffAt: number | null = null;
+  private bluffWaive = false;
+  private baitAt: number | null = null;
+  private baitDone = false;
   /** True once `onPhase` has announced WAIT for the current attempt. */
   private waitAnnounced = false;
 
@@ -455,6 +498,13 @@ export class DuelSystem {
       const dlDue = dl !== null && dl.at <= t;
       const enemyAt = this.enemyRealTime();
       const enDue = enemyAt !== null && enemyAt < t;
+      const pre = this.nextPre(t);
+      if (pre && (!dlDue || pre.at < dl!.at)) {
+        this.step(pre.at);
+        if (pre.kind === 'bluff') this.fireBluff();
+        else this.checkBait();
+        continue;
+      }
       if (!dlDue && !enDue) break;
       if (dlDue && (!enDue || dl!.at <= enemyAt!)) {
         this.step(dl!.at);
@@ -478,6 +528,7 @@ export class DuelSystem {
     this.inputLog.push(e);
     switch (e.type) {
       case 'hold':
+        if (this.phase === 'WAIT') this.armBait(this.now); // the finger (re)lands: stillness counts from here
         break;
       case 'lift':
         if (this.phase === 'WAIT') this.flinch();
@@ -488,7 +539,10 @@ export class DuelSystem {
       case 'aim':
         if (Number.isFinite(e.x) && Number.isFinite(e.y)) {
           const moved = !this.reticle || Math.hypot(e.x - this.reticle.x, e.y - this.reticle.y) >= MODIFIER_TUNING.stillMovePx;
-          if (moved) this.lastAimMoveAt = this.now;
+          if (moved) {
+            this.lastAimMoveAt = this.now;
+            if (this.phase === 'WAIT') this.armBait(this.now);
+          }
           this.reticle = { x: e.x, y: e.y };
         }
         break;
@@ -557,6 +611,9 @@ export class DuelSystem {
     this.phantom = false;
     this.lastEnemyShotAt = null;
     this.aimBudgetTotal = 0;
+    this.bluffAt = null;
+    this.bluffWaive = false;
+    this.baitDone = false;
     // Second Wind: a hero who starts wounded (was hit earlier in the run) draws Perfect
     this.autoPerfect = this.mods.afterHitAutoPerfect && this.heroMax < this.heroCap;
     this.rng = new Rng(this.seed);
@@ -590,6 +647,8 @@ export class DuelSystem {
     this.enemyDrawMs = Math.max(0, this.opponent.drawMs(this.rng));
     this.planShot(0);
     this.deadline = { at: t + this.waitMs, kind: 'cue' };
+    this.baitAt = null;
+    this.armBait(t);
   }
 
   private planShot(i: number): void {
@@ -639,6 +698,8 @@ export class DuelSystem {
   private onDeadline(kind: DeadlineKind): void {
     switch (kind) {
       case 'cue':
+        this.bluffAt = null; // a bluff that did not fit before the cue never fires
+        this.baitAt = null;
         this.cueAt = this.now;
         this.enemyT = 0;
         this.planShot(0);
@@ -669,7 +730,62 @@ export class DuelSystem {
       return;
     }
     this.flinched = true;
-    this.events.emit('onFlinch', { t: this.now, penaltyMs: this.cfg.draw.flinchPenaltyMs });
+    this.baitAt = null; // a hero who lifted is not standing still
+    // Bluff: the enemy fires a guaranteed miss before the cue, and the deliberate flinch costs no time
+    const hooks = this.opponent as OpponentPerkHooks;
+    const br = this.phase === 'WAIT' && this.deadline?.kind === 'cue' ? hooks.reactToFlinch?.() : null;
+    const fireAt = br && Number.isFinite(br.fireAfterMs) && br.fireAfterMs >= 0 ? this.now + br.fireAfterMs : null;
+    const fits = fireAt !== null && this.deadline !== null && fireAt < this.deadline.at;
+    if (fits) {
+      this.bluffAt = fireAt;
+      this.bluffWaive = true;
+    }
+    this.events.emit('onFlinch', { t: this.now, penaltyMs: fits ? 0 : this.cfg.draw.flinchPenaltyMs });
+    if (fits) this.events.emit('onBluff', { t: this.now, fireAt: fireAt as number });
+  }
+
+  /** Next due pre-cue hook event strictly before `t` (bluff shot, bait check), earliest first. */
+  private nextPre(t: number): { at: number; kind: 'bluff' | 'bait' } | null {
+    if (this.phase !== 'WAIT') return null;
+    const b = this.bluffAt !== null && this.bluffAt < t ? this.bluffAt : null;
+    const a = this.baitAt !== null && this.baitAt < t ? this.baitAt : null;
+    if (b === null && a === null) return null;
+    if (a === null || (b !== null && b <= a)) return { at: b as number, kind: 'bluff' };
+    return { at: a, kind: 'bait' };
+  }
+
+  private fireBluff(): void {
+    this.bluffAt = null;
+    const at = { x: this.cfg.arena.hero.x, y: this.cfg.arena.hero.y };
+    this.events.emit('onShot', { t: this.now, shooter: 'enemy', x: at.x, y: at.y, crit: false });
+    this.sfx({ type: 'gunshot', shooter: 'enemy' });
+    this.events.emit('onMiss', { t: this.now, shooter: 'enemy', evaded: 'bluff' });
+    this.sfx({ type: 'miss' });
+  }
+
+  /** (Re)starts the bait stillness timer at `from`. Bait is evaluated once per attempt, at exactly `from + BAIT_HOLD_MS`. */
+  private armBait(from: number): void {
+    if (this.baitDone || this.flinched || this.phase !== 'WAIT') return;
+    if (typeof (this.opponent as OpponentPerkHooks).reactToHold !== 'function') return;
+    const at = from + BAIT_HOLD_MS;
+    this.baitAt = this.deadline !== null && this.deadline.kind === 'cue' && at < this.deadline.at ? at : null;
+  }
+
+  private checkBait(): void {
+    const at = this.baitAt;
+    this.baitAt = null;
+    this.baitDone = true;
+    const dl = this.deadline;
+    if (at === null || !dl || dl.kind !== 'cue') return;
+    const r = (this.opponent as OpponentPerkHooks).reactToHold?.(at - this.startedAt);
+    if (!r || !Number.isFinite(r.cueAtMs)) return;
+    const cueAt = this.startedAt + r.cueAtMs;
+    if (!(cueAt > at && cueAt < dl.at)) return; // only earlier, and never in the past
+    const planned = dl.at;
+    this.deadline = { at: cueAt, kind: 'cue' };
+    // a fake tell that had not started by `at` is abandoned (the scene must not play it)
+    const fk = (this.opponent as { fakeTell?: { startMs: number } | null }).fakeTell;
+    this.events.emit('onBait', { t: this.now, cueAt, plannedCueAt: planned, fakeCancelled: !!fk && this.startedAt + fk.startMs >= at });
   }
 
   private onDrawInput(): void {
@@ -686,7 +802,7 @@ export class DuelSystem {
       return;
     }
     const raw = this.now - this.cueAt;
-    const penalty = this.mods.flinchNoTimeCost ? 0 : this.cfg.draw.flinchPenaltyMs;
+    const penalty = this.mods.flinchNoTimeCost || this.bluffWaive ? 0 : this.cfg.draw.flinchPenaltyMs;
     // a failed dodge leaves the hero stumbling: the draw starts late by what is left of it (flinch-like)
     const stumble = this.stumbleMs();
     const reaction = effectiveReaction(raw, this.flinched, penalty) + stumble;
@@ -823,7 +939,11 @@ export class DuelSystem {
       this.dodgeCommit = null; // the dodged shot no longer exists (tumble then limb hit): the dodge is void, no cost
       this.enemyShotIndex++;
       this.planShot(this.enemyShotIndex);
-      this.enemyNext = this.enemyT + this.shotDelays[this.enemyShotIndex];
+      // Disarmer: the dropped gun costs a pick-up beat (adds time only, F1 untouched; the plan array stays stable)
+      const raw = (this.opponent as OpponentPerkHooks).disarmPickupMs?.(this.disarms - 1, this.kind === 'boss');
+      const pickup = typeof raw === 'number' && Number.isFinite(raw) && raw > 0 ? raw : 0;
+      this.enemyNext = this.enemyT + this.shotDelays[this.enemyShotIndex] + pickup;
+      this.events.emit('onDisarm', { t: this.now, index: this.disarms - 1, pickupMs: pickup });
     }
     this.setPhase('SHOT');
     this.deadline = { at: this.now + this.cfg.aim.recoilMs, kind: 'recoilEnd' };

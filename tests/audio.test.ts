@@ -64,6 +64,21 @@ describe('AudioManager', () => {
     }
   });
 
+  it('dodge_perfect / dodge_fail are PLACEHOLDER events with no haptic of their own (Feel layer owns it)', () => {
+    expect(AUDIO_EVENT_TYPES).toContain('dodge_perfect');
+    expect(AUDIO_EVENT_TYPES).toContain('dodge_fail');
+    for (const id of ['dodge_perfect', 'dodge_fail']) {
+      const e = PLACEHOLDER_SOUNDS.find((p) => p.id === id);
+      expect(e?.note).toContain('PLACEHOLDER');
+    }
+    const { am, oscillators } = makeManager();
+    managers.push(am);
+    am.unlock();
+    expect(am.play({ type: 'dodge_perfect' })).toBe(true);
+    expect(am.play({ type: 'dodge_fail' })).toBe(true);
+    expect(oscillators.length).toBeGreaterThanOrEqual(4);
+  });
+
   it('routes bus events and unsubscribes on dispose', () => {
     const { am, oscillators } = makeManager();
     const bus = new AudioEventBus();

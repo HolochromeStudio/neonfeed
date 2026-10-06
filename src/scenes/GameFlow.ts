@@ -457,7 +457,7 @@ export class GameFlow {
     const run = this.r;
     const enc = this.enc ?? run.getDuel();
     const rd: RunDuelResult = {
-      outcome: res.outcome, heroHp: res.heroHp, tier: res.tier, reactionMs: res.reactionMs, headshots: res.headshots, dodges: res.dodges,
+      outcome: res.outcome, heroHp: res.heroHp, tier: res.tier, reactionMs: res.reactionMs, headshots: res.headshots, dodges: res.dodges, hitsIgnored: res.hitsIgnored,
       consumedPerks: this.consumedPerks(res),
     };
     let out: ReturnType<RunSystem['completeDuel']>;

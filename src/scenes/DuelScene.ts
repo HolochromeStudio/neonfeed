@@ -14,12 +14,12 @@ import type { DuelModifiers } from '../data/perks';
 import { Duelist, Hero } from '../entities/Hero';
 import { Projectile } from '../entities/Projectile';
 import { TIER_LABEL } from '../systems/DrawSystem';
-import { DUEL_EVENT_NAMES, DuelSystem, TypedEmitter, describeLoss } from '../systems/DuelSystem';
+import { DUEL_EVENT_NAMES, DuelSystem, TypedEmitter, configForOpponent, describeLoss } from '../systems/DuelSystem';
 import type { DuelEvents, DuelResult, EncounterKind, OpponentController } from '../systems/DuelSystem';
 import { createBossEncounter } from '../systems/BossSystem';
 import type { BossOpponent, BossSystem } from '../systems/BossSystem';
 import { attachBossToDuel } from '../systems/BossBridge';
-import { createOpponent } from '../systems/EnemyAISystem';
+import { createOpponent, opponentOptionsFromModifiers } from '../systems/EnemyAISystem';
 import type { EnemyOpponent } from '../systems/EnemyAISystem';
 import { installFeel } from '../systems/FeelSystem';
 import { SwipeTracker, pointInRect, reticleFromTouch } from '../systems/InputSystem';
@@ -324,11 +324,13 @@ export class DuelScene extends Phaser.Scene {
       this.boss = enc.boss;
       enemyHp = enc.enemyHp + bonus;
     } else {
-      this.opponentCtl = createOpponent(this.enemyDef.id, new Rng(seed), difficulty);
+      // A06 perk hooks (Devil's Deal fake tells, Bluff, Bait, Disarmer drop) come from the run's modifiers
+      this.opponentCtl = createOpponent(this.enemyDef.id, new Rng(seed), difficulty, opponentOptionsFromModifiers(this.mods));
     }
     this.system = new DuelSystem({
       seed,
-      config: this.cfg,
+      // D19: limb disarms per attempt come from the opponent (enemy def / boss default 1) plus the Disarmer delta
+      config: configForOpponent(this.cfg, this.opponentCtl, !!this.boss || this.data0.kind === 'boss', this.mods),
       opponent: this.opponentCtl,
       heroHp: this.data0.heroHp,
       heroMaxHp: this.data0.heroMaxHp,
@@ -583,8 +585,15 @@ export class DuelScene extends Phaser.Scene {
     });
     ev.on('onFlinch', (e) => {
       const fell = this.fakeWindow !== null && e.t >= this.fakeWindow.from && e.t <= this.fakeWindow.to;
-      this.flashZone(fell ? 'FELL FOR THE FAKE +300ms' : 'FLINCH +300ms', SCENE_TUNING.flashFlinchMs);
+      if (e.penaltyMs <= 0) this.flashZone('BLUFF!', SCENE_TUNING.flashFlinchMs); // Bluff: the flinch is free, the enemy wastes a shot
+      else this.flashZone(fell ? `FELL FOR THE FAKE +${Math.round(e.penaltyMs)}ms` : `FLINCH +${Math.round(e.penaltyMs)}ms`, SCENE_TUNING.flashFlinchMs);
     });
+    ev.on('onBait', (e) => {
+      // Bait: the enemy cracks early. A fake that had not played yet is dropped, the real cue comes sooner.
+      if (e.fakeCancelled) this.fakePlayed = true;
+      this.flashZone('BAITED!', SCENE_TUNING.flashFlinchMs);
+    });
+    ev.on('onDisarm', (e) => this.flashZone(e.pickupMs > 0 ? 'GUN DROPPED!' : 'DISARMED!'));
     ev.on('onDraw', () => {
       // keeps phaseText as DRAW!: the feel layer pops the reaction time (FEEL_REVIEW 8)
       this.cueText.setVisible(false);
@@ -604,6 +613,7 @@ export class DuelScene extends Phaser.Scene {
         }
       } else {
         this.enemy.setState('shoot');
+        if (this.system.snapshot().cueAt === null) this.time.delayedCall(260, () => { if (this.system.currentPhase === 'WAIT') this.enemy.setState('idle'); }); // Bluff shot before the cue
         new Projectile(this, enemyMuzzle, { x: A.hero.x, y: A.hero.y - 40 }, T.enemyMs, COL.red);
       }
     });
@@ -625,6 +635,7 @@ export class DuelScene extends Phaser.Scene {
       if (e.shooter === 'player') this.flashZone('MISS');
       else if (e.evaded === 'dodge') this.flashZone('DODGED!');
       else if (e.evaded === 'dust') this.flashZone('DUST BLOCKS IT!');
+      else if (e.evaded === 'bluff') this.flashZone('WASTED SHOT!');
       if (e.shooter === 'enemy') this.clearDust();
     });
     ev.on('onDodge', (e) => this.playDodge(e));

@@ -11,6 +11,8 @@ export type AudioEvent =
   | { type: 'hit_flesh' }
   | { type: 'hit_prop' }
   | { type: 'dodge' }
+  | { type: 'dodge_perfect' }
+  | { type: 'dodge_fail' }
   | { type: 'perfect_draw' }
   | { type: 'miss' }
   | { type: 'ui_click' }
@@ -22,7 +24,7 @@ export type AudioEvent =
 export type AudioEventType = AudioEvent['type'];
 
 export const AUDIO_EVENT_TYPES: readonly AudioEventType[] = [
-  'draw_cue', 'gunshot', 'hit_flesh', 'hit_prop', 'dodge', 'perfect_draw',
+  'draw_cue', 'gunshot', 'hit_flesh', 'hit_prop', 'dodge', 'dodge_perfect', 'dodge_fail', 'perfect_draw',
   'miss', 'ui_click', 'ui_confirm', 'coin', 'boss_sting', 'death',
 ];
 

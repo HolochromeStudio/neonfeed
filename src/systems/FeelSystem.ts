@@ -1,5 +1,6 @@
 import type Phaser from 'phaser';
-import type { HapticProfile } from '../core/audioEvents';
+import { audioBus } from '../core/audioEvents';
+import type { AudioEvent, HapticProfile } from '../core/audioEvents';
 import { haptics as defaultHaptics } from '../core/HapticsManager';
 import { Rng } from '../core/rng';
 import { DUEL_CONFIG } from '../data/duelConfig';
@@ -169,6 +170,45 @@ export function planPerfectDraw(reduced: boolean, cfg: FeelConfig = FEEL): Perfe
   };
 }
 
+export interface DodgePlan {
+  kind: 'perfect' | 'ok' | 'fail' | 'pastShot';
+  shake: { px: number; ms: number; intensity: number };
+  flash: { alpha: number; ms: number; colour: number };
+  punchZoom: number;
+  slowMo: { scale: number; ms: number } | null;
+  particles: number;
+  haptic: HapticProfile | null;
+  /** Extra layered audio event (the bus already plays 'dodge' for every successful dodge). */
+  audio: 'dodge_perfect' | null;
+}
+
+export interface DodgeLike {
+  result: DuelEvents['onDodge']['result'];
+  cloud?: boolean;
+}
+
+/** Everything one dodge (or evaded shot) does, already capped. */
+export function planDodge(d: DodgeLike, reduced: boolean, cfg: FeelConfig = FEEL): DodgePlan {
+  const kind: DodgePlan['kind'] = d.result === 'perfect' ? 'perfect' : d.result === 'ok' ? 'ok' : 'fail';
+  return planDodgeKind(kind, !!d.cloud && kind !== 'fail', reduced, cfg);
+}
+
+export function planDodgeKind(kind: DodgePlan['kind'], cloud: boolean, reduced: boolean, cfg: FeelConfig = FEEL): DodgePlan {
+  const t = cfg.dodge[kind];
+  const sm = t.slowMoMs > 0 ? capSlowMo(t.slowMoScale, t.slowMoMs, cfg) : null;
+  const particles = Math.min(cfg.caps.maxParticlesPerBurst, t.particles + (cloud ? cfg.dodge.cloudParticles : 0));
+  return {
+    kind,
+    shake: capShake(t.shakePx, t.shakeMs, reduced, cfg),
+    flash: { ...capFlash(t.flashAlpha, t.flashMs, cfg), colour: t.flashColour },
+    punchZoom: capPunchZoom(t.punchZoom, reduced, cfg),
+    slowMo: sm && sm.ms > 0 ? sm : null,
+    particles,
+    haptic: kind === 'perfect' ? cfg.haptics.dodgePerfect : kind === 'ok' ? cfg.haptics.dodgeOk : kind === 'fail' ? cfg.haptics.dodgeFail : null,
+    audio: kind === 'perfect' ? 'dodge_perfect' : null,
+  };
+}
+
 export interface ReactionPopPlan {
   text: string;
   colour: string;
@@ -287,6 +327,8 @@ export interface FeelOptions {
   config?: FeelConfig;
   settings?: () => FeelSettings;
   haptics?: { play(profile: HapticProfile): boolean };
+  /** Optional audio sink for the layered dodge_perfect chime (defaults to the shared audioBus). */
+  audio?: { emit(e: AudioEvent): void };
   /** Optional explicit display objects; otherwise found on the scene display list by position. */
   targets?: { hero?: Phaser.GameObjects.GameObject; enemy?: Phaser.GameObjects.GameObject };
 }
@@ -306,6 +348,7 @@ export class FeelSystem {
   private readonly cfg: FeelConfig;
   private readonly getSettings: () => FeelSettings;
   private readonly haptics: { play(profile: HapticProfile): boolean };
+  private readonly audio: { emit(e: AudioEvent): void };
   private readonly env: ScaleEnvelope;
   private readonly sched = new RealScheduler();
   private readonly rng = new Rng(0xfee1);
@@ -329,6 +372,7 @@ export class FeelSystem {
     const os = osPrefersReducedMotion();
     this.getSettings = opts.settings ?? (() => ({ reducedShake: os }));
     this.haptics = opts.haptics ?? defaultHaptics;
+    this.audio = opts.audio ?? audioBus;
     this.targetOverride = opts.targets;
   }
 
@@ -347,6 +391,8 @@ export class FeelSystem {
       on('onPerfectDraw', () => this.onPerfectDraw()),
       on('onShot', (e) => this.onShot(e)),
       on('onHit', (e) => this.onHit(e)),
+      on('onDodge', (e) => this.onDodge(e)),
+      on('onMiss', (e) => this.onMiss(e)),
       on('onRetry', () => this.cancelAll()),
       on('onWait', () => this.cancelAll()),
     );
@@ -480,6 +526,40 @@ export class FeelSystem {
     this.env.slowMo(plan.slowMo.scale, plan.slowMo.ms);
     this.applyScale(this.env.scale);
     if (plan.punchZoom > 0) this.punchZoom(plan.punchZoom, plan.punchInMs, plan.punchOutMs);
+  }
+
+  private onDodge(e: DuelEvents['onDodge']): void {
+    const plan = planDodge(e, this.reduced(), this.cfg);
+    this.runDodge(plan, e.dir === 'left' ? -1 : 1);
+  }
+
+  /** Enemy shot that missed because of a dodge or a dust cloud. Natural misses and the hero's own misses are not ours. */
+  private onMiss(e: DuelEvents['onMiss']): void {
+    if (e.shooter !== 'enemy' || !e.evaded) return;
+    const plan = planDodgeKind('pastShot', e.evaded === 'dust', this.reduced(), this.cfg);
+    this.runDodge(plan, 1);
+  }
+
+  private runDodge(plan: DodgePlan, dir: -1 | 1): void {
+    const s = this.scene;
+    if (!s) return;
+    this.play(plan.haptic);
+    if (plan.slowMo) this.env.slowMo(plan.slowMo.scale, plan.slowMo.ms);
+    this.applyScale(this.env.scale);
+    if (plan.shake.ms > 0 && plan.shake.intensity > 0) s.cameras.main.shake(plan.shake.ms, plan.shake.intensity, true);
+    if (plan.flash.alpha > 0) this.flash(plan.flash.colour, plan.flash.alpha, plan.flash.ms);
+    if (plan.punchZoom > 0) this.punchZoom(plan.punchZoom, this.cfg.perfectDraw.punchInMs, this.cfg.perfectDraw.punchOutMs);
+    if (plan.particles > 0) {
+      const A = DUEL_CONFIG.arena;
+      this.burst(A.hero.x, A.hero.y + 20, plan.particles, 'prop', dir > 0 ? -1 : 1, this.cfg.dodge.dustColour);
+    }
+    if (plan.audio) {
+      try {
+        this.audio.emit({ type: plan.audio });
+      } catch {
+        // audio is optional
+      }
+    }
   }
 
   private onShot(e: DuelEvents['onShot']): void {
@@ -681,7 +761,7 @@ export class FeelSystem {
     );
   }
 
-  private burst(x: number, y: number, requested: number, kind: ImpactKind, dir: -1 | 1): void {
+  private burst(x: number, y: number, requested: number, kind: ImpactKind, dir: -1 | 1, colour?: number): void {
     const s = this.scene;
     if (!s || !Number.isFinite(x) || !Number.isFinite(y)) return;
     const n = particleBudget(requested, this.particles.size, this.cfg);
@@ -692,7 +772,7 @@ export class FeelSystem {
       const sp = p.speedPx * (0.5 + this.rng.next() * 0.5);
       const vx = Math.cos(ang) * sp;
       const vy = Math.sin(ang) * sp - p.speedPx * 0.4;
-      const r = s.add.rectangle(x, y, p.sizePx, p.sizePx, p.colours[kind], 1).setDepth(this.cfg.depth - 2);
+      const r = s.add.rectangle(x, y, p.sizePx, p.sizePx, colour ?? p.colours[kind], 1).setDepth(this.cfg.depth - 2);
       this.particles.add(r);
       const tw = this.track(
         s.tweens.addCounter({
