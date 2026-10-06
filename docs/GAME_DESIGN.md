@@ -33,15 +33,21 @@ Numbers here are starting values for A18 to tune. Rules marked **RULE** are not 
 - Aim budget is a time limit in slow-mo, not a skill-less timer: moving the reticle costs nothing, but the budget ends and the shot auto-fires at the reticle position.
 
 ### Dodge
-- **Dodge** = horizontal swipe in the lower half *instead of* aiming, available only after the enemy's own shot is telegraphed (a second, shorter tell, "muzzle raise").
-- Dodge succeeds if input lands inside the enemy's shot window (default 250 ms). Success: enemy shot misses, player gets a free aimed shot from the next beat ("counter"). Fail: take the hit as normal.
+Implemented (D18, `DuelSystem` + `DuelScene`; numbers in `DUEL_CONFIG.dodge`, enemy windows in `src/data/enemies.ts`).
+- **Dodge** = a fast horizontal flick (>= 40 px at >= 0.3 px/ms, in the first 500 ms of the touch) of the thumb that is already down. It is a sidestep that makes exactly ONE pending enemy shot miss.
+- **When:** during the CUE (instead of drawing) and during recoil after your own shot (SHOT). Never in WAIT or while the gun is coming out (DRAW). While aiming only with Tumble, or with Phantom Step right after an enemy miss. The hint "DODGE NOW" shows when the window opens; "DODGED!" on success.
+- **Window:** the last W ms before the pending enemy shot (the muzzle-raise telegraph). W is per enemy: Rookie 420, Bandit 380, Gunslinger 300, Coward 380, Drunk 420, Sheriff 300, Dual Wielder 280, Sniper 320, Knife Thrower 360, Train Guard 320, Horse Rider 340, Bounty Hunter 280; default 250 (`dodge.windowMs`); perks multiply it and it is clamped to 150..600 ms. A multi-shot enemy has one window per shot. The window never opens while you are still answering the cue (>= 250 ms after it).
+- **Result:** the first 35% of the window is PERFECT (counter draw gets +30% aim budget), the rest OK; both succeed. A dodge before the window (EARLY) or up to 200 ms after an undodged shot (LATE) fails: you stumble and your next draw starts 300 ms late, like a flinch, and further dodges are ignored meanwhile.
+- **Counter:** a successful dodge in the CUE ends in a free counter draw at the dodged shot (no reaction tier, so Perfect-streak perks cannot be farmed). Dodging does not change the enemy plan: the first shot stays >= 450 ms after the cue (F1), and a limb hit voids a pending dodge at no cost.
 - Dodging is a choice: trade your current aim for safety. Some enemies punish it (Sniper tracks, Knife Thrower throws two).
+- Dodge perks: Counter Roll, Dust Kick, Matador, Slip Away (coins per dodge), Tumble, Phantom Step are live. Body Shield's prop-dodge half is not.
 
 ### Flinch
 - Lifting thumb before the tell = flinch: hero wastes the draw (+300 ms penalty to draw start), enemy gets a free beat. Never an instant loss. Coward and Drunk make flinching more tempting (fake tells).
 
 ### Damage and retry
-- Hero has 3 **Lives** (hearts: draw as brass hearts/bullets) per run. Enemy hit = lose 1 life (elite/boss may hit for 2).
+- Hero has 2 **Lives** (D14; hearts: draw as brass hearts/bullets) per run. An enemy hit costs 1 life; **elite and boss hits cost 2** (`damage.heroHp 2`, `eliteDamage 2`, `bossDamage 2`; perks such as Iron Skin and Mad Dog's Collar multiply it). Tin Star, Revive Flask and Bullet Belt are the ways to soak more.
+- Limb (gun-arm) disarms are capped per attempt: 2 for enemies up to hp 3, 1 for hp >= 4 and for bosses (D19); Disarmer adds 1.
 - Duel ends when enemy hp is 0, or hero hp is 0.
 - **Retry:** on death the player may (a) retry the *same duel* from the start of the standoff once per node by spending coins (cost scales with depth), or (b) end the run to results. Retry never changes the seed of enemy behaviour, so learning is real. No ads required (rewarded ad is an optional service per D7, never mandatory).
 - A loss in a normal duel that still leaves lives: fight again immediately (no map return).
@@ -227,6 +233,6 @@ Each boss has 3 phases, a unique tell language, introduces one new mechanic, and
 | Practice | Pick enemy and tell, infinite retries, no rewards; also the onboarding sandbox |
 
 ## 11. Open questions for A18 / A01
-1. Starting lives: 3 vs 4. Playtest.
+1. Starting lives: 2 today (D14, was 3). Playtest whether 2 or 3 feels right; the constants stay in `duelConfig.ts`.
 2. Retry-once-per-node cost curve.
 3. Whether 7 regions needs a 2nd boss per region at launch (no).

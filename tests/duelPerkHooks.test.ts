@@ -300,10 +300,8 @@ describe('Disarmer: drop beat and maxDisarms', () => {
   });
   it('the cap really limits disarms per attempt in a duel', () => {
     const count = (maxDisarms: number) => {
-      const opp = { ...createOpponent('bandit', new Rng(1), 0), maxDisarms } as unknown as OpponentController;
       // a plain controller with a far shot: the hero keeps shooting the gun arm
       const fixed: OpponentController = { id: 'f', waitMs: () => 1000, drawMs: () => 300, shotDelayMs: (_r, i) => (i === 0 ? 30000 : 30000), aimErrorPx: () => 0, ...({ maxDisarms } as object) };
-      void opp;
       const cfg = configForOpponent(noSlowMo, fixed, false);
       const d = new DuelSystem({ seed: 1, opponent: fixed, config: cfg, heroHp: 3, enemyHp: 1e6, audio: quietAudio });
       let n = 0;
@@ -342,8 +340,6 @@ describe('fuzz: all hooks on, random inputs', () => {
       d.events.on('onBluff', () => bluffs++);
       d.events.on('onBait', () => baits++);
       d.events.on('onDisarm', () => disarms++);
-      const lethal: number[] = [];
-      d.events.on('onCue', (c) => lethal.push(c.t));
       let firstSeen = false;
       d.events.on('onShot', (e) => {
         const cue = d.snapshot().cueAt;
@@ -352,12 +348,8 @@ describe('fuzz: all hooks on, random inputs', () => {
       });
       d.events.on('onRetry', () => { firstSeen = false; });
       const log: DuelInput[] = randomLog(r, { n: r.int(2, 30) });
-      // plain feed vs 60 fps frames
-      const framed = new DuelSystem(params(mkOpp()));
       for (const ev of log) {
         d.input(ev);
-        for (let t = framed.snapshot().now + 1000 / 60; t < ev.t; t += 1000 / 60) framed.advanceTo(t);
-        framed.input(ev);
         const s = d.snapshot();
         expect(Number.isFinite(s.now) && Number.isFinite(s.heroHp) && Number.isFinite(s.enemyHp)).toBe(true);
         if (d.isOver && d.snapshot().phase === 'RETRY') d.input({ type: 'retry', t: s.now + 1 });
@@ -370,9 +362,28 @@ describe('fuzz: all hooks on, random inputs', () => {
       expect(again.snapshot().outcome).toBe(d.snapshot().outcome);
       expect(again.snapshot().heroHp).toBe(d.snapshot().heroHp);
       expect(again.snapshot().enemyHp).toBe(d.snapshot().enemyHp);
-      void lethal;
     }
     expect(bluffs + baits + disarms).toBeGreaterThan(0);
+  });
+
+  it('the result does not depend on how often the frame loop advances the clock (bait and bluff fire at exact ms), 400 runs', () => {
+    for (let seed = 1; seed <= 400; seed++) {
+      const r = new Rng(seed * 31);
+      const id = ENEMY_LIST[r.int(0, ENEMY_LIST.length - 1)].id;
+      const diff = r.next();
+      const mk = () => new DuelSystem({ seed, opponent: createOpponent(id, new Rng(seed), diff, ALL), config: noSlowMo, heroHp: 3, audio: quietAudio });
+      const log = randomLog(r, { n: r.int(2, 25) }).filter((e) => e.type !== 'retry');
+      const plain = mk();
+      for (const ev of log) plain.input(ev);
+      plain.advanceTo(plain.snapshot().now + 30000);
+      const framed = mk();
+      for (const ev of log) {
+        for (let t = framed.snapshot().now + 1000 / 60; t < ev.t; t += 1000 / 60) framed.advanceTo(t);
+        framed.input(ev);
+      }
+      framed.advanceTo(framed.snapshot().now + 30000);
+      expect(framed.lastResult, `seed ${seed}`).toEqual(plain.lastResult);
+    }
   });
 
   it('the modifier mapping is complete and neutral modifiers map to all-off options', () => {

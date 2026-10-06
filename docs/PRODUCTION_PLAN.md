@@ -46,6 +46,7 @@ After Gate B: Run(A08), Economy(A09), Boss(A07), UI screens(A10) -> Balance(A18)
 | Game flow wired (menu->run->duel->reward->resume) | done (A02), verified headless |
 | Balance sim (A18) | done: game too easy, package C adopted (D14) |
 | Batch 7a (balance apply + dodge) | in progress (A02, A08, A06) |
+| Fragile test | tests/run.test.ts 'shop: buy, reroll...' passes only by seed (41->42 after perk pool change; Loaded Dice gave a free reroll). A08/A17: make it seed-independent by fixing the owned perks/offers, not by picking a seed |
 | Follow-ups queued | A02: extract FrameClock/eventTime/PointerOwner; enemy dodge; A18 balance pass (maxDisarms, perfectMs vs display lag) |
 | Everything else | pending |
 

@@ -323,7 +323,7 @@ describe('run flow', () => {
   });
 
   it('shop: buy, reroll, heal, remove curse, hidden curses and pawn', () => {
-    const run = startRun(41, { startCoins: 1000, startPerks: ['gamblers_fallacy', 'pawn_shop', 'blood_money'.replace('blood_money', 'widows_wager')] });
+    const run = startRun(42, { startCoins: 1000, startPerks: ['gamblers_fallacy', 'pawn_shop', 'blood_money'.replace('blood_money', 'widows_wager')] });
     const bot = new Rng(2);
     while (!run.getChoices().some((c) => c.type === 'shop')) playNode(run, bot);
     run.enterNode(run.getChoices().find((c) => c.type === 'shop')!.id);
