@@ -1,0 +1,845 @@
+{
+  "when": "2026-10-06T21:51:15.229Z",
+  "throttle": 4,
+  "viewport": "360x640@2x",
+  "mode": "production build",
+  "scenes": {
+    "menu": {
+      "frames": 141,
+      "avgFps": 32.05,
+      "p50": 33.3,
+      "p95": 50.1,
+      "p99": 83.4,
+      "max": 116.6,
+      "droppedFramePct": 46.59,
+      "over33msPct": 29.79,
+      "longTasks": 1,
+      "longTaskMaxMs": 62
+    },
+    "map": {
+      "frames": 148,
+      "avgFps": 35.38,
+      "p50": 33.3,
+      "p95": 33.4,
+      "p99": 50.1,
+      "max": 183.3,
+      "droppedFramePct": 41.04,
+      "over33msPct": 12.16,
+      "longTasks": 1,
+      "longTaskMaxMs": 166
+    },
+    "duel": {
+      "frames": 141,
+      "avgFps": 56.4,
+      "p50": 16.7,
+      "p95": 33.3,
+      "p99": 33.4,
+      "max": 33.5,
+      "droppedFramePct": 6,
+      "over33msPct": 0.71,
+      "longTasks": 0,
+      "longTaskMaxMs": 0
+    },
+    "duel-result": {
+      "frames": 78,
+      "avgFps": 57.08,
+      "p50": 16.7,
+      "p95": 16.7,
+      "p99": 66.7,
+      "max": 66.7,
+      "droppedFramePct": 4.88,
+      "over33msPct": 2.56,
+      "longTasks": 1,
+      "longTaskMaxMs": 79
+    },
+    "reward": {
+      "frames": 144,
+      "avgFps": 33.49,
+      "p50": 33.3,
+      "p95": 50,
+      "p99": 66.6,
+      "max": 100,
+      "droppedFramePct": 44.19,
+      "over33msPct": 18.06,
+      "longTasks": 0,
+      "longTaskMaxMs": 0
+    },
+    "reward-selected": {
+      "frames": 61,
+      "avgFps": 30.25,
+      "p50": 33.3,
+      "p95": 50,
+      "p99": 50,
+      "max": 50,
+      "droppedFramePct": 49.59,
+      "over33msPct": 24.59,
+      "longTasks": 0,
+      "longTaskMaxMs": 0
+    },
+    "loop1": {
+      "frames": 121,
+      "avgFps": 42.71,
+      "p50": 16.7,
+      "p95": 49.9,
+      "p99": 83.3,
+      "max": 333.3,
+      "droppedFramePct": 28.82,
+      "over33msPct": 11.57,
+      "longTasks": 0,
+      "longTaskMaxMs": 0
+    },
+    "loop2": {
+      "frames": 144,
+      "avgFps": 56.48,
+      "p50": 16.7,
+      "p95": 16.7,
+      "p99": 33.3,
+      "max": 150,
+      "droppedFramePct": 5.88,
+      "over33msPct": 0.69,
+      "longTasks": 0,
+      "longTaskMaxMs": 0
+    },
+    "loop3": {
+      "frames": 150,
+      "avgFps": 59.21,
+      "p50": 16.7,
+      "p95": 16.8,
+      "p99": 16.8,
+      "max": 50,
+      "droppedFramePct": 1.32,
+      "over33msPct": 0.67,
+      "longTasks": 0,
+      "longTaskMaxMs": 0
+    }
+  },
+  "stats": {
+    "menu": {
+      "activeScenes": [
+        "MainMenu"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 10,
+        "canvasTextures": 8,
+        "pixelTextTextures": 8,
+        "estMB": 4.62,
+        "pixelTextMB": 0.07,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 23,
+        "graphics": 4,
+        "graphicsCommands": 2676,
+        "texts": 0
+      },
+      "tweens": 1,
+      "jsHeapMB": 13.54,
+      "phaserFps": 40.43
+    },
+    "map": {
+      "activeScenes": [
+        "RunMap"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 15,
+        "canvasTextures": 13,
+        "pixelTextTextures": 13,
+        "estMB": 4.66,
+        "pixelTextMB": 0.11,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 24,
+        "graphics": 14,
+        "graphicsCommands": 5871,
+        "texts": 0
+      },
+      "tweens": 0,
+      "jsHeapMB": 16.79,
+      "phaserFps": 37.97
+    },
+    "duel:start": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 27,
+        "canvasTextures": 25,
+        "pixelTextTextures": 13,
+        "estMB": 4.66,
+        "pixelTextMB": 0.11,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 34,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 10
+      },
+      "tweens": 0,
+      "jsHeapMB": 14.07,
+      "phaserFps": 37.97
+    },
+    "duel:cue": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 27,
+        "canvasTextures": 25,
+        "pixelTextTextures": 13,
+        "estMB": 4.66,
+        "pixelTextMB": 0.11,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 34,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 10
+      },
+      "tweens": 0,
+      "jsHeapMB": 16.45,
+      "phaserFps": 39.73
+    },
+    "duel:result": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 27,
+        "canvasTextures": 25,
+        "pixelTextTextures": 13,
+        "estMB": 4.66,
+        "pixelTextMB": 0.11,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 35,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 10
+      },
+      "tweens": 0,
+      "jsHeapMB": 15.41,
+      "phaserFps": 44.8
+    },
+    "reward": {
+      "activeScenes": [
+        "Reward"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 33,
+        "canvasTextures": 31,
+        "pixelTextTextures": 31,
+        "estMB": 4.81,
+        "pixelTextMB": 0.25,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 20,
+        "graphics": 2,
+        "graphicsCommands": 4846,
+        "texts": 0
+      },
+      "tweens": 0,
+      "jsHeapMB": 16.32,
+      "phaserFps": 40.7
+    },
+    "reward-selected": {
+      "activeScenes": [
+        "Reward"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 36,
+        "canvasTextures": 34,
+        "pixelTextTextures": 34,
+        "estMB": 4.96,
+        "pixelTextMB": 0.4,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 20,
+        "graphics": 2,
+        "graphicsCommands": 4846,
+        "texts": 0
+      },
+      "tweens": 0,
+      "jsHeapMB": 18.48,
+      "phaserFps": 34.83
+    },
+    "loop1:start": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 47,
+        "canvasTextures": 45,
+        "pixelTextTextures": 34,
+        "estMB": 4.96,
+        "pixelTextMB": 0.4,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 33,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 10
+      },
+      "tweens": 0,
+      "jsHeapMB": 14.36,
+      "phaserFps": 34.83
+    },
+    "loop1:cue": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 47,
+        "canvasTextures": 45,
+        "pixelTextTextures": 34,
+        "estMB": 4.96,
+        "pixelTextMB": 0.4,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 33,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 10
+      },
+      "tweens": 0,
+      "jsHeapMB": 14.9,
+      "phaserFps": 31.37
+    },
+    "loop1:result": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 47,
+        "canvasTextures": 45,
+        "pixelTextTextures": 34,
+        "estMB": 4.96,
+        "pixelTextMB": 0.4,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 34,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 10
+      },
+      "tweens": 0,
+      "jsHeapMB": 15.97,
+      "phaserFps": 37.53
+    },
+    "loop2:start": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 47,
+        "canvasTextures": 45,
+        "pixelTextTextures": 34,
+        "estMB": 4.96,
+        "pixelTextMB": 0.4,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 33,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 10
+      },
+      "tweens": 0,
+      "jsHeapMB": 15.12,
+      "phaserFps": 40.9
+    },
+    "loop2:cue": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 47,
+        "canvasTextures": 45,
+        "pixelTextTextures": 34,
+        "estMB": 4.96,
+        "pixelTextMB": 0.4,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 33,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 10
+      },
+      "tweens": 0,
+      "jsHeapMB": 14.42,
+      "phaserFps": 43.67
+    },
+    "loop2:result": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 47,
+        "canvasTextures": 45,
+        "pixelTextTextures": 34,
+        "estMB": 4.96,
+        "pixelTextMB": 0.4,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 34,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 10
+      },
+      "tweens": 0,
+      "jsHeapMB": 15.11,
+      "phaserFps": 48
+    },
+    "loop3:start": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 47,
+        "canvasTextures": 45,
+        "pixelTextTextures": 34,
+        "estMB": 4.96,
+        "pixelTextMB": 0.4,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 33,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 10
+      },
+      "tweens": 0,
+      "jsHeapMB": 14.45,
+      "phaserFps": 48
+    },
+    "loop3:cue": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 47,
+        "canvasTextures": 45,
+        "pixelTextTextures": 34,
+        "estMB": 4.96,
+        "pixelTextMB": 0.4,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 33,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 10
+      },
+      "tweens": 0,
+      "jsHeapMB": 15.22,
+      "phaserFps": 51
+    },
+    "loop3:result": {
+      "activeScenes": [
+        "Duel"
+      ],
+      "renderer": "WEBGL",
+      "canvas": {
+        "w": 360,
+        "h": 640,
+        "cssW": 360,
+        "cssH": 640
+      },
+      "domNodes": 11,
+      "textures": {
+        "count": 48,
+        "canvasTextures": 46,
+        "pixelTextTextures": 34,
+        "estMB": 4.96,
+        "pixelTextMB": 0.4,
+        "big": [
+          {
+            "key": "placeholder",
+            "w": 256,
+            "h": 256,
+            "kb": 256
+          },
+          {
+            "key": "town",
+            "w": 1024,
+            "h": 1102,
+            "kb": 4408
+          }
+        ]
+      },
+      "displayList": {
+        "objects": 35,
+        "graphics": 6,
+        "graphicsCommands": 1792,
+        "texts": 11
+      },
+      "tweens": 1,
+      "jsHeapMB": 15.2,
+      "phaserFps": 53.5
+    }
+  },
+  "leak": [
+    {
+      "loop": 0,
+      "heapAfterGcMB": 6.82,
+      "texCount": 36,
+      "pixelTextTextures": 34,
+      "texEstMB": 4.96,
+      "objects": 20,
+      "tweens": 0
+    },
+    {
+      "loop": 1,
+      "heapAfterGcMB": 6.97,
+      "texCount": 47,
+      "pixelTextTextures": 34,
+      "texEstMB": 4.96,
+      "objects": 34,
+      "tweens": 0
+    },
+    {
+      "loop": 2,
+      "heapAfterGcMB": 6.96,
+      "texCount": 47,
+      "pixelTextTextures": 34,
+      "texEstMB": 4.96,
+      "objects": 34,
+      "tweens": 0
+    },
+    {
+      "loop": 3,
+      "heapAfterGcMB": 7.04,
+      "texCount": 48,
+      "pixelTextTextures": 34,
+      "texEstMB": 4.96,
+      "objects": 35,
+      "tweens": 1
+    }
+  ],
+  "errors": []
+}

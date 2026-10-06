@@ -48,10 +48,19 @@ describe('perk support truth (D16)', () => {
       expect(keysOf(p).some((k) => !consumed(k)) || !!p.blockedBy, `${p.id}: every key is consumed and nothing blocks it: make it ready`).toBe(true);
     }
   });
-  it('dodge perks: the hooks A02 landed are ready, the rest stay pending with a reason', () => {
-    for (const id of ['counter_roll', 'dust_kick', 'matador', 'tumble', 'phantom_step']) expect(PERKS.find((p) => p.id === id)!.support, id).toBe('ready');
-    // Slip Away: coinPerDodge is paid by RunSystem, but GameFlow does not hand DuelResult.dodges over yet
-    expect(PERKS.find((p) => p.id === 'slip_away')!.support).toBe('pending');
+  it('dodge and opponent-hook perks that landed are ready', () => {
+    for (const id of ['counter_roll', 'dust_kick', 'matador', 'tumble', 'phantom_step', 'slip_away', 'bluff', 'bait', 'devils_deal', 'disarmer']) expect(PERKS.find((p) => p.id === id)!.support, id).toBe('ready');
+  });
+  it('the opponent hooks are really called: DuelScene builds the opponent with the modifier options, DuelSystem calls the hooks', () => {
+    const scene = SRC_FILES.find((f) => f.path.endsWith('/scenes/DuelScene.ts'))!.text;
+    expect(scene).toMatch(/createOpponent\([^;]*opponentOptionsFromModifiers\(/);
+    expect(scene).toMatch(/configForOpponent\(/);
+    const duel = SRC_FILES.find((f) => f.path.endsWith('/systems/DuelSystem.ts'))!.text;
+    for (const hook of ['reactToFlinch', 'reactToHold', 'disarmPickupMs']) expect(duel, hook).toMatch(new RegExp(`\\.${hook}\\??\\.?\\(`));
+    // Slip Away and Tin Star need the flow to hand the duel counters to RunSystem
+    const flow = SRC_FILES.find((f) => f.path.endsWith('/scenes/GameFlow.ts'))!.text;
+    expect(flow).toMatch(/dodges:\s*res\.dodges/);
+    expect(flow).toMatch(/hitsIgnored:\s*res\.hitsIgnored/);
   });
   it('pending perks are never offered unless includePending is set', () => {
     const pending = new Set(PERKS.filter((p) => p.support === 'pending').map((p) => p.id));
