@@ -1,4 +1,21 @@
-/** Provider-agnostic service interfaces (D7). Game code depends only on these. */
+/**
+ * Provider-agnostic service interfaces (D7). Game code depends only on these.
+ *
+ * Review note (A14): no provider coupling exists. `src/**` has no imports of any SDK (only 'phaser'), and a grep for
+ * firebase/admob/gtag/revenuecat/capacitor/appsflyer finds nothing; the only consumers are GameFlow (type-only
+ * AnalyticsService) and main.ts (the default `services` registry, all no-ops).
+ * Gaps before a real analytics/ads/IAP adapter:
+ *  - Analytics: no consent/opt-out gate, no user/session id, no flush/shutdown (batching adapters need pagehide), no
+ *    event-name catalogue or param schema (params are flat primitives only).
+ *  - Ads: no load()/preload, no error/no-fill reason (boolean only), no pause-audio/pause-game hooks around
+ *    showRewarded, no frequency cap or COPPA/consent flags.
+ *  - Purchases: no entitlement/ownership query, no consumable-vs-permanent distinction, no pending/deferred or
+ *    cancelled-vs-failed result (boolean only), no receipt/validation hook, restore() returns bare ids; granting
+ *    results into MetaSave (unlocks) is unowned.
+ *  - Leaderboard: no player identity/auth, no "around me" query, no rejected-score reason.
+ *  - Registry: register() is whole-service replace with no async init()/ready state and no error isolation
+ *    (a throwing provider propagates into game code; wrap adapters or add a safe-proxy).
+ */
 export type AnalyticsParams = Record<string, string | number | boolean>;
 
 export interface AnalyticsService {
