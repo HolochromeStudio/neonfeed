@@ -103,3 +103,29 @@ Hard limits (enforced in code, asserted in tests):
 - `onRetry`, `onWait` and scene shutdown cancel all timers, tweens, spawned objects, camera zoom/shake, time scales, and restore recoiled sprites to rest x.
 
 Known interplay: `duelFeedback` fires before A02's own `wireVisuals` handlers for the same event (forwarders register first). That is harmless here because the feel layer only adds objects/tweens.
+
+## Dodge feel review (A03, 2026-10-06; addressed to A02 and A18)
+
+Method: `PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers node scripts/duelPlaythrough.mjs` (Dust Creek vs Bandit, `dodgeWindowMs` 380), screenshots `scripts/out/play_9..14`, plus code reading of `DuelSystem.onDodgeInput` and `duelConfig.dodge`. The scripted bot reacts in about 0 ms, so it proves the flow works but says nothing about human reachability; the numbers below are estimates from typical visual reaction (200-250 ms) and thumb flick speeds (0.3-1.5 px/ms), and need a real-device or A18 bot-with-human-latency check.
+Observed: early dodge gave `early` (TOO EARLY +300ms shown), the window prompt (muzzle glint + "<< DODGE NOW >>", 18 px, readable) showed, a bot flick at window open gave `perfect` with eta 106 ms left and the shot was `miss:dodge`. The run threw at the very end of the script (line 184, "Execution context was destroyed", the page navigated after RETRY while A02/GameFlow is mid-edit); this is not caused by the feel layer and the `dodges === 1` assertion was not reached.
+
+Dodge feedback shipped in the Feel layer (`FEEL.dodge`, `planDodge`, all inside the existing caps):
+
+| Event | Camera shake | Flash | Slow-mo | Zoom | Dust | Haptic / audio |
+|---|---|---|---|---|---|---|
+| perfect | 1.5 px / 70 ms | 0xc9f3ff a0.10 / 60 ms | 0.6x / 90 ms | +1% | 4 | `perfect_draw` pattern (replaces the bus `light`), layered `dodge_perfect` chime |
+| ok | 1 px / 50 ms | a0.05 / 50 ms | none | none | 3 | none extra (bus `dodge` = light) |
+| early / late | 1.5 px / 60 ms | red 0xd24a3a a0.10 / 60 ms | none | none | 0 | none extra (bus `miss` = light); `dodge_fail` placeholder exists for A02 to swap in |
+| evaded enemy shot (`onMiss.evaded`) | 1 px / 50 ms | none | none | none | 2 (+5 for dust) | none |
+| `cloud` (Dust Kick) | adds 5 dust particles only, never flash/slow-mo, none on failure | | | | | |
+
+reducedShake: shake x0.25, zoom removed, flash kept. Everything cancels on onRetry/onWait/shutdown. Slow-mo only scales tweens/anims; the dodge window is real ms in DuelSystem, so slow-mo can never eat the window.
+
+### Ranked recommendations (numbers; gameplay owner decides)
+
+1. **PERFECT is not reachable by reaction (A02 `dodge.perfectFrac`, A18 to verify).** PERFECT = first 35% of a 380 ms window = the first 133 ms after the prompt opens. Reaction (about 220 ms) plus flick travel (below) lands at 260-350 ms, i.e. OK at best; PERFECT only happens by anticipating the shot. Recommend `perfectFrac` 0.35 -> 0.55 (about 210 ms for the bandit) and A18 re-run PERFECT rate with a 220 ms +/- 40 ms human-latency bot; target 10-20% PERFECT for an attentive player.
+2. **No lead on "DODGE NOW" (A02 DuelScene `updateDodgeHint` / enemy `dodgeTell`).** The prompt appears exactly when `eta <= windowMs`, so the player starts reacting at window open and the window is eaten by reaction time. Recommend the tell (muzzle raise glint) starts 100-120 ms before the credited window opens (or, equivalently, the window is credited from `tellStart + 100 ms`), and the small grey "< flick sideways to dodge >" turns into the big prompt at tell start. Also for the 300 ms enemy (`dodgeWindowMs: 300`): raise to >= 360 ms; 300 ms is below reaction (220) + flick (40-130) for most thumbs.
+3. **Flick speed 0.3 px/ms and 40 px minimum (A02 `dodge.input`).** At the 0.3 floor a 40 px flick takes about 133 ms before it even qualifies, which is a third of the window; fast thumbs (about 1 px/ms) qualify in about 40 ms. Slow, careful thumbs are the risky group (and they are the ones who will hit the "TOO EARLY" re-flick). Recommend `minSpeedPxPerMs` 0.3 -> 0.2, `minDistancePx` 40 -> 32 (keep `speedWindowMs` 100 and the angle tolerance so a reticle drag still is not a dodge), and credit the flick from touch-move start, not qualification: subtract up to 60 ms of travel from the measured `eta` before classifying.
+4. **Failure penalty 300 ms (A02 `dodge.failPenaltyMs`).** Same value as the flinch, but an early dodge in CUE also delays the draw while the bandit's first shot is about 800 ms away. A late failure is already shot, so its penalty only affects the follow-up. Recommend `early` 250 ms and `late` 300 ms (two values), or a flat 250 ms. Do not go below 200 ms or mashing becomes free. The "TOO EARLY +300ms" label overlaps the SALOON sign in the mid-arena band; give it the same dark stroke as the pop text or move it to y about 470.
+5. **Hint copy (low).** While stumbling, `STUMBLING` is correct; in the screenshot taken after the early dodge the hint already read DODGE NOW again (the screenshot lands about 250 ms later, so probably the stumble had ended); A18 should verify the hint flips to STUMBLING within one frame of the failed dodge.
+6. **Audio (A13).** `dodge_perfect` (layered chime, emitted by the Feel layer) and `dodge_fail` are PLACEHOLDER synths. The duel currently emits `miss` for a failed dodge; A02 may emit `dodge_fail` instead (it has no haptic of its own, `miss` keeps the light buzz).
