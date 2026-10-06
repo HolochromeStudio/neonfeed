@@ -3,3 +3,4 @@ dist/
 .DS_Store
 scripts/out/
 scripts/sim/out/*.partial.*
+scripts/perf/out/
