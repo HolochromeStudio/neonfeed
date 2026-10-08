@@ -1,0 +1,2 @@
+WESTERN GAME ASSET PACK
+Original programmatic pixel-art starter assets. All character/FX/tiles/UI files are separate transparent PNGs. Sprites are 3x nearest-neighbor scaled, tiles 96x96, backgrounds 960x360. UI screens and cutscenes are templates, not finished interactive screens. Font atlas is visual only, not a loadable font. Assets are simplified placeholders, NOT pixel-perfect recreations of supplied reference sheets. See manifest.json.
